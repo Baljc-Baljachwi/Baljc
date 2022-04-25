@@ -2,9 +2,16 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: -apple-system, InkLipquid, sans-serif;
+  /* font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif; */
 }
+
+/* @font-face {
+  font-family: "InkLipquid";
+  font-weight: 200;
+  src: url("/fonts/InkLipquidFonts.ttf") format("truetype");
+} */
 
 a {
   color: inherit;
