@@ -12,9 +12,9 @@ export const GlobalStyle = createGlobalStyle`
   html, body, #__next {
     height: 100%;
   }
-  body { font-family: font-family: 'Noto Sans KR', cursive, sans-serif; }
+  body { font-family: 'Noto Sans KR', sans-serif; }
     .normal		{ font-weight: 400 }
-    .bold		{ font-weight: 700 }
+    .bold		  { font-weight: 700 }
     .bolder		{ font-weight: 800 }
     .light		{ font-weight: 300 }
   a { cursor: pointer; text-decoration: none; }
