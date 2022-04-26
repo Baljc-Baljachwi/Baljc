@@ -9,7 +9,6 @@ module.exports = withPWA({
   pwa: {
     dest: "public",
     runtimeCaching,
-    optimizeFonts: false,
   },
   env: {
     KAKAO_CLIENT_ID,
