@@ -10,10 +10,16 @@ const StyledHeader = styled.header`
   display: flex;
   align-items: center;
   padding: 0 2rem;
+  justify-content: space-between;
 `;
 
 const BackButton = styled.span`
   padding-right: 1rem;
+  cursor: pointer;
+`;
+
+const AddorModifyButton = styled.span`
+  /* padding-right: 2rem; */
   cursor: pointer;
 `;
 
@@ -28,6 +34,9 @@ export default function Header({ label }: HeaderProps) {
         <Icon mode="fas" icon="chevron-left" color="#ffffff" size="16px" />
       </BackButton>
       {label}
+      <AddorModifyButton>
+        <Icon mode="fas" icon="plus" color="#ffffff" size="16px" />
+      </AddorModifyButton>
     </StyledHeader>
   );
 }
