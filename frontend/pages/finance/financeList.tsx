@@ -22,6 +22,9 @@ export default function FinanceList() {
       <PageContainer>
         {/* 우선 이렇게 하드코딩 해놓음 */}
         <h1>4월</h1>
+        <h1>4월</h1>
+        <ButtonBottom label="가입" />
+        <FinanceCard title="이름"></FinanceCard>
         {/* color, type, title, price, isFixed */}
         {/* <FinanceCard isFixed={true} background-color="#FFD469" /> */}
         {/* <ButtonBottom label="가입" />
