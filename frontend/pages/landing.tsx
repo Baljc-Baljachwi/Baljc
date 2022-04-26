@@ -11,9 +11,12 @@ const Component = styled.div`
   justify-content: center;
 `;
 
-const Img = styled.img`
-  width: 84px;
-  height: 75px;
+const LogoImg = styled.img`
+  width: 8.4rem;
+`;
+
+const FootImg = styled.img`
+  width: 2.5rem;
 `;
 
 const Div = styled.div`
@@ -22,17 +25,17 @@ const Div = styled.div`
   h1 {
     writing-mode: vertical-rl;
   }
-  margin: 10px 0px;
+  margin: 1rem 0px;
 `;
 
 export default function Landing() {
   return (
     <Component>
-      <Img src="/assets/img/logo.png" alt="logo"></Img>
+      <LogoImg src="/assets/img/logo.png" alt="logo"></LogoImg>
       <Div>
         <h1>발자취</h1>
       </Div>
-      <img src="/assets/img/foot.png" alt="logo" width={25} height={27} />
+      <FootImg src="/assets/img/foot.png" alt="logo" />
     </Component>
   );
 }
