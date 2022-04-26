@@ -15,16 +15,16 @@ const RoutineHeader = styled.div`
   gap: 1rem;
 `;
 
-const RoutineList = styled.section`
+const RoutineList = styled.div`
   margin-top: 1rem;
-  font-size: 1.6rem;
 `;
 
 const RoutineListItem = styled.li`
   display: flex;
   align-items: center;
-  gap: 1rem;
   margin-top: 0.2rem;
+  gap: 1rem;
+  font-size: 1.6rem;
 `;
 
 export default function Routine() {
