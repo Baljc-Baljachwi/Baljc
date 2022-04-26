@@ -2,8 +2,11 @@ import Head from "next/head";
 // import "../styles/globals.css";
 import { ThemeProvider } from "styled-components";
 import type { AppProps } from "next/app";
+
 import { GlobalStyle } from "../styles/global-styles";
 import { theme } from "../styles/theme";
+
+import Layout from "../components/Layout";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -11,8 +14,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <Head>
-          <link rel='preconnect' href='https://fonts.googleapis.com' />
-          <link rel='preconnect' href='https://fonts.gstatic.com' />
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link
             href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
             rel="stylesheet"
@@ -123,7 +126,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             content="https://yourdomain.com/icons/apple-touch-icon.png"
           />
         </Head>
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </ThemeProvider>
       {/* <Component {...pageProps} /> */}
     </>
