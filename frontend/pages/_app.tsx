@@ -2,9 +2,12 @@ import Head from "next/head";
 // import "../styles/globals.css";
 import { ThemeProvider } from "styled-components";
 import type { AppProps } from "next/app";
+import { config } from "@fortawesome/fontawesome-svg-core";
+import "@fortawesome/fontawesome-svg-core/styles.css";
 
 import { GlobalStyle } from "../styles/global-styles";
 import { theme } from "../styles/theme";
+config.autoAddCss = false;
 
 import Layout from "../components/Layout";
 
