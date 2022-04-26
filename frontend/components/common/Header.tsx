@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { IconName } from "@fortawesome/free-solid-svg-icons";
+
 import Icon from "./Icon";
 
 const StyledHeader = styled.header`
@@ -25,18 +27,23 @@ const AddorModifyButton = styled.span`
 
 interface HeaderProps {
   label: string;
+  icon?: IconName;
 }
 
-export default function Header({ label }: HeaderProps) {
+export default function Header({ label, icon }: HeaderProps) {
   return (
     <StyledHeader>
-      <BackButton>
-        <Icon mode="fas" icon="chevron-left" color="#ffffff" size="16px" />
-      </BackButton>
-      {label}
-      <AddorModifyButton>
-        <Icon mode="fas" icon="plus" color="#ffffff" size="16px" />
-      </AddorModifyButton>
+      <div>
+        <BackButton>
+          <Icon mode="fas" icon="chevron-left" color="#ffffff" size="16px" />
+        </BackButton>
+        {label}
+      </div>
+      {icon && (
+        <AddorModifyButton>
+          <Icon mode="fas" icon={icon} color="#ffffff" size="16px" />
+        </AddorModifyButton>
+      )}
     </StyledHeader>
   );
 }

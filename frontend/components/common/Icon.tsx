@@ -16,7 +16,7 @@ interface IconProps {
   size?: string;
 }
 
-const StyledIcon = styled.div<{ size?: string; color?: string }>`
+const StyledIcon = styled.span<{ size?: string; color?: string }>`
   svg {
     color: ${(props) => (props.color ? props.color : "#000000")};
     font-size: ${(props) => (props.size ? props.size : "1rem")};

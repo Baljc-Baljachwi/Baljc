@@ -17,7 +17,7 @@ const ButtonContainer = styled.div`
 export default function Finance() {
   return (
     <>
-      <Header label="가계부 목록"></Header>
+      <Header label="가계부 목록" icon="plus"></Header>
       {/* <h1>Finance</h1> */}
       <PageContainer>
         {/* 우선 이렇게 하드코딩 해놓음 */}
