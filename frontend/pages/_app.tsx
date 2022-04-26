@@ -6,6 +6,7 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 
 import { GlobalStyle } from "../styles/global-styles";
+import "../styles/Calendar.css";
 import { theme } from "../styles/theme";
 config.autoAddCss = false;
 
