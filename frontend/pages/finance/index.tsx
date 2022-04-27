@@ -30,6 +30,8 @@ export default function FinanceList() {
           backgroundColor="#F4F4F4"
           title="통신비"
           price="-34,980원"
+          category="대중교통"
+          method="입출금통장"
         />
         {/* <ButtonBottom label="가입" /> */}
         {/* color, type, title, price, isFixed */}
