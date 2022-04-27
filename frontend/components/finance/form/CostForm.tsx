@@ -72,11 +72,11 @@ interface ICostForm {
   title: string; // 1 ~ 18자
   price: number;
   memo: string; // 100자 이하
-  paymentMethod: "M" | "C" | "E"; // M: 현금, C: 카드, E: 기타
+  paymentMethod: "M" | "C" | "E" | "N"; // M: 현금, C: 카드, E: 기타, N: null
   fixed: boolean;
 
   // fixed true
-  periodType: "M" | "W" | "D" | null; // M: 매월, W: 매주
+  periodType: "M" | "W" | "D" | "N"; // M: 매월, W: 매주, D: 매일, N: null
   monthlyPeriod: number | null; // 1 ~ 31 사이.
   weeklyPeriod: number | null; // 비트마스킹 이용, 일 목 => (1000100) = 68.
 
@@ -113,21 +113,21 @@ export default function CostForm() {
       setCostForm((prev) => ({
         ...prev,
         [name]: target.checked,
-        periodType: null,
+        periodType: "N",
         monthlyPeriod: null,
         weeklyPeriod: null,
       }));
     }
   }
 
-  function handleTogglePaymentMethod(value: "M" | "C" | "E") {
+  function handleTogglePaymentMethod(value: "M" | "C" | "E" | "N") {
     setCostForm((prev) => ({
       ...prev,
       paymentMethod: value,
     }));
   }
 
-  function handleTogglePeriodType(value: "M" | "W" | "D" | null) {
+  function handleTogglePeriodType(value: "M" | "W" | "D" | "N") {
     // 바뀔 때마다 필요없는 데이터 null로
     switch (value) {
       case "M":
@@ -155,7 +155,7 @@ export default function CostForm() {
           date: null,
         }));
         break;
-      case null:
+      case "N":
         setCostForm((prev) => ({
           ...prev,
           periodType: value,

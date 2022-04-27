@@ -23,7 +23,7 @@ const StyledButton = styled.button<{ isSelected: boolean }>`
   border-radius: 0.5rem;
   cursor: pointer;
 `;
-type TypePaymentMethod = "M" | "C" | "E";
+type TypePaymentMethod = "M" | "C" | "E" | "N";
 
 interface ButtonTogglePaymentMethodProps {
   selectedPaymentMethod: TypePaymentMethod;

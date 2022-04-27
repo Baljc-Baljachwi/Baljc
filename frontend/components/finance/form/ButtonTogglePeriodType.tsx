@@ -23,7 +23,7 @@ const StyledButton = styled.button<{ isSelected: boolean }>`
   border-radius: 0.5rem;
   cursor: pointer;
 `;
-type PeriodType = "M" | "W" | "D" | null;
+type PeriodType = "M" | "W" | "D" | "N";
 
 interface ButtonTogglePeriodTypeProps {
   selectedPeriodType: PeriodType;
