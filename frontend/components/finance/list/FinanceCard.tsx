@@ -71,7 +71,6 @@ interface FinanceCardProps {
   //   fixed_expenditure_yn: boolean;
   //   fixed_income_yn: boolean;
   //   inExpenditure: boolean;
-  // label: string;
 }
 
 export default function FinanceCard({
@@ -83,8 +82,7 @@ export default function FinanceCard({
   category,
   isFixed,
   isExpenditure,
-}: // price,
-FinanceCardProps) {
+}: FinanceCardProps) {
   return (
     <>
       {/* <FinanceCardItem background-color={backgroundColor}></FinanceCardItem> */}
