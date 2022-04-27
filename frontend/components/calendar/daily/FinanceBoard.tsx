@@ -15,6 +15,7 @@ const Title = styled.div`
   background-color: #8cbff2;
   color: #ffffff;
   padding: 0.1rem 1rem;
+  border-radius: 3px;
 `;
 
 const TextWrapper = styled.div`
@@ -35,6 +36,7 @@ const Typography = styled.div<{
 
 const FlexContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
 `;
 
@@ -53,44 +55,30 @@ export default function FinanceBoard() {
 
   return (
     <Container>
-      <Title>가계부</Title>
-      <TextWrapper>
-        <Typography fs="1.5rem">고정지출비용 {}원</Typography>
-        <FlexContainer>
-          <Typography fs="3.2rem">12,000{} 원</Typography>
-          <Typography fs="1.5rem" p="0 0 0 0.5rem">
-            남았습니다.
-          </Typography>
-        </FlexContainer>
-        <FlexContainer
-          style={{ flexWrap: "wrap", justifyContent: "space-between" }}
-        >
-          <Typography fs="1.5rem">오늘 소비 8,000 {}원</Typography>
+      <div onClick={handleClick}>
+        <Title>가계부</Title>
+        <TextWrapper>
+          <Typography fs="1.5rem">고정지출비용 {}원</Typography>
           <FlexContainer>
-            <Typography>이 돈으로</Typography>
-            <Typography color="#FFD469" p="0 0 0 0.5rem">
-              떡볶이 3인분
+            <Typography fs="3.2rem">12,000{} 원</Typography>
+            <Typography fs="1.5rem" p="0 0 0 0.5rem">
+              남았습니다.
             </Typography>
-            <Typography>을 먹을 수 있었어요.</Typography>
           </FlexContainer>
-        </FlexContainer>
-      </TextWrapper>
+          <FlexContainer style={{ justifyContent: "space-between" }}>
+            <Typography fs="1.5rem">오늘 소비 8,000 {}원</Typography>
+            <FlexContainer>
+              <Typography>이 돈으로</Typography>
+              <Typography color="#FFD469" p="0 0 0 0.5rem">
+                떡볶이 3인분
+              </Typography>
+              <Typography>을 먹을 수 있었어요.</Typography>
+            </FlexContainer>
+          </FlexContainer>
+        </TextWrapper>
+      </div>
       <FinanceListContainer>
-        <div onClick={handleClick}>
-          {isCollapsed ? null : (
-            <Typography p="0 3rem" cursor="pointer">
-              펼치기
-            </Typography>
-          )}
-        </div>
         {isCollapsed ? <FinanceList /> : null}
-        <div onClick={handleClick}>
-          {isCollapsed ? (
-            <Typography p="0 3rem" cursor="pointer">
-              닫기
-            </Typography>
-          ) : null}
-        </div>
       </FinanceListContainer>
     </Container>
   );

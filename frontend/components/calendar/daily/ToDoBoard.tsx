@@ -14,6 +14,7 @@ const Title = styled.div`
   background-color: #8cbff2;
   color: #ffffff;
   padding: 0.1rem 1rem;
+  border-radius: 3px;
 `;
 
 export default function ToDoBoard() {

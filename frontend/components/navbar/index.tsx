@@ -13,6 +13,7 @@ const Container = styled.nav`
   bottom: 0;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
+  z-index: 10000;
 `;
 
 const Item = styled.div`
