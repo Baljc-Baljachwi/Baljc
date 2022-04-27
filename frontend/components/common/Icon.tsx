@@ -1,4 +1,5 @@
 import { IconName, IconPrefix, fas } from "@fortawesome/free-solid-svg-icons";
+import { far } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   library,
@@ -24,7 +25,7 @@ const StyledIcon = styled.span<{ size?: string; color?: string }>`
 `;
 
 export default function Icon({ mode, icon, color, size }: IconProps) {
-  library.add(fas);
+  library.add(fas, far);
   const iconLookup: IconLookup = { prefix: mode, iconName: icon };
   const iconDefinition: IconDefinition = findIconDefinition(iconLookup);
 
