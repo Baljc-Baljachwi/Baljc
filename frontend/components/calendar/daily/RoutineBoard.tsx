@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Routine from "../../work/routine/index";
 
 const Container = styled.div`
   background-color: #4d5f8f;
@@ -13,6 +14,7 @@ const Title = styled.div`
   background-color: #8cbff2;
   color: #ffffff;
   padding: 0.1rem 1rem;
+  border-radius: 3px;
 `;
 
 const TextWrapper = styled.div`
@@ -51,6 +53,7 @@ export default function RoutineBoard() {
           ))}
         </ul>
       </TextWrapper>
+      <Routine />
     </Container>
   );
 }
