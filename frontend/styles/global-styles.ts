@@ -8,6 +8,7 @@ export const GlobalStyle = createGlobalStyle`
   }
   html {
     font-size: 62.5%;
+    color: #3D3D3D;
   }
   html, body, #__next {
     height: 100%;
