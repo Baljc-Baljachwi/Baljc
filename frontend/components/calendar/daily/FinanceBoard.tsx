@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useState } from "react";
-import FinanceList from "../../../pages/finance/financeList";
+import FinanceList from "../../finance/list/FinanceList";
 
 const Container = styled.div`
   background-color: #4d5f8f;

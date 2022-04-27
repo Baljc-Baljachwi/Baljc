@@ -6,6 +6,7 @@ const PageContainer = styled.main`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  width: 100%;
 `;
 
 export default function FinanceList() {
