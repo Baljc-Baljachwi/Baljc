@@ -112,13 +112,24 @@ export default function Survey() {
         ...prev,
         [name]: value,
       }));
-    } else if (target.files && target.files.length > 0) {
-      const file = target.files[0];
-      setImagePreview(URL.createObjectURL(file));
-      setSurveyForm((prev) => ({
-        ...prev,
-        [name]: target.files ? (file as Blob) : ({} as Blob),
-      }));
+    } else if (target.files) {
+      console.log(target.files);
+      if (target.files.length > 0) {
+        // 새로 파일을 넣은 경우
+        const file = target.files[0];
+        setImagePreview(URL.createObjectURL(file));
+        setSurveyForm((prev) => ({
+          ...prev,
+          [name]: file as Blob,
+        }));
+      } else {
+        // 파일을 없앤 경우
+        setImagePreview("");
+        setSurveyForm((prev) => ({
+          ...prev,
+          [name]: {} as Blob,
+        }));
+      }
     }
   }
 
@@ -135,6 +146,7 @@ export default function Survey() {
       <LabelProfileImageContiainer>
         <LabelProfileImage image={imagePreview} htmlFor="profileImage" />
       </LabelProfileImageContiainer>
+      {imagePreview}
       <input
         type="file"
         id="profileImage"
