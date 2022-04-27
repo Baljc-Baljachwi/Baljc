@@ -1,15 +1,13 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import Image from "next/image";
 import Icon from "../common/Icon";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Container = styled.nav`
   padding: 1rem;
-  /* border: 1px solid black; */
-  box-shadow: 0 -1px 5px #dcdcdc;
-  position: absolute;
+  background-color: #ffffff;
+  box-shadow: 0 -1px 1px #00000014;
+  position: fixed;
   width: 100%;
   left: 0;
   bottom: 0;
