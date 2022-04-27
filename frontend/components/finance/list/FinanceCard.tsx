@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import { colors } from "../../../styles/colors";
 
-const FinanceCardItem = styled.div`
+const FinanceCardItem = styled.div<{ backgroundColor: string }>`
   /* width: 32rem; */
   /* margin-left: 2rem; */
   filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25));
   display: flex;
   flex-direction: column;
-  background-color: #ffd469;
+  background-color: ${(props) => props.backgroundColor};
 
   width: 100%;
 
@@ -20,7 +20,7 @@ const FinanceCardItem = styled.div`
   -moz-appearance: none;
   appearance: none;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
   cursor: pointer;
 `;
 
@@ -34,8 +34,8 @@ const FinanceCardTitle = styled.span`
   font-weight: 400;
 `;
 
-const FinanceCardPrice = styled.span`
-  color: #3d3d3d;
+const FinanceCardPrice = styled.span<{ color: string }>`
+  color: ${(props) => props.color};
   font-weight: 500;
   font-style: medium;
 `;
@@ -57,7 +57,9 @@ const subtitleColor = {
 };
 
 interface FinanceCardProps {
-  backgroundColor: string;
+  // backgroundColor: string;
+  isFixed: boolean;
+  isExpenditure: boolean;
   //   (type==='E'? FinanceCardProps.color=" #FFD469": color="#F4F4F4"): string; // erd에선 char로 E: 지출, I: 수입 이지만 우선 string으로 해뒀습니다.
   // type: string;
   title: string;
@@ -66,7 +68,6 @@ interface FinanceCardProps {
   category: string;
   // price: number;
 
-  // isFixed: boolean;
   //   fixed_expenditure_yn: boolean;
   //   fixed_income_yn: boolean;
   //   inExpenditure: boolean;
@@ -74,22 +75,25 @@ interface FinanceCardProps {
 }
 
 export default function FinanceCard({
-  backgroundColor,
   // type,
   // isFixed,
   title,
   price,
   method,
   category,
+  isFixed,
+  isExpenditure,
 }: // price,
 FinanceCardProps) {
   return (
     <>
       {/* <FinanceCardItem background-color={backgroundColor}></FinanceCardItem> */}
-      <FinanceCardItem background-color={backgroundColor}>
+      <FinanceCardItem backgroundColor={isFixed ? "#ffd469" : "#F4F4F4"}>
         <FinanceCardContent>
           <FinanceCardTitle>{title}</FinanceCardTitle>
-          <FinanceCardPrice>{price}</FinanceCardPrice>
+          <FinanceCardPrice color={isExpenditure ? "#FF3F15" : "#0075FF"}>
+            {price}
+          </FinanceCardPrice>
         </FinanceCardContent>
         <FinanceCardDetail>
           {category} | {method}
