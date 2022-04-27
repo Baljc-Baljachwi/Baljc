@@ -32,13 +32,10 @@ interface listProps {
   id: number;
   content: string;
 }
-interface TodoProps {
-  viewOnly: boolean;
-}
 
 export default function TodoItem(props: {
   list: listProps;
-  viewOnly: TodoProps;
+  viewOnly: boolean;
 }) {
   const [isCompleted, setIsCompleted] = useState(false);
   const [todoClicked, setTodoClicked] = useState(false);
@@ -56,6 +53,7 @@ export default function TodoItem(props: {
     }
     // setTodoClicked((prev) => !prev);
   }
+  console.log(2, "todoitem", props.viewOnly);
 
   useEffect(() => {
     window.addEventListener("mousedown", todoItemClick);
