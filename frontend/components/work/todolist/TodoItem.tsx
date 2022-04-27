@@ -18,9 +18,10 @@ const TodoItemDiv = styled.div`
   justify-content: space-between;
 `;
 
-const TodoText = styled.span<{ isCompleted: boolean }>`
+const TodoText = styled.span<{ isCompleted: boolean; viewOnly: boolean }>`
   font-size: 1.6rem;
   text-decoration: ${(props) => (props.isCompleted ? "line-through" : "")};
+  color: ${(props) => (props.viewOnly ? "#ffffff" : "")};
 `;
 
 const IconDiv = styled.div<{ isClicked: boolean }>`
@@ -31,8 +32,14 @@ interface listProps {
   id: number;
   content: string;
 }
+interface TodoProps {
+  viewOnly: boolean;
+}
 
-export default function TodoItem(props: { list: listProps }) {
+export default function TodoItem(props: {
+  list: listProps;
+  viewOnly: boolean;
+}) {
   const [isCompleted, setIsCompleted] = useState(false);
   const [todoClicked, setTodoClicked] = useState(false);
   const todoRef = useRef() as React.MutableRefObject<HTMLSpanElement>;
@@ -80,7 +87,11 @@ export default function TodoItem(props: { list: listProps }) {
           />
         )}
         <TodoItemDiv>
-          <TodoText isCompleted={isCompleted} ref={todoRef}>
+          <TodoText
+            isCompleted={isCompleted}
+            viewOnly={props.viewOnly}
+            ref={todoRef}
+          >
             {props.list.content}
           </TodoText>
           <IconDiv isClicked={todoClicked}>
