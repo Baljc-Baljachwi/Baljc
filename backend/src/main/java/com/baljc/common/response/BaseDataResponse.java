@@ -1,10 +1,12 @@
 package com.baljc.common.response;
 
-public class BaseDataResponse<T> extends BaseResponse {
-    private T data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-    public BaseDataResponse(Integer code, String message, T data) {
-        super(code, message);
-        this.data = data;
-    }
+@Getter
+@AllArgsConstructor
+public class BaseDataResponse<T> {
+    private Integer code;
+    private String message;
+    private T data;
 }
