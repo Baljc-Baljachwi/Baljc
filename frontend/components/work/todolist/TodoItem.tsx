@@ -41,21 +41,21 @@ export default function TodoItem(props: { list: listProps }) {
     setIsCompleted((prev) => !prev);
   };
 
-  const todoItemClick = (
+  function todoItemClick(
     e: React.MouseEventHandler<HTMLSpanElement> & { target: Element }
-  ) => {
+  ) {
     if (todoRef && !todoRef.current.contains(e.target)) {
       setTodoClicked(false);
     } else {
       setTodoClicked(true);
     }
     // setTodoClicked((prev) => !prev);
-  };
+  }
 
   useEffect(() => {
-    window.addEventListener("mousedown", todoItemClick);
+    window.addEventListener("mousedown", (e) => todoItemClick);
     return () => {
-      window.removeEventListener("mousedown", todoItemClick);
+      window.removeEventListener("mousedown", (e) => todoItemClick);
     };
   });
 
