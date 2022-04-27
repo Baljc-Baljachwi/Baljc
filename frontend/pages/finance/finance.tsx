@@ -19,7 +19,7 @@ const PageContainer = styled.main`
 //   gap: 1.6rem;
 // `;
 
-export default function FinanceList() {
+export default function Finance() {
   return (
     <>
       <Header label="가계부 목록" icon="plus"></Header>
