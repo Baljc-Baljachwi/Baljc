@@ -28,6 +28,7 @@ const LabelProfileImage = styled.label<{ image: string }>`
   background-position: center;
   background-clip: border-box;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  cursor: pointer;
 `;
 
 const InputContainer = styled.div`
