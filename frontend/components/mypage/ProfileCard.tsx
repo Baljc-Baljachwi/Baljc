@@ -70,7 +70,7 @@ interface ProfileCardProps {
 
 const ProfileCard = ({}: ProfileCardProps) => {
   return (
-    <div>
+    <>
       <Container>
         <ProfileCardContainer>
           <ProfileImage>
@@ -90,9 +90,8 @@ const ProfileCard = ({}: ProfileCardProps) => {
             <span>한 달 예산 | 500,000 원</span>
           </ProfileInfo>
         </ProfileCardContainer>
-        {/* <PageContainer>하이sdfsdfdf</PageContainer> */}
       </Container>
-    </div>
+    </>
   );
 };
 

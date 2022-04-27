@@ -29,12 +29,10 @@ const DivisionLine = styled.hr`
 const ExpenditureDetailContainer = styled.div`
   display: flex;
   flex-direction: column;
-  /* appearance: none; */
   border: none;
   border-radius: 1rem;
   width: 100%;
   background-color: #ffffff;
-  /* background-color: #444444; */
   filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25));
 
   font-size: 1.6rem;
