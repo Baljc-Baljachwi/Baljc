@@ -16,7 +16,7 @@ export default function Home() {
       <StyledDiv>
         <Weekly></Weekly>
         <Routine></Routine>
-        <Todo></Todo>
+        <Todo viewOnly={false}></Todo>
       </StyledDiv>
     </>
   );
