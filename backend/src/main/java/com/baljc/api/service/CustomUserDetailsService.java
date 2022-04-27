@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Slf4j
 @Component("userDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {
@@ -24,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         log.debug("loadUserByUsername - username: {}", username);
-        Member member = memberRepository.findById(Long.parseLong(username))
+        Member member = memberRepository.findById(UUID.fromString(username))
                 .orElseThrow(() -> new UsernameNotFoundException(username + "은(는) 존재하지 않는 회원입니다."));
         return User.builder()
                 .username(username)
