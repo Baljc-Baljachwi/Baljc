@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -14,6 +16,7 @@ import java.util.UUID;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class AccountBook {
@@ -33,8 +36,9 @@ public class AccountBook {
     private Boolean fixedIncomeYn;
     private Character periodType;
     private Integer monthlyPeriod;
-    private Character weeklyPeriod;
+    private Integer weeklyPeriod;
     @Convert(converter = BooleanToYNConverter.class)
+    @ColumnDefault("false")
     private Boolean deletedYn;
     private LocalDateTime date;
 
@@ -47,8 +51,9 @@ public class AccountBook {
 
     @Builder
     public AccountBook(Character type, String title, Integer price, String memo, Character paymentMethod,
-                       Boolean fixedExpenditureYn, Boolean fixedIncomeYn, Character periodType, Integer monthlyPeriod,
-                       Character weeklyPeriod, Boolean deletedYn, LocalDateTime date) {
+                       Boolean fixedExpenditureYn, Boolean fixedIncomeYn, Character periodType,
+                       Integer monthlyPeriod, Integer weeklyPeriod, Boolean deletedYn, LocalDateTime date,
+                       Member member, Category category) {
         this.type = type;
         this.title = title;
         this.price = price;
@@ -61,5 +66,7 @@ public class AccountBook {
         this.weeklyPeriod = weeklyPeriod;
         this.deletedYn = deletedYn;
         this.date = date;
+        this.member = member;
+        this.category = category;
     }
 }

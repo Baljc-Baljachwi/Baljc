@@ -1,11 +1,13 @@
 package com.baljc.db.entity;
 
+import com.baljc.common.util.BooleanToYNConverter;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -16,6 +18,7 @@ import java.util.UUID;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Member {
@@ -30,20 +33,25 @@ public class Member {
     private String profileUrl;
     private Character salaryType;
     private Integer salary;
+    private Integer workingHours;
     private Integer budget;
-    @LastModifiedDate
+    @Convert(converter = BooleanToYNConverter.class)
+    @ColumnDefault("false")
+    private Boolean surveyedYn;
     private LocalDateTime deletedAt;
 
     @Builder
     public Member(String kakaoId, String email, String nickname, String profileUrl, Character salaryType,
-                  Integer salary, Integer budget) {
+                  Integer salary, Integer workingHours, Integer budget, Boolean surveyedYn) {
         this.kakaoId = kakaoId;
         this.email = email;
         this.nickname = nickname;
         this.profileUrl = profileUrl;
         this.salaryType = salaryType;
         this.salary = salary;
+        this.workingHours = workingHours;
         this.budget = budget;
+        this.surveyedYn = surveyedYn;
     }
 
     @OneToMany(mappedBy = "member")
