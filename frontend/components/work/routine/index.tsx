@@ -5,6 +5,7 @@ const RoutineDiv = styled.div`
   background: #f4f4f4;
   border-radius: 1rem;
   width: 100%;
+  margin: 2rem 0;
   padding: 1.5rem 2rem;
   filter: drop-shadow(0 0.2rem 0.4rem rgba(0, 0, 0, 0.25));
 `;
