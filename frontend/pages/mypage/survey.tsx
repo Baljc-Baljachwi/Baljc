@@ -4,16 +4,31 @@ import styled from "styled-components";
 import Header from "../../components/common/Header";
 import ButtonBottom from "../../components/common/ButtonBottom";
 import ButtonToggleSalaryType from "../../components/mypage/survey/ButtonToggleSalaryType";
-// import ButtonTrashCan from "../../components/common/ButtonTrashCan";
 
 const PageContainer = styled.main`
   padding: 0 2rem;
 `;
 
-// const ButtonContainer = styled.div`
-//   display: flex;
-//   gap: 1.6rem;
-// `;
+const LabelProfileImageContiainer = styled.div`
+  width: 100%;
+  margin: 5rem 0 4rem 0;
+  display: flex;
+  justify-content: center;
+`;
+
+const LabelProfileImage = styled.label<{ image: string }>`
+  display: inline-block;
+  width: 14rem;
+  height: 14rem;
+  border-radius: 50%;
+  background-color: #cccccc;
+  background-image: url(${(props) => (props.image ? props.image : "")});
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-clip: border-box;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+`;
 
 const InputContainer = styled.div`
   width: 100%;
@@ -65,7 +80,7 @@ const ButtonToggleContainer = styled.div`
   margin-top: 1.6rem;
 `;
 
-type TypeSalary = "월급" | "시급" | "없음";
+type TypeSalary = "M" | "H" | "N";
 
 interface SurveyInputForm {
   nickname: string;
@@ -73,26 +88,49 @@ interface SurveyInputForm {
   salary: number;
   workTime: number;
   monthBudget: number;
+  profileImage: Blob;
 }
 
 export default function Survey() {
   const [surveyForm, setSurveyForm] = useState<SurveyInputForm>({
     nickname: "",
-    salaryType: "월급",
+    salaryType: "M",
     salary: 0,
     workTime: 0,
     monthBudget: 0,
   } as SurveyInputForm);
+
+  const [imagePreview, setImagePreview] = useState<string>("");
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const target = event.target;
     const value = target.value;
     const name = target.name;
 
-    setSurveyForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    if (name !== "profileImage") {
+      setSurveyForm((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    } else if (target.files) {
+      console.log(target.files);
+      if (target.files.length > 0) {
+        // 새로 파일을 넣은 경우
+        const file = target.files[0];
+        setImagePreview(URL.createObjectURL(file));
+        setSurveyForm((prev) => ({
+          ...prev,
+          [name]: file as Blob,
+        }));
+      } else {
+        // 파일을 없앤 경우
+        setImagePreview("");
+        setSurveyForm((prev) => ({
+          ...prev,
+          [name]: {} as Blob,
+        }));
+      }
+    }
   }
 
   function handleToggleButton(value: TypeSalary) {
@@ -105,6 +143,18 @@ export default function Survey() {
   return (
     <>
       <Header label="설문 조사"></Header>
+      <LabelProfileImageContiainer>
+        <LabelProfileImage image={imagePreview} htmlFor="profileImage" />
+      </LabelProfileImageContiainer>
+      {imagePreview}
+      <input
+        type="file"
+        id="profileImage"
+        name="profileImage"
+        accept="image/*"
+        onChange={handleInputChange}
+        style={{ display: "none" }}
+      />
       <PageContainer>
         <StyledLabel htmlFor="nickname">닉네임</StyledLabel>
         <InputContainer>
@@ -124,7 +174,7 @@ export default function Survey() {
             handleToggleButton={handleToggleButton}
           />
         </ButtonToggleContainer>
-        {surveyForm?.salaryType !== "없음" && (
+        {surveyForm?.salaryType !== "N" && (
           <>
             <InputContainer>
               <StyledInput
