@@ -29,13 +29,16 @@ const ProfileCardContainer = styled.div`
 
 const ProfileImage = styled.div`
   border: 3px solid #fafafe;
-  box-sizing: border-box;
+  /* box-sizing: border-box; */
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-  border-radius: 4rem;
+  /* border-radius: 4rem; */
   /* background-image: ; */
+  border-radius: 50%;
   width: 10rem;
-  Image {
-    /* width: 10rem; */
+  height: 10rem;
+  position: relative;
+  .profileImg {
+    border-radius: 50%;
   }
 `;
 
@@ -72,10 +75,10 @@ const ProfileCard = ({}: ProfileCardProps) => {
         <ProfileCardContainer>
           <ProfileImage>
             <Image
+              className="profileImg"
               src="/assets/img/mypage/avatar_member6.png"
               alt="avatar"
-              width="100rem"
-              height="100rem"
+              layout="fill"
             />
           </ProfileImage>
           <ProfileInfo>
