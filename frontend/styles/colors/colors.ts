@@ -16,7 +16,7 @@ const colors = {
   charcoal50: "#474747",
   charcoal100: "#3D3D3D",
 
-  yellow100: "##FFD469",
+  yellow100: "#FFD469",
 
   blue50: "#A5C1F7",
   blue150: "#4A83EF",
