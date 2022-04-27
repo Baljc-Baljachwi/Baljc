@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { RefObject, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 import Icon from "../../common/Icon";
@@ -18,7 +18,7 @@ const TodoItemDiv = styled.div`
   justify-content: space-between;
 `;
 
-const TodoText = styled.p<{ isCompleted: boolean }>`
+const TodoText = styled.span<{ isCompleted: boolean }>`
   font-size: 1.6rem;
   text-decoration: ${(props) => (props.isCompleted ? "line-through" : "")};
 `;
@@ -35,15 +35,29 @@ interface listProps {
 export default function TodoItem(props: { list: listProps }) {
   const [isCompleted, setIsCompleted] = useState(false);
   const [todoClicked, setTodoClicked] = useState(false);
+  const todoRef = useRef() as React.MutableRefObject<HTMLSpanElement>;
 
-  const todoComplete = (e: React.MouseEventHandler<HTMLImageElement>) => {
+  const todoComplete = (e: any) => {
     setIsCompleted((prev) => !prev);
   };
 
-  const todoItemClick = (e: React.MouseEventHandler<HTMLDivElement>) => {
-    setTodoClicked((prev) => !prev);
-    console.log(props.list.id + " : " + todoClicked);
+  const todoItemClick = (
+    e: React.MouseEventHandler<HTMLSpanElement> & { target: Element }
+  ) => {
+    if (todoRef && !todoRef.current.contains(e.target)) {
+      setTodoClicked(false);
+    } else {
+      setTodoClicked(true);
+    }
+    // setTodoClicked((prev) => !prev);
   };
+
+  useEffect(() => {
+    window.addEventListener("mousedown", todoItemClick);
+    return () => {
+      window.removeEventListener("mousedown", todoItemClick);
+    };
+  });
 
   return (
     <>
@@ -66,7 +80,7 @@ export default function TodoItem(props: { list: listProps }) {
           />
         )}
         <TodoItemDiv>
-          <TodoText isCompleted={isCompleted} onClick={todoItemClick}>
+          <TodoText isCompleted={isCompleted} ref={todoRef}>
             {props.list.content}
           </TodoText>
           <IconDiv isClicked={todoClicked}>
