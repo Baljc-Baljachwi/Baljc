@@ -12,7 +12,7 @@ const FinanceCardItem = styled.div`
   width: 100%;
 
   font-size: 1.6rem;
-  padding: 1.6rem 0;
+  padding: 1.6rem 2rem;
 
   font-family: "Noto Sans KR", sans-serif;
   font-style: normal;
@@ -24,6 +24,11 @@ const FinanceCardItem = styled.div`
   cursor: pointer;
 `;
 
+const FinanceCardContent = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
 const FinanceCardTitle = styled.span`
   color: #3d3d3d;
   font-weight: 400;
@@ -32,10 +37,13 @@ const FinanceCardTitle = styled.span`
 const FinanceCardPrice = styled.span`
   color: #3d3d3d;
   font-weight: 500;
+  font-style: medium;
 `;
 
 const FinanceCardDetail = styled.span`
   color: #696969;
+  font-size: 1.2rem;
+  font-weight: 400;
 `;
 
 const titleColor = {
@@ -54,6 +62,8 @@ interface FinanceCardProps {
   // type: string;
   title: string;
   price: string;
+  method: string;
+  category: string;
   // price: number;
 
   // isFixed: boolean;
@@ -68,6 +78,8 @@ export default function FinanceCard({
   // type,
   title,
   price,
+  method,
+  category,
 }: // price,
 // isFixed,
 FinanceCardProps) {
@@ -75,8 +87,13 @@ FinanceCardProps) {
     <>
       {/* <FinanceCardItem background-color={backgroundColor}></FinanceCardItem> */}
       <FinanceCardItem background-color={backgroundColor}>
-        <FinanceCardTitle>{title}</FinanceCardTitle>
-        <FinanceCardPrice>{price}</FinanceCardPrice>
+        <FinanceCardContent>
+          <FinanceCardTitle>{title}</FinanceCardTitle>
+          <FinanceCardPrice>{price}</FinanceCardPrice>
+        </FinanceCardContent>
+        <FinanceCardDetail>
+          {category} | {method}
+        </FinanceCardDetail>
       </FinanceCardItem>
     </>
   );
