@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import FinanceBoard from "./FinanceBoard";
 import RoutineBoard from "./RoutineBoard";
+import ToDoBoard from "./ToDoBoard";
 
 const Container = styled.div`
   display: flex;
@@ -23,6 +24,7 @@ export default function Daily({ day }: DailyProps) {
       <Title>{day}</Title>
       <FinanceBoard />
       <RoutineBoard />
+      <ToDoBoard />
     </Container>
   );
 }
