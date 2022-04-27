@@ -159,7 +159,7 @@ export default function Survey() {
             name="monthBudget"
             type="number"
             placeholder="0"
-            value={surveyForm.monthBudget || ""}
+            value={surveyForm.monthBudget || 0}
             onChange={handleInputChange}
           />
           <InputUnit hasValue={surveyForm.monthBudget > 0}>원</InputUnit>
