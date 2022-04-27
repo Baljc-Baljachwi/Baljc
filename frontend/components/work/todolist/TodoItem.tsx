@@ -38,7 +38,7 @@ interface TodoProps {
 
 export default function TodoItem(props: {
   list: listProps;
-  viewOnly: boolean;
+  viewOnly: TodoProps;
 }) {
   const [isCompleted, setIsCompleted] = useState(false);
   const [todoClicked, setTodoClicked] = useState(false);
