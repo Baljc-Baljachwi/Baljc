@@ -32,7 +32,11 @@ const TodoInput = styled.input`
   }
 `;
 
-export default function Todo() {
+interface TodoProps {
+  viewOnly: boolean;
+}
+
+export default function Todo({ viewOnly }: TodoProps) {
   // 잠깐 넣어둔 리스트
   const todoList = [
     {
@@ -54,24 +58,26 @@ export default function Todo() {
       <TodoDiv>
         <>
           {todoList.map((list) => (
-            <TodoItem key={list.id} list={list} />
+            <TodoItem key={list.id} list={list} viewOnly={viewOnly} />
           ))}
         </>
-        <TodoInputDiv>
-          <Image
-            src="/assets/img/foot_false.png"
-            alt=""
-            width={20}
-            height={20}
-          />
-          <InputDiv>
-            <TodoInput
-              name="todo"
-              type="text"
-              placeholder="할 일을 입력해주세요"
+        {viewOnly ? null : (
+          <TodoInputDiv>
+            <Image
+              src="/assets/img/foot_false.png"
+              alt=""
+              width={20}
+              height={20}
             />
-          </InputDiv>
-        </TodoInputDiv>
+            <InputDiv>
+              <TodoInput
+                name="todo"
+                type="text"
+                placeholder="할 일을 입력해주세요"
+              />
+            </InputDiv>
+          </TodoInputDiv>
+        )}
       </TodoDiv>
     </>
   );
