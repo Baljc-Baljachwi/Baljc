@@ -17,6 +17,7 @@ const DayButton = styled.label<{ isSelected: boolean }>`
   color: ${(props) => (props.isSelected ? "#3d3d3d" : "#797979")};
   font-size: 1.4rem;
   font-weight: 400;
+  cursor: pointer;
 `;
 
 interface ButtonDaySelectProps {
