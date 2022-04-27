@@ -2,22 +2,32 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import Image from "next/image";
+import Icon from "../common/Icon";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Container = styled.nav`
   padding: 1rem;
-  border: 1px solid black;
+  /* border: 1px solid black; */
+  box-shadow: 0 -1px 5px #dcdcdc;
   position: absolute;
   width: 100%;
   left: 0;
   bottom: 0;
-  display: flex;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
 `;
 
 const Item = styled.div`
   display: flex;
   flex-direction: column;
   cursor: pointer;
+  align-items: center;
+  a {
+    color: #3d3d3d;
+  }
+  .active {
+    color: #cdcdcd;
+  }
 `;
 
 export default function NavBar() {
@@ -25,53 +35,66 @@ export default function NavBar() {
   return (
     <Container>
       <Item onClick={() => router.push("/community")}>
-        <Image
-          src="/assets/img/community_icon.png"
-          alt=""
-          width={25}
-          height={25}
+        <Icon
+          mode="fas"
+          icon="comments"
+          size="2rem"
+          color={router.pathname === "/community" ? undefined : "#cbcbcb"}
         />
         <Link href="/community">
-          <a>커뮤니티</a>
+          <a className={router.pathname === "/community" ? "" : "active"}>
+            커뮤니티
+          </a>
         </Link>
       </Item>
       <Item onClick={() => router.push("/finance")}>
-        <Image
-          src="/assets/img/finance_icon.png"
-          alt=""
-          width={25}
-          height={25}
+        <Icon
+          mode="fas"
+          icon="sack-dollar"
+          size="2rem"
+          color={router.pathname === "/finance" ? undefined : "#cdcdcd"}
         />
         <Link href="/finance">
-          <a>가계부</a>
+          <a className={router.pathname === "/finance" ? "" : "active"}>
+            가계부
+          </a>
         </Link>
       </Item>
       <Item onClick={() => router.push("/calendar")}>
-        <Image
-          src="/assets/img/calendar_icon.png"
-          alt=""
-          width={25}
-          height={25}
+        <Icon
+          mode="fas"
+          icon="calendar-days"
+          size="2rem"
+          color={router.pathname === "/calendar" ? undefined : "#cdcdcd"}
         />
         <Link href="/calendar">
-          <a>캘린더</a>
+          <a className={router.pathname === "/calendar" ? "" : "active"}>
+            캘린더
+          </a>
         </Link>
       </Item>
       <Item onClick={() => router.push("/work")}>
-        <Image src="/assets/img/work_icon.png" alt="" width={25} height={25} />
+        <Icon
+          mode="fas"
+          icon="clipboard-check"
+          size="2rem"
+          color={router.pathname === "/work" ? undefined : "#cdcdcd"}
+        />
         <Link href="/work">
-          <a>할 일</a>
+          <a className={router.pathname === "/work" ? "" : "active"}>할 일</a>
         </Link>
       </Item>
       <Item onClick={() => router.push("/mypage")}>
-        <Image
-          src="/assets/img/mypage_icon.png"
-          alt=""
-          width={25}
-          height={25}
+        <Icon
+          mode="fas"
+          icon="user"
+          size="2rem"
+          color={router.pathname === "/mypage" ? undefined : "#cdcdcd"}
         />
         <Link href="/mypage">
-          <a>마이페이지</a>
+          <a className={router.pathname === "/mypage" ? "" : "active"}>
+            마이페이지
+          </a>
         </Link>
       </Item>
     </Container>
