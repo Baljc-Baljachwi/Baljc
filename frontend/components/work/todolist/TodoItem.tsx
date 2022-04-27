@@ -48,16 +48,14 @@ export default function TodoItem(props: {
     setIsCompleted((prev) => !prev);
   };
 
-  const todoItemClick = (
-    e: React.MouseEventHandler<HTMLSpanElement> & { target: Element }
-  ) => {
+  function todoItemClick(e: any) {
     if (todoRef && !todoRef.current.contains(e.target)) {
       setTodoClicked(false);
     } else {
       setTodoClicked(true);
     }
     // setTodoClicked((prev) => !prev);
-  };
+  }
 
   useEffect(() => {
     window.addEventListener("mousedown", todoItemClick);
