@@ -65,7 +65,7 @@ const ButtonToggleContainer = styled.div`
   margin-top: 1.6rem;
 `;
 
-type TypeSalary = "월급" | "시급" | "없음";
+type TypeSalary = "M" | "H" | "N";
 
 interface SurveyInputForm {
   nickname: string;
@@ -78,7 +78,7 @@ interface SurveyInputForm {
 export default function Survey() {
   const [surveyForm, setSurveyForm] = useState<SurveyInputForm>({
     nickname: "",
-    salaryType: "월급",
+    salaryType: "M",
     salary: 0,
     workTime: 0,
     monthBudget: 0,
@@ -124,7 +124,7 @@ export default function Survey() {
             handleToggleButton={handleToggleButton}
           />
         </ButtonToggleContainer>
-        {surveyForm?.salaryType !== "없음" && (
+        {surveyForm?.salaryType !== "N" && (
           <>
             <InputContainer>
               <StyledInput
