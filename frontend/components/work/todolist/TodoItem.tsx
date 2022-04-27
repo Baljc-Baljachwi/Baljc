@@ -41,9 +41,7 @@ export default function TodoItem(props: { list: listProps }) {
     setIsCompleted((prev) => !prev);
   };
 
-  function todoItemClick(
-    e: React.MouseEventHandler<HTMLSpanElement> & { target: Element }
-  ) {
+  function todoItemClick(e: any) {
     if (todoRef && !todoRef.current.contains(e.target)) {
       setTodoClicked(false);
     } else {
@@ -53,9 +51,9 @@ export default function TodoItem(props: { list: listProps }) {
   }
 
   useEffect(() => {
-    window.addEventListener("mousedown", (e) => todoItemClick);
+    window.addEventListener("mousedown", todoItemClick);
     return () => {
-      window.removeEventListener("mousedown", (e) => todoItemClick);
+      window.removeEventListener("mousedown", todoItemClick);
     };
   });
 
