@@ -1,12 +1,9 @@
 import styled from "styled-components";
 
-import Header from "../../components/common/Header";
 import FinanceCard from "../../components/finance/list/FinanceCard";
-import ButtonBottom from "../../components/common/ButtonBottom";
-import ButtonTrashCan from "../../components/common/ButtonTrashCan";
 
 const PageContainer = styled.main`
-  padding: 0 2rem;
+  /* padding: 0 2rem; */
 `;
 
 // const FinanceCardItem = styled.div<{ backgroundColor: string }>`
@@ -22,10 +19,7 @@ const PageContainer = styled.main`
 export default function FinanceList() {
   return (
     <>
-      <Header label="가계부 목록" icon="plus"></Header>
       <PageContainer>
-        <h1>4월</h1>
-        {/* <FinanceCardItem backgroundColor="#F4F4F4" /> */}
         <FinanceCard
           backgroundColor="#F4F4F4"
           title="통신비"
