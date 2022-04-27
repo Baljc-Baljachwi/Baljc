@@ -28,31 +28,16 @@ const RoutineItem = styled.div`
 `;
 
 export default function RoutineBoard() {
-  // API 연동 전
-  const routine = [
-    {
-      id: 1,
-      content: "분리수거",
-    },
-    {
-      id: 2,
-      content: "빨래",
-    },
-    {
-      id: 3,
-      content: "운동",
-    },
-  ];
   return (
     <Container>
       <Title>일과</Title>
-      <TextWrapper>
+      {/* <TextWrapper>
         <ul>
           {routine.map((item) => (
             <RoutineItem key={item.id}>{item.content}</RoutineItem>
           ))}
         </ul>
-      </TextWrapper>
+      </TextWrapper> */}
       <Routine />
     </Container>
   );
