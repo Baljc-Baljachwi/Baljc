@@ -1,7 +1,7 @@
-import Header from "../components/common/Header";
-import Weekly from "../components/work/Weekly";
-import Routine from "../components/work/routine/index";
-import Todo from "../components/work/todolist/index";
+import Header from "../../components/common/Header";
+import Weekly from "../../components/work/Weekly";
+import Routine from "../../components/work/routine/index";
+import Todo from "../../components/work/todolist/index";
 
 import styled from "styled-components";
 
