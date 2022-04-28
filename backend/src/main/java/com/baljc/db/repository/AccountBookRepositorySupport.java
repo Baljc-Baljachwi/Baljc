@@ -20,7 +20,7 @@ public class AccountBookRepositorySupport {
     QCategory qCategory = QCategory.category;
 
     public Optional<AccountBookDto.AccountBookDetailResponse> getAccountBookDetail(UUID accountbookId) {
-        AccountBookDto.AccountBookDetailResponse response = jpaQueryFactory.select(new QAccountBookDto_AccountBookDetailResponse(qAccountBook.accountBookId, qCategory.categoryId, qCategory.name, qAccountBook.type, qAccountBook.title, qAccountBook.price, qAccountBook.memo, qAccountBook.paymentMethod, qAccountBook.fixedExpenditureYn, qAccountBook.fixedIncomeYn, qAccountBook.periodType, qAccountBook.monthlyPeriod, qAccountBook.weeklyPeriod, qAccountBook.date))
+        AccountBookDto.AccountBookDetailResponse response = jpaQueryFactory.select(new QAccountBookDto_AccountBookDetailResponse(qAccountBook.accountBookId, qCategory.categoryId, qCategory.name, qAccountBook.type, qAccountBook.title, qAccountBook.price, qAccountBook.memo, qAccountBook.paymentMethod, qAccountBook.fixedExpenditureYn, qAccountBook.fixedIncomeYn, qAccountBook.monthlyPeriod, qAccountBook.date, qAccountBook.startDate, qAccountBook.endDate))
                 .from(qAccountBook)
                 .leftJoin(qCategory).on(qAccountBook.category.eq(qCategory))
                 .where(qAccountBook.accountBookId.eq(accountbookId))

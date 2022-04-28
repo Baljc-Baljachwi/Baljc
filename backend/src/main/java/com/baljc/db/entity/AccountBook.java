@@ -9,6 +9,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -29,11 +30,11 @@ public class AccountBook {
     private Character paymentMethod;
     private Character fixedExpenditureYn;
     private Character fixedIncomeYn;
-    private Character periodType;
     private Integer monthlyPeriod;
-    private Integer weeklyPeriod;
     private Character deletedYn;
     private LocalDateTime date;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     @ManyToOne(targetEntity = Member.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -44,8 +45,9 @@ public class AccountBook {
 
     @Builder
     public AccountBook(Character type, String title, Integer price, String memo, Character paymentMethod,
-                       Character fixedExpenditureYn, Character fixedIncomeYn, Character periodType,
-                       Integer monthlyPeriod, Integer weeklyPeriod, Character deletedYn, LocalDateTime date,
+                       Character fixedExpenditureYn, Character fixedIncomeYn,
+                       Integer monthlyPeriod, Character deletedYn, LocalDateTime date,
+                       LocalDate startDate, LocalDate endDate,
                        Member member, Category category) {
         this.type = type;
         this.title = title;
@@ -54,11 +56,11 @@ public class AccountBook {
         this.paymentMethod = paymentMethod;
         this.fixedExpenditureYn = fixedExpenditureYn;
         this.fixedIncomeYn = fixedIncomeYn;
-        this.periodType = periodType;
         this.monthlyPeriod = monthlyPeriod;
-        this.weeklyPeriod = weeklyPeriod;
         this.deletedYn = deletedYn;
         this.date = date;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.member = member;
         this.category = category;
     }

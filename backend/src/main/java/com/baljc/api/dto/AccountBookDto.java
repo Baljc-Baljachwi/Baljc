@@ -36,13 +36,11 @@ public class AccountBookDto {
         private String fixedExpenditureYn;
         @Pattern(regexp = "^[YN]$", message = "올바른 고정지출여부 형식(Y/N)이 아닙니다.")
         private String fixedIncomeYn;
-//        @NotBlank(message = "주기유형은 필수입니다.")
-        @Pattern(regexp = "^[MWN]$", message = "올바른 주기유형 형식(M/W/N)이 아닙니다.")
-        private String periodType;
         private Integer monthlyPeriod;
-        private Integer weeklyPeriod;
-        private String date;
-        private String time;
+        private LocalDate date;
+        private LocalTime time;
+        private LocalDate startDate;
+        private LocalDate endDate;
     }
 
     @Getter
@@ -67,13 +65,13 @@ public class AccountBookDto {
         private Character paymentMethod;
         private Character fixedExpenditureYn;
         private Character fixedIncomeYn;
-        private Character periodType;
-        private Integer monthlyPeriod;
         private Integer weeklyPeriod;
         private LocalDateTime date;
+        private LocalDate startDate;
+        private LocalDate endDate;
 
         @QueryProjection
-        public AccountBookDetailResponse(UUID accountbookId, UUID categoryId, String categoryName, Character type, String title, Integer price, String memo, Character paymentMethod, Character fixedExpenditureYn, Character fixedIncomeYn, Character periodType, Integer monthlyPeriod, Integer weeklyPeriod, LocalDateTime date) {
+        public AccountBookDetailResponse(UUID accountbookId, UUID categoryId, String categoryName, Character type, String title, Integer price, String memo, Character paymentMethod, Character fixedExpenditureYn, Character fixedIncomeYn, Integer weeklyPeriod, LocalDateTime date, LocalDate startDate, LocalDate endDate) {
             this.accountbookId = accountbookId;
             this.categoryId = categoryId;
             this.categoryName = categoryName;
@@ -84,10 +82,10 @@ public class AccountBookDto {
             this.paymentMethod = paymentMethod;
             this.fixedExpenditureYn = fixedExpenditureYn;
             this.fixedIncomeYn = fixedIncomeYn;
-            this.periodType = periodType;
-            this.monthlyPeriod = monthlyPeriod;
             this.weeklyPeriod = weeklyPeriod;
             this.date = date;
+            this.startDate = startDate;
+            this.endDate = endDate;
         }
     }
 }

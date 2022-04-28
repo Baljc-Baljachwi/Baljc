@@ -45,9 +45,12 @@ public class AccountBookServiceImpl implements AccountBookService {
     @Override
     public void insertAccountBook(AccountBookDto.AccountBookRequest accountBookRequest) {
         //날짜랑 시간 합쳐서 하나로 만들기
-        LocalDate date = LocalDate.parse(accountBookRequest.getDate(), DateTimeFormatter.ISO_DATE);
-        LocalTime time = LocalTime.parse(accountBookRequest.getTime(), DateTimeFormatter.ISO_LOCAL_TIME);
-        LocalDateTime localDateTime = LocalDateTime.of(date, time);
+        LocalDateTime localDateTime = null;
+        if (accountBookRequest.getDate() != null && accountBookRequest.getTime() != null) {
+//            LocalDate date = LocalDate.parse(accountBookRequest.getDate(), DateTimeFormatter.ISO_DATE);
+//            LocalTime time = LocalTime.parse(accountBookRequest.getTime(), DateTimeFormatter.ISO_LOCAL_TIME);
+            localDateTime = LocalDateTime.of(accountBookRequest.getDate(), accountBookRequest.getTime());
+        }
 
         Category category = categoryRepository.getById(accountBookRequest.getCategoryId());
 
@@ -61,9 +64,9 @@ public class AccountBookServiceImpl implements AccountBookService {
                 .fixedIncomeYn(accountBookRequest.getFixedIncomeYn().charAt(0))
                 .paymentMethod(accountBookRequest.getPaymentMethod().charAt(0))
                 .memo(accountBookRequest.getMemo())
-                .periodType(accountBookRequest.getPeriodType().charAt(0))
                 .monthlyPeriod(accountBookRequest.getMonthlyPeriod())
-                .weeklyPeriod(accountBookRequest.getWeeklyPeriod())
+                .startDate(accountBookRequest.getStartDate())
+                .endDate(accountBookRequest.getEndDate())
                 .deletedYn('N')
                 .build());
 
