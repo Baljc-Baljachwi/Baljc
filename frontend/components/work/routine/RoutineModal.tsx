@@ -120,11 +120,7 @@ export default function RoutineModal({
       {open ? (
         <>
           <ModalOverlay visible={open} />
-          <ModalWrapper
-            visible={open}
-            tabIndex={-1}
-            onClick={open ? onMaskClick : null}
-          >
+          <ModalWrapper visible={open} tabIndex={-1} onClick={onMaskClick}>
             <ModalInner tabIndex={0} className="modal-inner">
               <ModalHeader>
                 <ModalTitle>{label}</ModalTitle>
