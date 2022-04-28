@@ -1,5 +1,7 @@
 import styled from "styled-components";
 
+import Image from "next/image";
+
 import Header from "components/common/Header";
 import ProfileCard from "components/mypage/ProfileCard";
 import ToggleButton from "components/mypage/settings/ToggleButton";
@@ -33,17 +35,16 @@ const PageTitle = styled.span`
   padding: 2rem 0;
   color: #33487f;
 `;
-const DivisionLine = styled.hr`
-  border-top: 2px solid lightgray;
-`;
+
 const ProfileContentListContainer = styled.div`
-  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25));
+  /* filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25)); */
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: #f4f4f4;
+  /* background-color: #f4f4f4; */
+  background-color: #ffffff;
   border: none;
-  border-radius: 1rem;
+  /* border-radius: 1rem; */
   width: 100%;
   height: 100%;
 
@@ -52,71 +53,82 @@ const ProfileContentListContainer = styled.div`
   gap: 2rem;
 `;
 //-----------------------------------------------------------------------------------
-// const ProfileMenuCardItem = styled.div`
-//   /* width: 32rem; */
-//   /* margin-left: 2rem; */
-//   filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25));
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: center;
-//   background-color: #f4f4f4;
+const ProfileMenuCardItem = styled.div`
+  /* width: 32rem; */
+  /* margin-left: 2rem; */
+  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #f4f4f4;
 
-//   width: 100%;
-//   /* width: 32rem; */
-//   height: 9rem;
-//   /* width: 320px; */
-//   /* height: 90px; */
+  width: 100%;
+  /* width: 32rem; */
+  /* height: 9rem; */
+  /* width: 320px; */
+  /* height: 90px; */
 
-//   font-size: 1.6rem;
-//   padding: 1.6rem 2rem;
+  font-size: 1.6rem;
+  padding: 1.6rem 2rem;
+  gap: 2rem;
 
-//   font-family: "Noto Sans KR", sans-serif;
-//   color: #747373;
-//   font-style: normal;
-//   -webkit-appearance: none;
-//   -moz-appearance: none;
-//   appearance: none;
-//   border: none;
-//   border-radius: 1rem;
-//   cursor: pointer;
-// `;
+  font-family: "Noto Sans KR", sans-serif;
+  color: #747373;
+  font-style: normal;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
+`;
 
-// const ProfileMenuCardContent = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   /* justify-content: space-between; */
-// `;
+const ProfileMenuCardContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-between; */
+  /* padding: 2rem 0; */
+  height: 100%;
+`;
 
-// const ProfileMenuCardTitle = styled.span`
-//   color: #33487f;
-//   font-weight: 700;
-//   font-size: 1.6rem;
-// `;
+const ProfileMenuCardTitle = styled.span`
+  color: #33487f;
+  font-weight: 700;
+  font-size: 1.6rem;
+`;
 
-// const ProfileMenuCardDetail = styled.span`
-//   color: #696969;
-//   font-size: 1rem;
-//   font-weight: 400;
-// `;
+const ProfileMenuCardDetail = styled.span`
+  color: #696969;
+  font-size: 1rem;
+  font-weight: 400;
+`;
+const DivisionLine = styled.hr`
+  border-top: 2px solid lightgray;
+`;
+const GoalsItemList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+`;
+const GoalsItem = styled.div`
+  display: flex;
+  justify-content: space-between;
+  /* flex-direction: column; */
+  span {
+    color: #3d3d3d;
+  }
+  .right-content {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+  }
+`;
 
-// const SettingAlarmItemList = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   gap: 2rem;
-// `;
-// const SettingAlarmItem = styled.div`
-//   display: flex;
-//   justify-content: space-between;
-//   /* flex-direction: column; */
-//   span {
-//     color: #3d3d3d;
-//   }
-//   .right-content {
-//     display: flex;
-//     flex-direction: row;
-//     gap: 1rem;
-//   }
-// `;
+const GraphImage = styled.div`
+  position: relative;
+  width: 28rem;
+  height: 12rem;
+`;
 
 interface ProfileMenuContentProps {
   title: string;
@@ -133,10 +145,6 @@ const goals = () => {
             <ProfileCard />
           </ProfileCardContainer>
           <ProfileContentListContainer>
-            <PageTitle>설정</PageTitle>
-            {/* <ProfileSettingsList /> */}
-          </ProfileContentListContainer>
-          {/* <ProfileContentListContainer>
             <ProfileMenuCardItem>
               <ProfileMenuCardContent>
                 <ProfileMenuCardTitle>목표를 향해서</ProfileMenuCardTitle>
@@ -145,24 +153,35 @@ const goals = () => {
                 </ProfileMenuCardDetail>
               </ProfileMenuCardContent>
               <DivisionLine />
-              <SettingAlarmItemList>
-                <SettingAlarmItem>
+              <GoalsItemList>
+                <GoalsItem>
+                  <span>목표 도달 관련 분석 여기에 넣기</span>
+                </GoalsItem>
+                <GraphImage>
+                  <Image
+                    className="graphImg"
+                    src="/assets/img/mypage/analysis/Graph1.png"
+                    alt="graph1"
+                    layout="fill"
+                  />
+                </GraphImage>
+                <GoalsItem>
                   <span>가계부</span>
                   <div className="right-content">
                     <span>오후 9:00</span>
                     <ToggleButton />
                   </div>
-                </SettingAlarmItem>
-                <SettingAlarmItem>
+                </GoalsItem>
+                <GoalsItem>
                   <span>할 일</span>
                   <div className="right-content">
                     <span>오전 9:00</span>
                     <ToggleButton />
                   </div>
-                </SettingAlarmItem>
-              </SettingAlarmItemList>
+                </GoalsItem>
+              </GoalsItemList>
             </ProfileMenuCardItem>
-          </ProfileContentListContainer> */}
+          </ProfileContentListContainer>
         </PageContainer>
       </Container>
     </>
