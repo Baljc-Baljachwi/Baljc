@@ -61,6 +61,7 @@ export default function Monthly() {
             event.preventDefault();
             console.log(value);
           }}
+          minDetail="month" // month 클릭시 year 이동 방지
           tileContent={({ date }) => (
             <>
               {saved.find((x) => x === dayjs(date).format("YYYY-MM-DD")) ? (

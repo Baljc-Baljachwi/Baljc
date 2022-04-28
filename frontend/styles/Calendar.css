@@ -50,7 +50,7 @@
   color: #000000;
 }
 .react-calendar__navigation button:disabled {
-  background-color: #f0f0f0;
+  background-color: #ffffff;
 }
 
 /* 요일 */
