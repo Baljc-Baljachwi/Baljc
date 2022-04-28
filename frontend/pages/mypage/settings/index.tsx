@@ -8,7 +8,6 @@ const Container = styled.div`
 `;
 const PageContainer = styled.main`
   font-family: "Noto Sans KR", sans-serif;
-
   background-color: #ffffff;
   color: #3d3d3d;
   display: flex;
