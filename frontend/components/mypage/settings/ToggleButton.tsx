@@ -13,6 +13,7 @@ const ToggleButtonBackGround = styled.div<{ isOn: boolean }>`
   height: 1.6rem;
   background-color: ${(props) => (props.isOn ? "#FFD469" : "#aaaaaa")};
   border-radius: 4rem;
+  box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
 `;
 
 const ToggleButtonCircle = styled.div<{ isOn: boolean }>`
