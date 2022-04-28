@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -31,5 +32,11 @@ public class AccountBookController {
     public ResponseEntity<BaseResponse> insertAccountBook(@Valid @RequestBody AccountBookDto.AccountBookRequest accountBookRequest) {
         accountBookService.insertAccountBook(accountBookRequest);
         return ResponseEntity.status(200).body(new BaseResponse(1301, "가계부 추가 성공"));
+    }
+
+    @GetMapping("/{accountbookId}")
+    public ResponseEntity<BaseDataResponse> getAccountBookDetail(@PathVariable String accountbookId) {
+        AccountBookDto.AccountBookDetailResponse response = accountBookService.getAccountBookDetail(UUID.fromString(accountbookId));
+        return ResponseEntity.status(200).body(new BaseDataResponse<>(1302, "가계부 상세 조회 성공", response));
     }
 }

@@ -5,9 +5,11 @@ import com.baljc.db.entity.AccountBook;
 import com.baljc.db.entity.Category;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface AccountBookService {
 
     List<AccountBookDto.AccountBookCategoryResponse> getAccountBookCategory(String type);
     void insertAccountBook(AccountBookDto.AccountBookRequest accountBookRequest);
+    AccountBookDto.AccountBookDetailResponse getAccountBookDetail(UUID accountbookId);
 }

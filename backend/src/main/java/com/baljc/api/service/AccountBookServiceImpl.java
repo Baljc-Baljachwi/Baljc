@@ -17,6 +17,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -56,30 +57,37 @@ public class AccountBookServiceImpl implements AccountBookService {
                 .title(accountBookRequest.getTitle())
                 .price(accountBookRequest.getPrice())
                 .date(localDateTime)
-                .fixedExpenditureYn(accountBookRequest.getFixedExpenditureYn())
-                .fixedIncomeYn(accountBookRequest.getFixedIncomeYn())
+                .fixedExpenditureYn(accountBookRequest.getFixedExpenditureYn().charAt(0))
+                .fixedIncomeYn(accountBookRequest.getFixedIncomeYn().charAt(0))
                 .paymentMethod(accountBookRequest.getPaymentMethod().charAt(0))
                 .memo(accountBookRequest.getMemo())
                 .periodType(accountBookRequest.getPeriodType().charAt(0))
                 .monthlyPeriod(accountBookRequest.getMonthlyPeriod())
                 .weeklyPeriod(accountBookRequest.getWeeklyPeriod())
+                .deletedYn('N')
                 .build());
 
 //        accountBookRepository.save(AccountBook.builder()
-//                        .category(category)
-//                        .member(memberService.getMemberByAuthentication())
-//                        .type(accountBookRequest.getType().charAt(0))
-//                        .title(accountBookRequest.getTitle())
-//                        .price(accountBookRequest.getPrice())
-//                        .date(localDateTime)
-//                        .fixedExpenditureYn(accountBookRequest.getFixedExpenditureYn())
-//                        .fixedIncomeYn(accountBookRequest.getFixedIncomeYn())
-//                        .paymentMethod(accountBookRequest.getPaymentMethod().charAt(0))
-//                        .memo(accountBookRequest.getMemo())
-//                        .periodType(accountBookRequest.getPeriodType().charAt(0))
-//                        .monthlyPeriod(accountBookRequest.getMonthlyPeriod())
-//                        .weeklyPeriod(accountBookRequest.getWeeklyPeriod())
-//                        .build());
+//                .category(category)
+//                .member(memberService.getMemberByAuthentication())
+//                .type(accountBookRequest.getType().charAt(0))
+//                .title(accountBookRequest.getTitle())
+//                .price(accountBookRequest.getPrice())
+//                .date(localDateTime)
+//                .fixedExpenditureYn(accountBookRequest.getFixedExpenditureYn().charAt(0))
+//                .fixedIncomeYn(accountBookRequest.getFixedIncomeYn().charAt(0))
+//                .paymentMethod(accountBookRequest.getPaymentMethod().charAt(0))
+//                .memo(accountBookRequest.getMemo())
+//                .periodType(accountBookRequest.getPeriodType().charAt(0))
+//                .monthlyPeriod(accountBookRequest.getMonthlyPeriod())
+//                .weeklyPeriod(accountBookRequest.getWeeklyPeriod())
+//                .deletedYn('N')
+//                .build());
+    }
+
+    @Override
+    public AccountBookDto.AccountBookDetailResponse getAccountBookDetail(UUID accountbookId) {
+        return accountBookRepositorySupport.getAccountBookDetail(accountbookId).orElseThrow(() -> new NullPointerException("해당 가계부가 존재하지 않습니다."));
     }
 
 }
