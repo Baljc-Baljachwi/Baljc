@@ -33,6 +33,13 @@ public class MemberDto {
 
     @Getter
     @AllArgsConstructor
+    public static class SigninInfo {
+        private String jwt;
+        private Boolean surveyedYn;
+    }
+
+    @Getter
+    @AllArgsConstructor
     public static class Response {
         private String nickname;
         private String profileUrl;
