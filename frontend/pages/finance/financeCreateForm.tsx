@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Header from "../../components/common/Header";
 import CostForm from "../../components/finance/form/CostForm";
 import IncomeForm from "components/finance/form/IncomeForm";
+import { AccountType } from "types";
 
 const PageContainer = styled.main`
   padding: 0 2rem;
@@ -25,8 +26,6 @@ const CostIncomeButton = styled.button<{ isSelected: boolean }>`
   font-family: "Noto Sans KR";
   font-size: 2.4rem;
 `;
-
-type AccountType = "E" | "I";
 
 export default function FinanceCreateForm() {
   const [accountType, setAccountType] = useState<AccountType>("E");

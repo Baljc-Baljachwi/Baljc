@@ -119,7 +119,7 @@ export default function CostForm() {
       // 고정 지출 체크 시 불필요 데이터 null 처리
       setCostForm((prev) => ({
         ...prev,
-        [name]: target.checked,
+        [name]: target.checked ? "Y" : "N",
         periodType: "M",
         date: null,
       }));
@@ -127,7 +127,7 @@ export default function CostForm() {
       // 고정 지출 체크 해제 시 불필요 데이터 null 처리
       setCostForm((prev) => ({
         ...prev,
-        [name]: target.checked,
+        [name]: target.checked ? "Y" : "N",
         periodType: "N",
         monthlyPeriod: null,
         weeklyPeriod: null,
@@ -233,11 +233,11 @@ export default function CostForm() {
             type="checkbox"
             id="fixedExpenditureYn"
             name="fixedExpenditureYn"
-            checked={costForm.fixedExpenditureYn || false}
+            checked={costForm.fixedExpenditureYn === "Y" || false}
             onChange={handleInputChange}
           />
           <CheckLabel htmlFor="fixedExpenditureYn">
-            {costForm.fixedExpenditureYn ? (
+            {costForm.fixedExpenditureYn === "Y" ? (
               <Icon
                 mode="fas"
                 icon="square-check"
