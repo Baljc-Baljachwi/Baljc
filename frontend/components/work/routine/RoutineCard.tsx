@@ -1,5 +1,7 @@
+import { useState } from "react";
 import styled from "styled-components";
 import Icon from "../../common/Icon";
+import RoutineModal from "./RoutineModal";
 
 const CardDiv = styled.div`
   margin: 2rem;
@@ -12,6 +14,7 @@ const CardDiv = styled.div`
   gap: 1rem;
   font-size: 1.6rem;
   font-weight: 500;
+  cursor: pointer;
 `;
 
 const RoutineContent = styled.div`
@@ -30,18 +33,33 @@ interface listProps {
 }
 
 export default function RoutineCard(props: { list: listProps }) {
+  const [open, setOpen] = useState(false);
+
+  const onClick = () => {
+    setOpen((prev) => !prev);
+  };
+
   return (
     <>
-      <CardDiv>
+      <CardDiv onClick={onClick}>
         <Icon mode="fas" icon="circle" color="#8CBFF2" size="1rem" />
         <RoutineContent>
           <RoutineTitle>{props.list.title}</RoutineTitle>
           <RoutineDay>
-            {props.list.repetition.map((item) => item + " ")}{" "}
+            {props.list.repetition.map((item) => item + " ")}
           </RoutineDay>
-          {/* <RoutineDay>{props.list.repetition} </RoutineDay> */}
         </RoutineContent>
       </CardDiv>
+      {open ? (
+        <RoutineModal
+          open={open}
+          setOpen={setOpen}
+          label={"오늘의 일과 수정"}
+          list={props.list}
+        />
+      ) : (
+        ""
+      )}
     </>
   );
 }
