@@ -11,7 +11,7 @@ export default function KakaoAuth() {
     kakaoLogin(code as string).then((res) => {
       console.log(res.data);
       if (res.data.code === 1000) {
-        const { accessToken } = res.headers;
+        const accessToken = res.headers.authorization;
         console.log(`accessToken : ${accessToken}`);
         console.log(res.data);
         console.log(res.data.data);
