@@ -3,10 +3,8 @@ package com.baljc.api.service;
 import com.baljc.api.dto.MemberDto;
 import com.baljc.common.jwt.TokenProvider;
 import com.baljc.common.util.SecurityUtil;
-import com.baljc.db.entity.Member;
-import com.baljc.db.entity.PushAlarm;
-import com.baljc.db.repository.MemberRepository;
-import com.baljc.db.repository.PushAlarmRepository;
+import com.baljc.db.entity.*;
+import com.baljc.db.repository.*;
 import com.baljc.exception.UnauthenticatedMemberException;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -38,6 +36,9 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final PushAlarmRepository pushAlarmRepository;
+    private final AccountBookRepository accountBookRepository;
+    private final RoutineRepository routineRepository;
+    private final TodoRepository todoRepository;
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final String clientId;
@@ -47,6 +48,9 @@ public class MemberServiceImpl implements MemberService {
 
     public MemberServiceImpl(MemberRepository memberRepository,
                              PushAlarmRepository pushAlarmRepository,
+                             AccountBookRepository accountBookRepository,
+                             RoutineRepository routineRepository,
+                             TodoRepository todoRepository,
                              TokenProvider tokenProvider,
                              AuthenticationManagerBuilder authenticationManagerBuilder,
                              @Value("${kakao.clientId}") String clientId,
@@ -56,6 +60,9 @@ public class MemberServiceImpl implements MemberService {
     ) {
         this.memberRepository = memberRepository;
         this.pushAlarmRepository = pushAlarmRepository;
+        this.accountBookRepository = accountBookRepository;
+        this.routineRepository = routineRepository;
+        this.todoRepository = todoRepository;
         this.tokenProvider = tokenProvider;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.clientId = clientId;
@@ -160,7 +167,9 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findById(UUID.fromString(SecurityUtil.getCurrentUsername()
                         .orElseThrow(() -> new ArithmeticException("토큰으로 조회되는 회원이 존재하지 않습니다."))))
                 .orElseThrow(() -> new UnauthenticatedMemberException("토큰으로 조회되는 회원이 존재하지 않습니다."));
-        if (member.getSurveyedYn() == null || member.getSurveyedYn() == 'N')
+        if (member.getSurveyedYn() == null)
+            throw new UnauthenticatedMemberException("탈퇴한 회원은 서비스를 이용할 수 없습니다.");
+        else if (member.getSurveyedYn() == 'N')
             throw new UnauthenticatedMemberException("설문을 시행하지 않은 회원은 서비스를 이용할 수 없습니다.");
         return member;
     }
@@ -176,7 +185,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateMember(MemberDto.RegisterRequest registerRequest, MultipartFile multipartFile) {
-        Member member = getMemberByAuthentication();
+        Member member = memberRepository.findById(UUID.fromString(SecurityUtil.getCurrentUsername()
+                        .orElseThrow(() -> new ArithmeticException("토큰으로 조회되는 회원이 존재하지 않습니다."))))
+                .orElseThrow(() -> new UnauthenticatedMemberException("토큰으로 조회되는 회원이 존재하지 않습니다."));
         member.updateInfo(registerRequest);
         if (registerRequest.getProfileUpdated()) {
             if (!multipartFile.isEmpty()) {
@@ -193,6 +204,20 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteMember() {
-
+        Member member = getMemberByAuthentication();
+        pushAlarmRepository.delete(pushAlarmRepository.findByMember(member)
+                .orElseThrow(() -> new NullPointerException("회원의 알림설정이 존재하지 않습니다.")));
+        for (AccountBook accountBook:accountBookRepository.findByMember(member)) {
+            accountBookRepository.delete(accountBook);
+        }
+        for (Routine routine:routineRepository.findByMember(member)) {
+            routineRepository.delete(routine);
+        }
+        for (Todo todo:todoRepository.findByMember(member)) {
+            todoRepository.delete(todo);
+        }
+        if (member.getProfileUrl() != null) fileService.deleteImage(member.getProfileUrl());
+        member.argsNullSetter();
+        SecurityContextHolder.clearContext();
     }
 }
