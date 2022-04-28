@@ -5,7 +5,7 @@ const DayButtonContainer = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
-  margin: 1rem 0;
+  margin-bottom: 3rem;
 `;
 
 const DayButton = styled.label<{ isSelected: boolean }>`
