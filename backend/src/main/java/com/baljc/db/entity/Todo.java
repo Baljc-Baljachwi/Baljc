@@ -5,8 +5,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -16,7 +14,6 @@ import java.util.UUID;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Todo {
@@ -28,10 +25,8 @@ public class Todo {
     private LocalDate date;
     private String content;
     @Convert(converter = BooleanToYNConverter.class)
-    @ColumnDefault("false")
     private Boolean completedYn;
     @Convert(converter = BooleanToYNConverter.class)
-    @ColumnDefault("false")
     private Boolean deletedYn;
 
     @ManyToOne(targetEntity = Member.class, fetch = FetchType.LAZY)

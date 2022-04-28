@@ -5,8 +5,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -15,7 +13,6 @@ import java.util.UUID;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Routine {
@@ -28,7 +25,6 @@ public class Routine {
     private String content;
     private Integer repetition;
     @Convert(converter = BooleanToYNConverter.class)
-    @ColumnDefault("false")
     private Boolean deletedYn;
 
     @ManyToOne(targetEntity = Member.class, fetch = FetchType.LAZY)

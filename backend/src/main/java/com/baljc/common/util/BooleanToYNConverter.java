@@ -4,13 +4,13 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 @Converter
-public class BooleanToYNConverter implements AttributeConverter<Boolean, Character> {
+public class BooleanToYNConverter implements AttributeConverter<Boolean, String> {
     @Override
-    public Character convertToDatabaseColumn(Boolean attribute){
-        return (attribute != null && attribute) ? 'Y' : 'N';
+    public String convertToDatabaseColumn(Boolean attribute){
+        return (attribute != null && attribute) ? "Y" : "N";
     }
     @Override
-    public Boolean convertToEntityAttribute(Character dbData){
-        return 'Y' == dbData;
+    public Boolean convertToEntityAttribute(String dbData){
+        return "Y".equals(dbData);
     }
 }
