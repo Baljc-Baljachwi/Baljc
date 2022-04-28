@@ -12,12 +12,12 @@ export default function RoutineDetail() {
     {
       id: 1,
       title: "분리수거",
-      repetition: ["목"],
+      repetition: 4, // 0000100
     },
     {
       id: 2,
       title: "헬스가기",
-      repetition: ["월", "수", "금"],
+      repetition: 42, // 0101010
     },
   ];
 
