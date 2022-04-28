@@ -15,22 +15,28 @@ interface IconProps {
   icon: IconName;
   color?: string;
   size?: string;
+  display?: string;
 }
 
-const StyledIcon = styled.span<{ size?: string; color?: string }>`
+const StyledIcon = styled.span<{
+  size?: string;
+  color?: string;
+  display?: string;
+}>`
+  display: ${(props) => (props.display ? props.display : "")};
   svg {
     color: ${(props) => (props.color ? props.color : "#000000")};
     font-size: ${(props) => (props.size ? props.size : "1rem")};
   }
 `;
 
-export default function Icon({ mode, icon, color, size }: IconProps) {
+export default function Icon({ mode, icon, color, size, display }: IconProps) {
   library.add(fas, far);
   const iconLookup: IconLookup = { prefix: mode, iconName: icon };
   const iconDefinition: IconDefinition = findIconDefinition(iconLookup);
 
   return (
-    <StyledIcon color={color} size={size}>
+    <StyledIcon color={color} size={size} display={display}>
       <FontAwesomeIcon icon={iconDefinition} />
     </StyledIcon>
   );

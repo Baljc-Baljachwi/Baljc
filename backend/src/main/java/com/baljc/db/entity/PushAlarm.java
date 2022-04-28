@@ -26,14 +26,12 @@ public class PushAlarm {
     @Column(columnDefinition = "BINARY(16)")
     private UUID pushAlarmId;
     @Convert(converter = BooleanToYNConverter.class)
-    @ColumnDefault("true")
     private Boolean accountAlarmYn;
-    @ColumnDefault("LocalTime.parse('09:00:00')")
+    @ColumnDefault("'09:00:00'")
     private LocalTime accountAlarmTime;
     @Convert(converter = BooleanToYNConverter.class)
-    @ColumnDefault("true")
     private Boolean todoAlarmYn;
-    @ColumnDefault("LocalTime.parse('09:00:00')")
+    @ColumnDefault("'09:00:00'")
     private LocalTime todoAlarmTime;
 
     @OneToOne(targetEntity = Member.class, fetch = FetchType.LAZY)

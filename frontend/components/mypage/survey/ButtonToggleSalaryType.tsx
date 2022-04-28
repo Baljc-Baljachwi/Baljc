@@ -22,7 +22,7 @@ const StyledButton = styled.button<{ isSelected: boolean }>`
   border-radius: 0.5rem;
   cursor: pointer;
 `;
-type TypeSalary = "월급" | "시급" | "없음";
+type TypeSalary = "M" | "H" | "N";
 
 interface ButtonToggleSalaryTypeProps {
   selectedSalaryType: string;
@@ -39,22 +39,22 @@ export default function ButtonToggleSalaryType({
   return (
     <ButtonContainer>
       <StyledButton
-        value="월급"
-        isSelected={selectedSalaryType === "월급"}
+        value="M"
+        isSelected={selectedSalaryType === "M"}
         onClick={handleClickButton}
       >
         월급
       </StyledButton>
       <StyledButton
-        value="시급"
-        isSelected={selectedSalaryType === "시급"}
+        value="H"
+        isSelected={selectedSalaryType === "H"}
         onClick={handleClickButton}
       >
         시급
       </StyledButton>
       <StyledButton
-        value="없음"
-        isSelected={selectedSalaryType === "없음"}
+        value="N"
+        isSelected={selectedSalaryType === "N"}
         onClick={handleClickButton}
       >
         없음

@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import Routine from "../../work/routine/index";
+
+import Icon from "../../common/Icon";
 
 const Container = styled.div`
   background-color: #4d5f8f;
@@ -17,28 +18,50 @@ const Title = styled.div`
   border-radius: 3px;
 `;
 
-const TextWrapper = styled.div`
+const RoutineList = styled.div`
   padding: 1rem 0;
   color: #ffffff;
 `;
 
-const RoutineItem = styled.div`
-  font-size: 1.4rem;
-  line-height: 2.4rem;
+const RoutineListItem = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 0.2rem;
+  gap: 1rem;
+  font-size: 1.6rem;
 `;
 
 export default function RoutineBoard() {
+  // API 연동 전
+  const routine = [
+    {
+      id: 1,
+      content: "분리수거",
+    },
+    {
+      id: 2,
+      content: "헬스장",
+    },
+  ];
   return (
     <Container>
       <Title>일과</Title>
-      {/* <TextWrapper>
+      <RoutineList>
         <ul>
           {routine.map((item) => (
-            <RoutineItem key={item.id}>{item.content}</RoutineItem>
+            <RoutineListItem key={item.id}>
+              <Icon
+                mode="fas"
+                icon="circle"
+                color="#FFD469"
+                size="1rem"
+                display="flex"
+              />
+              {item.content}
+            </RoutineListItem>
           ))}
         </ul>
-      </TextWrapper> */}
-      <Routine />
+      </RoutineList>
     </Container>
   );
 }

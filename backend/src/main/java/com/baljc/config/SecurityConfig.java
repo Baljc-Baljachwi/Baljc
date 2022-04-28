@@ -64,7 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeHttpRequests()    // HttpServletRequest를 사용하는 요청들에 대한 접근을 제한(인증 요청)
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() // Preflight 요청에 대해 인증 처리X
                 .antMatchers("/members/login/kakao").permitAll() // 해당 URL은 인증 처리X
-                .antMatchers(HttpMethod.POST, "/members").permitAll()
+                .antMatchers("/**").permitAll()
                 .anyRequest()
                 .authenticated()
 

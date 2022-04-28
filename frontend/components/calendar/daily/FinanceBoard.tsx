@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import { useState } from "react";
+import { useRouter } from "next/router";
+
 import FinanceList from "../../finance/list/FinanceList";
+import Icon from "../../common/Icon";
 
 const Container = styled.div`
   background-color: #4d5f8f;
@@ -16,6 +19,11 @@ const Title = styled.div`
   color: #ffffff;
   padding: 0.1rem 1rem;
   border-radius: 3px;
+`;
+
+const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 const TextWrapper = styled.div`
@@ -34,10 +42,11 @@ const Typography = styled.div<{
   cursor: ${(props) => (props.cursor ? props.cursor : "")};
 `;
 
-const FlexContainer = styled.div`
+const FlexContainer = styled.div<{ jc?: string }>`
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
+  justify-content: ${(props) => (props.jc ? props.jc : "")};
 `;
 
 const FinanceListContainer = styled.div`
@@ -49,14 +58,31 @@ const FinanceListContainer = styled.div`
 export default function FinanceBoard() {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
+  const router = useRouter();
+
   const handleClick = (e: any) => {
     setIsCollapsed((prev) => !prev);
   };
 
   return (
     <Container>
-      <div onClick={handleClick}>
+      <Header>
         <Title>가계부</Title>
+        <div
+          onClick={(e: any) => {
+            router.push("/finance/financeCreateForm");
+          }}
+        >
+          <Icon
+            mode="fas"
+            icon="plus"
+            color="#ffffff"
+            size="2rem"
+            display="flex"
+          />
+        </div>
+      </Header>
+      <div onClick={handleClick}>
         <TextWrapper>
           <Typography fs="1.5rem">고정지출비용 {}원</Typography>
           <FlexContainer>
@@ -78,7 +104,30 @@ export default function FinanceBoard() {
         </TextWrapper>
       </div>
       <FinanceListContainer>
-        {isCollapsed ? <FinanceList /> : null}
+        {isCollapsed ? (
+          <>
+            <FinanceList />
+            <Typography fs="1rem" p="0.5rem 100% 0 100%" onClick={handleClick}>
+              <Icon
+                mode="fas"
+                icon="caret-up"
+                color="#ffffff"
+                size="2rem"
+                display="flex"
+              />
+            </Typography>
+          </>
+        ) : (
+          <Typography fs="1rem" p="0 100%" onClick={handleClick}>
+            <Icon
+              mode="fas"
+              icon="caret-down"
+              color="#ffffff"
+              size="2rem"
+              display="flex"
+            />
+          </Typography>
+        )}
       </FinanceListContainer>
     </Container>
   );

@@ -5,11 +5,20 @@ import Icon from "../../common/Icon";
 import ButtonTogglePaymentMethod from "./ButtonTogglePaymentMethod";
 import ButtonTogglePeriodType from "./ButtonTogglePeriodType";
 import ButtonDaySelect from "./ButtonDaySelect";
+import ButtonBottom from "components/common/ButtonBottom";
+import { IAccountBook, PeriodType, PaymentMethodType } from "types";
+
+const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  padding-bottom: 10rem;
+`;
 
 const InputContainer = styled.div<{ isPrice?: boolean }>`
   width: 100%;
   border-bottom: 1px solid #cccccc;
-  margin: ${(props) => (props.isPrice ? "1.6rem 0 0 0" : "1.6rem 0 4rem 0")};
+  margin: ${(props) => (props.isPrice ? "1.6rem 0 0 0" : "1.6rem 0 0 0")};
   color: #cccccc;
   :focus-within {
     border-bottom: 1px solid #3d3d3d;
@@ -24,7 +33,7 @@ const InputContainer = styled.div<{ isPrice?: boolean }>`
 
 // 입력 Input 뒤에 단위 나타내는 텍스트
 const InputUnit = styled.span<{ hasValue: boolean }>`
-  line-height: 2rem;
+  line-height: 2.8rem;
   word-break: keep-all;
   color: ${(props) => (props.hasValue ? "#3d3d3d" : "#cccccc")};
 `;
@@ -39,6 +48,7 @@ const StyledInput = styled.input`
   -moz-appearance: none;
   appearance: none;
   color: #3d3d3d;
+  font-family: "Noto Sans KR", sans-serif;
   ::placeholder {
     color: #cccccc;
   }
@@ -50,9 +60,12 @@ const StyledLabel = styled.label`
   /* font-weight: 500; */
   display: inline-block;
   margin-top: 1.6rem;
+  cursor: pointer;
 `;
 
 const CheckboxContainer = styled.div`
+  position: absolute;
+  right: 2rem;
   display: flex;
   justify-content: end;
   padding-top: 1rem;
@@ -65,30 +78,32 @@ const StyledCheckBox = styled.input`
 `;
 
 const CheckLabel = styled.label`
+  font-size: 1.6rem;
   cursor: pointer;
+  line-height: 1.6rem;
 `;
 
-interface ICostForm {
-  title: string; // 1 ~ 18자
-  price: number;
-  memo: string; // 100자 이하
-  paymentMethod: "M" | "C" | "E" | "N"; // M: 현금, C: 카드, E: 기타, N: null
-  fixed: boolean;
+// interface ICostForm {
+//   title: string; // 1 ~ 18자
+//   price: number;
+//   memo: string; // 100자 이하
+//   paymentMethod: "M" | "C" | "E" | "N"; // M: 현금, C: 카드, E: 기타, N: null
+//   fixed: boolean;
 
-  // fixed true
-  periodType: "M" | "W" | "D" | "N"; // M: 매월, W: 매주, D: 매일, N: null
-  monthlyPeriod: number | null; // 1 ~ 31 사이.
-  weeklyPeriod: number | null; // 비트마스킹 이용, 일 목 => (1000100) = 68.
+//   // fixed true
+//   periodType: "M" | "W" | "D" | "N"; // M: 매월, W: 매주, D: 매일, N: null
+//   monthlyPeriod: number | null; // 1 ~ 31 사이.
+//   weeklyPeriod: number | null; // 비트마스킹 이용, 일 목 => (1000100) = 68.
 
-  // fixed false
-  date: string | null;
-  time: string | null;
-}
+//   // fixed false
+//   date: string | null;
+//   time: string | null;
+// }
 
 export default function CostForm() {
-  const [costForm, setCostForm] = useState<ICostForm>({
+  const [costForm, setCostForm] = useState<IAccountBook>({
     paymentMethod: "C",
-  } as ICostForm);
+  } as IAccountBook);
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const target = event.target;
@@ -120,14 +135,14 @@ export default function CostForm() {
     }
   }
 
-  function handleTogglePaymentMethod(value: "M" | "C" | "E" | "N") {
+  function handleTogglePaymentMethod(value: PaymentMethodType) {
     setCostForm((prev) => ({
       ...prev,
       paymentMethod: value,
     }));
   }
 
-  function handleTogglePeriodType(value: "M" | "W" | "D" | "N") {
+  function handleTogglePeriodType(value: PeriodType) {
     // 바뀔 때마다 필요없는 데이터 null로
     switch (value) {
       case "M":
@@ -183,114 +198,130 @@ export default function CostForm() {
     }));
   }
 
+  function onClickConfirmButton(event: React.MouseEvent<HTMLButtonElement>) {
+    console.log("Confirm!!");
+    console.log(costForm);
+  }
+
   return (
-    <>
-      <StyledLabel>제목</StyledLabel>
-      <InputContainer>
-        <StyledInput
-          name="title"
-          value={costForm.title || ""}
-          onChange={handleInputChange}
-        />
-      </InputContainer>
-
-      <StyledLabel>금액</StyledLabel>
-      <InputContainer isPrice={true}>
-        <StyledInput
-          type="number"
-          placeholder="0"
-          name="price"
-          value={costForm.price || ""}
-          onChange={handleInputChange}
-        />
-        <InputUnit hasValue={costForm.price > 0}>원</InputUnit>
-      </InputContainer>
-
-      <CheckboxContainer>
-        <StyledCheckBox
-          type="checkbox"
-          id="fixed"
-          name="fixed"
-          checked={costForm.fixed || false}
-          onChange={handleInputChange}
-        />
-        <CheckLabel htmlFor="fixed">
-          {costForm.fixed ? (
-            <Icon
-              mode="fas"
-              icon="square-check"
-              color="#ffd469"
-              size="1.6rem"
-            />
-          ) : (
-            <Icon mode="far" icon="square" color="#ffd469" size="1.6rem" />
-          )}
-        </CheckLabel>
-        <label htmlFor="fixed">고정지출</label>
-      </CheckboxContainer>
-
-      <StyledLabel>날짜</StyledLabel>
-      {costForm.periodType === "M" ? (
-        <>
-          <ButtonTogglePeriodType
-            selectedPeriodType={costForm.periodType || "M"}
-            handleToggleButton={handleTogglePeriodType}
+    <FormContainer>
+      <div>
+        <StyledLabel>제목</StyledLabel>
+        <InputContainer>
+          <StyledInput
+            name="title"
+            value={costForm.title || ""}
+            onChange={handleInputChange}
           />
-          <InputContainer>
-            <StyledInput
-              type="number"
-              name="monthlyPeriod"
-              value={costForm.monthlyPeriod || 0}
-              onChange={handleInputChange}
+        </InputContainer>
+      </div>
+      <div>
+        <StyledLabel>금액</StyledLabel>
+        <InputContainer isPrice={true}>
+          <StyledInput
+            type="number"
+            placeholder="0"
+            name="price"
+            value={costForm.price || ""}
+            onChange={handleInputChange}
+          />
+          <InputUnit hasValue={costForm.price > 0}>원</InputUnit>
+        </InputContainer>
+
+        <CheckboxContainer>
+          <StyledCheckBox
+            type="checkbox"
+            id="fixedExpenditureYn"
+            name="fixedExpenditureYn"
+            checked={costForm.fixedExpenditureYn || false}
+            onChange={handleInputChange}
+          />
+          <CheckLabel htmlFor="fixedExpenditureYn">
+            {costForm.fixedExpenditureYn ? (
+              <Icon
+                mode="fas"
+                icon="square-check"
+                color="#ffd469"
+                size="1.6rem"
+              />
+            ) : (
+              <Icon mode="far" icon="square" color="#ffd469" size="1.6rem" />
+            )}
+          </CheckLabel>
+          <CheckLabel htmlFor="fixedExpenditureYn">고정지출</CheckLabel>
+        </CheckboxContainer>
+      </div>
+
+      <div>
+        <StyledLabel>날짜</StyledLabel>
+        {costForm.periodType === "M" ? (
+          <>
+            <ButtonTogglePeriodType
+              selectedPeriodType={costForm.periodType || "M"}
+              handleToggleButton={handleTogglePeriodType}
             />
-            <InputUnit hasValue={!!costForm.monthlyPeriod}>일마다</InputUnit>
-          </InputContainer>
-        </>
-      ) : costForm.periodType === "W" ? (
-        <>
+            <InputContainer>
+              <StyledInput
+                type="number"
+                name="monthlyPeriod"
+                value={costForm.monthlyPeriod || 0}
+                onChange={handleInputChange}
+              />
+              <InputUnit hasValue={!!costForm.monthlyPeriod}>일마다</InputUnit>
+            </InputContainer>
+          </>
+        ) : costForm.periodType === "W" ? (
+          <>
+            <ButtonTogglePeriodType
+              selectedPeriodType={costForm.periodType}
+              handleToggleButton={handleTogglePeriodType}
+            />
+            <ButtonDaySelect
+              selectedDays={costForm.weeklyPeriod}
+              handleWeeklyDayUpdate={handleWeeklyDayUpdate}
+            />
+          </>
+        ) : costForm.periodType === "D" ? (
           <ButtonTogglePeriodType
             selectedPeriodType={costForm.periodType}
             handleToggleButton={handleTogglePeriodType}
           />
-          <ButtonDaySelect
-            selectedDays={costForm.weeklyPeriod}
-            handleWeeklyDayUpdate={handleWeeklyDayUpdate}
-          />
-        </>
-      ) : costForm.periodType === "D" ? (
-        <ButtonTogglePeriodType
-          selectedPeriodType={costForm.periodType}
-          handleToggleButton={handleTogglePeriodType}
-        />
-      ) : (
-        <InputContainer>
-          <StyledInput type="date" />
-        </InputContainer>
-      )}
-
-      <StyledLabel>시각</StyledLabel>
-      <InputContainer>
-        <StyledInput type="time" />
-      </InputContainer>
+        ) : (
+          <>
+            <InputContainer>
+              <StyledInput type="date" />
+            </InputContainer>
+            <StyledLabel>시각</StyledLabel>
+            <InputContainer>
+              <StyledInput type="time" />
+            </InputContainer>
+          </>
+        )}
+      </div>
 
       <StyledLabel>카테고리</StyledLabel>
 
-      <StyledLabel>결제 수단</StyledLabel>
-      <ButtonTogglePaymentMethod
-        selectedPaymentMethod={costForm.paymentMethod}
-        handleToggleButton={handleTogglePaymentMethod}
-      />
-
-      <StyledLabel>메모</StyledLabel>
-      <InputContainer>
-        <StyledInput
-          type="text"
-          name="memo"
-          placeholder="메모 남기기"
-          value={costForm.memo || ""}
-          onChange={handleInputChange}
+      <div>
+        <StyledLabel>결제 수단</StyledLabel>
+        <ButtonTogglePaymentMethod
+          selectedPaymentMethod={costForm.paymentMethod}
+          handleToggleButton={handleTogglePaymentMethod}
         />
-      </InputContainer>
-    </>
+      </div>
+
+      <div>
+        <StyledLabel>메모</StyledLabel>
+        <InputContainer>
+          <StyledInput
+            type="text"
+            name="memo"
+            placeholder="메모 남기기"
+            value={costForm.memo || ""}
+            onChange={handleInputChange}
+          />
+        </InputContainer>
+      </div>
+      <ButtonBottom label="확인" onClick={onClickConfirmButton}></ButtonBottom>
+    </FormContainer>
   );
 }

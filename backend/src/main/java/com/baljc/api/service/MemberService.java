@@ -5,7 +5,8 @@ import com.baljc.db.entity.Member;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface MemberService {
-    void insertMember(MemberDto.RegisterRequest registerRequest);
+    Member signinByKakao(String code);
+    MemberDto.SigninInfo authenticateMember(Member member);
     Member getMemberByAuthentication();
     MemberDto.Response getMemberInfoByAuthentication();
     void updateMember(MemberDto.RegisterRequest registerRequest, MultipartFile multipartFile);
