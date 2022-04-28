@@ -303,7 +303,7 @@ export default function IncomeForm() {
           />
         </InputContainer>
       </div>
-      <ButtonBottom label="수정" onClick={onClickConfirmButton} />
+      <ButtonBottom label="확인" onClick={onClickConfirmButton} />
     </FormContainer>
   );
 }
