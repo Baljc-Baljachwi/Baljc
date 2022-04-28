@@ -19,6 +19,25 @@ const CalendarWrapper = styled.div`
 export default function Monthly() {
   const [date, setDate] = useState(new Date());
   const [mounted, setMounted] = useState(false);
+  // const year = 2022;
+  // const month = 4;
+  // // 예산 내 소비한 날짜 저장할 배열
+  // const [mark, setMark] = useState([]);
+
+  // // `/api/calendars/months?year=&month=`
+  // // `/api/calendars/months?year={2022}&month={4}`
+  // const result = await api.get(`/api/calendars/months?`, {
+  //   params: {
+  //     year: year,
+  //     month: month,
+  //   },
+  // });
+  // console.log(result);
+
+  // 절약한 날짜
+  const saved = ["2022-04-02", "2022-04-03", "2022-04-10"];
+
+  // 소비 내역 있는 날짜
 
   const day = dayjs(date).format("DD일 dddd");
 
@@ -42,6 +61,19 @@ export default function Monthly() {
             event.preventDefault();
             console.log(value);
           }}
+          minDetail="month" // month 클릭시 year 이동 방지
+          tileContent={({ date }) => (
+            <>
+              {saved.find((x) => x === dayjs(date).format("YYYY-MM-DD")) ? (
+                <div className="img"></div>
+              ) : null}
+
+              <div className="finance-wrapper">
+                <div className="cost">-10,000</div>
+                <div className="income">2,000</div>
+              </div>
+            </>
+          )}
         />
       </CalendarWrapper>
       <Daily day={day} />
