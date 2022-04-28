@@ -117,7 +117,7 @@ export default function IncomeForm() {
       // 고정 수입 체크 시 불필요 데이터 null 처리
       setIncomeForm((prev) => ({
         ...prev,
-        [name]: target.checked,
+        [name]: target.checked ? "Y" : "N",
         periodType: "M",
         date: null,
       }));
@@ -125,7 +125,7 @@ export default function IncomeForm() {
       // 고정 수입 체크 해제 시 불필요 데이터 null 처리
       setIncomeForm((prev) => ({
         ...prev,
-        [name]: target.checked,
+        [name]: target.checked ? "Y" : "N",
         periodType: "N",
         monthlyPeriod: null,
         weeklyPeriod: null,
@@ -224,11 +224,11 @@ export default function IncomeForm() {
             type="checkbox"
             id="fixedIncomeYn"
             name="fixedIncomeYn"
-            checked={incomeForm.fixedIncomeYn || false}
+            checked={incomeForm.fixedIncomeYn === "Y" || false}
             onChange={handleInputChange}
           />
           <CheckLabel htmlFor="fixedIncomeYn">
-            {incomeForm.fixedIncomeYn ? (
+            {incomeForm.fixedIncomeYn === "Y" ? (
               <Icon
                 mode="fas"
                 icon="square-check"
