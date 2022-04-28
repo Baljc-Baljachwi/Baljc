@@ -5,6 +5,7 @@ import Icon from "../../common/Icon";
 import ButtonTrashCan from "../../common/ButtonTrashCan";
 import ButtonBottom from "../../common/ButtonBottom";
 import RoutineDaySelect from "./RoutineDaySelect";
+import { IRoutine } from "types";
 
 const ModalWrapper = styled.div<{ visible: boolean }>`
   box-sizing: border-box;
@@ -94,7 +95,7 @@ interface ModalProps {
   list: {
     id?: number;
     title?: string;
-    repetition: number | null;
+    repetition: number;
   };
   label?: string;
 }
@@ -105,6 +106,8 @@ export default function RoutineModal({
   label,
   list,
 }: ModalProps) {
+  const [day, setDay] = useState<number>(list.repetition);
+
   const onClose = () => {
     setOpen(false);
   };
@@ -115,7 +118,20 @@ export default function RoutineModal({
     }
   };
 
-  const dayList = ["일", "월", "화", "수", "목", "금", "토"];
+  function handleWeeklyDayUpdate(value: number) {
+    let newValue = 0;
+    if (!day) {
+      newValue = 1 << value;
+    } else if (day & (1 << value)) {
+      // 이미 선택된 경우
+      newValue = day - (1 << value);
+    } else {
+      // 새로 선택한 경우
+      newValue = day + (1 << value);
+    }
+    setDay(newValue);
+  }
+
   return (
     <>
       {open ? (
@@ -132,7 +148,10 @@ export default function RoutineModal({
               <ModalLable>제목</ModalLable>
               <ModalInput type="text" value={list.title} />
               <ModalLable>반복</ModalLable>
-              {/* <RoutineDaySelect></RoutineDaySelect> */}
+              <RoutineDaySelect
+                selectedDays={day}
+                handleWeeklyDayUpdate={handleWeeklyDayUpdate}
+              ></RoutineDaySelect>
               <ModalFooter>
                 <ButtonTrashCan />
                 <ButtonBottom label="추가" />

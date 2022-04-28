@@ -35,7 +35,7 @@ const RoutineDay = styled.p``;
 interface listProps {
   id: number;
   title: string;
-  repetition: number | null;
+  repetition: number;
 }
 
 export default function RoutineCard(props: { list: listProps }) {
@@ -61,7 +61,6 @@ export default function RoutineCard(props: { list: listProps }) {
                   : props.list.repetition & (1 << (6 - index))
                   ? true
                   : false;
-              console.log(checked);
               return (
                 <>
                   {checked ? (
