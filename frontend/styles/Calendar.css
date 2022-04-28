@@ -3,7 +3,7 @@
   max-width: 100%;
   font-family: "Noto Sans KR", sans-serif;
   line-height: 1.125em;
-  color: #3d3d3d;
+  color: #676c76;
 }
 
 .react-calendar--doubleView {
@@ -29,8 +29,8 @@
 .react-calendar button {
   margin: 0;
   border: 0;
-  outline: none;
   font-size: 1.3rem;
+  height: 5rem;
 }
 .react-calendar button:enabled:hover {
   cursor: pointer;
@@ -47,7 +47,7 @@
   font-family: "Noto Sans KR", sans-serif;
   font-size: 2rem;
   font-weight: bold;
-  color: #3d3d3d;
+  color: #000000;
 }
 .react-calendar__navigation button:disabled {
   background-color: #f0f0f0;
@@ -87,16 +87,16 @@ abbr[title] {
   padding: 0;
   background: none;
   text-align: center;
-  line-height: 16px;
-  color: #3d3d3d;
+  line-height: 1.5rem;
+  color: #676c76;
 }
 
-.react-calendar__month-view__days__day--weekend {
+/* .react-calendar__month-view__days__day--weekend {
   color: #d10000;
 }
 .react-calendar__month-view__days__day--neighboringMonth {
   color: #aaaaaa;
-}
+} */
 
 .react-calendar__tile:disabled {
   background-color: #f0f0f0;
@@ -104,7 +104,7 @@ abbr[title] {
 
 /* 현재 달/날짜 */
 .react-calendar__tile--now {
-  color: #3d3d3d;
+  color: #676c76;
   font-family: "Noto Sans KR", sans-serif;
   font-weight: 700;
 }
@@ -122,6 +122,40 @@ abbr[title] {
   font-family: "Noto Sans KR", sans-serif;
   font-weight: 700;
   text-decoration: underline;
-  border-radius: 50%;
-  padding: 0.5rem;
+}
+
+.img {
+  height: 2rem;
+  width: 2rem;
+  object-fit: cover;
+  background-image: url("/assets/img/foot_true.png");
+  background-size: cover;
+  position: absolute;
+  margin: -2rem 0 0 1.7rem;
+  opacity: 80%;
+  z-index: -100000;
+}
+
+.finance-wrapper {
+  display: flex;
+  justify-content: end;
+  margin: 0 1rem 0 0;
+}
+
+.cost {
+  position: absolute;
+  font-size: 0.5rem;
+  margin: -0.1rem 0 0 1.5rem;
+  color: #3d3d3d;
+  font-weight: 300;
+  text-decoration: none;
+}
+
+.income {
+  position: absolute;
+  font-size: 0.5rem;
+  margin: 0.8rem 0 0 1.5rem;
+  color: #8cbff2;
+  font-weight: 300;
+  text-decoration: none;
 }
