@@ -50,8 +50,8 @@ public class MemberController {
     @PutMapping
     public ResponseEntity<BaseResponse> modifyMember(@Valid @RequestPart(value = "memberInfo") MemberDto.RegisterRequest registerRequest,
                                                @RequestPart(value = "profileImage", required = false) MultipartFile multipartFile) {
-//        log.debug("modifyMember - {}", multipartFile.isEmpty());
-//        memberService.updateMember(registerRequest, multipartFile);
+        log.debug("modifyMember - {}", multipartFile.isEmpty());
+        memberService.updateMember(registerRequest, multipartFile);
         return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse(1002, "회원정보 변경이 완료되었습니다."));
     }
 

@@ -26,6 +26,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -78,12 +79,15 @@ public class MemberServiceImpl implements MemberService {
             member = Member.builder()
                     .kakaoId(kakaoUser.get("socialId"))
                     .email(kakaoUser.get("email"))
+                    .surveyedYn('N')
                     .build();
             memberRepository.save(member);
             pushAlarmRepository.save(PushAlarm.builder()
                     .member(member)
-                    .accountAlarmYn(true)
-                    .todoAlarmYn(true)
+                    .accountAlarmYn('Y')
+                    .accountAlarmTime(LocalTime.parse("09:00:00"))
+                    .todoAlarmYn('Y')
+                    .todoAlarmTime(LocalTime.parse("09:00:00"))
                     .build());
         }
         return member;
@@ -148,30 +152,42 @@ public class MemberServiceImpl implements MemberService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         log.debug("authenticateMember - surveyedYn: {}",  member.getSurveyedYn());
-        return new MemberDto.SigninInfo(tokenProvider.createToken(authentication), member.getSurveyedYn());
+        return new MemberDto.SigninInfo(tokenProvider.createToken(authentication), member.getSurveyedYn() == 'Y');
     }
 
     @Override
     public Member getMemberByAuthentication() {
-        return memberRepository.findById(UUID.fromString(SecurityUtil.getCurrentUsername()
+        Member member = memberRepository.findById(UUID.fromString(SecurityUtil.getCurrentUsername()
                         .orElseThrow(() -> new ArithmeticException("토큰으로 조회되는 회원이 존재하지 않습니다."))))
                 .orElseThrow(() -> new UnauthenticatedMemberException("토큰으로 조회되는 회원이 존재하지 않습니다."));
+        if (member.getSurveyedYn() == null || member.getSurveyedYn() == 'N')
+            throw new UnauthenticatedMemberException("설문을 시행하지 않은 회원은 서비스를 이용할 수 없습니다.");
+        return member;
     }
 
     @Override
     public MemberDto.Response getMemberInfoByAuthentication() {
         Member member = getMemberByAuthentication();
-        if (!member.getSurveyedYn())
-            throw new UnauthenticatedMemberException("설문을 시행하지 않은 회원은 정보를 조회할 수 없습니다.");
         return new MemberDto.Response(member.getNickname(), member.getProfileUrl(),
-                String.valueOf(member.getSalaryType()), member.getSalary(),
+                member.getSalaryType(), member.getSalary(),
                 member.getWorkingHours(), member.getBudget());
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateMember(MemberDto.RegisterRequest registerRequest, MultipartFile multipartFile) {
-
+        Member member = getMemberByAuthentication();
+        member.updateInfo(registerRequest);
+        if (registerRequest.getProfileUpdated()) {
+            if (!multipartFile.isEmpty()) {
+                String imageUrl = fileService.uploadImage(multipartFile, profileImagePath);
+                if (member.getProfileUrl() != null) fileService.deleteImage(member.getProfileUrl());
+                member.updateProfileUrl(imageUrl);
+            }else if (member.getProfileUrl() != null) {
+                fileService.deleteImage(member.getProfileUrl());
+                member.updateProfileUrl(null);
+            }
+        }
     }
 
     @Override

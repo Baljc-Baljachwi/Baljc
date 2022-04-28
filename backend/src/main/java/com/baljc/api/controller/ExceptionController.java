@@ -7,12 +7,16 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestControllerAdvice
@@ -79,6 +83,18 @@ public class ExceptionController {
         log.error("JsonProcessingException - {}", "JSON 처리 에러");
         //500
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new BaseResponse(2008, e.getMessage()));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<BaseResponse> MethodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
+        String allErrors = e.getBindingResult()
+                .getAllErrors()
+                .stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.joining(" / "));
+        log.error("MethodArgumentNotValidException - {}", allErrors);
+        // 400
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse(2009, allErrors));
     }
 
     @ExceptionHandler(UnauthenticatedMemberException.class)
