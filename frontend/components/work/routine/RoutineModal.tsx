@@ -92,8 +92,8 @@ const ModalFooter = styled.div`
 interface ModalProps {
   open: boolean;
   setOpen: any;
-  list: {
-    id?: number;
+  list?: {
+    id: number;
     title: string;
     repetition: number;
   };
@@ -107,8 +107,8 @@ export default function RoutineModal({
   list,
 }: ModalProps) {
   // 나중에 API 형식으로 받아오기
-  const [day, setDay] = useState<number>(list.repetition);
-  const [title, setTitle] = useState<string>(list.title);
+  const [day, setDay] = useState<number>(0);
+  const [title, setTitle] = useState<string>("");
 
   const onClose = () => {
     setOpen(false);
@@ -139,6 +139,16 @@ export default function RoutineModal({
     setTitle(e.target.value);
   }
 
+  useEffect(() => {
+    if (list) {
+      setDay(list.repetition);
+      setTitle(list.title);
+    } else {
+      setDay(0);
+      setTitle("");
+    }
+  }, []);
+
   return (
     <>
       {open ? (
@@ -153,7 +163,12 @@ export default function RoutineModal({
                 </ModalCloseBtn>
               </ModalHeader>
               <ModalLable>제목</ModalLable>
-              <ModalInput type="text" value={title} onChange={onChange} />
+              <ModalInput
+                type="text"
+                value={title}
+                onChange={onChange}
+                placeholder="일과를 입력해주세요."
+              />
               <ModalLable>반복</ModalLable>
               <RoutineDaySelect
                 selectedDays={day}
