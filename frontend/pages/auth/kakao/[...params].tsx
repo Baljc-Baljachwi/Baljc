@@ -11,7 +11,12 @@ export default function KakaoAuth() {
     kakaoLogin(code as string).then((res) => {
       console.log(res.data);
       if (res.data.code === 1000) {
-        console.log(res.data.data.accessToken);
+        const { accessToken } = res.headers;
+        console.log(`accessToken : ${accessToken}`);
+        console.log(res.data);
+        console.log(res.data.data);
+
+        router.push(res.data.data.surveyYn ? "/" : "/mypage/survey");
       }
     });
   }, [code]);
