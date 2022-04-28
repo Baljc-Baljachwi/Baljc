@@ -6,6 +6,7 @@ import ButtonTogglePaymentMethod from "./ButtonTogglePaymentMethod";
 import ButtonTogglePeriodType from "./ButtonTogglePeriodType";
 import ButtonDaySelect from "./ButtonDaySelect";
 import ButtonBottom from "components/common/ButtonBottom";
+import ButtonTrashCan from "components/common/ButtonTrashCan";
 import { IAccountBook, PeriodType, PaymentMethodType } from "types";
 
 const FormContainer = styled.div`
@@ -83,56 +84,46 @@ const CheckLabel = styled.label`
   line-height: 1.6rem;
 `;
 
-// interface ICostForm {
-//   title: string; // 1 ~ 18자
-//   price: number;
-//   memo: string; // 100자 이하
-//   paymentMethod: "M" | "C" | "E" | "N"; // M: 현금, C: 카드, E: 기타, N: null
-//   fixed: boolean;
+const ButtonContainer = styled.div`
+  width: 100%;
+  display: flex;
+  gap: 1.6rem;
+`;
 
-//   // fixed true
-//   periodType: "M" | "W" | "D" | "N"; // M: 매월, W: 매주, D: 매일, N: null
-//   monthlyPeriod: number | null; // 1 ~ 31 사이.
-//   weeklyPeriod: number | null; // 비트마스킹 이용, 일 목 => (1000100) = 68.
+interface CostFormProps {
+  initCostForm?: IAccountBook;
+}
 
-//   // fixed false
-//   date: string | null;
-//   time: string | null;
-// }
-
-export default function CostForm() {
-  const [costForm, setCostForm] = useState<IAccountBook>({
-    paymentMethod: "C",
-  } as IAccountBook);
+export default function CostForm({ initCostForm }: CostFormProps) {
+  const [costForm, setCostForm] = useState<IAccountBook>(
+    initCostForm || ({} as IAccountBook)
+  );
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const target = event.target;
     const value = target.value;
     const name = target.name;
 
-    if (target.type !== "checkbox") {
-      setCostForm((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    } else if (target.checked) {
-      // 고정 지출 체크 시 불필요 데이터 null 처리
-      setCostForm((prev) => ({
-        ...prev,
-        [name]: target.checked ? "Y" : "N",
-        periodType: "M",
-        date: null,
-      }));
-    } else {
-      // 고정 지출 체크 해제 시 불필요 데이터 null 처리
-      setCostForm((prev) => ({
-        ...prev,
-        [name]: target.checked ? "Y" : "N",
-        periodType: "N",
-        monthlyPeriod: null,
-        weeklyPeriod: null,
-      }));
-    }
+    setCostForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  }
+
+  function handleCheckBoxChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const target = event.target;
+    const name = target.name;
+
+    const newData = target.checked
+      ? { date: null }
+      : { monthlyPeriod: null, weeklyPeriod: null };
+
+    setCostForm((prev) => ({
+      ...prev,
+      [name]: target.checked ? "Y" : "N",
+      periodType: target.checked ? "M" : "N",
+      ...newData,
+    }));
   }
 
   function handleTogglePaymentMethod(value: PaymentMethodType) {
@@ -202,7 +193,7 @@ export default function CostForm() {
     console.log("Confirm!!");
     console.log(costForm);
   }
-
+  console.log(initCostForm);
   return (
     <FormContainer>
       <div>
@@ -234,7 +225,7 @@ export default function CostForm() {
             id="fixedExpenditureYn"
             name="fixedExpenditureYn"
             checked={costForm.fixedExpenditureYn === "Y" || false}
-            onChange={handleInputChange}
+            onChange={handleCheckBoxChange}
           />
           <CheckLabel htmlFor="fixedExpenditureYn">
             {costForm.fixedExpenditureYn === "Y" ? (
@@ -321,7 +312,18 @@ export default function CostForm() {
           />
         </InputContainer>
       </div>
-      <ButtonBottom label="확인" onClick={onClickConfirmButton}></ButtonBottom>
+      {!initCostForm ? (
+        <ButtonBottom
+          label="확인"
+          onClick={onClickConfirmButton}
+        ></ButtonBottom>
+      ) : (
+        <ButtonContainer>
+          <ButtonTrashCan />
+          <ButtonBottom label="수정" />
+        </ButtonContainer>
+      )}
+      {/* <ButtonBottom label="확인" onClick={onClickConfirmButton}></ButtonBottom> */}
     </FormContainer>
   );
 }

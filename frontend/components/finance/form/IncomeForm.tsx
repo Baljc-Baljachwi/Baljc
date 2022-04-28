@@ -5,6 +5,7 @@ import Icon from "../../common/Icon";
 import ButtonTogglePeriodType from "./ButtonTogglePeriodType";
 import ButtonDaySelect from "./ButtonDaySelect";
 import ButtonBottom from "components/common/ButtonBottom";
+import ButtonTrashCan from "components/common/ButtonTrashCan";
 import { IAccountBook, PeriodType } from "types";
 
 const FormContainer = styled.div`
@@ -82,25 +83,19 @@ const CheckLabel = styled.label`
   line-height: 1.6rem;
 `;
 
-// interface IIncomeForm {
-//   title: string; // 1 ~ 18자
-//   price: number;
-//   memo: string; // 100자 이하
-//   fixed: boolean;
+const ButtonContainer = styled.div`
+  width: 100%;
+  display: flex;
+  gap: 1.6rem;
+`;
 
-//   // fixed true
-//   periodType: "M" | "W" | "D" | "N"; // M: 매월, W: 매주, D: 매일, N: null
-//   monthlyPeriod: number | null; // 1 ~ 31 사이.
-//   weeklyPeriod: number | null; // 비트마스킹 이용, 일 목 => (1000100) = 68.
+interface IncomeFormProps {
+  initIncomeForm?: IAccountBook;
+}
 
-//   // fixed false
-//   date: string | null;
-//   time: string | null;
-// }
-
-export default function IncomeForm() {
+export default function IncomeForm({ initIncomeForm }: IncomeFormProps) {
   const [incomeForm, setIncomeForm] = useState<IAccountBook>(
-    {} as IAccountBook
+    initIncomeForm || ({} as IAccountBook)
   );
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -108,29 +103,26 @@ export default function IncomeForm() {
     const value = target.value;
     const name = target.name;
 
-    if (target.type !== "checkbox") {
-      setIncomeForm((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    } else if (target.checked) {
-      // 고정 수입 체크 시 불필요 데이터 null 처리
-      setIncomeForm((prev) => ({
-        ...prev,
-        [name]: target.checked ? "Y" : "N",
-        periodType: "M",
-        date: null,
-      }));
-    } else {
-      // 고정 수입 체크 해제 시 불필요 데이터 null 처리
-      setIncomeForm((prev) => ({
-        ...prev,
-        [name]: target.checked ? "Y" : "N",
-        periodType: "N",
-        monthlyPeriod: null,
-        weeklyPeriod: null,
-      }));
-    }
+    setIncomeForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  }
+
+  function handleCheckBoxChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const target = event.target;
+    const name = target.name;
+
+    const newData = target.checked
+      ? { date: null }
+      : { monthlyPeriod: null, weeklyPeriod: null };
+
+    setIncomeForm((prev) => ({
+      ...prev,
+      [name]: target.checked ? "Y" : "N",
+      periodType: target.checked ? "M" : "N",
+      ...newData,
+    }));
   }
 
   function handleTogglePeriodType(value: PeriodType) {
@@ -225,7 +217,7 @@ export default function IncomeForm() {
             id="fixedIncomeYn"
             name="fixedIncomeYn"
             checked={incomeForm.fixedIncomeYn === "Y" || false}
-            onChange={handleInputChange}
+            onChange={handleCheckBoxChange}
           />
           <CheckLabel htmlFor="fixedIncomeYn">
             {incomeForm.fixedIncomeYn === "Y" ? (
@@ -306,7 +298,18 @@ export default function IncomeForm() {
           />
         </InputContainer>
       </div>
-      <ButtonBottom label="확인" onClick={onClickConfirmButton} />
+
+      {!initIncomeForm ? (
+        <ButtonBottom
+          label="확인"
+          onClick={onClickConfirmButton}
+        ></ButtonBottom>
+      ) : (
+        <ButtonContainer>
+          <ButtonTrashCan />
+          <ButtonBottom label="수정" />
+        </ButtonContainer>
+      )}
     </FormContainer>
   );
 }
