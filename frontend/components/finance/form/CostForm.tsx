@@ -1,4 +1,4 @@
-import React, { useState, memo } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import Icon from "../../common/Icon";
@@ -99,6 +99,11 @@ export default function CostForm({ initCostForm }: CostFormProps) {
     initCostForm || ({} as IAccountBook)
   );
 
+  const [dateTime, setDateTime] = useState<{ date: string; time: string }>({
+    date: "",
+    time: "",
+  });
+
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const target = event.target;
     const value = target.value;
@@ -189,11 +194,27 @@ export default function CostForm({ initCostForm }: CostFormProps) {
     }));
   }
 
+  function handleDateTimeInputChange(
+    event: React.ChangeEvent<HTMLInputElement>
+  ) {
+    const target = event.target;
+    const name = target.name;
+    const value = target.value;
+    setDateTime((prev) => ({ ...prev, [name]: value }));
+  }
+
   function onClickConfirmButton(event: React.MouseEvent<HTMLButtonElement>) {
     console.log("Confirm!!");
     console.log(costForm);
+    console.log(dateTime);
   }
-  console.log(initCostForm);
+
+  function onClickEditButton(event: React.MouseEvent<HTMLButtonElement>) {
+    console.log("Edit!!");
+    console.log(costForm);
+    console.log(dateTime);
+  }
+
   return (
     <FormContainer>
       <div>
@@ -280,11 +301,21 @@ export default function CostForm({ initCostForm }: CostFormProps) {
         ) : (
           <>
             <InputContainer>
-              <StyledInput type="date" />
+              <StyledInput
+                type="date"
+                name="date"
+                value={dateTime.date}
+                onChange={handleDateTimeInputChange}
+              />
             </InputContainer>
             <StyledLabel>시각</StyledLabel>
             <InputContainer>
-              <StyledInput type="time" />
+              <StyledInput
+                type="time"
+                name="time"
+                value={dateTime.time}
+                onChange={handleDateTimeInputChange}
+              />
             </InputContainer>
           </>
         )}
@@ -320,10 +351,9 @@ export default function CostForm({ initCostForm }: CostFormProps) {
       ) : (
         <ButtonContainer>
           <ButtonTrashCan />
-          <ButtonBottom label="수정" />
+          <ButtonBottom label="수정" onClick={onClickEditButton} />
         </ButtonContainer>
       )}
-      {/* <ButtonBottom label="확인" onClick={onClickConfirmButton}></ButtonBottom> */}
     </FormContainer>
   );
 }

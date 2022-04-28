@@ -1,4 +1,4 @@
-import React, { useState, memo } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import Icon from "../../common/Icon";
@@ -98,6 +98,11 @@ export default function IncomeForm({ initIncomeForm }: IncomeFormProps) {
     initIncomeForm || ({} as IAccountBook)
   );
 
+  const [dateTime, setDateTime] = useState<{ date: string; time: string }>({
+    date: "",
+    time: "",
+  });
+
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const target = event.target;
     const value = target.value;
@@ -181,9 +186,25 @@ export default function IncomeForm({ initIncomeForm }: IncomeFormProps) {
     }));
   }
 
+  function handleDateTimeInputChange(
+    event: React.ChangeEvent<HTMLInputElement>
+  ) {
+    const target = event.target;
+    const name = target.name;
+    const value = target.value;
+    setDateTime((prev) => ({ ...prev, [name]: value }));
+  }
+
   function onClickConfirmButton(event: React.MouseEvent<HTMLButtonElement>) {
     console.log("Confirm!!");
     console.log(incomeForm);
+    console.log(dateTime);
+  }
+
+  function onClickEditButton(event: React.MouseEvent<HTMLButtonElement>) {
+    console.log("Edit!!");
+    console.log(incomeForm);
+    console.log(dateTime);
   }
 
   return (
@@ -274,11 +295,21 @@ export default function IncomeForm({ initIncomeForm }: IncomeFormProps) {
         ) : (
           <>
             <InputContainer>
-              <StyledInput type="date" />
+              <StyledInput
+                type="date"
+                name="date"
+                value={dateTime.date}
+                onChange={handleDateTimeInputChange}
+              />
             </InputContainer>
             <StyledLabel>시각</StyledLabel>
             <InputContainer>
-              <StyledInput type="time" />
+              <StyledInput
+                type="time"
+                name="time"
+                value={dateTime.time}
+                onChange={handleDateTimeInputChange}
+              />
             </InputContainer>
           </>
         )}
@@ -307,7 +338,7 @@ export default function IncomeForm({ initIncomeForm }: IncomeFormProps) {
       ) : (
         <ButtonContainer>
           <ButtonTrashCan />
-          <ButtonBottom label="수정" />
+          <ButtonBottom label="수정" onClick={onClickEditButton} />
         </ButtonContainer>
       )}
     </FormContainer>
