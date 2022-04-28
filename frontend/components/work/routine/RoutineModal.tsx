@@ -108,13 +108,23 @@ export default function RoutineModal({
     setOpen(false);
   };
 
+  const onMaskClick = (e: any) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   const dayList = ["일", "월", "화", "수", "목", "금", "토"];
   return (
     <>
       {open ? (
         <>
           <ModalOverlay visible={open} />
-          <ModalWrapper visible={open} tabIndex={-1}>
+          <ModalWrapper
+            visible={open}
+            tabIndex={-1}
+            onClick={open ? onMaskClick : null}
+          >
             <ModalInner tabIndex={0} className="modal-inner">
               <ModalHeader>
                 <ModalTitle>{label}</ModalTitle>
