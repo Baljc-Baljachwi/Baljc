@@ -2,7 +2,6 @@ import React, { useState, memo } from "react";
 import styled from "styled-components";
 
 import Icon from "../../common/Icon";
-import ButtonTogglePaymentMethod from "./ButtonTogglePaymentMethod";
 import ButtonTogglePeriodType from "./ButtonTogglePeriodType";
 import ButtonDaySelect from "./ButtonDaySelect";
 import ButtonBottom from "components/common/ButtonBottom";
@@ -82,11 +81,10 @@ const CheckLabel = styled.label`
   line-height: 1.6rem;
 `;
 
-interface ICostForm {
+interface IIncomeForm {
   title: string; // 1 ~ 18자
   price: number;
   memo: string; // 100자 이하
-  paymentMethod: "M" | "C" | "E" | "N"; // M: 현금, C: 카드, E: 기타, N: null
   fixed: boolean;
 
   // fixed true
@@ -99,10 +97,8 @@ interface ICostForm {
   time: string | null;
 }
 
-export default function CostForm() {
-  const [costForm, setCostForm] = useState<ICostForm>({
-    paymentMethod: "C",
-  } as ICostForm);
+export default function IncomeForm() {
+  const [incomeForm, setIncomeForm] = useState<IIncomeForm>({} as IIncomeForm);
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const target = event.target;
@@ -110,21 +106,21 @@ export default function CostForm() {
     const name = target.name;
 
     if (target.type !== "checkbox") {
-      setCostForm((prev) => ({
+      setIncomeForm((prev) => ({
         ...prev,
         [name]: value,
       }));
     } else if (target.checked) {
-      // 고정 지출 체크 시 불필요 데이터 null 처리
-      setCostForm((prev) => ({
+      // 고정 수입 체크 시 불필요 데이터 null 처리
+      setIncomeForm((prev) => ({
         ...prev,
         [name]: target.checked,
         periodType: "M",
         date: null,
       }));
     } else {
-      // 고정 지출 체크 해제 시 불필요 데이터 null 처리
-      setCostForm((prev) => ({
+      // 고정 수입 체크 해제 시 불필요 데이터 null 처리
+      setIncomeForm((prev) => ({
         ...prev,
         [name]: target.checked,
         periodType: "N",
@@ -134,18 +130,11 @@ export default function CostForm() {
     }
   }
 
-  function handleTogglePaymentMethod(value: "M" | "C" | "E" | "N") {
-    setCostForm((prev) => ({
-      ...prev,
-      paymentMethod: value,
-    }));
-  }
-
   function handleTogglePeriodType(value: "M" | "W" | "D" | "N") {
     // 바뀔 때마다 필요없는 데이터 null로
     switch (value) {
       case "M":
-        setCostForm((prev) => ({
+        setIncomeForm((prev) => ({
           ...prev,
           periodType: value,
           weeklyPeriod: null,
@@ -153,7 +142,7 @@ export default function CostForm() {
         }));
         break;
       case "W":
-        setCostForm((prev) => ({
+        setIncomeForm((prev) => ({
           ...prev,
           periodType: value,
           monthlyPeriod: null,
@@ -161,7 +150,7 @@ export default function CostForm() {
         }));
         break;
       case "D":
-        setCostForm((prev) => ({
+        setIncomeForm((prev) => ({
           ...prev,
           periodType: value,
           monthlyPeriod: null,
@@ -170,7 +159,7 @@ export default function CostForm() {
         }));
         break;
       case "N":
-        setCostForm((prev) => ({
+        setIncomeForm((prev) => ({
           ...prev,
           periodType: value,
           monthlyPeriod: null,
@@ -182,16 +171,16 @@ export default function CostForm() {
 
   function handleWeeklyDayUpdate(value: number) {
     let newValue = 0;
-    if (!costForm.weeklyPeriod) {
+    if (!incomeForm.weeklyPeriod) {
       newValue = 1 << value;
-    } else if (costForm.weeklyPeriod & (1 << value)) {
+    } else if (incomeForm.weeklyPeriod & (1 << value)) {
       // 이미 선택된 경우
-      newValue = costForm.weeklyPeriod - (1 << value);
+      newValue = incomeForm.weeklyPeriod - (1 << value);
     } else {
       // 새로 선택한 경우
-      newValue = costForm.weeklyPeriod + (1 << value);
+      newValue = incomeForm.weeklyPeriod + (1 << value);
     }
-    setCostForm((prev) => ({
+    setIncomeForm((prev) => ({
       ...prev,
       weeklyPeriod: newValue,
     }));
@@ -199,7 +188,7 @@ export default function CostForm() {
 
   function onClickConfirmButton(event: React.MouseEvent<HTMLButtonElement>) {
     console.log("Confirm!!");
-    console.log(costForm);
+    console.log(incomeForm);
   }
 
   return (
@@ -209,7 +198,7 @@ export default function CostForm() {
         <InputContainer>
           <StyledInput
             name="title"
-            value={costForm.title || ""}
+            value={incomeForm.title || ""}
             onChange={handleInputChange}
           />
         </InputContainer>
@@ -221,10 +210,10 @@ export default function CostForm() {
             type="number"
             placeholder="0"
             name="price"
-            value={costForm.price || ""}
+            value={incomeForm.price || ""}
             onChange={handleInputChange}
           />
-          <InputUnit hasValue={costForm.price > 0}>원</InputUnit>
+          <InputUnit hasValue={incomeForm.price > 0}>원</InputUnit>
         </InputContainer>
 
         <CheckboxContainer>
@@ -232,11 +221,11 @@ export default function CostForm() {
             type="checkbox"
             id="fixed"
             name="fixed"
-            checked={costForm.fixed || false}
+            checked={incomeForm.fixed || false}
             onChange={handleInputChange}
           />
           <CheckLabel htmlFor="fixed">
-            {costForm.fixed ? (
+            {incomeForm.fixed ? (
               <Icon
                 mode="fas"
                 icon="square-check"
@@ -247,42 +236,44 @@ export default function CostForm() {
               <Icon mode="far" icon="square" color="#ffd469" size="1.6rem" />
             )}
           </CheckLabel>
-          <CheckLabel htmlFor="fixed">고정지출</CheckLabel>
+          <CheckLabel htmlFor="fixed">고정수입</CheckLabel>
         </CheckboxContainer>
       </div>
 
       <div>
         <StyledLabel>날짜</StyledLabel>
-        {costForm.periodType === "M" ? (
+        {incomeForm.periodType === "M" ? (
           <>
             <ButtonTogglePeriodType
-              selectedPeriodType={costForm.periodType || "M"}
+              selectedPeriodType={incomeForm.periodType || "M"}
               handleToggleButton={handleTogglePeriodType}
             />
             <InputContainer>
               <StyledInput
                 type="number"
                 name="monthlyPeriod"
-                value={costForm.monthlyPeriod || 0}
+                value={incomeForm.monthlyPeriod || 0}
                 onChange={handleInputChange}
               />
-              <InputUnit hasValue={!!costForm.monthlyPeriod}>일마다</InputUnit>
+              <InputUnit hasValue={!!incomeForm.monthlyPeriod}>
+                일마다
+              </InputUnit>
             </InputContainer>
           </>
-        ) : costForm.periodType === "W" ? (
+        ) : incomeForm.periodType === "W" ? (
           <>
             <ButtonTogglePeriodType
-              selectedPeriodType={costForm.periodType}
+              selectedPeriodType={incomeForm.periodType}
               handleToggleButton={handleTogglePeriodType}
             />
             <ButtonDaySelect
-              selectedDays={costForm.weeklyPeriod}
+              selectedDays={incomeForm.weeklyPeriod}
               handleWeeklyDayUpdate={handleWeeklyDayUpdate}
             />
           </>
-        ) : costForm.periodType === "D" ? (
+        ) : incomeForm.periodType === "D" ? (
           <ButtonTogglePeriodType
-            selectedPeriodType={costForm.periodType}
+            selectedPeriodType={incomeForm.periodType}
             handleToggleButton={handleTogglePeriodType}
           />
         ) : (
@@ -301,26 +292,18 @@ export default function CostForm() {
       <StyledLabel>카테고리</StyledLabel>
 
       <div>
-        <StyledLabel>결제 수단</StyledLabel>
-        <ButtonTogglePaymentMethod
-          selectedPaymentMethod={costForm.paymentMethod}
-          handleToggleButton={handleTogglePaymentMethod}
-        />
-      </div>
-
-      <div>
         <StyledLabel>메모</StyledLabel>
         <InputContainer>
           <StyledInput
             type="text"
             name="memo"
             placeholder="메모 남기기"
-            value={costForm.memo || ""}
+            value={incomeForm.memo || ""}
             onChange={handleInputChange}
           />
         </InputContainer>
       </div>
-      <ButtonBottom label="확인" onClick={onClickConfirmButton}></ButtonBottom>
+      <ButtonBottom label="확인" onClick={onClickConfirmButton} />
     </FormContainer>
   );
 }
