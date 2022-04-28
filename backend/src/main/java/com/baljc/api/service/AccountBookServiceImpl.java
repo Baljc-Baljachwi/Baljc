@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 @Service
 public class AccountBookServiceImpl implements AccountBookService {
 
+    private final MemberService memberService;
     private final AccountBookRepository accountBookRepository;
     private final CategoryRepository categoryRepository;
     private final AccountBookRepositorySupport accountBookRepositorySupport;
@@ -44,22 +45,41 @@ public class AccountBookServiceImpl implements AccountBookService {
     public void insertAccountBook(AccountBookDto.AccountBookRequest accountBookRequest) {
         //날짜랑 시간 합쳐서 하나로 만들기
         LocalDate date = LocalDate.parse(accountBookRequest.getDate(), DateTimeFormatter.ISO_DATE);
-        LocalTime time = LocalTime.parse(accountBookRequest.getTime(), DateTimeFormatter.ISO_DATE);
+        LocalTime time = LocalTime.parse(accountBookRequest.getTime(), DateTimeFormatter.ISO_LOCAL_TIME);
         LocalDateTime localDateTime = LocalDateTime.of(date, time);
 
+        Category category = categoryRepository.getById(accountBookRequest.getCategoryId());
+
         accountBookRepository.save(AccountBook.builder()
-                        .type(accountBookRequest.getType().charAt(0))
-                        .title(accountBookRequest.getTitle())
-                        .price(accountBookRequest.getPrice())
-                        .date(localDateTime)
-                        .fixedExpenditureYn(accountBookRequest.getFixedExpenditureYn())
-                        .fixedIncomeYn(accountBookRequest.getFixedIncomeYn())
-                        .paymentMethod(accountBookRequest.getPaymentMethod().charAt(0))
-                        .memo(accountBookRequest.getMemo())
-                        .periodType(accountBookRequest.getPeriodType().charAt(0))
-                        .monthlyPeriod(accountBookRequest.getMonthlyPeriod())
-                        .weeklyPeriod(accountBookRequest.getWeeklyPeriod())
-                        .build());
+                .category(category)
+                .type(accountBookRequest.getType().charAt(0))
+                .title(accountBookRequest.getTitle())
+                .price(accountBookRequest.getPrice())
+                .date(localDateTime)
+                .fixedExpenditureYn(accountBookRequest.getFixedExpenditureYn())
+                .fixedIncomeYn(accountBookRequest.getFixedIncomeYn())
+                .paymentMethod(accountBookRequest.getPaymentMethod().charAt(0))
+                .memo(accountBookRequest.getMemo())
+                .periodType(accountBookRequest.getPeriodType().charAt(0))
+                .monthlyPeriod(accountBookRequest.getMonthlyPeriod())
+                .weeklyPeriod(accountBookRequest.getWeeklyPeriod())
+                .build());
+
+//        accountBookRepository.save(AccountBook.builder()
+//                        .category(category)
+//                        .member(memberService.getMemberByAuthentication())
+//                        .type(accountBookRequest.getType().charAt(0))
+//                        .title(accountBookRequest.getTitle())
+//                        .price(accountBookRequest.getPrice())
+//                        .date(localDateTime)
+//                        .fixedExpenditureYn(accountBookRequest.getFixedExpenditureYn())
+//                        .fixedIncomeYn(accountBookRequest.getFixedIncomeYn())
+//                        .paymentMethod(accountBookRequest.getPaymentMethod().charAt(0))
+//                        .memo(accountBookRequest.getMemo())
+//                        .periodType(accountBookRequest.getPeriodType().charAt(0))
+//                        .monthlyPeriod(accountBookRequest.getMonthlyPeriod())
+//                        .weeklyPeriod(accountBookRequest.getWeeklyPeriod())
+//                        .build());
     }
 
 }

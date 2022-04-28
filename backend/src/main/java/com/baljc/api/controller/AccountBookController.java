@@ -28,7 +28,7 @@ public class AccountBookController {
     }
 
     @PostMapping("")
-    public ResponseEntity<BaseResponse> insertAccountBook(@Valid AccountBookDto.AccountBookRequest accountBookRequest) {
+    public ResponseEntity<BaseResponse> insertAccountBook(@Valid @RequestBody AccountBookDto.AccountBookRequest accountBookRequest) {
         accountBookService.insertAccountBook(accountBookRequest);
         return ResponseEntity.status(200).body(new BaseResponse(1301, "가계부 추가 성공"));
     }
