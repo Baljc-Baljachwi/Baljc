@@ -29,7 +29,8 @@ public class MemberController {
 
     @GetMapping("/login/kakao")
     public ResponseEntity<BaseDataResponse<Map<String, Boolean>>> signinMember(@RequestParam(value = "code") String code) {
-        MemberDto.SigninInfo signinInfo = memberService.authenticateMember(code);
+        log.debug("signinMember - code: {}", code);
+        MemberDto.SigninInfo signinInfo = memberService.authenticateMember(memberService.signinByKakao(code));
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + signinInfo.getJwt());

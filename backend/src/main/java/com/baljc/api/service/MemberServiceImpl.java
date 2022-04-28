@@ -4,7 +4,9 @@ import com.baljc.api.dto.MemberDto;
 import com.baljc.common.jwt.TokenProvider;
 import com.baljc.common.util.SecurityUtil;
 import com.baljc.db.entity.Member;
+import com.baljc.db.entity.PushAlarm;
 import com.baljc.db.repository.MemberRepository;
+import com.baljc.db.repository.PushAlarmRepository;
 import com.baljc.exception.UnauthenticatedMemberException;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -34,6 +36,7 @@ import java.util.UUID;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final PushAlarmRepository pushAlarmRepository;
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final String clientId;
@@ -42,6 +45,7 @@ public class MemberServiceImpl implements MemberService {
     private final String profileImagePath;
 
     public MemberServiceImpl(MemberRepository memberRepository,
+                             PushAlarmRepository pushAlarmRepository,
                              TokenProvider tokenProvider,
                              AuthenticationManagerBuilder authenticationManagerBuilder,
                              @Value("${kakao.clientId}") String clientId,
@@ -50,6 +54,7 @@ public class MemberServiceImpl implements MemberService {
                              @Value("${cloud.aws.s3.folder.profileImage}") String profileImagePath
     ) {
         this.memberRepository = memberRepository;
+        this.pushAlarmRepository = pushAlarmRepository;
         this.tokenProvider = tokenProvider;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.clientId = clientId;
@@ -60,9 +65,10 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public MemberDto.SigninInfo authenticateMember(String code) {
+    public Member signinByKakao(String code) {
         // 인가코드 -> 엑세스 토큰
         String accessToken = getAccessTokenByKakao(code);
+        log.debug("authenticateMember - accessToken: {}", accessToken);
 
         // 엑세스 토큰 -> 카카오 사용자 정보
         Map<String, String> kakaoUser = getMemberInfoByKakaoToken(accessToken);
@@ -74,14 +80,13 @@ public class MemberServiceImpl implements MemberService {
                     .email(kakaoUser.get("email"))
                     .build();
             memberRepository.save(member);
+            pushAlarmRepository.save(PushAlarm.builder()
+                    .member(member)
+                    .accountAlarmYn(true)
+                    .todoAlarmYn(true)
+                    .build());
         }
-
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(member.getMemberId(), member.getKakaoId());
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        return new MemberDto.SigninInfo(tokenProvider.createToken(authentication), member.getSurveyedYn());
+        return member;
     }
 
     private String getAccessTokenByKakao(String code) {
@@ -134,6 +139,16 @@ public class MemberServiceImpl implements MemberService {
         map.put("socialId", socialId);
         map.put("email", email);
         return map;
+    }
+
+    @Override
+    public MemberDto.SigninInfo authenticateMember(Member member) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(member.getMemberId(), member.getKakaoId());
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        log.debug("authenticateMember - surveyedYn: {}",  member.getSurveyedYn());
+        return new MemberDto.SigninInfo(tokenProvider.createToken(authentication), member.getSurveyedYn());
     }
 
     @Override
