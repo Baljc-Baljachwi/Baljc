@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { useState } from "react";
 import styled from "styled-components";
 import Icon from "../../common/Icon";
@@ -24,12 +25,17 @@ const RoutineContent = styled.div`
 `;
 
 const RoutineTitle = styled.div``;
-const RoutineDay = styled.div``;
 
+const RoutineDayDiv = styled.div`
+  display: flex;
+  gap: 1rem;
+`;
+
+const RoutineDay = styled.p``;
 interface listProps {
   id: number;
   title: string;
-  repetition: string[];
+  repetition: number | null;
 }
 
 export default function RoutineCard(props: { list: listProps }) {
@@ -39,15 +45,32 @@ export default function RoutineCard(props: { list: listProps }) {
     setOpen((prev) => !prev);
   };
 
+  const dayList = ["일", "월", "화", "수", "목", "금", "토"];
+
   return (
     <>
       <CardDiv onClick={onClick}>
         <Icon mode="fas" icon="circle" color="#8CBFF2" size="1rem" />
         <RoutineContent>
           <RoutineTitle>{props.list.title}</RoutineTitle>
-          <RoutineDay>
-            {props.list.repetition.map((item) => item + " ")}
-          </RoutineDay>
+          <RoutineDayDiv>
+            {dayList.map((value, index) => {
+              const checked =
+                props.list.repetition === null
+                  ? false
+                  : props.list.repetition & (1 << (6 - index))
+                  ? true
+                  : false;
+              console.log(checked);
+              return (
+                <>
+                  {checked ? (
+                    <RoutineDay key={index}>{value}</RoutineDay>
+                  ) : null}
+                </>
+              );
+            })}
+          </RoutineDayDiv>
         </RoutineContent>
       </CardDiv>
       {open ? (
