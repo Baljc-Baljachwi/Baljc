@@ -1,6 +1,7 @@
 import Header from "../../../components/common/Header";
 import RoutineCard from "./RoutineCard";
 import Icon from "../../../components/common/Icon";
+import RoutineModal from "./RoutineModal";
 
 import styled from "styled-components";
 import { useState } from "react";
@@ -69,6 +70,15 @@ export default function RoutineDetail() {
           <RoutineCard key={list.id} list={list}></RoutineCard>
         ))}
       </RoutineDiv>
+      {open ? (
+        <RoutineModal
+          open={open}
+          setOpen={setOpen}
+          label={"오늘의 일과 추가"}
+        />
+      ) : (
+        ""
+      )}
     </>
   );
 }
