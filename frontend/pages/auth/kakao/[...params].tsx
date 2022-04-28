@@ -9,11 +9,12 @@ export default function KakaoAuth() {
   useEffect(() => {
     if (!code) return;
     kakaoLogin(code as string).then((res) => {
+      console.log(res.data);
       if (res.data.code === 1000) {
         console.log(res.data.data.accessToken);
       }
     });
-  }, []);
+  }, [code]);
   console.log(code);
   return <div>Login...</div>;
 }
