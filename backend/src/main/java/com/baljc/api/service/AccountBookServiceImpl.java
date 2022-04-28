@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class AccountBookServiceImpl implements AccountBookService {
 
     private final MemberService memberService;
-//    private final AccountBookRepository accountBookRepository;
+    private final AccountBookRepository accountBookRepository;
     private final CategoryRepository categoryRepository;
 //    private final AccountBookRepositorySupport accountBookRepositorySupport;
 
