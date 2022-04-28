@@ -2,7 +2,7 @@ import axios from "axios";
 
 function createBasicInstance() {
   const instance = axios.create({
-    baseURL: "http://localhost:8080",
+    baseURL: "https://baljc.com",
     headers: {
       "Content-Type": "application/json",
     },
