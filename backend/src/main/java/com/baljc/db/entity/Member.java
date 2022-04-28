@@ -58,6 +58,19 @@ public class Member {
     @OneToOne(mappedBy = "member")
     PushAlarm pushAlarm;
 
+    public void argsNullSetter() {
+        this.kakaoId = null;
+        this.email = null;
+        this.nickname = null;
+        this.profileUrl = null;
+        this.salaryType = null;
+        this.salary = null;
+        this.workingHours = null;
+        this.budget = null;
+        this.surveyedYn = null;
+        this.deletedAt = LocalDateTime.now();
+    }
+
     public void updateInfo(MemberDto.RegisterRequest registerRequest) {
         this.nickname = registerRequest.getNickname();
         this.salaryType = registerRequest.getSalaryType().charAt(0);

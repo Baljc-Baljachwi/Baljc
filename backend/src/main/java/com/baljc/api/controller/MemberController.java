@@ -56,8 +56,8 @@ public class MemberController {
     }
 
     @DeleteMapping
-    public ResponseEntity<BaseResponse> deleteMember() {
-
+    public ResponseEntity<BaseResponse> removeMember() {
+        memberService.deleteMember();
         return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse(1003, "회원탈퇴가 완료되었습니다."));
     }
 }
