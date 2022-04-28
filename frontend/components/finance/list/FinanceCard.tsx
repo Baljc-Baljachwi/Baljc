@@ -85,7 +85,6 @@ export default function FinanceCard({
 }: FinanceCardProps) {
   return (
     <>
-      {/* <FinanceCardItem background-color={backgroundColor}></FinanceCardItem> */}
       <FinanceCardItem backgroundColor={isFixed ? "#ffd469" : "#F4F4F4"}>
         <FinanceCardContent>
           <FinanceCardTitle>{title}</FinanceCardTitle>
