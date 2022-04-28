@@ -27,15 +27,12 @@ public class AccountBook {
     private Integer price;
     private String memo;
     private Character paymentMethod;
-    @Convert(converter = BooleanToYNConverter.class)
-    private Boolean fixedExpenditureYn;
-    @Convert(converter = BooleanToYNConverter.class)
-    private Boolean fixedIncomeYn;
+    private Character fixedExpenditureYn;
+    private Character fixedIncomeYn;
     private Character periodType;
     private Integer monthlyPeriod;
     private Integer weeklyPeriod;
-    @Convert(converter = BooleanToYNConverter.class)
-    private Boolean deletedYn;
+    private Character deletedYn;
     private LocalDateTime date;
 
     @ManyToOne(targetEntity = Member.class, fetch = FetchType.LAZY)
@@ -47,8 +44,8 @@ public class AccountBook {
 
     @Builder
     public AccountBook(Character type, String title, Integer price, String memo, Character paymentMethod,
-                       Boolean fixedExpenditureYn, Boolean fixedIncomeYn, Character periodType,
-                       Integer monthlyPeriod, Integer weeklyPeriod, Boolean deletedYn, LocalDateTime date,
+                       Character fixedExpenditureYn, Character fixedIncomeYn, Character periodType,
+                       Integer monthlyPeriod, Integer weeklyPeriod, Character deletedYn, LocalDateTime date,
                        Member member, Category category) {
         this.type = type;
         this.title = title;
