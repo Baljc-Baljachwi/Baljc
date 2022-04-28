@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Header from "components/common/Header";
 import ProfileContentCard from "components/mypage/ProfileContentCard";
+import ToggleButton from "components/mypage/settings/ToggleButton";
 
 const Container = styled.div`
   height: 100vh;
@@ -123,10 +124,12 @@ const alarm = ({ title, description }: ProfileMenuContentProps) => {
               <SettingAlarmItem>
                 <span>가계부</span>
                 <span>오후 9:00</span>
+                <ToggleButton />
               </SettingAlarmItem>
               <SettingAlarmItem>
                 <span>할 일</span>
                 <span>오전 9:00</span>
+                <ToggleButton />
               </SettingAlarmItem>
             </SettingAlarmItemList>
             {/* <ProfileContentCard
