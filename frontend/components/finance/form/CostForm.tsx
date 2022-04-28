@@ -5,11 +5,13 @@ import Icon from "../../common/Icon";
 import ButtonTogglePaymentMethod from "./ButtonTogglePaymentMethod";
 import ButtonTogglePeriodType from "./ButtonTogglePeriodType";
 import ButtonDaySelect from "./ButtonDaySelect";
+import ButtonBottom from "components/common/ButtonBottom";
 
 const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4rem;
+  padding-bottom: 10rem;
 `;
 
 const InputContainer = styled.div<{ isPrice?: boolean }>`
@@ -30,7 +32,7 @@ const InputContainer = styled.div<{ isPrice?: boolean }>`
 
 // 입력 Input 뒤에 단위 나타내는 텍스트
 const InputUnit = styled.span<{ hasValue: boolean }>`
-  line-height: 2rem;
+  line-height: 2.8rem;
   word-break: keep-all;
   color: ${(props) => (props.hasValue ? "#3d3d3d" : "#cccccc")};
 `;
@@ -195,6 +197,11 @@ export default function CostForm() {
     }));
   }
 
+  function onClickConfirmButton(event: React.MouseEvent<HTMLButtonElement>) {
+    console.log("Confirm!!");
+    console.log(costForm);
+  }
+
   return (
     <FormContainer>
       <div>
@@ -313,6 +320,7 @@ export default function CostForm() {
           />
         </InputContainer>
       </div>
+      <ButtonBottom label="확인" onClick={onClickConfirmButton}></ButtonBottom>
     </FormContainer>
   );
 }
