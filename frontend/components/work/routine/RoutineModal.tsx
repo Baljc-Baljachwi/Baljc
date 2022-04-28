@@ -94,7 +94,7 @@ interface ModalProps {
   setOpen: any;
   list: {
     id?: number;
-    title?: string;
+    title: string;
     repetition: number;
   };
   label?: string;
@@ -106,7 +106,9 @@ export default function RoutineModal({
   label,
   list,
 }: ModalProps) {
+  // 나중에 API 형식으로 받아오기
   const [day, setDay] = useState<number>(list.repetition);
+  const [title, setTitle] = useState<string>(list.title);
 
   const onClose = () => {
     setOpen(false);
@@ -132,6 +134,11 @@ export default function RoutineModal({
     setDay(newValue);
   }
 
+  function onChange(e: React.ChangeEvent<HTMLInputElement>) {
+    // console.log(e.target.value);
+    setTitle(e.target.value);
+  }
+
   return (
     <>
       {open ? (
@@ -146,7 +153,7 @@ export default function RoutineModal({
                 </ModalCloseBtn>
               </ModalHeader>
               <ModalLable>제목</ModalLable>
-              <ModalInput type="text" value={list.title} />
+              <ModalInput type="text" value={title} onChange={onChange} />
               <ModalLable>반복</ModalLable>
               <RoutineDaySelect
                 selectedDays={day}
