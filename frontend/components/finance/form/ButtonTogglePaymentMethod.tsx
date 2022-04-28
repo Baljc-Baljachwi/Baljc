@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
+import { PaymentMethodType } from "types";
+
 const ButtonContainer = styled.div`
   display: flex;
   width: 23.5rem;
@@ -23,11 +25,10 @@ const StyledButton = styled.button<{ isSelected: boolean }>`
   border-radius: 0.5rem;
   cursor: pointer;
 `;
-type TypePaymentMethod = "M" | "C" | "E" | "N";
 
 interface ButtonTogglePaymentMethodProps {
-  selectedPaymentMethod: TypePaymentMethod;
-  handleToggleButton: (value: TypePaymentMethod) => void;
+  selectedPaymentMethod: PaymentMethodType;
+  handleToggleButton: (value: PaymentMethodType) => void;
 }
 
 export default function ButtonTogglePaymentMethod({
