@@ -1,6 +1,5 @@
 package com.baljc.db.entity;
 
-import com.baljc.common.util.BooleanToYNConverter;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,15 +23,14 @@ public class Routine {
     private String title;
     private String content;
     private Integer repetition;
-    @Convert(converter = BooleanToYNConverter.class)
-    private Boolean deletedYn;
+    private Character deletedYn;
 
     @ManyToOne(targetEntity = Member.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
     @Builder
-    public Routine(String title, String content, Integer repetition, Boolean deletedYn, Member member) {
+    public Routine(String title, String content, Integer repetition, Character deletedYn, Member member) {
         this.title = title;
         this.content = content;
         this.repetition = repetition;

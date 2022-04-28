@@ -1,6 +1,5 @@
 package com.baljc.db.entity;
 
-import com.baljc.common.util.BooleanToYNConverter;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,17 +23,15 @@ public class Todo {
     private UUID todoId;
     private LocalDate date;
     private String content;
-    @Convert(converter = BooleanToYNConverter.class)
-    private Boolean completedYn;
-    @Convert(converter = BooleanToYNConverter.class)
-    private Boolean deletedYn;
+    private Character completedYn;
+    private Character deletedYn;
 
     @ManyToOne(targetEntity = Member.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
     @Builder
-    public Todo(LocalDate date, String content, Boolean completedYn, Boolean deletedYn, Member member) {
+    public Todo(LocalDate date, String content, Character completedYn, Character deletedYn, Member member) {
         this.date = date;
         this.content = content;
         this.completedYn = completedYn;

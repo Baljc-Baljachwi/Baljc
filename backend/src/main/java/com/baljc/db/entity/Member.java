@@ -1,6 +1,6 @@
 package com.baljc.db.entity;
 
-import com.baljc.common.util.BooleanToYNConverter;
+import com.baljc.api.dto.MemberDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,13 +32,12 @@ public class Member {
     private Integer salary;
     private Integer workingHours;
     private Integer budget;
-    @Convert(converter = BooleanToYNConverter.class)
-    private Boolean surveyedYn;
+    private Character surveyedYn;
     private LocalDateTime deletedAt;
 
     @Builder
     public Member(String kakaoId, String email, String nickname, String profileUrl, Character salaryType,
-                  Integer salary, Integer workingHours, Integer budget, Boolean surveyedYn) {
+                  Integer salary, Integer workingHours, Integer budget, Character surveyedYn) {
         this.kakaoId = kakaoId;
         this.email = email;
         this.nickname = nickname;
@@ -58,4 +57,15 @@ public class Member {
     List<Todo> todoList = new ArrayList<>();
     @OneToOne(mappedBy = "member")
     PushAlarm pushAlarm;
+
+    public void updateInfo(MemberDto.RegisterRequest registerRequest) {
+        this.nickname = registerRequest.getNickname();
+        this.salaryType = registerRequest.getSalaryType().charAt(0);
+        this.salary = registerRequest.getSalary();
+        this.workingHours = registerRequest.getWorkingHours();
+        this.budget = registerRequest.getBudget();
+        if (this.surveyedYn == 'N') this.surveyedYn = 'Y';
+    }
+
+    public void updateProfileUrl(String profileUrl) { this.profileUrl = profileUrl; }
 }

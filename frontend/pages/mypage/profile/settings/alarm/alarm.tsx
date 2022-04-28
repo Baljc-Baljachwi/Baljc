@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Header from "components/common/Header";
 import ProfileContentCard from "components/mypage/ProfileContentCard";
+import ToggleButton from "components/mypage/settings/ToggleButton";
 
 const Container = styled.div`
   height: 100vh;
@@ -99,6 +100,11 @@ const SettingAlarmItem = styled.div`
   span {
     color: #3d3d3d;
   }
+  .right-content {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+  }
 `;
 
 interface ProfileMenuContentProps {
@@ -115,18 +121,24 @@ const alarm = ({ title, description }: ProfileMenuContentProps) => {
             <ProfileMenuCardContent>
               <ProfileMenuCardTitle>푸쉬 알림 설정</ProfileMenuCardTitle>
               <ProfileMenuCardDetail>
-                푸쉬 알림을 받습니다.
+                정해진 시간에 푸쉬 알림을 받습니다.
               </ProfileMenuCardDetail>
             </ProfileMenuCardContent>
             <DivisionLine />
             <SettingAlarmItemList>
               <SettingAlarmItem>
                 <span>가계부</span>
-                <span>오후 9:00</span>
+                <div className="right-content">
+                  <span>오후 9:00</span>
+                  <ToggleButton />
+                </div>
               </SettingAlarmItem>
               <SettingAlarmItem>
                 <span>할 일</span>
-                <span>오전 9:00</span>
+                <div className="right-content">
+                  <span>오전 9:00</span>
+                  <ToggleButton />
+                </div>
               </SettingAlarmItem>
             </SettingAlarmItemList>
             {/* <ProfileContentCard
