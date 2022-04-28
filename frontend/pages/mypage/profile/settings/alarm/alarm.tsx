@@ -121,7 +121,7 @@ const alarm = ({ title, description }: ProfileMenuContentProps) => {
             <ProfileMenuCardContent>
               <ProfileMenuCardTitle>푸쉬 알림 설정</ProfileMenuCardTitle>
               <ProfileMenuCardDetail>
-                푸쉬 알림을 받습니다.
+                정해진 시간에 푸쉬 알림을 받습니다.
               </ProfileMenuCardDetail>
             </ProfileMenuCardContent>
             <DivisionLine />
