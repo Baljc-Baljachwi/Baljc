@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
+import { PeriodType } from "types";
+
 const ButtonContainer = styled.div`
   display: flex;
   width: 23.5rem;
@@ -23,7 +25,6 @@ const StyledButton = styled.button<{ isSelected: boolean }>`
   border-radius: 0.5rem;
   cursor: pointer;
 `;
-type PeriodType = "M" | "W" | "D" | "N";
 
 interface ButtonTogglePeriodTypeProps {
   selectedPeriodType: PeriodType;

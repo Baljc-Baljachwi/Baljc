@@ -5,6 +5,7 @@ import Icon from "../../common/Icon";
 import ButtonTogglePeriodType from "./ButtonTogglePeriodType";
 import ButtonDaySelect from "./ButtonDaySelect";
 import ButtonBottom from "components/common/ButtonBottom";
+import { IAccountBook, PeriodType } from "types";
 
 const FormContainer = styled.div`
   display: flex;
@@ -81,24 +82,26 @@ const CheckLabel = styled.label`
   line-height: 1.6rem;
 `;
 
-interface IIncomeForm {
-  title: string; // 1 ~ 18자
-  price: number;
-  memo: string; // 100자 이하
-  fixed: boolean;
+// interface IIncomeForm {
+//   title: string; // 1 ~ 18자
+//   price: number;
+//   memo: string; // 100자 이하
+//   fixed: boolean;
 
-  // fixed true
-  periodType: "M" | "W" | "D" | "N"; // M: 매월, W: 매주, D: 매일, N: null
-  monthlyPeriod: number | null; // 1 ~ 31 사이.
-  weeklyPeriod: number | null; // 비트마스킹 이용, 일 목 => (1000100) = 68.
+//   // fixed true
+//   periodType: "M" | "W" | "D" | "N"; // M: 매월, W: 매주, D: 매일, N: null
+//   monthlyPeriod: number | null; // 1 ~ 31 사이.
+//   weeklyPeriod: number | null; // 비트마스킹 이용, 일 목 => (1000100) = 68.
 
-  // fixed false
-  date: string | null;
-  time: string | null;
-}
+//   // fixed false
+//   date: string | null;
+//   time: string | null;
+// }
 
 export default function IncomeForm() {
-  const [incomeForm, setIncomeForm] = useState<IIncomeForm>({} as IIncomeForm);
+  const [incomeForm, setIncomeForm] = useState<IAccountBook>(
+    {} as IAccountBook
+  );
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const target = event.target;
@@ -130,7 +133,7 @@ export default function IncomeForm() {
     }
   }
 
-  function handleTogglePeriodType(value: "M" | "W" | "D" | "N") {
+  function handleTogglePeriodType(value: PeriodType) {
     // 바뀔 때마다 필요없는 데이터 null로
     switch (value) {
       case "M":
@@ -219,13 +222,13 @@ export default function IncomeForm() {
         <CheckboxContainer>
           <StyledCheckBox
             type="checkbox"
-            id="fixed"
-            name="fixed"
-            checked={incomeForm.fixed || false}
+            id="fixedIncomeYn"
+            name="fixedIncomeYn"
+            checked={incomeForm.fixedIncomeYn || false}
             onChange={handleInputChange}
           />
-          <CheckLabel htmlFor="fixed">
-            {incomeForm.fixed ? (
+          <CheckLabel htmlFor="fixedIncomeYn">
+            {incomeForm.fixedIncomeYn ? (
               <Icon
                 mode="fas"
                 icon="square-check"
@@ -236,7 +239,7 @@ export default function IncomeForm() {
               <Icon mode="far" icon="square" color="#ffd469" size="1.6rem" />
             )}
           </CheckLabel>
-          <CheckLabel htmlFor="fixed">고정수입</CheckLabel>
+          <CheckLabel htmlFor="fixedIncomeYn">고정수입</CheckLabel>
         </CheckboxContainer>
       </div>
 

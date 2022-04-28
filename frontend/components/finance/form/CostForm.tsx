@@ -6,6 +6,7 @@ import ButtonTogglePaymentMethod from "./ButtonTogglePaymentMethod";
 import ButtonTogglePeriodType from "./ButtonTogglePeriodType";
 import ButtonDaySelect from "./ButtonDaySelect";
 import ButtonBottom from "components/common/ButtonBottom";
+import { IAccountBook, PeriodType, PaymentMethodType } from "types";
 
 const FormContainer = styled.div`
   display: flex;
@@ -82,27 +83,27 @@ const CheckLabel = styled.label`
   line-height: 1.6rem;
 `;
 
-interface ICostForm {
-  title: string; // 1 ~ 18자
-  price: number;
-  memo: string; // 100자 이하
-  paymentMethod: "M" | "C" | "E" | "N"; // M: 현금, C: 카드, E: 기타, N: null
-  fixed: boolean;
+// interface ICostForm {
+//   title: string; // 1 ~ 18자
+//   price: number;
+//   memo: string; // 100자 이하
+//   paymentMethod: "M" | "C" | "E" | "N"; // M: 현금, C: 카드, E: 기타, N: null
+//   fixed: boolean;
 
-  // fixed true
-  periodType: "M" | "W" | "D" | "N"; // M: 매월, W: 매주, D: 매일, N: null
-  monthlyPeriod: number | null; // 1 ~ 31 사이.
-  weeklyPeriod: number | null; // 비트마스킹 이용, 일 목 => (1000100) = 68.
+//   // fixed true
+//   periodType: "M" | "W" | "D" | "N"; // M: 매월, W: 매주, D: 매일, N: null
+//   monthlyPeriod: number | null; // 1 ~ 31 사이.
+//   weeklyPeriod: number | null; // 비트마스킹 이용, 일 목 => (1000100) = 68.
 
-  // fixed false
-  date: string | null;
-  time: string | null;
-}
+//   // fixed false
+//   date: string | null;
+//   time: string | null;
+// }
 
 export default function CostForm() {
-  const [costForm, setCostForm] = useState<ICostForm>({
+  const [costForm, setCostForm] = useState<IAccountBook>({
     paymentMethod: "C",
-  } as ICostForm);
+  } as IAccountBook);
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const target = event.target;
@@ -134,14 +135,14 @@ export default function CostForm() {
     }
   }
 
-  function handleTogglePaymentMethod(value: "M" | "C" | "E" | "N") {
+  function handleTogglePaymentMethod(value: PaymentMethodType) {
     setCostForm((prev) => ({
       ...prev,
       paymentMethod: value,
     }));
   }
 
-  function handleTogglePeriodType(value: "M" | "W" | "D" | "N") {
+  function handleTogglePeriodType(value: PeriodType) {
     // 바뀔 때마다 필요없는 데이터 null로
     switch (value) {
       case "M":
@@ -230,13 +231,13 @@ export default function CostForm() {
         <CheckboxContainer>
           <StyledCheckBox
             type="checkbox"
-            id="fixed"
-            name="fixed"
-            checked={costForm.fixed || false}
+            id="fixedExpenditureYn"
+            name="fixedExpenditureYn"
+            checked={costForm.fixedExpenditureYn || false}
             onChange={handleInputChange}
           />
-          <CheckLabel htmlFor="fixed">
-            {costForm.fixed ? (
+          <CheckLabel htmlFor="fixedExpenditureYn">
+            {costForm.fixedExpenditureYn ? (
               <Icon
                 mode="fas"
                 icon="square-check"
@@ -247,7 +248,7 @@ export default function CostForm() {
               <Icon mode="far" icon="square" color="#ffd469" size="1.6rem" />
             )}
           </CheckLabel>
-          <CheckLabel htmlFor="fixed">고정지출</CheckLabel>
+          <CheckLabel htmlFor="fixedExpenditureYn">고정지출</CheckLabel>
         </CheckboxContainer>
       </div>
 
