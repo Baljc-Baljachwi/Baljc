@@ -6,6 +6,7 @@ import Image from "next/image";
 
 const TodoDiv = styled.div`
   width: 100%;
+  margin: 2.5rem 0;
 `;
 
 const TodoInputDiv = styled.div`
