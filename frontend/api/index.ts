@@ -1,5 +1,28 @@
 import axios from "axios";
 
+class LocalStorage {
+  constructor() {}
+
+  static setItem(key: string, item: string) {
+    if (typeof window !== "undefined") {
+      localStorage.setItem(key, item);
+    }
+  }
+
+  static getItem(key: string) {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem(key);
+    }
+    return null;
+  }
+
+  static removeItem(key: string) {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem(key);
+    }
+  }
+}
+
 function createBasicInstance() {
   const instance = axios.create({
     baseURL: "https://baljc.com",
@@ -7,7 +30,7 @@ function createBasicInstance() {
       "Content-Type": "application/json",
     },
   });
-  const accessToken = localStorage.getItem("accessToken");
+  const accessToken = LocalStorage.getItem("accessToken");
   if (accessToken) {
     instance.defaults.headers.common["Authorization"] = accessToken;
   }
