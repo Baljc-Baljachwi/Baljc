@@ -1,8 +1,12 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { useRecoilState } from "recoil";
+
+import { accessTokenState } from "states";
 import { kakaoLogin } from "../../../api/member";
 
 export default function KakaoAuth() {
+  const [_, setAccessToken] = useRecoilState(accessTokenState);
   const router = useRouter();
   const { code } = router.query;
 
@@ -13,6 +17,7 @@ export default function KakaoAuth() {
       if (res.data.code === 1000) {
         const accessToken = res.headers.authorization;
         console.log(`accessToken : ${accessToken}`);
+        setAccessToken(() => ({ accessToken }));
         console.log(res.data);
         console.log(res.data.data);
 
