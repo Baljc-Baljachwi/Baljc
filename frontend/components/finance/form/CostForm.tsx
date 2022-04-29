@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import Image from "next/image";
 
+import { getCategoies } from "api/accountBook";
 import Icon from "../../common/Icon";
 import ButtonTogglePaymentMethod from "./ButtonTogglePaymentMethod";
-import ButtonTogglePeriodType from "./ButtonTogglePeriodType";
-import ButtonDaySelect from "./ButtonDaySelect";
 import ButtonBottom from "components/common/ButtonBottom";
 import ButtonTrashCan from "components/common/ButtonTrashCan";
-import { IAccountBook, PeriodType, PaymentMethodType } from "types";
+import { IAccountBook, PaymentMethodType } from "types";
 
 const FormContainer = styled.div`
   display: flex;
@@ -90,8 +90,56 @@ const ButtonContainer = styled.div`
   gap: 1.6rem;
 `;
 
+const CategoryListContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+`;
+
+const CategoryButton = styled.div<{ isSelected?: boolean }>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  font-size: 1.2rem;
+  height: 7.4rem;
+`;
+
+const CategoryImage = styled.div<{ isSelected?: boolean }>`
+  position: relative;
+  width: ${(props) => (props.isSelected ? "4.8rem" : "4.4rem")};
+  height: ${(props) => (props.isSelected ? "4.8rem" : "4.4rem")};
+  box-sizing: content-box;
+  border: ${(props) => (props.isSelected ? "0.4rem solid #2E437A" : "")};
+  border-radius: 50%;
+  + span {
+    font-size: ${(props) => (props.isSelected ? "1.4rem" : "1.2rem")};
+    font-weight: ${(props) => (props.isSelected ? "500" : "400")};
+  }
+`;
+
 interface CostFormProps {
   initCostForm?: IAccountBook;
+}
+
+interface Category {
+  categoryId: string;
+  type: "E" | "I";
+  name: string;
+  imgUrl: string;
+}
+
+function compareDate(
+  startDate: string | null,
+  endDate: string | null
+): boolean {
+  if (!startDate || !endDate) {
+    return false;
+  }
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  return start > end;
 }
 
 export default function CostForm({ initCostForm }: CostFormProps) {
@@ -104,29 +152,47 @@ export default function CostForm({ initCostForm }: CostFormProps) {
     time: "",
   });
 
+  const [categoryList, setCategoryList] = useState<Category[]>([]);
+
+  useEffect(() => {
+    getCategoies("E").then((res) => {
+      console.log(res.data);
+      if (res.data.code === 1300) {
+        console.log(res.data.data);
+        setCategoryList(res.data.data);
+      }
+    });
+  }, []);
+
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const target = event.target;
     const value = target.value;
     const name = target.name;
 
-    setCostForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    // 시작날짜보다 끝날짜가 빠른 경우 대처
+    if (name === "startDate" && compareDate(value, costForm.endDate)) {
+      setCostForm((prev) => ({
+        ...prev,
+        endDate: value,
+        [name]: value,
+      }));
+    } else {
+      setCostForm((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   }
 
   function handleCheckBoxChange(event: React.ChangeEvent<HTMLInputElement>) {
     const target = event.target;
     const name = target.name;
 
-    const newData = target.checked
-      ? { date: null }
-      : { monthlyPeriod: null, weeklyPeriod: null };
+    const newData = target.checked ? { date: null } : { monthlyPeriod: null };
 
     setCostForm((prev) => ({
       ...prev,
       [name]: target.checked ? "Y" : "N",
-      periodType: target.checked ? "M" : "N",
       ...newData,
     }));
   }
@@ -135,62 +201,6 @@ export default function CostForm({ initCostForm }: CostFormProps) {
     setCostForm((prev) => ({
       ...prev,
       paymentMethod: value,
-    }));
-  }
-
-  function handleTogglePeriodType(value: PeriodType) {
-    // 바뀔 때마다 필요없는 데이터 null로
-    switch (value) {
-      case "M":
-        setCostForm((prev) => ({
-          ...prev,
-          periodType: value,
-          weeklyPeriod: null,
-          date: null,
-        }));
-        break;
-      case "W":
-        setCostForm((prev) => ({
-          ...prev,
-          periodType: value,
-          monthlyPeriod: null,
-          date: null,
-        }));
-        break;
-      case "D":
-        setCostForm((prev) => ({
-          ...prev,
-          periodType: value,
-          monthlyPeriod: null,
-          weeklyPeriod: null,
-          date: null,
-        }));
-        break;
-      case "N":
-        setCostForm((prev) => ({
-          ...prev,
-          periodType: value,
-          monthlyPeriod: null,
-          weeklyPeriod: null,
-        }));
-        break;
-    }
-  }
-
-  function handleWeeklyDayUpdate(value: number) {
-    let newValue = 0;
-    if (!costForm.weeklyPeriod) {
-      newValue = 1 << value;
-    } else if (costForm.weeklyPeriod & (1 << value)) {
-      // 이미 선택된 경우
-      newValue = costForm.weeklyPeriod - (1 << value);
-    } else {
-      // 새로 선택한 경우
-      newValue = costForm.weeklyPeriod + (1 << value);
-    }
-    setCostForm((prev) => ({
-      ...prev,
-      weeklyPeriod: newValue,
     }));
   }
 
@@ -213,6 +223,11 @@ export default function CostForm({ initCostForm }: CostFormProps) {
     console.log("Edit!!");
     console.log(costForm);
     console.log(dateTime);
+  }
+
+  function onClickCategoryButton(categoryId: string) {
+    console.log(categoryId);
+    setCostForm((prev) => ({ ...prev, categoryType: categoryId }));
   }
 
   return (
@@ -264,42 +279,46 @@ export default function CostForm({ initCostForm }: CostFormProps) {
         </CheckboxContainer>
       </div>
 
-      <div>
-        <StyledLabel>날짜</StyledLabel>
-        {costForm.periodType === "M" ? (
-          <>
-            <ButtonTogglePeriodType
-              selectedPeriodType={costForm.periodType || "M"}
-              handleToggleButton={handleTogglePeriodType}
-            />
+      {costForm.fixedExpenditureYn === "Y" ? (
+        <>
+          <div>
+            <StyledLabel>날짜</StyledLabel>
             <InputContainer>
+              <StyledInput
+                type="month"
+                name="startDate"
+                value={costForm.startDate || ""}
+                onChange={handleInputChange}
+              />
+              <InputUnit hasValue={!!costForm.startDate}>부터</InputUnit>
+              <StyledInput
+                type="month"
+                name="endDate"
+                value={costForm.endDate || ""}
+                min={costForm.startDate || ""}
+                onChange={handleInputChange}
+              />
+              <InputUnit hasValue={!!costForm.endDate}>까지</InputUnit>
+            </InputContainer>
+          </div>
+          <div>
+            <InputContainer>
+              <InputUnit hasValue={!!costForm.monthlyPeriod}>매월</InputUnit>
               <StyledInput
                 type="number"
                 name="monthlyPeriod"
-                value={costForm.monthlyPeriod || 0}
+                max={28}
+                value={Math.min(costForm.monthlyPeriod || 0, 28) || ""}
                 onChange={handleInputChange}
               />
               <InputUnit hasValue={!!costForm.monthlyPeriod}>일마다</InputUnit>
             </InputContainer>
-          </>
-        ) : costForm.periodType === "W" ? (
-          <>
-            <ButtonTogglePeriodType
-              selectedPeriodType={costForm.periodType}
-              handleToggleButton={handleTogglePeriodType}
-            />
-            <ButtonDaySelect
-              selectedDays={costForm.weeklyPeriod}
-              handleWeeklyDayUpdate={handleWeeklyDayUpdate}
-            />
-          </>
-        ) : costForm.periodType === "D" ? (
-          <ButtonTogglePeriodType
-            selectedPeriodType={costForm.periodType}
-            handleToggleButton={handleTogglePeriodType}
-          />
-        ) : (
-          <>
+          </div>
+        </>
+      ) : (
+        <>
+          <div>
+            <StyledLabel>날짜</StyledLabel>
             <InputContainer>
               <StyledInput
                 type="date"
@@ -308,6 +327,8 @@ export default function CostForm({ initCostForm }: CostFormProps) {
                 onChange={handleDateTimeInputChange}
               />
             </InputContainer>
+          </div>
+          <div>
             <StyledLabel>시각</StyledLabel>
             <InputContainer>
               <StyledInput
@@ -317,16 +338,36 @@ export default function CostForm({ initCostForm }: CostFormProps) {
                 onChange={handleDateTimeInputChange}
               />
             </InputContainer>
-          </>
-        )}
+          </div>
+        </>
+      )}
+      <div>
+        <StyledLabel>카테고리</StyledLabel>
+        <CategoryListContainer>
+          {categoryList.map((category) => (
+            <CategoryButton
+              key={category.categoryId}
+              onClick={() => onClickCategoryButton(category.categoryId)}
+            >
+              <CategoryImage
+                isSelected={costForm.categoryType === category.categoryId}
+              >
+                <Image
+                  src={category.imgUrl}
+                  alt={category.name}
+                  layout="fill"
+                />
+              </CategoryImage>
+              <span>{category.name}</span>
+            </CategoryButton>
+          ))}
+        </CategoryListContainer>
       </div>
-
-      <StyledLabel>카테고리</StyledLabel>
 
       <div>
         <StyledLabel>결제 수단</StyledLabel>
         <ButtonTogglePaymentMethod
-          selectedPaymentMethod={costForm.paymentMethod}
+          selectedPaymentMethod={costForm.paymentMethod || "C"}
           handleToggleButton={handleTogglePaymentMethod}
         />
       </div>
