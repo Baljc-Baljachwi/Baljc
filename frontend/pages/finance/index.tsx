@@ -6,6 +6,10 @@ import FinanceCard from "../../components/finance/list/FinanceCard";
 import ButtonBottom from "../../components/common/ButtonBottom";
 import ButtonTrashCan from "../../components/common/ButtonTrashCan";
 
+import { WithRouterProps } from "next/dist/client/with-router";
+import { Router, withRouter } from "next/router";
+import Link from "next/link";
+
 const Container = styled.div`
   height: 100vh;
   /* background-color: #ebeced; */
@@ -75,6 +79,7 @@ export default function Finance() {
                 <span style={{ color: "#0075FF", fontWeight: "bold" }}>
                   1,000,000 원
                 </span>
+                {/* <Link href="/detail" shallow={router.asPath === "/detail"}></Link> */}
               </MonthlyContentIncome>
               <MonthlyContentExpenditure>
                 <span>월 지출총액</span>
