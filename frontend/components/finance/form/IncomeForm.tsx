@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import Image from "next/image";
 
 import Icon from "../../common/Icon";
-import ButtonTogglePeriodType from "./ButtonTogglePeriodType";
-import ButtonDaySelect from "./ButtonDaySelect";
 import ButtonBottom from "components/common/ButtonBottom";
 import ButtonTrashCan from "components/common/ButtonTrashCan";
-import { IAccountBook, PeriodType } from "types";
+import { IAccountBook } from "types";
+import { getCategoies } from "api/accountBook";
+import categoryImage from "public/assets/img/category/congratulations.png";
 
 const FormContainer = styled.div`
   display: flex;
@@ -89,8 +90,43 @@ const ButtonContainer = styled.div`
   gap: 1.6rem;
 `;
 
+const CategoryListContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+`;
+
+const CategoryButton = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  font-size: 1.2rem;
+  height: 7.4rem;
+`;
+
+const CategoryImage = styled.div<{ isSelected?: boolean }>`
+  position: relative;
+  width: ${(props) => (props.isSelected ? "4.8rem" : "4.4rem")};
+  height: ${(props) => (props.isSelected ? "4.8rem" : "4.4rem")};
+  box-sizing: content-box;
+  border: ${(props) => (props.isSelected ? "0.4rem solid #2E437A" : "")};
+  border-radius: 50%;
+  + span {
+    font-size: ${(props) => (props.isSelected ? "1.4rem" : "1.2rem")};
+    font-weight: ${(props) => (props.isSelected ? "500" : "400")};
+  }
+`;
+
 interface IncomeFormProps {
   initIncomeForm?: IAccountBook;
+}
+
+interface Category {
+  categoryId: string;
+  type: "E" | "I";
+  name: string;
+  imgUrl: string;
 }
 
 function compareDate(
@@ -114,6 +150,18 @@ export default function IncomeForm({ initIncomeForm }: IncomeFormProps) {
     date: "",
     time: "",
   });
+
+  const [categoryList, setCategoryList] = useState<Category[]>([]);
+
+  useEffect(() => {
+    getCategoies("I").then((res) => {
+      console.log(res.data);
+      if (res.data.code === 1300) {
+        console.log(res.data.data);
+        setCategoryList(res.data.data);
+      }
+    });
+  }, []);
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const target = event.target;
@@ -167,6 +215,11 @@ export default function IncomeForm({ initIncomeForm }: IncomeFormProps) {
     console.log("Edit!!");
     console.log(incomeForm);
     console.log(dateTime);
+  }
+
+  function onClickCategoryButton(categoryId: string) {
+    console.log(categoryId);
+    setIncomeForm((prev) => ({ ...prev, categoryType: categoryId }));
   }
 
   return (
@@ -284,6 +337,27 @@ export default function IncomeForm({ initIncomeForm }: IncomeFormProps) {
       )}
 
       <StyledLabel>카테고리</StyledLabel>
+      <CategoryListContainer>
+        {categoryList.map((category) => (
+          <CategoryButton
+            key={category.categoryId}
+            onClick={() => onClickCategoryButton(category.categoryId)}
+          >
+            <CategoryImage
+              isSelected={incomeForm.categoryType === category.categoryId}
+            >
+              <Image
+                // 이미지 S3 저장전까지 asset으로 사용.
+                // src={"http://" + category.imgUrl}
+                src={categoryImage}
+                alt={category.name}
+                layout="fill"
+              />
+            </CategoryImage>
+            <span>{category.name}</span>
+          </CategoryButton>
+        ))}
+      </CategoryListContainer>
 
       <div>
         <StyledLabel>메모</StyledLabel>

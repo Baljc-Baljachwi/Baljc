@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import Image from "next/image";
 
+import { getCategoies } from "api/accountBook";
 import Icon from "../../common/Icon";
 import ButtonTogglePaymentMethod from "./ButtonTogglePaymentMethod";
-import ButtonTogglePeriodType from "./ButtonTogglePeriodType";
-import ButtonDaySelect from "./ButtonDaySelect";
 import ButtonBottom from "components/common/ButtonBottom";
 import ButtonTrashCan from "components/common/ButtonTrashCan";
-import { IAccountBook, PeriodType, PaymentMethodType } from "types";
+import { IAccountBook, PaymentMethodType } from "types";
+import categoryImage from "public/assets/img/category/congratulations.png";
+import { prepareServerlessUrl } from "next/dist/server/base-server";
 
 const FormContainer = styled.div`
   display: flex;
@@ -90,8 +92,43 @@ const ButtonContainer = styled.div`
   gap: 1.6rem;
 `;
 
+const CategoryListContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+`;
+
+const CategoryButton = styled.div<{ isSelected?: boolean }>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  font-size: 1.2rem;
+  height: 7.4rem;
+`;
+
+const CategoryImage = styled.div<{ isSelected?: boolean }>`
+  position: relative;
+  width: ${(props) => (props.isSelected ? "4.8rem" : "4.4rem")};
+  height: ${(props) => (props.isSelected ? "4.8rem" : "4.4rem")};
+  box-sizing: content-box;
+  border: ${(props) => (props.isSelected ? "0.4rem solid #2E437A" : "")};
+  border-radius: 50%;
+  + span {
+    font-size: ${(props) => (props.isSelected ? "1.4rem" : "1.2rem")};
+    font-weight: ${(props) => (props.isSelected ? "500" : "400")};
+  }
+`;
+
 interface CostFormProps {
   initCostForm?: IAccountBook;
+}
+
+interface Category {
+  categoryId: string;
+  type: "E" | "I";
+  name: string;
+  imgUrl: string;
 }
 
 function compareDate(
@@ -115,6 +152,18 @@ export default function CostForm({ initCostForm }: CostFormProps) {
     date: "",
     time: "",
   });
+
+  const [categoryList, setCategoryList] = useState<Category[]>([]);
+
+  useEffect(() => {
+    getCategoies("E").then((res) => {
+      console.log(res.data);
+      if (res.data.code === 1300) {
+        console.log(res.data.data);
+        setCategoryList(res.data.data);
+      }
+    });
+  }, []);
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const target = event.target;
@@ -175,6 +224,11 @@ export default function CostForm({ initCostForm }: CostFormProps) {
     console.log("Edit!!");
     console.log(costForm);
     console.log(dateTime);
+  }
+
+  function onClickCategoryButton(categoryId: string) {
+    console.log(categoryId);
+    setCostForm((prev) => ({ ...prev, categoryType: categoryId }));
   }
 
   return (
@@ -290,6 +344,27 @@ export default function CostForm({ initCostForm }: CostFormProps) {
       )}
 
       <StyledLabel>카테고리</StyledLabel>
+      <CategoryListContainer>
+        {categoryList.map((category) => (
+          <CategoryButton
+            key={category.categoryId}
+            onClick={() => onClickCategoryButton(category.categoryId)}
+          >
+            <CategoryImage
+              isSelected={costForm.categoryType === category.categoryId}
+            >
+              <Image
+                // 이미지 S3 저장전까지 asset으로 사용.
+                // src={"http://" + category.imgUrl}
+                src={categoryImage}
+                alt={category.name}
+                layout="fill"
+              />
+            </CategoryImage>
+            <span>{category.name}</span>
+          </CategoryButton>
+        ))}
+      </CategoryListContainer>
 
       <div>
         <StyledLabel>결제 수단</StyledLabel>
