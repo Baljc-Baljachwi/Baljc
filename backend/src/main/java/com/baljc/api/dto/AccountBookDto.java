@@ -12,7 +12,7 @@ import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.UUID;
+import java.util.*;
 
 public class AccountBookDto {
     @Getter
@@ -113,5 +113,44 @@ public class AccountBookDto {
             this.type = type;
             this.price = price;
         }
+    }
+
+    @Getter
+    @Setter
+    public static class AccountBookMonth {
+        private UUID accountbookId;
+        private Character type;
+        private Integer price;
+        private String categoryImgUrl;
+        private String categoryName;
+        private String title;
+        private Character paymentMethod;
+        private Integer monthlyPeriod;
+        private LocalDateTime date;
+        private Character fixedExpenditureYn;
+        private Character fixedIncomeYn;
+        private String dayOfWeek;
+
+        @QueryProjection
+        public AccountBookMonth(UUID accountbookId, Character type, Integer price, String categoryImgUrl, String categoryName, String title, Character paymentMethod, Integer monthlyPeriod, LocalDateTime date, Character fixedExpenditureYn, Character fixedIncomeYn) {
+            this.accountbookId = accountbookId;
+            this.type = type;
+            this.price = price;
+            this.categoryImgUrl = categoryImgUrl;
+            this.categoryName = categoryName;
+            this.title = title;
+            this.paymentMethod = paymentMethod;
+            this.monthlyPeriod = monthlyPeriod;
+            this.date = date;
+            this.fixedExpenditureYn = fixedExpenditureYn;
+            this.fixedIncomeYn = fixedIncomeYn;
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class AccountBookList {
+        private HashMap<String, Integer> monthTotal;
+        private TreeMap<Integer, List<AccountBookMonth>> accountbookMonth;
     }
 }

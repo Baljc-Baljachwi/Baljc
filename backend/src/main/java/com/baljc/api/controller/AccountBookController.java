@@ -41,20 +41,20 @@ public class AccountBookController {
     }
 
     @GetMapping("")
-    public ResponseEntity<BaseResponse> getAccountBookList(@RequestParam(value = "year") int year, @RequestParam(value = "month") int month) {
-        accountBookService.getAcoountBookList(year, month);
-        return ResponseEntity.status(200).body(new BaseResponse(1302, "가계부 상세 조회 성공"));
+    public ResponseEntity<BaseDataResponse> getAccountBookList(@RequestParam(value = "year") int year, @RequestParam(value = "month") int month) {
+        AccountBookDto.AccountBookList response = accountBookService.getAcoountBookList(year, month);
+        return ResponseEntity.status(200).body(new BaseDataResponse(1303, "가계부 목록 조회 성공", response));
     }
 
     @PutMapping("/{accountbookId}")
     public ResponseEntity<BaseResponse> updateAccountBook(@PathVariable String accountbookId, @Valid @RequestBody AccountBookDto.AccountBookRequest accountBookRequest) {
         accountBookService.updateAccountBook(UUID.fromString(accountbookId), accountBookRequest);
-        return ResponseEntity.status(200).body(new BaseResponse(1303, "가계부 수정 성공"));
+        return ResponseEntity.status(200).body(new BaseResponse(1304, "가계부 수정 성공"));
     }
 
     @DeleteMapping("/{accountbookId}")
     public ResponseEntity<BaseResponse> deleteAccountBook(@PathVariable String accountbookId) {
         accountBookService.deleteAccountBook(UUID.fromString(accountbookId));
-        return ResponseEntity.status(200).body(new BaseResponse(1304, "가계부 삭제 성공"));
+        return ResponseEntity.status(200).body(new BaseResponse(1305, "가계부 삭제 성공"));
     }
 }
