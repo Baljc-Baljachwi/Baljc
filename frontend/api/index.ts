@@ -7,6 +7,11 @@ function createBasicInstance() {
       "Content-Type": "application/json",
     },
   });
+  const accessToken = localStorage.getItem("accessToken");
+  if (accessToken) {
+    instance.defaults.headers.common["Authorization"] = accessToken;
+  }
+
   return instance;
 }
 

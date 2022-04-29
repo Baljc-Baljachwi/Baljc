@@ -4,6 +4,7 @@ import { ThemeProvider } from "styled-components";
 import type { AppProps } from "next/app";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
+import { RecoilRoot } from "recoil";
 
 import { GlobalStyle } from "../styles/global-styles";
 import "../styles/Calendar.css";
@@ -140,9 +141,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             rel="stylesheet"
           />
         </Head>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <RecoilRoot>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </RecoilRoot>
       </ThemeProvider>
       {/* <Component {...pageProps} /> */}
     </>
