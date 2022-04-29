@@ -77,4 +77,22 @@ public class AccountBookServiceImpl implements AccountBookService {
         return accountBookRepositorySupport.getAccountBookDetail(accountbookId).orElseThrow(() -> new NullPointerException("해당 가계부가 존재하지 않습니다."));
     }
 
+    @Override
+    public void getAcoountBookList(int year, int month) {
+
+    }
+
+    @Override
+    public void updateAccountBook(UUID accoutbookId, AccountBookDto.AccountBookRequest accountBookRequest) {
+        AccountBook accountBook = accountBookRepository.getById(accoutbookId);
+        Category category = categoryRepository.getById(accountBookRequest.getCategoryId());
+        accountBook.updateAccontBook(accountBookRequest, category);
+    }
+
+    @Override
+    public void deleteAccountBook(UUID accoutbookId) {
+        AccountBook accountBook = accountBookRepository.getById(accoutbookId);
+        accountBook.deleteAccountBook();
+    }
+
 }

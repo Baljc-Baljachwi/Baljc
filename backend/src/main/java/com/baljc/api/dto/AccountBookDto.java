@@ -88,4 +88,30 @@ public class AccountBookDto {
             this.endDate = endDate;
         }
     }
+
+    @Getter
+    @Setter
+    public static class AccountBookMonthTotalResponse {
+        private Integer expenditure;
+        private Integer income;
+
+        @QueryProjection
+        public AccountBookMonthTotalResponse(Integer expenditure, Integer income) {
+            this.expenditure = expenditure;
+            this.income = income;
+        }
+    }
+
+    @Getter
+    @Setter
+    public static class AccountBookMonthTotal {
+        private Character type;
+        private Integer price;
+
+        @QueryProjection
+        public AccountBookMonthTotal(Character type, Integer price) {
+            this.type = type;
+            this.price = price;
+        }
+    }
 }

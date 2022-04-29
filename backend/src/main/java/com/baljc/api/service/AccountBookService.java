@@ -12,4 +12,7 @@ public interface AccountBookService {
     List<AccountBookDto.AccountBookCategoryResponse> getAccountBookCategory(String type);
     void insertAccountBook(AccountBookDto.AccountBookRequest accountBookRequest);
     AccountBookDto.AccountBookDetailResponse getAccountBookDetail(UUID accountbookId);
+    void getAcoountBookList(int year, int month);
+    void updateAccountBook(UUID accoutbookId, AccountBookDto.AccountBookRequest accountBookRequest);
+    void deleteAccountBook(UUID accoutbookId);
 }

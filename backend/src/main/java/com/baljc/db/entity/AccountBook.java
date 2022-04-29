@@ -1,5 +1,6 @@
 package com.baljc.db.entity;
 
+import com.baljc.api.dto.AccountBookDto;
 import com.baljc.common.util.BooleanToYNConverter;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -63,5 +64,29 @@ public class AccountBook {
         this.endDate = endDate;
         this.member = member;
         this.category = category;
+    }
+
+    public void updateAccontBook(AccountBookDto.AccountBookRequest accountBookRequest, Category category) {
+        LocalDateTime localDateTime = null;
+        if (accountBookRequest.getDate() != null && accountBookRequest.getTime() != null) {
+            localDateTime = LocalDateTime.of(accountBookRequest.getDate(), accountBookRequest.getTime());
+        }
+
+        this.type = accountBookRequest.getType().charAt(0);
+        this.title = accountBookRequest.getTitle();
+        this.price = accountBookRequest.getPrice();
+        this.memo = accountBookRequest.getMemo();
+        this.paymentMethod = accountBookRequest.getPaymentMethod().charAt(0);
+        this.fixedExpenditureYn = accountBookRequest.getFixedExpenditureYn().charAt(0);
+        this.fixedIncomeYn = accountBookRequest.getFixedIncomeYn().charAt(0);
+        this.monthlyPeriod = accountBookRequest.getMonthlyPeriod();
+        this.date = localDateTime;
+        this.startDate = accountBookRequest.getStartDate();
+        this.endDate = accountBookRequest.getEndDate();
+        this.category = category;
+    }
+
+    public void deleteAccountBook() {
+        this.deletedYn = 'Y';
     }
 }
