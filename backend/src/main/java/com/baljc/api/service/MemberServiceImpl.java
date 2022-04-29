@@ -205,15 +205,14 @@ public class MemberServiceImpl implements MemberService {
     @Transactional(rollbackFor = Exception.class)
     public void deleteMember() {
         Member member = getMemberByAuthentication();
-        pushAlarmRepository.delete(pushAlarmRepository.findByMember(member)
-                .orElseThrow(() -> new NullPointerException("회원의 알림설정이 존재하지 않습니다.")));
-        for (AccountBook accountBook:accountBookRepository.findByMember(member)) {
+        pushAlarmRepository.delete(member.getPushAlarm());
+        for (AccountBook accountBook:member.getAccountBookList()) {
             accountBookRepository.delete(accountBook);
         }
-        for (Routine routine:routineRepository.findByMember(member)) {
+        for (Routine routine:member.getRoutineList()) {
             routineRepository.delete(routine);
         }
-        for (Todo todo:todoRepository.findByMember(member)) {
+        for (Todo todo:member.getTodoList()) {
             todoRepository.delete(todo);
         }
         if (member.getProfileUrl() != null) fileService.deleteImage(member.getProfileUrl());

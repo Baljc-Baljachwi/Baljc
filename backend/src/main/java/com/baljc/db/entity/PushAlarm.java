@@ -1,5 +1,6 @@
 package com.baljc.db.entity;
 
+import com.baljc.api.dto.PushAlarmDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,5 +38,12 @@ public class PushAlarm {
         this.todoAlarmYn = todoAlarmYn;
         this.todoAlarmTime = todoAlarmTime;
         this.member = member;
+    }
+
+    public void updateSetting(PushAlarmDto.Request request) {
+        this.accountAlarmYn = request.getAccountAlarmYn().charAt(0);
+        this.accountAlarmTime = LocalTime.parse(request.getAccountAlarmTime());
+        this.todoAlarmYn = request.getTodoAlarmYn().charAt(0);
+        this.todoAlarmTime = LocalTime.parse(request.getTodoAlarmTime());
     }
 }
