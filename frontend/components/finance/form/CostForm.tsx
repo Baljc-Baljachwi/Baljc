@@ -94,6 +94,7 @@ const CategoryListContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 1rem;
+  margin-top: 2rem;
 `;
 
 const CategoryButton = styled.div<{ isSelected?: boolean }>`
@@ -340,23 +341,28 @@ export default function CostForm({ initCostForm }: CostFormProps) {
           </div>
         </>
       )}
-
-      <StyledLabel>카테고리</StyledLabel>
-      <CategoryListContainer>
-        {categoryList.map((category) => (
-          <CategoryButton
-            key={category.categoryId}
-            onClick={() => onClickCategoryButton(category.categoryId)}
-          >
-            <CategoryImage
-              isSelected={costForm.categoryType === category.categoryId}
+      <div>
+        <StyledLabel>카테고리</StyledLabel>
+        <CategoryListContainer>
+          {categoryList.map((category) => (
+            <CategoryButton
+              key={category.categoryId}
+              onClick={() => onClickCategoryButton(category.categoryId)}
             >
-              <Image src={category.imgUrl} alt={category.name} layout="fill" />
-            </CategoryImage>
-            <span>{category.name}</span>
-          </CategoryButton>
-        ))}
-      </CategoryListContainer>
+              <CategoryImage
+                isSelected={costForm.categoryType === category.categoryId}
+              >
+                <Image
+                  src={category.imgUrl}
+                  alt={category.name}
+                  layout="fill"
+                />
+              </CategoryImage>
+              <span>{category.name}</span>
+            </CategoryButton>
+          ))}
+        </CategoryListContainer>
+      </div>
 
       <div>
         <StyledLabel>결제 수단</StyledLabel>
