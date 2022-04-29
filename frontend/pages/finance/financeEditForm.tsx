@@ -23,16 +23,16 @@ interface FinanceEditFormProps {
 const dummyData = {
   accountBookId: 1,
   accountType: "E",
-  categoryType: 1,
+  categoryType: "123",
   title: "오늘도 나는 돈을 쓴다",
   price: 100000,
   memo: "쓸데없는 지출",
   paymentMethod: "C",
   fixedExpenditureYn: "N",
   fixedIncomeYn: "N",
-  periodType: "N",
+  startDate: "",
+  endDate: "",
   monthlyPeriod: null,
-  weeklyPeriod: null,
   date: "2022-04-28 ",
 } as IAccountBook;
 
