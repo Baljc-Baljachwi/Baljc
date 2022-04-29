@@ -56,6 +56,7 @@ public class AccountBookServiceImpl implements AccountBookService {
 
         accountBookRepository.save(AccountBook.builder()
                 .category(category)
+                .member(memberService.getMemberByAuthentication())
                 .type(accountBookRequest.getType().charAt(0))
                 .title(accountBookRequest.getTitle())
                 .price(accountBookRequest.getPrice())
@@ -69,23 +70,6 @@ public class AccountBookServiceImpl implements AccountBookService {
                 .endDate(accountBookRequest.getEndDate())
                 .deletedYn('N')
                 .build());
-
-//        accountBookRepository.save(AccountBook.builder()
-//                .category(category)
-//                .member(memberService.getMemberByAuthentication())
-//                .type(accountBookRequest.getType().charAt(0))
-//                .title(accountBookRequest.getTitle())
-//                .price(accountBookRequest.getPrice())
-//                .date(localDateTime)
-//                .fixedExpenditureYn(accountBookRequest.getFixedExpenditureYn().charAt(0))
-//                .fixedIncomeYn(accountBookRequest.getFixedIncomeYn().charAt(0))
-//                .paymentMethod(accountBookRequest.getPaymentMethod().charAt(0))
-//                .memo(accountBookRequest.getMemo())
-//                .periodType(accountBookRequest.getPeriodType().charAt(0))
-//                .monthlyPeriod(accountBookRequest.getMonthlyPeriod())
-//                .weeklyPeriod(accountBookRequest.getWeeklyPeriod())
-//                .deletedYn('N')
-//                .build());
     }
 
     @Override
