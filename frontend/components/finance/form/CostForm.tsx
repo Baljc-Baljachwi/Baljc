@@ -8,8 +8,6 @@ import ButtonTogglePaymentMethod from "./ButtonTogglePaymentMethod";
 import ButtonBottom from "components/common/ButtonBottom";
 import ButtonTrashCan from "components/common/ButtonTrashCan";
 import { IAccountBook, PaymentMethodType } from "types";
-import categoryImage from "public/assets/img/category/congratulations.png";
-import { prepareServerlessUrl } from "next/dist/server/base-server";
 
 const FormContainer = styled.div`
   display: flex;
@@ -353,13 +351,7 @@ export default function CostForm({ initCostForm }: CostFormProps) {
             <CategoryImage
               isSelected={costForm.categoryType === category.categoryId}
             >
-              <Image
-                // 이미지 S3 저장전까지 asset으로 사용.
-                // src={"http://" + category.imgUrl}
-                src={categoryImage}
-                alt={category.name}
-                layout="fill"
-              />
+              <Image src={category.imgUrl} alt={category.name} layout="fill" />
             </CategoryImage>
             <span>{category.name}</span>
           </CategoryButton>

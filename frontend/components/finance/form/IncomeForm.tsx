@@ -7,7 +7,6 @@ import ButtonBottom from "components/common/ButtonBottom";
 import ButtonTrashCan from "components/common/ButtonTrashCan";
 import { IAccountBook } from "types";
 import { getCategoies } from "api/accountBook";
-import categoryImage from "public/assets/img/category/congratulations.png";
 
 const FormContainer = styled.div`
   display: flex;
@@ -346,13 +345,7 @@ export default function IncomeForm({ initIncomeForm }: IncomeFormProps) {
             <CategoryImage
               isSelected={incomeForm.categoryType === category.categoryId}
             >
-              <Image
-                // 이미지 S3 저장전까지 asset으로 사용.
-                // src={"http://" + category.imgUrl}
-                src={categoryImage}
-                alt={category.name}
-                layout="fill"
-              />
+              <Image src={category.imgUrl} alt={category.name} layout="fill" />
             </CategoryImage>
             <span>{category.name}</span>
           </CategoryButton>
