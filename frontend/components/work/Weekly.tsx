@@ -7,14 +7,14 @@ const WeeklyDiv = styled.div`
 `;
 
 const WeeklyHeader = styled.div`
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.8rem;
 `;
 
 const YoilDiv = styled.div`
   display: flex;
   justify-content: space-around;
   margin: 1rem 0;
-  font-size: 1rem;
+  font-size: 1.3rem;
   font-weight: 500;
 `;
 
@@ -24,11 +24,11 @@ const DateDiv = styled.div`
 `;
 
 const DateItem = styled.p<{ isToday: boolean }>`
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   font-weight: 500;
-  width: 3.5rem;
+  width: 4rem;
   text-align: center;
-  line-height: 3.5rem;
+  line-height: 4rem;
   color: ${(props) => (props.isToday ? "white" : "#a3a3a3")};
   background: ${(props) => (props.isToday ? "#FFD469" : "")};
   border-radius: ${(props) => (props.isToday ? "50%" : "")};
