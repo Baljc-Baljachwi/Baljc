@@ -7,21 +7,21 @@ export type YNType = "Y" | "N"; // boolean 대신 true: "Y", false: "N"
 export interface IAccountBook {
   accountBookId: number;
   accountType: AccountType;
-  categoryType: number;
+  categoryType: string;
   title: string;
   price: number;
   memo: string | null;
   paymentMethod: PaymentMethodType;
   fixedExpenditureYn: YNType;
   fixedIncomeYn: YNType;
-  periodType: PeriodType;
   monthlyPeriod: number | null;
-  weeklyPeriod: number | null;
+  startDate: string | null;
+  endDate: string | null;
   date: string | null;
 }
 
 export interface ICategory {
-  categoryId: number;
+  categoryId: string;
   accountType: AccountType;
   name: string;
   imgUrl: string;
