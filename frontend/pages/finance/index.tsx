@@ -7,7 +7,7 @@ import ButtonBottom from "../../components/common/ButtonBottom";
 import ButtonTrashCan from "../../components/common/ButtonTrashCan";
 
 import { WithRouterProps } from "next/dist/client/with-router";
-import { Router, withRouter } from "next/router";
+import { Router, useRouter, withRouter } from "next/router";
 import Link from "next/link";
 
 const Container = styled.div`
@@ -64,10 +64,16 @@ const MonthlyContentExpenditure = styled.div`
 // `;
 
 export default function Finance() {
+  const router = useRouter();
+
   return (
     <>
       <Container>
-        <Header label="가계부 목록" icon="plus"></Header>
+        <Header
+          label="가계부 목록"
+          icon="plus"
+          onClickRightButton={() => router.push("/finance/financeCreateForm")}
+        ></Header>
         <PageContainer>
           <MonthlyContentContainer>
             <MonthlySection>
