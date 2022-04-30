@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 
-import { getCategoies } from "api/accountBook";
+import { getCategories, postAccountBooks } from "api/accountBook";
 import Icon from "../../common/Icon";
 import ButtonTogglePaymentMethod from "./ButtonTogglePaymentMethod";
 import ButtonBottom from "components/common/ButtonBottom";
@@ -16,10 +16,10 @@ const FormContainer = styled.div`
   padding-bottom: 10rem;
 `;
 
-const InputContainer = styled.div<{ isPrice?: boolean }>`
+const InputContainer = styled.div`
   width: 100%;
   border-bottom: 1px solid #cccccc;
-  margin: ${(props) => (props.isPrice ? "1.6rem 0 0 0" : "1.6rem 0 0 0")};
+  margin: 1.6rem 0 0 0;
   color: #cccccc;
   :focus-within {
     border-bottom: 1px solid #3d3d3d;
@@ -119,8 +119,12 @@ const CategoryImage = styled.div<{ isSelected?: boolean }>`
   }
 `;
 
+interface ICostForm extends IAccountBook {
+  time: string | null;
+}
+
 interface CostFormProps {
-  initCostForm?: IAccountBook;
+  initCostForm?: ICostForm;
 }
 
 interface Category {
@@ -143,19 +147,30 @@ function compareDate(
 }
 
 export default function CostForm({ initCostForm }: CostFormProps) {
-  const [costForm, setCostForm] = useState<IAccountBook>(
-    initCostForm || ({} as IAccountBook)
+  const [costForm, setCostForm] = useState<ICostForm>(
+    initCostForm ||
+      ({
+        accountBookId: "",
+        type: "E",
+        categoryId: "",
+        title: "",
+        price: 0,
+        memo: null,
+        paymentMethod: "C",
+        fixedExpenditureYn: "N",
+        fixedIncomeYn: "N",
+        monthlyPeriod: null,
+        startDate: null,
+        endDate: null,
+        date: null,
+        time: null,
+      } as ICostForm)
   );
-
-  const [dateTime, setDateTime] = useState<{ date: string; time: string }>({
-    date: "",
-    time: "",
-  });
 
   const [categoryList, setCategoryList] = useState<Category[]>([]);
 
   useEffect(() => {
-    getCategoies("E").then((res) => {
+    getCategories("E").then((res) => {
       console.log(res.data);
       if (res.data.code === 1300) {
         console.log(res.data.data);
@@ -166,8 +181,8 @@ export default function CostForm({ initCostForm }: CostFormProps) {
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const target = event.target;
-    const value = target.value;
     const name = target.name;
+    const value = target.value;
 
     // 시작날짜보다 끝날짜가 빠른 경우 대처
     if (name === "startDate" && compareDate(value, costForm.endDate)) {
@@ -175,6 +190,17 @@ export default function CostForm({ initCostForm }: CostFormProps) {
         ...prev,
         endDate: value,
         [name]: value,
+      }));
+    } else if (name === "price") {
+      setCostForm((prev) => ({
+        ...prev,
+        [name]: +value,
+      }));
+    } else if (name === "monthlyPeriod") {
+      const newValue = Math.min(+value, 28);
+      setCostForm((prev) => ({
+        ...prev,
+        [name]: newValue,
       }));
     } else {
       setCostForm((prev) => ({
@@ -187,8 +213,9 @@ export default function CostForm({ initCostForm }: CostFormProps) {
   function handleCheckBoxChange(event: React.ChangeEvent<HTMLInputElement>) {
     const target = event.target;
     const name = target.name;
-
-    const newData = target.checked ? { date: null } : { monthlyPeriod: null };
+    const newData = target.checked
+      ? { date: null, time: null }
+      : { monthlyPeriod: null };
 
     setCostForm((prev) => ({
       ...prev,
@@ -204,30 +231,27 @@ export default function CostForm({ initCostForm }: CostFormProps) {
     }));
   }
 
-  function handleDateTimeInputChange(
-    event: React.ChangeEvent<HTMLInputElement>
-  ) {
-    const target = event.target;
-    const name = target.name;
-    const value = target.value;
-    setDateTime((prev) => ({ ...prev, [name]: value }));
-  }
-
-  function onClickConfirmButton(event: React.MouseEvent<HTMLButtonElement>) {
+  function onClickConfirmButton() {
     console.log("Confirm!!");
-    console.log(costForm);
-    console.log(dateTime);
+    const params = {
+      ...costForm,
+    };
+    delete params.accountBookId;
+
+    postAccountBooks(params).then((res) => {
+      console.log(res.data);
+    });
+    console.log(params);
   }
 
-  function onClickEditButton(event: React.MouseEvent<HTMLButtonElement>) {
+  function onClickEditButton() {
     console.log("Edit!!");
     console.log(costForm);
-    console.log(dateTime);
   }
 
   function onClickCategoryButton(categoryId: string) {
     console.log(categoryId);
-    setCostForm((prev) => ({ ...prev, categoryType: categoryId }));
+    setCostForm((prev) => ({ ...prev, categoryId }));
   }
 
   return (
@@ -237,19 +261,19 @@ export default function CostForm({ initCostForm }: CostFormProps) {
         <InputContainer>
           <StyledInput
             name="title"
-            value={costForm.title || ""}
+            value={costForm.title}
             onChange={handleInputChange}
           />
         </InputContainer>
       </div>
       <div>
         <StyledLabel>금액</StyledLabel>
-        <InputContainer isPrice={true}>
+        <InputContainer>
           <StyledInput
             type="number"
             placeholder="0"
             name="price"
-            value={costForm.price || ""}
+            value={costForm.price}
             onChange={handleInputChange}
           />
           <InputUnit hasValue={costForm.price > 0}>원</InputUnit>
@@ -260,7 +284,7 @@ export default function CostForm({ initCostForm }: CostFormProps) {
             type="checkbox"
             id="fixedExpenditureYn"
             name="fixedExpenditureYn"
-            checked={costForm.fixedExpenditureYn === "Y" || false}
+            checked={costForm.fixedExpenditureYn === "Y"}
             onChange={handleCheckBoxChange}
           />
           <CheckLabel htmlFor="fixedExpenditureYn">
@@ -323,8 +347,8 @@ export default function CostForm({ initCostForm }: CostFormProps) {
               <StyledInput
                 type="date"
                 name="date"
-                value={dateTime.date}
-                onChange={handleDateTimeInputChange}
+                value={costForm.date || ""}
+                onChange={handleInputChange}
               />
             </InputContainer>
           </div>
@@ -334,8 +358,8 @@ export default function CostForm({ initCostForm }: CostFormProps) {
               <StyledInput
                 type="time"
                 name="time"
-                value={dateTime.time}
-                onChange={handleDateTimeInputChange}
+                value={costForm.time || ""}
+                onChange={handleInputChange}
               />
             </InputContainer>
           </div>
@@ -350,7 +374,7 @@ export default function CostForm({ initCostForm }: CostFormProps) {
               onClick={() => onClickCategoryButton(category.categoryId)}
             >
               <CategoryImage
-                isSelected={costForm.categoryType === category.categoryId}
+                isSelected={costForm.categoryId === category.categoryId}
               >
                 <Image
                   src={category.imgUrl}
@@ -367,7 +391,7 @@ export default function CostForm({ initCostForm }: CostFormProps) {
       <div>
         <StyledLabel>결제 수단</StyledLabel>
         <ButtonTogglePaymentMethod
-          selectedPaymentMethod={costForm.paymentMethod || "C"}
+          selectedPaymentMethod={costForm.paymentMethod}
           handleToggleButton={handleTogglePaymentMethod}
         />
       </div>

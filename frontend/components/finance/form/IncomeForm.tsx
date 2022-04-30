@@ -6,7 +6,7 @@ import Icon from "../../common/Icon";
 import ButtonBottom from "components/common/ButtonBottom";
 import ButtonTrashCan from "components/common/ButtonTrashCan";
 import { IAccountBook } from "types";
-import { getCategoies } from "api/accountBook";
+import { getCategories, postAccountBooks } from "api/accountBook";
 
 const FormContainer = styled.div`
   display: flex;
@@ -15,10 +15,10 @@ const FormContainer = styled.div`
   padding-bottom: 10rem;
 `;
 
-const InputContainer = styled.div<{ isPrice?: boolean }>`
+const InputContainer = styled.div`
   width: 100%;
   border-bottom: 1px solid #cccccc;
-  margin: ${(props) => (props.isPrice ? "1.6rem 0 0 0" : "1.6rem 0 0 0")};
+  margin: 1.6rem 0 0 0;
   color: #cccccc;
   :focus-within {
     border-bottom: 1px solid #3d3d3d;
@@ -118,8 +118,12 @@ const CategoryImage = styled.div<{ isSelected?: boolean }>`
   }
 `;
 
+interface IIncomeForm extends IAccountBook {
+  time: string | null;
+}
+
 interface IncomeFormProps {
-  initIncomeForm?: IAccountBook;
+  initIncomeForm?: IIncomeForm;
 }
 
 interface Category {
@@ -142,19 +146,30 @@ function compareDate(
 }
 
 export default function IncomeForm({ initIncomeForm }: IncomeFormProps) {
-  const [incomeForm, setIncomeForm] = useState<IAccountBook>(
-    initIncomeForm || ({} as IAccountBook)
+  const [incomeForm, setIncomeForm] = useState<IIncomeForm>(
+    initIncomeForm ||
+      ({
+        accountBookId: "",
+        type: "E",
+        categoryId: "",
+        title: "",
+        price: 0,
+        memo: null,
+        paymentMethod: "N",
+        fixedExpenditureYn: "N",
+        fixedIncomeYn: "N",
+        monthlyPeriod: null,
+        startDate: null,
+        endDate: null,
+        date: null,
+        time: null,
+      } as IIncomeForm)
   );
-
-  const [dateTime, setDateTime] = useState<{ date: string; time: string }>({
-    date: "",
-    time: "",
-  });
 
   const [categoryList, setCategoryList] = useState<Category[]>([]);
 
   useEffect(() => {
-    getCategoies("I").then((res) => {
+    getCategories("I").then((res) => {
       console.log(res.data);
       if (res.data.code === 1300) {
         console.log(res.data.data);
@@ -165,8 +180,8 @@ export default function IncomeForm({ initIncomeForm }: IncomeFormProps) {
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const target = event.target;
-    const value = target.value;
     const name = target.name;
+    const value = target.value;
 
     // 시작날짜보다 끝날짜가 빠른 경우 대처
     if (name === "startDate" && compareDate(value, incomeForm.endDate)) {
@@ -174,6 +189,17 @@ export default function IncomeForm({ initIncomeForm }: IncomeFormProps) {
         ...prev,
         endDate: value,
         [name]: value,
+      }));
+    } else if (name === "price") {
+      setIncomeForm((prev) => ({
+        ...prev,
+        [name]: +value,
+      }));
+    } else if (name === "monthlyPeriod") {
+      const newValue = Math.min(+value, 28);
+      setIncomeForm((prev) => ({
+        ...prev,
+        [name]: newValue,
       }));
     } else {
       setIncomeForm((prev) => ({
@@ -187,7 +213,9 @@ export default function IncomeForm({ initIncomeForm }: IncomeFormProps) {
     const target = event.target;
     const name = target.name;
 
-    const newData = target.checked ? { date: null } : { monthlyPeriod: null };
+    const newData = target.checked
+      ? { date: null, time: null }
+      : { monthlyPeriod: null };
 
     setIncomeForm((prev) => ({
       ...prev,
@@ -196,30 +224,27 @@ export default function IncomeForm({ initIncomeForm }: IncomeFormProps) {
     }));
   }
 
-  function handleDateTimeInputChange(
-    event: React.ChangeEvent<HTMLInputElement>
-  ) {
-    const target = event.target;
-    const name = target.name;
-    const value = target.value;
-    setDateTime((prev) => ({ ...prev, [name]: value }));
-  }
-
-  function onClickConfirmButton(event: React.MouseEvent<HTMLButtonElement>) {
+  function onClickConfirmButton() {
     console.log("Confirm!!");
-    console.log(incomeForm);
-    console.log(dateTime);
+    const params = {
+      ...incomeForm,
+    };
+    delete params.accountBookId;
+
+    postAccountBooks(params).then((res) => {
+      console.log(res.data);
+    });
+    console.log(params);
   }
 
-  function onClickEditButton(event: React.MouseEvent<HTMLButtonElement>) {
+  function onClickEditButton() {
     console.log("Edit!!");
     console.log(incomeForm);
-    console.log(dateTime);
   }
 
   function onClickCategoryButton(categoryId: string) {
     console.log(categoryId);
-    setIncomeForm((prev) => ({ ...prev, categoryType: categoryId }));
+    setIncomeForm((prev) => ({ ...prev, categoryId }));
   }
 
   return (
@@ -229,19 +254,19 @@ export default function IncomeForm({ initIncomeForm }: IncomeFormProps) {
         <InputContainer>
           <StyledInput
             name="title"
-            value={incomeForm.title || ""}
+            value={incomeForm.title}
             onChange={handleInputChange}
           />
         </InputContainer>
       </div>
       <div>
         <StyledLabel>금액</StyledLabel>
-        <InputContainer isPrice={true}>
+        <InputContainer>
           <StyledInput
             type="number"
             placeholder="0"
             name="price"
-            value={incomeForm.price || ""}
+            value={incomeForm.price}
             onChange={handleInputChange}
           />
           <InputUnit hasValue={incomeForm.price > 0}>원</InputUnit>
@@ -252,7 +277,7 @@ export default function IncomeForm({ initIncomeForm }: IncomeFormProps) {
             type="checkbox"
             id="fixedIncomeYn"
             name="fixedIncomeYn"
-            checked={incomeForm.fixedIncomeYn === "Y" || false}
+            checked={incomeForm.fixedIncomeYn === "Y"}
             onChange={handleCheckBoxChange}
           />
           <CheckLabel htmlFor="fixedIncomeYn">
@@ -317,8 +342,8 @@ export default function IncomeForm({ initIncomeForm }: IncomeFormProps) {
               <StyledInput
                 type="date"
                 name="date"
-                value={dateTime.date}
-                onChange={handleDateTimeInputChange}
+                value={incomeForm.date || ""}
+                onChange={handleInputChange}
               />
             </InputContainer>
           </div>
@@ -328,8 +353,8 @@ export default function IncomeForm({ initIncomeForm }: IncomeFormProps) {
               <StyledInput
                 type="time"
                 name="time"
-                value={dateTime.time}
-                onChange={handleDateTimeInputChange}
+                value={incomeForm.time || ""}
+                onChange={handleInputChange}
               />
             </InputContainer>
           </div>
@@ -345,7 +370,7 @@ export default function IncomeForm({ initIncomeForm }: IncomeFormProps) {
               onClick={() => onClickCategoryButton(category.categoryId)}
             >
               <CategoryImage
-                isSelected={incomeForm.categoryType === category.categoryId}
+                isSelected={incomeForm.categoryId === category.categoryId}
               >
                 <Image
                   src={category.imgUrl}

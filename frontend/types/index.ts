@@ -5,9 +5,9 @@ export type SalaryType = "M" | "H" | "N"; // M: 월급, H: 시급, N: 없음
 export type YNType = "Y" | "N"; // boolean 대신 true: "Y", false: "N"
 
 export interface IAccountBook {
-  accountBookId: number;
-  accountType: AccountType;
-  categoryType: string;
+  accountBookId?: string;
+  type: AccountType;
+  categoryId: string;
   title: string;
   price: number;
   memo: string | null;
