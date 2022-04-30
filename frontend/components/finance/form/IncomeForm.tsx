@@ -6,7 +6,7 @@ import Icon from "../../common/Icon";
 import ButtonBottom from "components/common/ButtonBottom";
 import ButtonTrashCan from "components/common/ButtonTrashCan";
 import { IAccountBook } from "types";
-import { getCategoies, postAccountBooks } from "api/accountBook";
+import { getCategories, postAccountBooks } from "api/accountBook";
 
 const FormContainer = styled.div`
   display: flex;
@@ -174,7 +174,7 @@ export default function IncomeForm({ initIncomeForm }: IncomeFormProps) {
   const [categoryList, setCategoryList] = useState<Category[]>([]);
 
   useEffect(() => {
-    getCategoies("I").then((res) => {
+    getCategories("I").then((res) => {
       console.log(res.data);
       if (res.data.code === 1300) {
         console.log(res.data.data);
