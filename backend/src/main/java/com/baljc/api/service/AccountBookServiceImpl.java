@@ -85,12 +85,12 @@ public class AccountBookServiceImpl implements AccountBookService {
 
         TreeMap<Integer, List<AccountBookDto.AccountBookMonth>> accountbookMonth = new TreeMap<>(Collections.reverseOrder());
 
-        List<AccountBookDto.AccountBookMonthTotal> totalList = accountBookRepositorySupport.getAccountBookMonthTotal(year, month).orElseThrow(() -> new NullPointerException("해당 월의 전체 지출, 수입이 존재하지 않습니다."));
+        List<AccountBookDto.AccountBookMonthTotal> totalList = accountBookRepositorySupport.getAccountBookMonthTotal(year, month, memberService.getMemberByAuthentication()).orElseThrow(() -> new NullPointerException("해당 월의 전체 지출, 수입이 존재하지 않습니다."));
         for (AccountBookDto.AccountBookMonthTotal accountBookMonthTotal : totalList) {
             monthTotalMap.put(Character.toString(accountBookMonthTotal.getType()), accountBookMonthTotal.getPrice());
         }
 
-        List<AccountBookDto.AccountBookMonth> fixedList = accountBookRepositorySupport.getAccountBookMonthFixed(year, month).orElseThrow(() -> new NullPointerException("해당 월의 고정 지출, 고정 수입이 존재하지 않습니다."));
+        List<AccountBookDto.AccountBookMonth> fixedList = accountBookRepositorySupport.getAccountBookMonthFixed(year, month, memberService.getMemberByAuthentication()).orElseThrow(() -> new NullPointerException("해당 월의 고정 지출, 고정 수입이 존재하지 않습니다."));
         for (AccountBookDto.AccountBookMonth accountBookMonthFixed : fixedList) {
             monthTotalMap.put(Character.toString(accountBookMonthFixed.getType()),
                     monthTotalMap.get(Character.toString(accountBookMonthFixed.getType())) + accountBookMonthFixed.getPrice());
@@ -107,7 +107,7 @@ public class AccountBookServiceImpl implements AccountBookService {
             accountbookMonth.put(accountBookMonthFixed.getMonthlyPeriod(), temp);
         }
 
-        List<AccountBookDto.AccountBookMonth> monthList = accountBookRepositorySupport.getAccountBookMonth(year, month).orElseThrow(() -> new NullPointerException("해당 월의 지출, 수입이 존재하지 않습니다."));
+        List<AccountBookDto.AccountBookMonth> monthList = accountBookRepositorySupport.getAccountBookMonth(year, month, memberService.getMemberByAuthentication()).orElseThrow(() -> new NullPointerException("해당 월의 지출, 수입이 존재하지 않습니다."));
         for (AccountBookDto.AccountBookMonth accountBookMonth : monthList) {
             List<AccountBookDto.AccountBookMonth> temp = new ArrayList<>();
             int day = Integer.parseInt(accountBookMonth.getDate().toString().substring(8, 10));
