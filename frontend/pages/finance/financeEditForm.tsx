@@ -5,6 +5,7 @@ import Header from "../../components/common/Header";
 import CostForm from "../../components/finance/form/CostForm";
 import IncomeForm from "components/finance/form/IncomeForm";
 import { IAccountBook } from "types";
+import FinanceForm from "components/finance/form/financeForm";
 
 const PageContainer = styled.main`
   padding: 0 2rem;
@@ -50,11 +51,12 @@ export default function FinanceEditForm({ accountBook }: FinanceEditFormProps) {
       <Header label="가계부 내역 수정"></Header>
       <PageContainer>
         <CostIncomeTitle>{type === "E" ? "지출" : "수입"}</CostIncomeTitle>
-        {type === "E" ? (
+        <FinanceForm type={type} initForm={{ ...dummyData, date, time }} />
+        {/* {type === "E" ? (
           <CostForm initCostForm={{ ...dummyData, date, time }} />
         ) : (
           <IncomeForm initIncomeForm={{ ...dummyData, date, time }} />
-        )}
+        )} */}
       </PageContainer>
     </>
   );
