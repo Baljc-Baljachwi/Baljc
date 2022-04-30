@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Header from "../../components/common/Header";
 import CostForm from "../../components/finance/form/CostForm";
 import IncomeForm from "components/finance/form/IncomeForm";
-import FinanceForm from "components/finance/form/financeForm";
+import FinanceForm from "components/finance/form/FinanceForm";
 import { AccountType } from "types";
 
 const PageContainer = styled.main`

@@ -1,15 +1,12 @@
 package com.baljc.api.controller;
 
-import com.baljc.api.dto.MemberDto;
 import com.baljc.api.dto.PushAlarmDto;
 import com.baljc.api.service.PushAlarmService;
 import com.baljc.common.response.BaseDataResponse;
-import com.baljc.common.response.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
