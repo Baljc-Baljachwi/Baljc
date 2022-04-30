@@ -19,15 +19,15 @@ public class MemberDto {
         @NotBlank(message = "급여유형 입력은 필수입니다.")
         @Pattern(regexp = "^[MHN]$", message = "올바른 급여유형 형식(M/H/N)이 아닙니다.")
         private String salaryType;
-        @PositiveOrZero(message = "올바른 급여의 범위(0이상 2147483647이하)이 아닙니다.")
-        @Max(value = Integer.MAX_VALUE, message = "올바른 급여의 범위(0이상 2147483647이하)이 아닙니다.")
+        @PositiveOrZero(message = "올바른 급여의 범위(0이상 2147483647이하)가 아닙니다.")
+        @Max(value = Integer.MAX_VALUE, message = "올바른 급여의 범위(0이상 2147483647이하)가 아닙니다.")
         private Integer salary;
-        @PositiveOrZero(message = "올바른 주당 근무시간의 범위(0이상 168)이 아닙니다.")
-        @Max(value = 168, message = "올바른 주당 근무시간의 범위(0이상 168)이 아닙니다.")
+        @PositiveOrZero(message = "올바른 주당 근무시간의 범위(0이상 168이하)가 아닙니다.")
+        @Max(value = 168, message = "올바른 주당 근무시간의 범위(0이상 168이하)가 아닙니다.")
         private Integer workingHours;
         @NotNull(message = "예산 입력은 필수입니다.")
-        @PositiveOrZero(message = "올바른 예산의 범위(0이상 2147483647이하)이 아닙니다.")
-        @Max(value = Integer.MAX_VALUE, message = "올바른 예산의 범위(0이상 2147483647이하)이 아닙니다.")
+        @PositiveOrZero(message = "올바른 예산의 범위(0이상 2147483647이하)가 아닙니다.")
+        @Max(value = Integer.MAX_VALUE, message = "올바른 예산의 범위(0이상 2147483647이하)가 아닙니다.")
         private Integer budget;
     }
 

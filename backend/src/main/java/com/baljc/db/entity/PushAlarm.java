@@ -42,8 +42,10 @@ public class PushAlarm {
 
     public void updateSetting(PushAlarmDto.Request request) {
         this.accountAlarmYn = request.getAccountAlarmYn().charAt(0);
-        this.accountAlarmTime = LocalTime.parse(request.getAccountAlarmTime());
+//        this.accountAlarmTime = LocalTime.parse(request.getAccountAlarmTime());
+        this.accountAlarmTime = request.getAccountAlarmTime();
         this.todoAlarmYn = request.getTodoAlarmYn().charAt(0);
-        this.todoAlarmTime = LocalTime.parse(request.getTodoAlarmTime());
+//        this.todoAlarmTime = LocalTime.parse(request.getTodoAlarmTime());
+        this.todoAlarmTime = request.getTodoAlarmTime();
     }
 }
