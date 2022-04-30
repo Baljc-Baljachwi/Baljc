@@ -78,15 +78,6 @@
       "sizes": "180x180"
     },
     {
-      "src": "/apple-icon.png"
-    },
-    {
-      "src": "https://baljc.com/icons/android-chrome-192x192.png"
-    },
-    {
-      "src": "https://baljc.com/icons/apple-touch-icon.png"
-    },
-    {
       "src": "/favicon.ico",
       "type": "image/x-icon"
     }
