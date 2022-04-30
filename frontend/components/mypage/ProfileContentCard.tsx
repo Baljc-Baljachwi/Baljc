@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useRouter } from "next/router";
 
 const ProfileMenuCardItem = styled.div`
   /* width: 32rem; */
@@ -48,12 +49,19 @@ const ProfileMenuCardDetail = styled.span`
 interface ProfileContentProps {
   title: string;
   description: string;
+  onClickCard?: () => void;
 }
 
-const ProfileContentCard = ({ title, description }: ProfileContentProps) => {
+const ProfileContentCard = ({
+  title,
+  description,
+  onClickCard,
+}: ProfileContentProps) => {
+  const router = useRouter();
+
   return (
     <>
-      <ProfileMenuCardItem>
+      <ProfileMenuCardItem onClick={onClickCard}>
         <ProfileMenuCardContent>
           <ProfileMenuCardTitle>{title}</ProfileMenuCardTitle>
         </ProfileMenuCardContent>
