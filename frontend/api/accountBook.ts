@@ -5,7 +5,7 @@ interface IPostAccountBooksParams extends IAccountBook {
   time: string | null;
 }
 
-export const getCategoies = async (type: "E" | "I") => {
+export const getCategories = async (type: "E" | "I") => {
   return await api.get(`/api/accountbooks/categories?type=${type}`);
 };
 

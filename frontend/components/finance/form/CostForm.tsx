@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 
-import { getCategoies, postAccountBooks } from "api/accountBook";
+import { getCategories, postAccountBooks } from "api/accountBook";
 import Icon from "../../common/Icon";
 import ButtonTogglePaymentMethod from "./ButtonTogglePaymentMethod";
 import ButtonBottom from "components/common/ButtonBottom";
@@ -170,7 +170,7 @@ export default function CostForm({ initCostForm }: CostFormProps) {
   const [categoryList, setCategoryList] = useState<Category[]>([]);
 
   useEffect(() => {
-    getCategoies("E").then((res) => {
+    getCategories("E").then((res) => {
       console.log(res.data);
       if (res.data.code === 1300) {
         console.log(res.data.data);

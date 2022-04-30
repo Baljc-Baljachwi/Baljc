@@ -6,7 +6,7 @@ import Icon from "../../common/Icon";
 import ButtonBottom from "components/common/ButtonBottom";
 import ButtonTrashCan from "components/common/ButtonTrashCan";
 import { IAccountBook } from "types";
-import { getCategoies, postAccountBooks } from "api/accountBook";
+import { getCategories, postAccountBooks } from "api/accountBook";
 
 const FormContainer = styled.div`
   display: flex;
@@ -166,15 +166,10 @@ export default function IncomeForm({ initIncomeForm }: IncomeFormProps) {
       } as IIncomeForm)
   );
 
-  const [dateTime, setDateTime] = useState<{ date: string; time: string }>({
-    date: "",
-    time: "",
-  });
-
   const [categoryList, setCategoryList] = useState<Category[]>([]);
 
   useEffect(() => {
-    getCategoies("I").then((res) => {
+    getCategories("I").then((res) => {
       console.log(res.data);
       if (res.data.code === 1300) {
         console.log(res.data.data);
@@ -245,7 +240,6 @@ export default function IncomeForm({ initIncomeForm }: IncomeFormProps) {
   function onClickEditButton() {
     console.log("Edit!!");
     console.log(incomeForm);
-    console.log(dateTime);
   }
 
   function onClickCategoryButton(categoryId: string) {
