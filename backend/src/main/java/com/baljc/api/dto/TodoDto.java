@@ -1,7 +1,13 @@
 package com.baljc.api.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
@@ -51,5 +57,18 @@ public class TodoDto {
         private LocalDate date;
         private String content;
         private Character completedYn;
+    }
+
+    @Getter
+    @Setter
+    public static class TodoMonth {
+        private LocalDate date;
+        private Long count;
+
+        @QueryProjection
+        public TodoMonth(LocalDate date, Long count) {
+            this.date = date;
+            this.count = count;
+        }
     }
 }

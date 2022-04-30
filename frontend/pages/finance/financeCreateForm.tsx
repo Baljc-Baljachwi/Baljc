@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Header from "../../components/common/Header";
 import CostForm from "../../components/finance/form/CostForm";
 import IncomeForm from "components/finance/form/IncomeForm";
+import FinanceForm from "components/finance/form/FinanceForm";
 import { AccountType } from "types";
 
 const PageContainer = styled.main`
@@ -35,7 +36,7 @@ export default function FinanceCreateForm() {
   }
   return (
     <>
-      <Header label="가계부 내역 추가"></Header>
+      <Header label="가계부 내역 추가" />
       <PageContainer>
         <ToggleCostIncome>
           <CostIncomeButton
@@ -53,7 +54,8 @@ export default function FinanceCreateForm() {
             수입
           </CostIncomeButton>
         </ToggleCostIncome>
-        {accountType === "E" ? <CostForm /> : <IncomeForm />}
+        <FinanceForm type={accountType} />
+        {/* {accountType === "E" ? <CostForm /> : <IncomeForm />} */}
       </PageContainer>
     </>
   );

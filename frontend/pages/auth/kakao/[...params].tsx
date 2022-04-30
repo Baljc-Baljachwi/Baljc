@@ -21,10 +21,10 @@ export default function KakaoAuth() {
         console.log(res.data);
         console.log(res.data.data);
 
-        router.push(res.data.data.surveyYn ? "/" : "/mypage/survey");
+        router.push(res.data.data.surveyedYn ? "/" : "/mypage/survey");
       }
     });
-  }, [code]);
+  }, [code, router, setAccessToken]);
   console.log(code);
   return <div>Login...</div>;
 }

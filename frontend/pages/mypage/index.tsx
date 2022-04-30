@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useRouter } from "next/router";
 
 import Header from "components/common/Header";
 import ProfileCard from "components/mypage/ProfileCard";
@@ -45,11 +46,16 @@ const ProfileContentListContainer = styled.div`
   gap: 2rem;
 `;
 
-const profile = () => {
+const MyPage = () => {
+  const router = useRouter();
   return (
     <div>
       <Container>
-        <Header label="마이페이지" icon="pencil"></Header>
+        <Header
+          label="마이페이지"
+          icon="pencil"
+          onClickRightButton={() => router.push("/mypage/modify")}
+        ></Header>
         <PageContainer>
           <ProfileCardContainer>
             <ProfileCard />
@@ -63,4 +69,4 @@ const profile = () => {
   );
 };
 
-export default profile;
+export default MyPage;
