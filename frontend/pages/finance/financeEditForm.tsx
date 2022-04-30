@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Header from "../../components/common/Header";
 import CostForm from "../../components/finance/form/CostForm";
 import IncomeForm from "components/finance/form/IncomeForm";
-import { IAccountBook, AccountType } from "types";
+import { IAccountBook } from "types";
 
 const PageContainer = styled.main`
   padding: 0 2rem;
@@ -21,9 +21,9 @@ interface FinanceEditFormProps {
 }
 
 const dummyData = {
-  accountBookId: 1,
-  accountType: "E",
-  categoryType: "123",
+  accountBookId: "abc",
+  type: "E",
+  categoryId: "123",
   title: "오늘도 나는 돈을 쓴다",
   price: 100000,
   memo: "쓸데없는 지출",
@@ -33,22 +33,27 @@ const dummyData = {
   startDate: "",
   endDate: "",
   monthlyPeriod: null,
-  date: "2022-04-28 ",
+  date: null,
 } as IAccountBook;
 
 export default function FinanceEditForm({ accountBook }: FinanceEditFormProps) {
-  const { accountType } = dummyData;
+  // 지출, 수입 구분
+  const { type } = dummyData;
+
+  // 입력 폼에 date, time 따로
+  const [date, time] = dummyData.date
+    ? dummyData.date.split("T")
+    : [null, null];
+  console.log(date, time);
   return (
     <>
       <Header label="가계부 내역 수정"></Header>
       <PageContainer>
-        <CostIncomeTitle>
-          {accountType === "E" ? "지출" : "수입"}
-        </CostIncomeTitle>
-        {accountType === "E" ? (
-          <CostForm initCostForm={dummyData} />
+        <CostIncomeTitle>{type === "E" ? "지출" : "수입"}</CostIncomeTitle>
+        {type === "E" ? (
+          <CostForm initCostForm={{ ...dummyData, date, time }} />
         ) : (
-          <IncomeForm initIncomeForm={dummyData} />
+          <IncomeForm initIncomeForm={{ ...dummyData, date, time }} />
         )}
       </PageContainer>
     </>
