@@ -6,4 +6,5 @@ import com.baljc.api.dto.CalendarDto;
 public interface CalendarService {
 
     CalendarDto.CalendarByMonthResponse getCalendarByMonth(int year, int month);
+    void getCalendarByDay(int year, int month, int day);
 }

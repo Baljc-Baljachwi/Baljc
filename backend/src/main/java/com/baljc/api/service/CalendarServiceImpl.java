@@ -26,6 +26,12 @@ public class CalendarServiceImpl implements CalendarService {
 
     @Override
     public CalendarDto.CalendarByMonthResponse getCalendarByMonth(int year, int month) {
+        int[] days = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+        String monthTemp = String.valueOf(month);
+        if (monthTemp.length() == 1) {
+            monthTemp = "0" + monthTemp;
+        }
+
         //월 전체 지출, 수입
         HashMap<String, Integer> monthTotalMap = new HashMap<>();
         monthTotalMap.put("E", 0);
@@ -44,8 +50,8 @@ public class CalendarServiceImpl implements CalendarService {
                     monthTotalMap.get(Character.toString(accountBookMonthFixed.getType())) + accountBookMonthFixed.getPrice());
 
             HashMap<String, Integer> map = new HashMap<>();
-            if (calendarMonth.containsKey(year + "-" + month + "-" + accountBookMonthFixed.getMonthlyPeriod())) {
-                map = calendarMonth.get(year + "-" + month + "-" + accountBookMonthFixed.getMonthlyPeriod());
+            if (calendarMonth.containsKey(year + "-" + monthTemp + "-" + accountBookMonthFixed.getMonthlyPeriod())) {
+                map = calendarMonth.get(year + "-" + monthTemp + "-" + accountBookMonthFixed.getMonthlyPeriod());
             }
 
             if (accountBookMonthFixed.getType() == 'E') {
@@ -54,7 +60,7 @@ public class CalendarServiceImpl implements CalendarService {
                 map.put("I", map.getOrDefault("I", 0) + accountBookMonthFixed.getPrice());
             }
 
-            calendarMonth.put(year + "-" + month + "-" + accountBookMonthFixed.getMonthlyPeriod(), map);
+            calendarMonth.put(year + "-" + monthTemp + "-" + accountBookMonthFixed.getMonthlyPeriod(), map);
         }
 
         List<AccountBookDto.AccountBookMonth> monthList = accountBookRepositorySupport.getAccountBookMonth(year, month, memberService.getMemberByAuthentication()).orElseThrow(() -> new NullPointerException("해당 월의 지출, 수입이 존재하지 않습니다."));
@@ -63,8 +69,8 @@ public class CalendarServiceImpl implements CalendarService {
             int day = Integer.parseInt(accountBookMonth.getDate().toString().substring(8, 10));
 
             HashMap<String, Integer> map = new HashMap<>();
-            if (calendarMonth.containsKey(year + "-" + month + "-" + day)) {
-                map = calendarMonth.get(year + "-" + month + "-" + day);
+            if (calendarMonth.containsKey(year + "-" + monthTemp + "-" + day)) {
+                map = calendarMonth.get(year + "-" + monthTemp + "-" + day);
             }
 
             if (accountBookMonth.getType() == 'E') {
@@ -73,7 +79,7 @@ public class CalendarServiceImpl implements CalendarService {
                 map.put("I", map.getOrDefault("I", 0) + accountBookMonth.getPrice());
             }
 
-            calendarMonth.put(year + "-" + month + "-" + day, map);
+            calendarMonth.put(year + "-" + monthTemp + "-" + day, map);
         }
 
         //발도장
@@ -97,5 +103,10 @@ public class CalendarServiceImpl implements CalendarService {
 
         CalendarDto.CalendarByMonthResponse response = new CalendarDto.CalendarByMonthResponse(monthTotalMap, calendarMonth);
         return response;
+    }
+
+    @Override
+    public void getCalendarByDay(int year, int month, int day) {
+
     }
 }
