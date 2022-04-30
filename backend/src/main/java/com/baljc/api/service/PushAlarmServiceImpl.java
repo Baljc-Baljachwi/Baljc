@@ -20,10 +20,10 @@ public class PushAlarmServiceImpl implements PushAlarmService {
     @Override
     public PushAlarmDto.Response getPushAlarm() {
         PushAlarm pushAlarm = memberService.getMemberByAuthentication().getPushAlarm();
-        return new PushAlarmDto.Response(pushAlarm.getAccountAlarmYn(), pushAlarm.getAccountAlarmTime().toString(),
-                pushAlarm.getTodoAlarmYn(), pushAlarm.getAccountAlarmTime().toString());
+        return new PushAlarmDto.Response(pushAlarm.getAccountAlarmYn(), pushAlarm.getAccountAlarmTime(),
+                pushAlarm.getTodoAlarmYn(), pushAlarm.getTodoAlarmTime());
 //        return new PushAlarmDto.Response(pushAlarm.getAccountAlarmYn(), pushAlarm.getAccountAlarmTime().format(DateTimeFormatter.ofPattern("HH:mm")),
-//                pushAlarm.getTodoAlarmYn(), pushAlarm.getAccountAlarmTime().format(DateTimeFormatter.ofPattern("HH:mm")));
+//                pushAlarm.getTodoAlarmYn(), pushAlarm.getTodoAlarmTime().format(DateTimeFormatter.ofPattern("HH:mm")));
     }
 
     @Override
@@ -31,7 +31,7 @@ public class PushAlarmServiceImpl implements PushAlarmService {
     public PushAlarmDto.Response updatePushAlarm(PushAlarmDto.Request request) {
         PushAlarm pushAlarm = memberService.getMemberByAuthentication().getPushAlarm();
         pushAlarm.updateSetting(request);
-        return new PushAlarmDto.Response(pushAlarm.getAccountAlarmYn(), pushAlarm.getAccountAlarmTime().toString(),
-                pushAlarm.getTodoAlarmYn(), pushAlarm.getAccountAlarmTime().toString());
+        return new PushAlarmDto.Response(pushAlarm.getAccountAlarmYn(), pushAlarm.getAccountAlarmTime(),
+                pushAlarm.getTodoAlarmYn(), pushAlarm.getTodoAlarmTime());
     }
 }
