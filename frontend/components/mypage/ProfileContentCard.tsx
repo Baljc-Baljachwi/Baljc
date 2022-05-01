@@ -2,8 +2,6 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 
 const ProfileMenuCardItem = styled.div`
-  /* width: 32rem; */
-  /* margin-left: 2rem; */
   filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25));
   display: flex;
   flex-direction: column;
@@ -11,10 +9,7 @@ const ProfileMenuCardItem = styled.div`
   background-color: #f4f4f4;
 
   width: 100%;
-  /* width: 32rem; */
   height: 9rem;
-  /* width: 320px; */
-  /* height: 90px; */
 
   font-size: 1.6rem;
   padding: 1.6rem 2rem;
