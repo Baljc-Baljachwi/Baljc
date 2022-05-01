@@ -4,7 +4,6 @@ import Image from "next/image";
 
 import Header from "components/common/Header";
 import ProfileCard from "components/mypage/ProfileCard";
-import ToggleButton from "components/mypage/settings/ToggleButton";
 
 const Container = styled.div`
   height: 100vh;
