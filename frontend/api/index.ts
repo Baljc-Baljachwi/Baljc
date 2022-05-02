@@ -24,33 +24,34 @@ class LocalStorage {
 }
 
 function createBasicInstance() {
+  const tokenItem = LocalStorage.getItem("accessToken");
+  const accessToken = tokenItem ? JSON.parse(tokenItem)["accessToken"] : null;
+
+  console.log("Create basic instance");
   const instance = axios.create({
     baseURL: process.env.BASE_URL,
     headers: {
       "Content-Type": "application/json",
+      Authorization: accessToken,
     },
   });
-  const accessToken = LocalStorage.getItem("accessToken");
-  if (accessToken) {
-    instance.defaults.headers.common["Authorization"] =
-      JSON.parse(accessToken)["accessToken"];
-  }
 
   return instance;
 }
 
 function createFileInstance() {
+  const tokenItem = LocalStorage.getItem("accessToken");
+  const accessToken = tokenItem ? JSON.parse(tokenItem)["accessToken"] : null;
+  console.log("Create basic instance");
+
   const instance = axios.create({
     baseURL: process.env.BASE_URL,
     headers: {
       "Content-Type": "multipart/form-data",
+      Authorization: accessToken,
     },
   });
-  const accessToken = LocalStorage.getItem("accessToken");
-  if (accessToken) {
-    instance.defaults.headers.common["Authorization"] =
-      JSON.parse(accessToken)["accessToken"];
-  }
+
   return instance;
 }
 
