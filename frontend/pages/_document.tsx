@@ -5,7 +5,7 @@ export default function Document() {
     <Html>
       <Head>
         <meta charSet="utf-8" />
-        <meta
+        {/* <meta
           name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no"
         />
@@ -27,7 +27,7 @@ export default function Document() {
         <link
           href="https://fonts.googleapis.com/css2?family=Inter&display=optional"
           rel="stylesheet"
-        />
+        /> */}
       </Head>
       <body>
         <Main />
