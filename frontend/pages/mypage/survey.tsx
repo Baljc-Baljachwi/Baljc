@@ -90,7 +90,7 @@ interface SurveyInputForm {
   salary: number;
   workingHours: number;
   budget: number;
-  profileImage: Blob;
+  profileImage: Blob | null;
 }
 
 export default function Survey() {
@@ -98,7 +98,7 @@ export default function Survey() {
     nickname: "",
     salaryType: "M",
     salary: 0,
-    profileImage: {} as Blob,
+    profileImage: null,
     workingHours: 0,
     budget: 0,
   } as SurveyInputForm);
@@ -129,7 +129,7 @@ export default function Survey() {
         setImagePreview("");
         setSurveyForm((prev) => ({
           ...prev,
-          [name]: {} as Blob,
+          [name]: new Blob(),
         }));
       }
     }
@@ -146,7 +146,8 @@ export default function Survey() {
     console.log("click");
     const memberInfo = {
       nickname: surveyForm.nickname,
-      profileUpdated: surveyForm.profileImage?.size > 0,
+      profileUpdated:
+        !!surveyForm.profileImage && surveyForm.profileImage.size > 0,
       salaryType: surveyForm.salaryType,
       salary: +surveyForm.salary,
       workingHours: +surveyForm.workingHours,
@@ -155,7 +156,7 @@ export default function Survey() {
     console.log(memberInfo);
 
     const data = new FormData();
-    data.append("profileImage", surveyForm.profileImage);
+    data.append("profileImage", surveyForm.profileImage || new Blob());
     data.append(
       "memberInfo",
       new Blob([JSON.stringify(memberInfo)], { type: "application/json" })
