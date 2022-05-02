@@ -54,17 +54,11 @@ export default function RoutineDetail() {
 
   return (
     <>
-      <StyledHeader>
-        <div>
-          <BackButton>
-            <Icon mode="fas" icon="chevron-left" color="#ffffff" size="16px" />
-          </BackButton>
-          오늘의 일과
-        </div>
-        <AddorModifyButton onClick={onClick}>
-          <Icon mode="fas" icon="plus" color="#ffffff" size="16px" />
-        </AddorModifyButton>
-      </StyledHeader>
+      <Header
+        label="오늘의 일과"
+        icon="plus"
+        onClickRightButton={() => onClick()}
+      />
       <RoutineDiv>
         {routineList.map((list) => (
           <RoutineCard key={list.id} list={list}></RoutineCard>
