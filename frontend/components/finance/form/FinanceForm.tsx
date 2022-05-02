@@ -2,12 +2,17 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 
-import { getCategories, postAccountBooks } from "api/accountBook";
+import {
+  getCategories,
+  postAccountbooks,
+  putAccountbooks,
+  deleteAccountbooks,
+} from "api/accountbook";
 import Icon from "../../common/Icon";
 import ButtonTogglePaymentMethod from "./ButtonTogglePaymentMethod";
 import ButtonBottom from "components/common/ButtonBottom";
 import ButtonTrashCan from "components/common/ButtonTrashCan";
-import { IAccountBook, PaymentMethodType } from "types";
+import { IAccountbook, PaymentMethodType } from "types";
 
 const FormContainer = styled.div`
   display: flex;
@@ -119,13 +124,13 @@ const CategoryImage = styled.div<{ isSelected?: boolean }>`
   }
 `;
 
-interface IAccountBookForm extends IAccountBook {
+interface IaccountbookForm extends IAccountbook {
   time: string | null;
 }
 
 interface FinanceFormProps {
   type: "E" | "I";
-  initForm?: IAccountBookForm;
+  initForm?: IaccountbookForm;
 }
 
 interface Category {
@@ -148,10 +153,10 @@ function compareDate(
 }
 
 export default function FinanceForm({ type, initForm }: FinanceFormProps) {
-  const [financeForm, setFinanceForm] = useState<IAccountBookForm>(
+  const [financeForm, setFinanceForm] = useState<IaccountbookForm>(
     initForm ||
       ({
-        accountBookId: "",
+        accountbookId: "",
         type,
         categoryId: "",
         title: "",
@@ -165,7 +170,7 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
         endDate: null,
         date: null,
         time: null,
-      } as IAccountBookForm)
+      } as IaccountbookForm)
   );
 
   const [categoryList, setCategoryList] = useState<Category[]>([]);
@@ -249,9 +254,9 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
       startDate: financeForm.startDate ? financeForm.startDate + "-01" : null,
       endDate: financeForm.endDate ? financeForm.endDate + "-28" : null,
     };
-    delete params.accountBookId;
+    delete params.accountbookId;
 
-    postAccountBooks(params).then((res) => {
+    postAccountbooks(params).then((res) => {
       console.log(res.data);
     });
     console.log(params);
@@ -260,6 +265,10 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
   function onClickEditButton() {
     console.log("Edit!!");
     console.log(financeForm);
+  }
+
+  function onClickDeleteButton() {
+    console.log("Delete!");
   }
 
   function onClickCategoryButton(categoryId: string) {
@@ -445,7 +454,7 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
         ></ButtonBottom>
       ) : (
         <ButtonContainer>
-          <ButtonTrashCan />
+          <ButtonTrashCan onClick={onClickDeleteButton} />
           <ButtonBottom label="수정" onClick={onClickEditButton} />
         </ButtonContainer>
       )}

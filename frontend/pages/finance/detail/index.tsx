@@ -1,8 +1,8 @@
-import { getAccountBooks } from "api/accountBook";
+import { getAccountbooks } from "api/accountbook";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { IAccountBook } from "types";
+import { IAccountbook } from "types";
 import Header from "../../../components/common/Header";
 
 const Container = styled.div`
@@ -58,7 +58,7 @@ const DetailContents = styled.div`
 `;
 
 // type TypeTitle = "지출" | "수입";
-interface IFinancaDetail extends IAccountBook {
+interface IFinanceDetail extends IAccountbook {
   categoryName: string;
 }
 
@@ -81,12 +81,12 @@ const FinanceDetail = ({
   category,
 }: FinanceDetailProps) => {
   const router = useRouter();
-  const [financeDetailInfo, setFinanceDetailInfo] = useState<IFinancaDetail>();
+  const [financeDetailInfo, setFinanceDetailInfo] = useState<IFinanceDetail>();
 
   useEffect(() => {
     // console.log(router.query);
     // console.log(router.query.accountbookId);
-    getAccountBooks("fe73688a-26b3-41d8-83a5-d582180d45b5").then((res) => {
+    getAccountbooks("fe73688a-26b3-41d8-83a5-d582180d45b5").then((res) => {
       console.log(res.data);
       if (res.data.code === 1302) {
         setFinanceDetailInfo(res.data.data);
@@ -94,7 +94,7 @@ const FinanceDetail = ({
         console.log(res.data.message);
       }
     });
-  }, []);
+  }, [router.query.accountbookId]);
 
   function datetimeParsing(datetime: string) {
     if (!datetime) {
@@ -118,10 +118,25 @@ const FinanceDetail = ({
     return `${startYear}년 ${startMonth}월 ~ ${endYear}년 ${endMonth}월`;
   }
 
+  function onClickEditButton() {
+    console.log("Edit Button Clicked !!");
+    if (!financeDetailInfo) {
+      return;
+    }
+    router.push({
+      pathname: "/finance/financeEditForm",
+      query: { accountbookId: financeDetailInfo.accountbookId },
+    });
+  }
+
   return (
     <>
       <Container>
-        <Header label="가계부 내역 상세 조회" icon="pencil"></Header>
+        <Header
+          label="가계부 내역 상세 조회"
+          icon="pencil"
+          onClickRightButton={onClickEditButton}
+        />
         <PageContainer>
           {/* <PageTitle
             color={isExpenditure ? TypeTitle === "지출" : TypeTitle === "수입"}

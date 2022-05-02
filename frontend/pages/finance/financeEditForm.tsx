@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import Header from "../../components/common/Header";
-import CostForm from "../../components/finance/form/CostForm";
-import IncomeForm from "components/finance/form/IncomeForm";
-import { IAccountBook } from "types";
+import { IAccountbook } from "types";
 import FinanceForm from "components/finance/form/FinanceForm";
+import { useRouter } from "next/router";
+import { getAccountbooks } from "api/accountbook";
 
 const PageContainer = styled.main`
   padding: 0 2rem;
@@ -18,11 +18,11 @@ const CostIncomeTitle = styled.div`
 `;
 
 interface FinanceEditFormProps {
-  accountBook: IAccountBook;
+  accountbook: IAccountbook;
 }
 
 const dummyData = {
-  accountBookId: "abc",
+  accountbookId: "abc",
   type: "E",
   categoryId: "123",
   title: "오늘도 나는 돈을 쓴다",
@@ -35,11 +35,24 @@ const dummyData = {
   endDate: "",
   monthlyPeriod: null,
   date: null,
-} as IAccountBook;
+} as IAccountbook;
 
-export default function FinanceEditForm({ accountBook }: FinanceEditFormProps) {
+export default function FinanceEditForm({ accountbook }: FinanceEditFormProps) {
   // 지출, 수입 구분
+  const router = useRouter();
+
   const { type } = dummyData;
+  const [initForm, setInitForm] = useState<IAccountbook>();
+
+  useEffect(() => {
+    const accountbookId = router.query.accountbookId;
+    console.log("accountbookId :", accountbookId);
+    if (accountbookId && typeof accountbookId === "string") {
+      getAccountbooks(accountbookId).then((res) => {
+        console.log(res.data.data);
+      });
+    }
+  }, [router.query.accountbookId]);
 
   // 입력 폼에 date, time 따로
   const [date, time] = dummyData.date
