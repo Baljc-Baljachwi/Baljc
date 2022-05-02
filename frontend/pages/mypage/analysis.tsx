@@ -7,9 +7,9 @@ import Header from "components/common/Header";
 import ProfileCard from "components/mypage/ProfileCard";
 import { Line } from "react-chartjs-2";
 import { Doughnut } from "react-chartjs-2";
-import Chart from "chart.js/auto";
-import { CategoryScale } from "chart.js";
-Chart.register(CategoryScale);
+// import Chart from "chart.js/auto";
+// import { CategoryScale } from "chart.js";
+// Chart.register(CategoryScale);
 import styles from "../../styles/Home.module.css";
 
 const Container = styled.div`

@@ -4,9 +4,10 @@ import styled from "styled-components";
 import Header from "../../components/common/Header";
 import ButtonBottom from "../../components/common/ButtonBottom";
 import ButtonToggleSalaryType from "../../components/mypage/survey/ButtonToggleSalaryType";
+import { putMembers } from "api/member";
 
 const PageContainer = styled.main`
-  padding: 0 2rem;
+  padding: 0 2rem 6rem 2rem;
 `;
 
 const LabelProfileImageContiainer = styled.div`
@@ -87,8 +88,8 @@ interface SurveyInputForm {
   nickname: string;
   salaryType: TypeSalary;
   salary: number;
-  workTime: number;
-  monthBudget: number;
+  workingHours: number;
+  budget: number;
   profileImage: Blob;
 }
 
@@ -97,8 +98,9 @@ export default function Survey() {
     nickname: "",
     salaryType: "M",
     salary: 0,
-    workTime: 0,
-    monthBudget: 0,
+    profileImage: {} as Blob,
+    workingHours: 0,
+    budget: 0,
   } as SurveyInputForm);
 
   const [imagePreview, setImagePreview] = useState<string>("");
@@ -114,7 +116,6 @@ export default function Survey() {
         [name]: value,
       }));
     } else if (target.files) {
-      console.log(target.files);
       if (target.files.length > 0) {
         // 새로 파일을 넣은 경우
         const file = target.files[0];
@@ -141,13 +142,40 @@ export default function Survey() {
     }));
   }
 
+  function onClickSubmitButton() {
+    console.log("click");
+    const memberInfo = {
+      nickname: surveyForm.nickname,
+      profileUpdated: surveyForm.profileImage?.size > 0,
+      salaryType: surveyForm.salaryType,
+      salary: +surveyForm.salary,
+      workingHours: +surveyForm.workingHours,
+      budget: +surveyForm.budget,
+    };
+    console.log(memberInfo);
+
+    const data = new FormData();
+    data.append("profileImage", surveyForm.profileImage);
+    data.append(
+      "memberInfo",
+      new Blob([JSON.stringify(memberInfo)], { type: "application/json" })
+    );
+
+    console.log(data.get("profileImage"));
+    console.log(data.get("memberInfo"));
+
+    putMembers(data).then((res) => {
+      console.log(res);
+      console.log(res.data);
+    });
+  }
+
   return (
     <>
       <Header label="설문 조사"></Header>
       <LabelProfileImageContiainer>
         <LabelProfileImage image={imagePreview} htmlFor="profileImage" />
       </LabelProfileImageContiainer>
-      {imagePreview}
       <input
         type="file"
         id="profileImage"
@@ -188,35 +216,35 @@ export default function Survey() {
               <InputUnit hasValue={surveyForm.salary > 0}>원</InputUnit>
             </InputContainer>
 
-            <StyledLabel htmlFor="salary">
+            <StyledLabel htmlFor="workingHours">
               한 주에 몇 시간 일하시나요?
             </StyledLabel>
             <InputContainer>
               <StyledInput
-                name="workTime"
+                name="workingHours"
                 type="number"
                 placeholder="0"
-                value={surveyForm.workTime || ""}
+                value={surveyForm.workingHours || ""}
                 onChange={handleInputChange}
               />
-              <InputUnit hasValue={surveyForm.workTime > 0}>시간</InputUnit>
+              <InputUnit hasValue={surveyForm.workingHours > 0}>시간</InputUnit>
             </InputContainer>
           </>
         )}
 
-        <StyledLabel htmlFor="monthBudget">한 달 예산</StyledLabel>
+        <StyledLabel htmlFor="budget">한 달 예산</StyledLabel>
         <InputContainer>
           <StyledInput
-            name="monthBudget"
+            name="budget"
             type="number"
             placeholder="0"
-            value={surveyForm.monthBudget || 0}
+            value={surveyForm.budget || 0}
             onChange={handleInputChange}
           />
-          <InputUnit hasValue={surveyForm.monthBudget > 0}>원</InputUnit>
+          <InputUnit hasValue={surveyForm.budget > 0}>원</InputUnit>
         </InputContainer>
 
-        <ButtonBottom label="가입" />
+        <ButtonBottom label="가입" onClick={onClickSubmitButton} />
         {/* <ButtonContainer>
           <ButtonTrashCan />
           <ButtonBottom label="수정" />
