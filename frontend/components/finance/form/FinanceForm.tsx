@@ -171,6 +171,7 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
   const [categoryList, setCategoryList] = useState<Category[]>([]);
 
   useEffect(() => {
+    console.log(type);
     getCategories(type).then((res) => {
       console.log(res.data);
       if (res.data.code === 1300) {
@@ -181,6 +182,7 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
 
     setFinanceForm((prev) => ({
       ...prev,
+      type,
       categoryId: "",
       paymentMethod: "N",
       fixedExpenditureYn: "N",
@@ -249,9 +251,9 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
     };
     delete params.accountBookId;
 
-    postAccountBooks(params).then((res) => {
-      console.log(res.data);
-    });
+    // postAccountBooks(params).then((res) => {
+    //   console.log(res.data);
+    // });
     console.log(params);
   }
 
@@ -301,7 +303,9 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
             }
             onChange={handleCheckBoxChange}
           />
-          <CheckLabel htmlFor="fixedExpenditureYn">
+          <CheckLabel
+            htmlFor={type === "E" ? "fixedExpenditureYn" : "fixedIncomeYn"}
+          >
             {(type === "E" && financeForm.fixedExpenditureYn === "Y") ||
             (type === "I" && financeForm.fixedIncomeYn === "Y") ? (
               <Icon
@@ -314,7 +318,11 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
               <Icon mode="far" icon="square" color="#ffd469" size="1.6rem" />
             )}
           </CheckLabel>
-          <CheckLabel htmlFor="fixedExpenditureYn">고정지출</CheckLabel>
+          <CheckLabel
+            htmlFor={type === "E" ? "fixedExpenditureYn" : "fixedIncomeYn"}
+          >
+            {type === "E" ? "고정지출" : "고정수입"}
+          </CheckLabel>
         </CheckboxContainer>
       </div>
 
