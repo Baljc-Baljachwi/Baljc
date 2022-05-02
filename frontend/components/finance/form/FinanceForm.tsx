@@ -171,6 +171,7 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
   const [categoryList, setCategoryList] = useState<Category[]>([]);
 
   useEffect(() => {
+    console.log(type);
     getCategories(type).then((res) => {
       console.log(res.data);
       if (res.data.code === 1300) {
@@ -181,6 +182,7 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
 
     setFinanceForm((prev) => ({
       ...prev,
+      type,
       categoryId: "",
       paymentMethod: "N",
       fixedExpenditureYn: "N",
@@ -224,7 +226,7 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
     const name = target.name;
     const newData = target.checked
       ? { date: null, time: null }
-      : { monthlyPeriod: null };
+      : { monthlyPeriod: null, startDate: null, endDate: null };
 
     setFinanceForm((prev) => ({
       ...prev,
@@ -244,6 +246,8 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
     console.log("Confirm!!");
     const params = {
       ...financeForm,
+      startDate: financeForm.startDate ? financeForm.startDate + "-01" : null,
+      endDate: financeForm.endDate ? financeForm.endDate + "-28" : null,
     };
     delete params.accountBookId;
 
@@ -299,7 +303,9 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
             }
             onChange={handleCheckBoxChange}
           />
-          <CheckLabel htmlFor="fixedExpenditureYn">
+          <CheckLabel
+            htmlFor={type === "E" ? "fixedExpenditureYn" : "fixedIncomeYn"}
+          >
             {(type === "E" && financeForm.fixedExpenditureYn === "Y") ||
             (type === "I" && financeForm.fixedIncomeYn === "Y") ? (
               <Icon
@@ -312,7 +318,11 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
               <Icon mode="far" icon="square" color="#ffd469" size="1.6rem" />
             )}
           </CheckLabel>
-          <CheckLabel htmlFor="fixedExpenditureYn">고정지출</CheckLabel>
+          <CheckLabel
+            htmlFor={type === "E" ? "fixedExpenditureYn" : "fixedIncomeYn"}
+          >
+            {type === "E" ? "고정지출" : "고정수입"}
+          </CheckLabel>
         </CheckboxContainer>
       </div>
 
