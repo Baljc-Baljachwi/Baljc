@@ -30,7 +30,8 @@ public class CalendarController {
     }
 
     @GetMapping("/days")
-    public ResponseEntity<BaseResponse> getCalendarByDay(@RequestParam(value = "year") int year, @RequestParam(value = "month") int month, @RequestParam(value = "day") int day) {
-        return ResponseEntity.status(200).body(new BaseResponse(1601, "캘린더 일별 조회 성공"));
+    public ResponseEntity<BaseDataResponse> getCalendarByDay(@RequestParam(value = "year") int year, @RequestParam(value = "month") int month, @RequestParam(value = "day") int day) {
+        CalendarDto.CalendarByDayResponse response = calendarService.getCalendarByDay(year, month, day);
+        return ResponseEntity.status(200).body(new BaseDataResponse(1601, "캘린더 일별 조회 성공", response));
     }
 }
