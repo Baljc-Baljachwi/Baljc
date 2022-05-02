@@ -48,7 +48,7 @@ export default function Routine({ dow }: RoutineProps) {
   const getRoutineList = () => {
     getRoutines(dow)
       .then((res) => {
-        console.log(res.data.data);
+        // console.log(res.data.data);
         setRoutineList(res.data.data);
       })
       .catch((err) => {

@@ -53,7 +53,7 @@ export default function Todo({ viewOnly }: TodoProps) {
       content: "운동가기",
     },
   ];
-  console.log(1, "index", viewOnly); // true
+
   return (
     <>
       <TodoDiv>
