@@ -31,7 +31,7 @@ export default function Monthly() {
   // const [saved, setSaved] = useState<string[]>([]); 이렇게 써도 됨
 
   // 소비한 날짜와 금액
-  const entries = Object.entries(mark);
+  const amount = Object.entries(mark);
   // [['2022-05-1', {E: 3500, I: 1000}], ['2022-05-2', {E: 10000}]]
 
   const day = dayjs(date).format("DD일 dddd");
@@ -71,6 +71,7 @@ export default function Monthly() {
           calendarType="US" // 일요일 시작
           formatDay={(locale, date) => dayjs(date).format("D")} // 날짜 표기 방식 변경
           formatMonthYear={(locale, date) => dayjs(date).format("M월")} // 월 표기 방식 변경
+          showNeighboringMonth={false} // 이전, 이후 달 날짜 보이지 않도록
           next2Label={null} // 연 단위 이동 삭제
           prev2Label={null}
           minDetail="month" // month 클릭시 year 이동 방지
@@ -81,8 +82,8 @@ export default function Monthly() {
                   <div className="img"></div>
                 ) : null
               ) : null}
-              {entries
-                ? entries.map((item, idx) =>
+              {amount
+                ? amount.map((item, idx) =>
                     item[0] === dayjs(date).format("YYYY-MM-D") ? (
                       item[1]["E"] ? (
                         <div key={idx} className="finance-wrapper">
