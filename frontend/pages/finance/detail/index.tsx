@@ -1,4 +1,8 @@
+import { getAccountBooks } from "api/accountBook";
+import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
+import { IAccountBook } from "types";
 import Header from "../../../components/common/Header";
 
 const Container = styled.div`
@@ -47,9 +51,16 @@ const DetailContents = styled.div`
   span {
     font-size: 2rem;
   }
+  .fixedDateTime {
+    font-size: 1.6rem;
+    color: #767676;
+  }
 `;
 
 // type TypeTitle = "지출" | "수입";
+interface IFinancaDetail extends IAccountBook {
+  categoryName: string;
+}
 
 interface FinanceDetailProps {
   isFixed: boolean;
@@ -61,7 +72,7 @@ interface FinanceDetailProps {
   category: string;
 }
 
-const financeDetail = ({
+const FinanceDetail = ({
   isFixed,
   isExpenditure,
   title,
@@ -69,6 +80,44 @@ const financeDetail = ({
   method,
   category,
 }: FinanceDetailProps) => {
+  const router = useRouter();
+  const [financeDetailInfo, setFinanceDetailInfo] = useState<IFinancaDetail>();
+
+  useEffect(() => {
+    // console.log(router.query);
+    // console.log(router.query.accountbookId);
+    getAccountBooks("fe73688a-26b3-41d8-83a5-d582180d45b5").then((res) => {
+      console.log(res.data);
+      if (res.data.code === 1302) {
+        setFinanceDetailInfo(res.data.data);
+      } else {
+        console.log(res.data.message);
+      }
+    });
+  }, []);
+
+  function datetimeParsing(datetime: string) {
+    if (!datetime) {
+      return "";
+    }
+    const [date, time] = datetime.split("T");
+    const [year, month, day] = date.split("-");
+    const [hour, minute, _] = time.split(":");
+
+    const amPm = parseInt(hour) >= 12 ? "오후" : "오전";
+    const newHour = parseInt(hour) >= 12 ? parseInt(hour) - 12 : hour;
+    return `${year}년 ${month}월 ${day}일 ${amPm} ${newHour}시 ${minute}분`;
+  }
+
+  function fixedDateTimeParsing(startDate: string, endDate: string) {
+    if (!startDate || !endDate) {
+      return "";
+    }
+    const [startYear, startMonth, startDay] = startDate.split("-");
+    const [endYear, endMonth, endDay] = endDate.split("-");
+    return `${startYear}년 ${startMonth}월 ~ ${endYear}년 ${endMonth}월`;
+  }
+
   return (
     <>
       <Container>
@@ -77,32 +126,56 @@ const financeDetail = ({
           {/* <PageTitle
             color={isExpenditure ? TypeTitle === "지출" : TypeTitle === "수입"}
           > */}
-          <PageTitle>지출</PageTitle>
+          <PageTitle>
+            {financeDetailInfo?.type === "E" ? "지출" : "수입"}
+          </PageTitle>
           <DivisionLine />
           <ExpenditureDetailContainer>
             <DetailContents>
               제목
-              <span>커블 체어(당근 거래)</span>
+              <span>{financeDetailInfo?.title || "제목"}</span>
             </DetailContents>
             <DetailContents>
               금액
-              <span>26,000 원</span>
+              <span>{financeDetailInfo?.price || "0"} 원</span>
             </DetailContents>
             <DetailContents>
               날짜
-              <span>2022년 4월 29일 오후 7:54</span>
+              {financeDetailInfo?.date ? (
+                <span>{datetimeParsing(financeDetailInfo?.date || "")}</span>
+              ) : (
+                <>
+                  <span>매월 {financeDetailInfo?.monthlyPeriod}일</span>
+                  <span className="fixedDateTime">
+                    {fixedDateTimeParsing(
+                      financeDetailInfo?.startDate || "",
+                      financeDetailInfo?.endDate || ""
+                    )}
+                  </span>
+                </>
+              )}
+              <span>{datetimeParsing(financeDetailInfo?.date || "")}</span>
             </DetailContents>
-            <DetailContents>
-              결제수단
-              <span>현금</span>
-            </DetailContents>
+            {financeDetailInfo?.type === "E" && (
+              <DetailContents>
+                결제수단
+                <span>
+                  {financeDetailInfo?.paymentMethod === "C"
+                    ? "카드"
+                    : financeDetailInfo?.paymentMethod === "M"
+                    ? "현금"
+                    : "기타"}
+                </span>
+              </DetailContents>
+            )}
+
             <DetailContents>
               카테고리
-              <span>쇼핑</span>
+              <span>{financeDetailInfo?.categoryName}</span>
             </DetailContents>
             <DetailContents>
               메모
-              <span>커블 체어 득템했음! 🥕</span>
+              <span>{financeDetailInfo?.memo}</span>
             </DetailContents>
           </ExpenditureDetailContainer>
         </PageContainer>
@@ -111,4 +184,4 @@ const financeDetail = ({
   );
 };
 
-export default financeDetail;
+export default FinanceDetail;
