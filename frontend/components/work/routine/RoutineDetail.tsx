@@ -34,6 +34,20 @@ const RoutineDiv = styled.div`
   // width: 100%;
 `;
 
+const CardDiv = styled.div`
+  margin: 2rem;
+  padding: 1.5rem;
+  background: #f4f4f4;
+  border-radius: 1rem;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-contents: center;
+  gap: 1rem;
+  font-size: 1.6rem;
+  font-weight: 500;
+  cursor: pointer;
+`;
+
 export default function RoutineDetail() {
   const router = useRouter();
   // query로 보내면 문자열이 되네요..?
@@ -49,7 +63,6 @@ export default function RoutineDetail() {
   const getRoutineList = () => {
     getRoutines(dow)
       .then((res) => {
-        console.log(res.data.data);
         setRoutineList(res.data.data);
       })
       .catch((err) => {
@@ -58,7 +71,7 @@ export default function RoutineDetail() {
   };
   useEffect(() => {
     getRoutineList();
-  }, [dow]);
+  }, []);
 
   return (
     <>
@@ -68,9 +81,13 @@ export default function RoutineDetail() {
         onClickRightButton={() => onClick()}
       />
       <RoutineDiv>
-        {routineList.map((list, index) => (
-          <RoutineCard key={index} list={list}></RoutineCard>
-        ))}
+        {routineList.length != 0 ? (
+          routineList.map((list, index) => (
+            <RoutineCard key={index} list={list}></RoutineCard>
+          ))
+        ) : (
+          <CardDiv onClick={onClick}>일과를 등록해보세요 !</CardDiv>
+        )}
       </RoutineDiv>
       {open ? (
         <RoutineModal
