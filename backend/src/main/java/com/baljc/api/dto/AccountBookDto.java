@@ -65,13 +65,13 @@ public class AccountBookDto {
         private Character paymentMethod;
         private Character fixedExpenditureYn;
         private Character fixedIncomeYn;
-        private Integer weeklyPeriod;
+        private Integer monthlyPeriod;
         private LocalDateTime date;
         private LocalDate startDate;
         private LocalDate endDate;
 
         @QueryProjection
-        public AccountBookDetailResponse(UUID accountbookId, UUID categoryId, String categoryName, Character type, String title, Integer price, String memo, Character paymentMethod, Character fixedExpenditureYn, Character fixedIncomeYn, Integer weeklyPeriod, LocalDateTime date, LocalDate startDate, LocalDate endDate) {
+        public AccountBookDetailResponse(UUID accountbookId, UUID categoryId, String categoryName, Character type, String title, Integer price, String memo, Character paymentMethod, Character fixedExpenditureYn, Character fixedIncomeYn, Integer monthlyPeriod, LocalDateTime date, LocalDate startDate, LocalDate endDate) {
             this.accountbookId = accountbookId;
             this.categoryId = categoryId;
             this.categoryName = categoryName;
@@ -82,7 +82,7 @@ public class AccountBookDto {
             this.paymentMethod = paymentMethod;
             this.fixedExpenditureYn = fixedExpenditureYn;
             this.fixedIncomeYn = fixedIncomeYn;
-            this.weeklyPeriod = weeklyPeriod;
+            this.monthlyPeriod = monthlyPeriod;
             this.date = date;
             this.startDate = startDate;
             this.endDate = endDate;
