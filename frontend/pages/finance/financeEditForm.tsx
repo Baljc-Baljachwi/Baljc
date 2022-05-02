@@ -21,55 +21,51 @@ interface FinanceEditFormProps {
   accountbook: IAccountbook;
 }
 
-const dummyData = {
-  accountbookId: "abc",
-  type: "E",
-  categoryId: "123",
-  title: "오늘도 나는 돈을 쓴다",
-  price: 100000,
-  memo: "쓸데없는 지출",
-  paymentMethod: "C",
-  fixedExpenditureYn: "N",
-  fixedIncomeYn: "N",
-  startDate: "",
-  endDate: "",
-  monthlyPeriod: null,
-  date: null,
-} as IAccountbook;
+interface IAccountbookForm extends IAccountbook {
+  time: string | null;
+}
 
 export default function FinanceEditForm({ accountbook }: FinanceEditFormProps) {
   // 지출, 수입 구분
   const router = useRouter();
 
-  const { type } = dummyData;
-  const [initForm, setInitForm] = useState<IAccountbook>();
+  const [initForm, setInitForm] = useState<IAccountbookForm>();
 
   useEffect(() => {
     const accountbookId = router.query.accountbookId;
     console.log("accountbookId :", accountbookId);
+
     if (accountbookId && typeof accountbookId === "string") {
       getAccountbooks(accountbookId).then((res) => {
-        console.log(res.data.data);
+        console.log(res.data);
+        if (res.data.code === 1302) {
+          const data = res.data.data;
+
+          // 데이터 형식 파싱
+          const [date, time] = data.date ? data.date.split("T") : [null, null];
+          const startDate = data.startDate ? data.startDate.slice(0, 7) : null;
+          const endDate = data.endDate ? data.endDate.slice(0, 7) : null;
+
+          setInitForm({ ...data, date, time, startDate, endDate });
+        } else {
+          console.log(res.data.message);
+        }
       });
     }
   }, [router.query.accountbookId]);
 
-  // 입력 폼에 date, time 따로
-  const [date, time] = dummyData.date
-    ? dummyData.date.split("T")
-    : [null, null];
-  console.log(date, time);
   return (
     <>
       <Header label="가계부 내역 수정"></Header>
       <PageContainer>
-        <CostIncomeTitle>{type === "E" ? "지출" : "수입"}</CostIncomeTitle>
-        <FinanceForm type={type} initForm={{ ...dummyData, date, time }} />
-        {/* {type === "E" ? (
-          <CostForm initCostForm={{ ...dummyData, date, time }} />
-        ) : (
-          <IncomeForm initIncomeForm={{ ...dummyData, date, time }} />
-        )} */}
+        <CostIncomeTitle>
+          {initForm?.type === "E"
+            ? "지출"
+            : initForm?.type === "I"
+            ? "수입"
+            : ""}
+        </CostIncomeTitle>
+        {initForm && <FinanceForm type={initForm.type} initForm={initForm} />}
       </PageContainer>
     </>
   );

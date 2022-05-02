@@ -84,18 +84,20 @@ const FinanceDetail = ({
   const [financeDetailInfo, setFinanceDetailInfo] = useState<IFinanceDetail>();
 
   useEffect(() => {
-    // console.log(router.query);
-    // console.log(router.query.accountbookId);
-    getAccountbooks("fe73688a-26b3-41d8-83a5-d582180d45b5").then((res) => {
-      console.log(res.data);
-      if (res.data.code === 1302) {
-        setFinanceDetailInfo(res.data.data);
-      } else {
-        console.log(res.data.message);
-      }
-    });
+    const accountbookId = router.query.accountbookId;
+    if (accountbookId && typeof accountbookId === "string") {
+      getAccountbooks(accountbookId).then((res) => {
+        console.log(res.data);
+        if (res.data.code === 1302) {
+          setFinanceDetailInfo(res.data.data);
+        } else {
+          console.log(res.data.message);
+        }
+      });
+    }
   }, [router.query.accountbookId]);
 
+  // YYYY-MM-DDTHH:MM:SS => YYYY년 MM월 DD일 HH시 MM분
   function datetimeParsing(datetime: string) {
     if (!datetime) {
       return "";
@@ -109,6 +111,7 @@ const FinanceDetail = ({
     return `${year}년 ${month}월 ${day}일 ${amPm} ${newHour}시 ${minute}분`;
   }
 
+  // 기간 파싱
   function fixedDateTimeParsing(startDate: string, endDate: string) {
     if (!startDate || !endDate) {
       return "";
@@ -169,7 +172,6 @@ const FinanceDetail = ({
                   </span>
                 </>
               )}
-              <span>{datetimeParsing(financeDetailInfo?.date || "")}</span>
             </DetailContents>
             {financeDetailInfo?.type === "E" && (
               <DetailContents>
