@@ -117,19 +117,19 @@ const Content = () => {
           </div>
         </div>
       </div>
-      {/* chart started  */}
+      {/* chart started 
       <div className={styles.charts}>
-        {/* bar chart */}
+        bar chart
         <div className={styles.bar}>
           <h2>월 별 지출 통계</h2>
           <Line data={data} width={400} height={400} />
         </div>
-        {/* 도넛 chart */}
+        도넛 chart
         <div className={styles.circle}>
           <h2>카테고리별 지출 통계</h2>
           <Doughnut data={data1} width={400} height={400} />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
