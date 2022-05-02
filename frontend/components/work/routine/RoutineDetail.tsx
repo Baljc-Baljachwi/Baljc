@@ -1,10 +1,12 @@
 import Header from "../../../components/common/Header";
 import RoutineCard from "./RoutineCard";
-import Icon from "../../../components/common/Icon";
 import RoutineModal from "./RoutineModal";
 
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { getRoutines } from "../../../api/routine";
+import { IRoutine } from "../../../types/index";
 
 const StyledHeader = styled.header`
   width: 100%;
@@ -32,43 +34,60 @@ const RoutineDiv = styled.div`
   // width: 100%;
 `;
 
-export default function RoutineDetail() {
-  const [open, setOpen] = useState(false);
+const CardDiv = styled.div`
+  margin: 2rem;
+  padding: 1.5rem;
+  background: #f4f4f4;
+  border-radius: 1rem;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-contents: center;
+  gap: 1rem;
+  font-size: 1.6rem;
+  font-weight: 500;
+  cursor: pointer;
+`;
 
-  const routineList = [
-    {
-      id: 1,
-      title: "분리수거",
-      repetition: 4, // 0000100
-    },
-    {
-      id: 2,
-      title: "헬스가기",
-      repetition: 42, // 0101010
-    },
-  ];
+export default function RoutineDetail() {
+  const router = useRouter();
+  // query로 보내면 문자열이 되네요..?
+  const dow = Number(router.query.dow);
+
+  const [open, setOpen] = useState(false);
+  const [routineList, setRoutineList] = useState<IRoutine[]>([]);
 
   const onClick = () => {
     setOpen((prev) => !prev);
   };
 
+  const getRoutineList = () => {
+    getRoutines(dow)
+      .then((res) => {
+        setRoutineList(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  useEffect(() => {
+    getRoutineList();
+  }, []);
+
   return (
     <>
-      <StyledHeader>
-        <div>
-          <BackButton>
-            <Icon mode="fas" icon="chevron-left" color="#ffffff" size="16px" />
-          </BackButton>
-          오늘의 일과
-        </div>
-        <AddorModifyButton onClick={onClick}>
-          <Icon mode="fas" icon="plus" color="#ffffff" size="16px" />
-        </AddorModifyButton>
-      </StyledHeader>
+      <Header
+        label="오늘의 일과"
+        icon="plus"
+        onClickRightButton={() => onClick()}
+      />
       <RoutineDiv>
-        {routineList.map((list) => (
-          <RoutineCard key={list.id} list={list}></RoutineCard>
-        ))}
+        {routineList.length != 0 ? (
+          routineList.map((list, index) => (
+            <RoutineCard key={index} list={list}></RoutineCard>
+          ))
+        ) : (
+          <CardDiv onClick={onClick}>일과를 등록해보세요 !</CardDiv>
+        )}
       </RoutineDiv>
       {open ? (
         <RoutineModal

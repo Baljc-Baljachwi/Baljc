@@ -1,6 +1,9 @@
-import Link from "next/link";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Icon from "../../common/Icon";
+import { getRoutines } from "../../../api/routine";
+import { IRoutine } from "../../../types/index";
+import { useRouter } from "next/router";
 
 const RoutineDiv = styled.div`
   background: #f4f4f4;
@@ -22,7 +25,7 @@ const RoutineList = styled.div`
   margin-top: 1rem;
 `;
 
-const RoutineListItem = styled.li`
+const RoutineListItem = styled.li<{ isEmpty: boolean }>`
   display: flex;
   align-items: center;
   margin-top: 0.2rem;
@@ -30,36 +33,57 @@ const RoutineListItem = styled.li`
   font-size: 1.6rem;
 `;
 
-export default function Routine() {
-  const routineList = [
-    {
-      id: 1,
-      title: "분리수거",
-    },
-    {
-      id: 2,
-      title: "헬스가기",
-    },
-  ];
+interface RoutineProps {
+  dow: number;
+}
+
+export default function Routine({ dow }: RoutineProps) {
+  const router = useRouter();
+
+  const [routineList, setRoutineList] = useState<IRoutine[]>([]);
+
+  const getRoutineList = () => {
+    getRoutines(dow)
+      .then((res) => {
+        // console.log(res.data.data);
+        setRoutineList(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    getRoutineList();
+  }, [dow]);
 
   return (
     <>
-      <Link href="/work/routine" passHref>
-        <RoutineDiv>
-          <RoutineHeader>
-            <Icon mode="fas" icon="thumbtack" color="#EB3232" size="1.6rem" />
-            <h1>오늘의 일과</h1>
-          </RoutineHeader>
-          <RoutineList>
-            {routineList.map((list) => (
-              <RoutineListItem key={list.id}>
+      <RoutineDiv
+        onClick={() =>
+          router.push({ pathname: "/work/routine", query: { dow: dow } })
+        }
+      >
+        <RoutineHeader>
+          <Icon mode="fas" icon="thumbtack" color="#EB3232" size="1.6rem" />
+          <h1>오늘의 일과</h1>
+        </RoutineHeader>
+        <RoutineList>
+          {routineList.length !== 0 ? (
+            routineList.map((list) => (
+              <RoutineListItem key={list.routineId} isEmpty={false}>
                 <Icon mode="fas" icon="circle" color="#8CBFF2" size="1rem" />
                 <p>{list.title}</p>
               </RoutineListItem>
-            ))}
-          </RoutineList>
-        </RoutineDiv>
-      </Link>
+            ))
+          ) : (
+            <RoutineListItem isEmpty={true}>
+              <p>등록된 일과가 없습니다! </p>
+              <p>추가하려면 클릭하세요.</p>
+            </RoutineListItem>
+          )}
+        </RoutineList>
+      </RoutineDiv>
     </>
   );
 }

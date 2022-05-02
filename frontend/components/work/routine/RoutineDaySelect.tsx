@@ -9,10 +9,10 @@ const DayButtonContainer = styled.div`
 `;
 
 const DayButton = styled.label<{ isSelected: boolean }>`
-  width: 3.6rem;
-  height: 3.6rem;
+  width: 3.8rem;
+  height: 3.8rem;
   text-align: center;
-  line-height: 3.6rem;
+  line-height: 3.8rem;
   border-radius: 50%;
   background-color: ${(props) => (props.isSelected ? "#FFD469" : "#f5f6fa")};
   color: ${(props) => (props.isSelected ? "#3d3d3d" : "#797979")};
