@@ -156,7 +156,17 @@ export default function RoutineModal({
   }
 
   const addRoutine = () => {
-    console.log("addRoutine");
+    console.log(routineForm);
+    putRoutines(routineForm)
+      .then((res) => {
+        console.log(res.data);
+        alert("일과 등록 완료");
+        setOpen(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("일과 등록 실패");
+      });
   };
 
   useEffect(() => {
