@@ -5,6 +5,7 @@ import Todo from "../../components/work/todolist/index";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import { type } from "os";
 
 const StyledDiv = styled.div`
   padding: 2rem;
@@ -43,8 +44,17 @@ const DateItem = styled.p<{ isToday: boolean }>`
   cursor: pointer;
 `;
 
+interface WeekState {
+  day: string;
+  isClicked: boolean;
+}
+
 export default function Home() {
-  const [week, setWeek] = useState<string[]>();
+  const [week, setWeek] = useState<WeekState[]>([]);
+  // const [week, setWeek] = useState<WeekState>({ day: "", isClicked: false });
+  // const [week, setWeek] = useState<string[]>();
+  // const [isClicked, setIsClicked] = useState<boolean[]>();
+
   const today = dayjs(new Date()).format("YYYY-MM-DD");
   const yoil = ["일", "월", "화", "수", "목", "금", "토"];
   const [dow, setDow] = useState<number>(0);
@@ -66,14 +76,29 @@ export default function Home() {
       now.setTime(now.getTime() + 86400000);
       result.push(now.toISOString().slice(0, 10));
     }
-    setWeek(result);
+
+    for (let d of result) {
+      let is = false;
+      if (d === today) is = true;
+
+      setWeek((prev) => [...prev, { day: d, isClicked: is }]);
+    }
   };
 
-  const onClick = (day: number) => {
-    getTodayYoil(day);
+  const onClick = (item: WeekState, index: number) => {
+    console.log(item);
+    setWeek(
+      week.map((w) =>
+        w.day === item.day
+          ? { ...w, isClicked: !w.isClicked }
+          : { ...w, isClicked: false }
+      )
+    );
+    getTodayYoil(index);
   };
 
   useEffect(() => {
+    setWeek([]);
     getWeekly();
   }, []);
 
@@ -98,15 +123,17 @@ export default function Home() {
           </YoilDiv>
           <DateDiv>
             {week &&
-              week.map((item, key) => (
-                <DateItem
-                  isToday={today == item ? true : false}
-                  key={key}
-                  onClick={() => onClick(key)}
-                >
-                  {item.slice(8)}
-                </DateItem>
-              ))}
+              week.map((item, index) => {
+                return (
+                  <DateItem
+                    isToday={item.isClicked}
+                    key={index}
+                    onClick={() => onClick(item, index)}
+                  >
+                    {item.day.slice(8)}
+                  </DateItem>
+                );
+              })}
           </DateDiv>
         </WeeklyDiv>
         <Routine dow={dow}></Routine>
