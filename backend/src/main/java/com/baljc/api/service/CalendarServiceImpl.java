@@ -2,6 +2,7 @@ package com.baljc.api.service;
 
 import com.baljc.api.dto.AccountBookDto;
 import com.baljc.api.dto.CalendarDto;
+import com.baljc.api.dto.RoutineDto;
 import com.baljc.api.dto.TodoDto;
 import com.baljc.db.repository.AccountBookRepository;
 import com.baljc.db.repository.AccountBookRepositorySupport;
@@ -11,6 +12,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Slf4j
@@ -20,6 +25,7 @@ import java.util.*;
 public class CalendarServiceImpl implements CalendarService {
 
     private final MemberService memberService;
+    private final TodoService todoService;
     private final AccountBookRepository accountBookRepository;
     private final AccountBookRepositorySupport accountBookRepositorySupport;
     private final TodoRepositorySupport todoRepositorySupport;
@@ -106,7 +112,121 @@ public class CalendarServiceImpl implements CalendarService {
     }
 
     @Override
-    public void getCalendarByDay(int year, int month, int day) {
+    public CalendarDto.CalendarByDayResponse getCalendarByDay(int year, int month, int day) {
+        //가계부 단일 항목
+        Map<String, Integer> mapInteger = new HashMap<>();
+        Map<String, String> mapString = new HashMap<>();
+        int budget = memberService.getMemberByAuthentication().getBudget();
+        int budgetOfDay = budget / 30;
+        int fixedExpenditure = 0;
+        int todayExpenditure = 0;
+        int cntExpenditure = 0;
+        int totalExpenditure = 0;
+        int totalIncome = 0;
 
+
+        //가계부 리스트
+        List<AccountBookDto.AccountBookMonth> list = new ArrayList<>();
+
+        List<AccountBookDto.AccountBookMonth> fixedList = accountBookRepositorySupport.getAccountBookDayFixed(year, month, day, memberService.getMemberByAuthentication()).orElseThrow(() -> new NullPointerException("해당 월의 고정 지출, 고정 수입이 존재하지 않습니다."));
+        for (AccountBookDto.AccountBookMonth accountBookDayFixed : fixedList) {
+            list.add(accountBookDayFixed);
+            if (accountBookDayFixed.getType() == 'E') {
+                fixedExpenditure += accountBookDayFixed.getPrice();
+                cntExpenditure++;
+                totalExpenditure += accountBookDayFixed.getPrice();
+            } else {
+                totalIncome += accountBookDayFixed.getPrice();
+            }
+        }
+
+        List<AccountBookDto.AccountBookMonth> dayList = accountBookRepositorySupport.getAccountBookDay(year, month, day, memberService.getMemberByAuthentication()).orElseThrow(() -> new NullPointerException("해당 월의 지출, 수입이 존재하지 않습니다."));
+        for (AccountBookDto.AccountBookMonth accountBookDay : dayList) {
+            list.add(accountBookDay);
+            if (accountBookDay.getType() == 'E') {
+                todayExpenditure += accountBookDay.getPrice();
+                cntExpenditure++;
+                totalExpenditure += accountBookDay.getPrice();
+            } else {
+                totalIncome += accountBookDay.getPrice();
+            }
+        }
+
+        mapInteger.put("remainingBudget", budgetOfDay - todayExpenditure);
+        mapInteger.put("fixedExpenditure", fixedExpenditure);
+        mapInteger.put("cntExpenditure", cntExpenditure);
+        mapInteger.put("totalExpenditure", totalExpenditure);
+        mapInteger.put("totalIncome", totalIncome);
+
+        mapString.put("dayOfWeek", getDayOfWeek(year, month, day));
+
+        if (todayExpenditure >= 40000) {
+            if (memberService.getMemberByAuthentication().getSalaryType() == 'M') {
+                int price = memberService.getMemberByAuthentication().getSalary() / (memberService.getMemberByAuthentication().getWorkingHours() * 4);
+                mapString.put("word", "이 돈을 벌려면 " + (todayExpenditure / price) + "시간 일해야 해요.");
+            } else if (memberService.getMemberByAuthentication().getSalaryType() == 'H') {
+                int price = memberService.getMemberByAuthentication().getSalary();
+                mapString.put("word", "이 돈을 벌려면 " + (todayExpenditure / price) + "시간 일해야 해요.");
+            } else {
+                mapString.put("word", "이 돈으로 치킨 " + (todayExpenditure / 18000) + "마리를 먹을 수 있었어요.");
+            }
+        } else if (todayExpenditure >= 18000) {
+            mapString.put("word", "이 돈으로 치킨 " + (todayExpenditure / 18000) + "마리를 먹을 수 있었어요.");
+        } else if (todayExpenditure >= 4000) {
+            mapString.put("word", "이 돈으로 떡볶이 " + (todayExpenditure / 4000) + "인분을 먹을 수 있었어요.");
+        }
+
+
+        //일과 및 할 일 리스트
+        String temp = String.valueOf(month);
+        if (temp.length() == 1) {
+            temp = "0" + temp;
+        }
+        String dayTemp = String.valueOf(day);
+        if (dayTemp.length() == 1) {
+            dayTemp = "0" + dayTemp;
+        }
+        String strDate = year + "-" + temp + "-" + dayTemp;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(strDate, formatter);
+
+        TodoDto.ResponseByDate responseByDate = todoService.getTodoByDate(date);
+        List<RoutineDto.Response> routines = responseByDate.getRoutines();
+        List<TodoDto.Response> todos = responseByDate.getTodos();
+
+        CalendarDto.CalendarByDayResponse response = new CalendarDto.CalendarByDayResponse(mapInteger, mapString, list, routines, todos);
+        return response;
+    }
+
+    private String getDayOfWeek(int year, int month, int day) {
+        String dayOfWeekStr = "";
+        LocalDate date = LocalDate.of(year, month, day);
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+        int dayOfWeekNumber = dayOfWeek.getValue();
+        switch (dayOfWeekNumber) {
+            case 1:
+                dayOfWeekStr = "월";
+                break;
+            case 2:
+                dayOfWeekStr = "화";
+                break;
+            case 3:
+                dayOfWeekStr = "수";
+                break;
+            case 4:
+                dayOfWeekStr = "목";
+                break;
+            case 5:
+                dayOfWeekStr = "금";
+                break;
+            case 6:
+                dayOfWeekStr = "토";
+                break;
+            case 7:
+                dayOfWeekStr = "일";
+                break;
+        }
+
+        return dayOfWeekStr;
     }
 }
