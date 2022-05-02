@@ -224,7 +224,7 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
     const name = target.name;
     const newData = target.checked
       ? { date: null, time: null }
-      : { monthlyPeriod: null };
+      : { monthlyPeriod: null, startDate: null, endDate: null };
 
     setFinanceForm((prev) => ({
       ...prev,
@@ -244,6 +244,8 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
     console.log("Confirm!!");
     const params = {
       ...financeForm,
+      startDate: financeForm.startDate ? financeForm.startDate + "-01" : null,
+      endDate: financeForm.endDate ? financeForm.endDate + "-28" : null,
     };
     delete params.accountBookId;
 
