@@ -2,6 +2,7 @@
 const withPWA = require("next-pwa");
 const runtimeCaching = require("next-pwa/cache");
 
+const BASE_URL = process.env.BASE_URL;
 const KAKAO_CLIENT_ID = process.env.KAKAO_CLIENT_ID;
 const KAKAO_REDIRECT_URI = process.env.KAKAO_REDIRECT_URI;
 
@@ -11,6 +12,7 @@ module.exports = withPWA({
     runtimeCaching,
   },
   env: {
+    BASE_URL,
     KAKAO_CLIENT_ID,
     KAKAO_REDIRECT_URI,
   },

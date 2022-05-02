@@ -25,7 +25,7 @@ class LocalStorage {
 
 function createBasicInstance() {
   const instance = axios.create({
-    baseURL: "https://baljc.com",
+    baseURL: process.env.BASE_URL,
     headers: {
       "Content-Type": "application/json",
     },
