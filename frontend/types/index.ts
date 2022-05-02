@@ -64,3 +64,8 @@ export interface IAlarm {
   todoAlarmYn: YNType;
   todoAlarmTime: string;
 }
+
+export interface ICalendar {
+  year: number;
+  month: number;
+}
