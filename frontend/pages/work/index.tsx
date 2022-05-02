@@ -86,7 +86,7 @@ export default function Home() {
     setWeek(
       week.map((w) =>
         w.day === item.day
-          ? { ...w, isClicked: !w.isClicked }
+          ? { ...w, isClicked: true }
           : { ...w, isClicked: false }
       )
     );
