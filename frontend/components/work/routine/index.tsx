@@ -1,11 +1,8 @@
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Icon from "../../common/Icon";
 import { getRoutines } from "../../../api/routine";
-import { atom, useRecoilState } from "recoil";
 import { IRoutine } from "../../../types/index";
-import LocalStorage from "utils/localStorage";
 import { useRouter } from "next/router";
 
 const RoutineDiv = styled.div`
@@ -62,7 +59,11 @@ export default function Routine({ dow }: RoutineProps) {
 
   return (
     <>
-      <RoutineDiv onClick={() => router.push("/work/routine")}>
+      <RoutineDiv
+        onClick={() =>
+          router.push({ pathname: "/work/routine", query: { dow: dow } })
+        }
+      >
         <RoutineHeader>
           <Icon mode="fas" icon="thumbtack" color="#EB3232" size="1.6rem" />
           <h1>오늘의 일과</h1>

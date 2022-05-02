@@ -1,10 +1,12 @@
 import Header from "../../../components/common/Header";
 import RoutineCard from "./RoutineCard";
-import Icon from "../../../components/common/Icon";
 import RoutineModal from "./RoutineModal";
 
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { getRoutines } from "../../../api/routine";
+import { IRoutine } from "../../../types/index";
 
 const StyledHeader = styled.header`
   width: 100%;
@@ -33,24 +35,30 @@ const RoutineDiv = styled.div`
 `;
 
 export default function RoutineDetail() {
-  const [open, setOpen] = useState(false);
+  const router = useRouter();
+  // query로 보내면 문자열이 되네요..?
+  const dow = Number(router.query.dow);
 
-  const routineList = [
-    {
-      id: 1,
-      title: "분리수거",
-      repetition: 4, // 0000100
-    },
-    {
-      id: 2,
-      title: "헬스가기",
-      repetition: 42, // 0101010
-    },
-  ];
+  const [open, setOpen] = useState(false);
+  const [routineList, setRoutineList] = useState<IRoutine[]>([]);
 
   const onClick = () => {
     setOpen((prev) => !prev);
   };
+
+  const getRoutineList = () => {
+    getRoutines(dow)
+      .then((res) => {
+        console.log(res.data.data);
+        setRoutineList(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  useEffect(() => {
+    getRoutineList();
+  }, [dow]);
 
   return (
     <>
@@ -60,8 +68,8 @@ export default function RoutineDetail() {
         onClickRightButton={() => onClick()}
       />
       <RoutineDiv>
-        {routineList.map((list) => (
-          <RoutineCard key={list.id} list={list}></RoutineCard>
+        {routineList.map((list, index) => (
+          <RoutineCard key={index} list={list}></RoutineCard>
         ))}
       </RoutineDiv>
       {open ? (
