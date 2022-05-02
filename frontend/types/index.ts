@@ -1,27 +1,27 @@
-export type AccountType = "E" | "I"; // E: 지출, I: 수입, ERD는 type이지만 예약어라 문제될까봐 accountType으로 수정
-export type PaymentMethodType = "M" | "C" | "E" | "N"; // M: 현금, C: 카드, E: 기타, N: 없음
-export type PeriodType = "M" | "W" | "D" | "N"; // M : 매월, W: 매주, D: 매일, N: 없음
-export type SalaryType = "M" | "H" | "N"; // M: 월급, H: 시급, N: 없음
+export type AccountType = "E" | "I"; // [수입/지출] E: 지출, I: 수입, ERD는 type이지만 예약어라 문제될까봐 accountType으로 수정
+export type PaymentMethodType = "M" | "C" | "E" | "N"; // [결제수단] M: 현금, C: 카드, E: 기타, N: 없음
+export type PeriodType = "M" | "W" | "D" | "N"; // [주기유형] M : 매월, W: 매주, D: 매일, N: 없음
+export type SalaryType = "M" | "H" | "N"; // [급여유형] M: 월급, H: 시급, N: 없음
 export type YNType = "Y" | "N"; // boolean 대신 true: "Y", false: "N"
 
 export interface IAccountBook {
-  accountBookId: number;
-  accountType: AccountType;
-  categoryType: number;
+  accountBookId?: string;
+  type: AccountType;
+  categoryId: string;
   title: string;
   price: number;
   memo: string | null;
   paymentMethod: PaymentMethodType;
   fixedExpenditureYn: YNType;
   fixedIncomeYn: YNType;
-  periodType: PeriodType;
   monthlyPeriod: number | null;
-  weeklyPeriod: number | null;
+  startDate: string | null;
+  endDate: string | null;
   date: string | null;
 }
 
 export interface ICategory {
-  categoryId: number;
+  categoryId: string;
   accountType: AccountType;
   name: string;
   imgUrl: string;
@@ -54,4 +54,13 @@ export interface ITodo {
   date: string;
   content: string;
   completedYn: YNType;
+}
+
+export interface IAlarm {
+  pushAlarmId: number;
+  memberId: number;
+  accountAlarmYn: YNType;
+  accountAlarmTime: string;
+  todoAlarmYn: YNType;
+  todoAlarmTime: string;
 }

@@ -1,5 +1,6 @@
 package com.baljc.db.entity;
 
+import com.baljc.api.dto.TodoDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,5 +38,17 @@ public class Todo {
         this.completedYn = completedYn;
         this.deletedYn = deletedYn;
         this.member = member;
+    }
+
+    public void updateTodoContent(TodoDto.ContentRequest contentRequest) {
+        this.content = contentRequest.getContent();
+    }
+
+    public void updateTodoYn(Character yn) {
+        this.completedYn = yn;
+    }
+
+    public void deleteTodo() {
+        this.deletedYn = 'Y';
     }
 }

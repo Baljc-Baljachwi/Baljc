@@ -1,4 +1,5 @@
 import { atom } from "recoil";
+import LocalStorage from "utils/localStorage";
 
 interface IAccessToken {
   accessToken: string;
@@ -8,15 +9,15 @@ interface IAccessToken {
 const localStorageEffect =
   (key: string) =>
   ({ setSelf, onSet }: any) => {
-    const savedValue = localStorage.getItem(key);
+    const savedValue = LocalStorage.getItem(key);
     if (savedValue != null) {
       setSelf(JSON.parse(savedValue));
     }
 
     onSet((newValue: any, _: any, isReset: any) => {
       isReset
-        ? localStorage.removeItem(key)
-        : localStorage.setItem(key, JSON.stringify(newValue));
+        ? LocalStorage.removeItem(key)
+        : LocalStorage.setItem(key, JSON.stringify(newValue));
     });
   };
 

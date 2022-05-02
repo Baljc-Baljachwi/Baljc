@@ -4,6 +4,7 @@ import com.baljc.api.dto.AccountBookDto;
 import com.baljc.api.dto.QAccountBookDto_AccountBookDetailResponse;
 import com.baljc.api.dto.QAccountBookDto_AccountBookMonth;
 import com.baljc.api.dto.QAccountBookDto_AccountBookMonthTotal;
+import com.baljc.db.entity.Member;
 import com.baljc.db.entity.QAccountBook;
 import com.baljc.db.entity.QCategory;
 import com.querydsl.core.types.ConstantImpl;
@@ -38,7 +39,7 @@ public class AccountBookRepositorySupport {
         return Optional.ofNullable(response);
     }
 
-    public Optional<List<AccountBookDto.AccountBookMonthTotal>> getAccountBookMonthTotal(int year, int month) {
+    public Optional<List<AccountBookDto.AccountBookMonthTotal>> getAccountBookMonthTotal(int year, int month, Member member) {
         int[] day = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
         String temp = String.valueOf(month);
         if (temp.length() == 1) {
@@ -59,6 +60,7 @@ public class AccountBookRepositorySupport {
                 .from(qAccountBook)
                 .groupBy(qAccountBook.type)
                 .where(
+                        qAccountBook.member.eq(member),
                         qAccountBook.date.goe(start),
                         qAccountBook.date.loe(end),
                         qAccountBook.deletedYn.eq('N'),
@@ -69,7 +71,7 @@ public class AccountBookRepositorySupport {
         return Optional.ofNullable(response);
     }
 
-    public Optional<List<AccountBookDto.AccountBookMonth>> getAccountBookMonthFixed(int year, int month) {
+    public Optional<List<AccountBookDto.AccountBookMonth>> getAccountBookMonthFixed(int year, int month, Member member) {
         String temp = String.valueOf(month);
         if (temp.length() == 1) {
             temp = "0" + temp;
@@ -82,6 +84,7 @@ public class AccountBookRepositorySupport {
                 .from(qAccountBook)
                 .leftJoin(qCategory).on(qAccountBook.category.eq(qCategory))
                 .where(
+                        qAccountBook.member.eq(member),
                         qAccountBook.startDate.loe(date),
                         qAccountBook.endDate.goe(date),
                         qAccountBook.deletedYn.eq('N'),
@@ -92,7 +95,7 @@ public class AccountBookRepositorySupport {
         return Optional.ofNullable(response);
     }
 
-    public Optional<List<AccountBookDto.AccountBookMonth>> getAccountBookMonth(int year, int month) {
+    public Optional<List<AccountBookDto.AccountBookMonth>> getAccountBookMonth(int year, int month, Member member) {
         int[] day = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
         String temp = String.valueOf(month);
         if (temp.length() == 1) {
@@ -108,6 +111,7 @@ public class AccountBookRepositorySupport {
                 .from(qAccountBook)
                 .leftJoin(qCategory).on(qAccountBook.category.eq(qCategory))
                 .where(
+                        qAccountBook.member.eq(member),
                         qAccountBook.date.goe(start),
                         qAccountBook.date.loe(end),
                         qAccountBook.deletedYn.eq('N'),

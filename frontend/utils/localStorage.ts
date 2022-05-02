@@ -1,5 +1,3 @@
-import axios from "axios";
-
 class LocalStorage {
   constructor() {}
 
@@ -23,19 +21,4 @@ class LocalStorage {
   }
 }
 
-function createBasicInstance() {
-  const instance = axios.create({
-    baseURL: "https://baljc.com",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const accessToken = LocalStorage.getItem("accessToken");
-  if (accessToken) {
-    instance.defaults.headers.common["Authorization"] = accessToken;
-  }
-
-  return instance;
-}
-
-export const api = createBasicInstance();
+export default LocalStorage;

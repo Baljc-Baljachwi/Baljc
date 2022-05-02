@@ -1,5 +1,6 @@
 package com.baljc.db.entity;
 
+import com.baljc.api.dto.RoutineDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,5 +37,14 @@ public class Routine {
         this.repetition = repetition;
         this.deletedYn = deletedYn;
         this.member = member;
+    }
+
+    public void updateRoutine(RoutineDto.Request request) {
+        this.title = request.getTitle();
+        this.repetition = request.getRepetition();
+    }
+
+    public void deleteRoutine() {
+        this.deletedYn = 'Y';
     }
 }

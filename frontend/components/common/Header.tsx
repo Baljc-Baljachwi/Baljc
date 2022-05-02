@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { IconName } from "@fortawesome/free-solid-svg-icons";
 
 import Icon from "./Icon";
+import { useRouter } from "next/router";
 
 const StyledHeader = styled.header`
   width: 100%;
@@ -28,19 +29,29 @@ const AddorModifyButton = styled.span`
 interface HeaderProps {
   label: string;
   icon?: IconName;
+  onClickRightButton?: () => void;
 }
 
-export default function Header({ label, icon }: HeaderProps) {
+export default function Header({
+  label,
+  icon,
+  onClickRightButton,
+}: HeaderProps) {
+  const router = useRouter();
+  function onClickBackButton() {
+    router.back();
+  }
+
   return (
     <StyledHeader>
       <div>
-        <BackButton>
+        <BackButton onClick={onClickBackButton}>
           <Icon mode="fas" icon="chevron-left" color="#ffffff" size="16px" />
         </BackButton>
         {label}
       </div>
       {icon && (
-        <AddorModifyButton>
+        <AddorModifyButton onClick={onClickRightButton}>
           <Icon mode="fas" icon={icon} color="#ffffff" size="16px" />
         </AddorModifyButton>
       )}

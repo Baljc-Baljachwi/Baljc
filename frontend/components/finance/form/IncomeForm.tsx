@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import Image from "next/image";
 
 import Icon from "../../common/Icon";
-import ButtonTogglePeriodType from "./ButtonTogglePeriodType";
-import ButtonDaySelect from "./ButtonDaySelect";
 import ButtonBottom from "components/common/ButtonBottom";
 import ButtonTrashCan from "components/common/ButtonTrashCan";
-import { IAccountBook, PeriodType } from "types";
+import { IAccountBook } from "types";
+import { getCategories, postAccountBooks } from "api/accountBook";
 
 const FormContainer = styled.div`
   display: flex;
@@ -15,10 +15,10 @@ const FormContainer = styled.div`
   padding-bottom: 10rem;
 `;
 
-const InputContainer = styled.div<{ isPrice?: boolean }>`
+const InputContainer = styled.div`
   width: 100%;
   border-bottom: 1px solid #cccccc;
-  margin: ${(props) => (props.isPrice ? "1.6rem 0 0 0" : "1.6rem 0 0 0")};
+  margin: 1.6rem 0 0 0;
   color: #cccccc;
   :focus-within {
     border-bottom: 1px solid #3d3d3d;
@@ -89,29 +89,124 @@ const ButtonContainer = styled.div`
   gap: 1.6rem;
 `;
 
+const CategoryListContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+`;
+
+const CategoryButton = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  font-size: 1.2rem;
+  height: 7.4rem;
+`;
+
+const CategoryImage = styled.div<{ isSelected?: boolean }>`
+  position: relative;
+  width: ${(props) => (props.isSelected ? "4.8rem" : "4.4rem")};
+  height: ${(props) => (props.isSelected ? "4.8rem" : "4.4rem")};
+  box-sizing: content-box;
+  border: ${(props) => (props.isSelected ? "0.4rem solid #2E437A" : "")};
+  border-radius: 50%;
+  + span {
+    font-size: ${(props) => (props.isSelected ? "1.4rem" : "1.2rem")};
+    font-weight: ${(props) => (props.isSelected ? "500" : "400")};
+  }
+`;
+
+interface IIncomeForm extends IAccountBook {
+  time: string | null;
+}
+
 interface IncomeFormProps {
-  initIncomeForm?: IAccountBook;
+  initIncomeForm?: IIncomeForm;
+}
+
+interface Category {
+  categoryId: string;
+  type: "E" | "I";
+  name: string;
+  imgUrl: string;
+}
+
+function compareDate(
+  startDate: string | null,
+  endDate: string | null
+): boolean {
+  if (!startDate || !endDate) {
+    return false;
+  }
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  return start > end;
 }
 
 export default function IncomeForm({ initIncomeForm }: IncomeFormProps) {
-  const [incomeForm, setIncomeForm] = useState<IAccountBook>(
-    initIncomeForm || ({} as IAccountBook)
+  const [incomeForm, setIncomeForm] = useState<IIncomeForm>(
+    initIncomeForm ||
+      ({
+        accountBookId: "",
+        type: "E",
+        categoryId: "",
+        title: "",
+        price: 0,
+        memo: null,
+        paymentMethod: "N",
+        fixedExpenditureYn: "N",
+        fixedIncomeYn: "N",
+        monthlyPeriod: null,
+        startDate: null,
+        endDate: null,
+        date: null,
+        time: null,
+      } as IIncomeForm)
   );
 
-  const [dateTime, setDateTime] = useState<{ date: string; time: string }>({
-    date: "",
-    time: "",
-  });
+  const [categoryList, setCategoryList] = useState<Category[]>([]);
+
+  useEffect(() => {
+    getCategories("I").then((res) => {
+      console.log(res.data);
+      if (res.data.code === 1300) {
+        console.log(res.data.data);
+        setCategoryList(res.data.data);
+      }
+    });
+  }, []);
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const target = event.target;
-    const value = target.value;
     const name = target.name;
+    const value = target.value;
 
-    setIncomeForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    // 시작날짜보다 끝날짜가 빠른 경우 대처
+    if (name === "startDate" && compareDate(value, incomeForm.endDate)) {
+      setIncomeForm((prev) => ({
+        ...prev,
+        endDate: value,
+        [name]: value,
+      }));
+    } else if (name === "price") {
+      setIncomeForm((prev) => ({
+        ...prev,
+        [name]: +value,
+      }));
+    } else if (name === "monthlyPeriod") {
+      const newValue = Math.min(+value, 28);
+      setIncomeForm((prev) => ({
+        ...prev,
+        [name]: newValue,
+      }));
+    } else {
+      setIncomeForm((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   }
 
   function handleCheckBoxChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -119,92 +214,37 @@ export default function IncomeForm({ initIncomeForm }: IncomeFormProps) {
     const name = target.name;
 
     const newData = target.checked
-      ? { date: null }
-      : { monthlyPeriod: null, weeklyPeriod: null };
+      ? { date: null, time: null }
+      : { monthlyPeriod: null };
 
     setIncomeForm((prev) => ({
       ...prev,
       [name]: target.checked ? "Y" : "N",
-      periodType: target.checked ? "M" : "N",
       ...newData,
     }));
   }
 
-  function handleTogglePeriodType(value: PeriodType) {
-    // 바뀔 때마다 필요없는 데이터 null로
-    switch (value) {
-      case "M":
-        setIncomeForm((prev) => ({
-          ...prev,
-          periodType: value,
-          weeklyPeriod: null,
-          date: null,
-        }));
-        break;
-      case "W":
-        setIncomeForm((prev) => ({
-          ...prev,
-          periodType: value,
-          monthlyPeriod: null,
-          date: null,
-        }));
-        break;
-      case "D":
-        setIncomeForm((prev) => ({
-          ...prev,
-          periodType: value,
-          monthlyPeriod: null,
-          weeklyPeriod: null,
-          date: null,
-        }));
-        break;
-      case "N":
-        setIncomeForm((prev) => ({
-          ...prev,
-          periodType: value,
-          monthlyPeriod: null,
-          weeklyPeriod: null,
-        }));
-        break;
-    }
-  }
-
-  function handleWeeklyDayUpdate(value: number) {
-    let newValue = 0;
-    if (!incomeForm.weeklyPeriod) {
-      newValue = 1 << value;
-    } else if (incomeForm.weeklyPeriod & (1 << value)) {
-      // 이미 선택된 경우
-      newValue = incomeForm.weeklyPeriod - (1 << value);
-    } else {
-      // 새로 선택한 경우
-      newValue = incomeForm.weeklyPeriod + (1 << value);
-    }
-    setIncomeForm((prev) => ({
-      ...prev,
-      weeklyPeriod: newValue,
-    }));
-  }
-
-  function handleDateTimeInputChange(
-    event: React.ChangeEvent<HTMLInputElement>
-  ) {
-    const target = event.target;
-    const name = target.name;
-    const value = target.value;
-    setDateTime((prev) => ({ ...prev, [name]: value }));
-  }
-
-  function onClickConfirmButton(event: React.MouseEvent<HTMLButtonElement>) {
+  function onClickConfirmButton() {
     console.log("Confirm!!");
-    console.log(incomeForm);
-    console.log(dateTime);
+    const params = {
+      ...incomeForm,
+    };
+    delete params.accountBookId;
+
+    postAccountBooks(params).then((res) => {
+      console.log(res.data);
+    });
+    console.log(params);
   }
 
-  function onClickEditButton(event: React.MouseEvent<HTMLButtonElement>) {
+  function onClickEditButton() {
     console.log("Edit!!");
     console.log(incomeForm);
-    console.log(dateTime);
+  }
+
+  function onClickCategoryButton(categoryId: string) {
+    console.log(categoryId);
+    setIncomeForm((prev) => ({ ...prev, categoryId }));
   }
 
   return (
@@ -214,19 +254,19 @@ export default function IncomeForm({ initIncomeForm }: IncomeFormProps) {
         <InputContainer>
           <StyledInput
             name="title"
-            value={incomeForm.title || ""}
+            value={incomeForm.title}
             onChange={handleInputChange}
           />
         </InputContainer>
       </div>
       <div>
         <StyledLabel>금액</StyledLabel>
-        <InputContainer isPrice={true}>
+        <InputContainer>
           <StyledInput
             type="number"
             placeholder="0"
             name="price"
-            value={incomeForm.price || ""}
+            value={incomeForm.price}
             onChange={handleInputChange}
           />
           <InputUnit hasValue={incomeForm.price > 0}>원</InputUnit>
@@ -237,7 +277,7 @@ export default function IncomeForm({ initIncomeForm }: IncomeFormProps) {
             type="checkbox"
             id="fixedIncomeYn"
             name="fixedIncomeYn"
-            checked={incomeForm.fixedIncomeYn === "Y" || false}
+            checked={incomeForm.fixedIncomeYn === "Y"}
             onChange={handleCheckBoxChange}
           />
           <CheckLabel htmlFor="fixedIncomeYn">
@@ -256,66 +296,93 @@ export default function IncomeForm({ initIncomeForm }: IncomeFormProps) {
         </CheckboxContainer>
       </div>
 
-      <div>
-        <StyledLabel>날짜</StyledLabel>
-        {incomeForm.periodType === "M" ? (
-          <>
-            <ButtonTogglePeriodType
-              selectedPeriodType={incomeForm.periodType || "M"}
-              handleToggleButton={handleTogglePeriodType}
-            />
+      {incomeForm.fixedIncomeYn === "Y" ? (
+        <>
+          <div>
+            <StyledLabel>날짜</StyledLabel>
             <InputContainer>
+              <StyledInput
+                type="month"
+                name="startDate"
+                value={incomeForm.startDate || ""}
+                onChange={handleInputChange}
+              />
+              <InputUnit hasValue={!!incomeForm.startDate}>부터</InputUnit>
+              <StyledInput
+                type="month"
+                name="endDate"
+                value={incomeForm.endDate || ""}
+                min={incomeForm.startDate || ""}
+                onChange={handleInputChange}
+              />
+              <InputUnit hasValue={!!incomeForm.endDate}>까지</InputUnit>
+            </InputContainer>
+          </div>
+          <div>
+            <InputContainer>
+              <InputUnit hasValue={!!incomeForm.monthlyPeriod}>매월</InputUnit>
               <StyledInput
                 type="number"
                 name="monthlyPeriod"
-                value={incomeForm.monthlyPeriod || 0}
+                max={28}
+                value={Math.min(incomeForm.monthlyPeriod || 0, 28) || ""}
                 onChange={handleInputChange}
               />
               <InputUnit hasValue={!!incomeForm.monthlyPeriod}>
                 일마다
               </InputUnit>
             </InputContainer>
-          </>
-        ) : incomeForm.periodType === "W" ? (
-          <>
-            <ButtonTogglePeriodType
-              selectedPeriodType={incomeForm.periodType}
-              handleToggleButton={handleTogglePeriodType}
-            />
-            <ButtonDaySelect
-              selectedDays={incomeForm.weeklyPeriod}
-              handleWeeklyDayUpdate={handleWeeklyDayUpdate}
-            />
-          </>
-        ) : incomeForm.periodType === "D" ? (
-          <ButtonTogglePeriodType
-            selectedPeriodType={incomeForm.periodType}
-            handleToggleButton={handleTogglePeriodType}
-          />
-        ) : (
-          <>
+          </div>
+        </>
+      ) : (
+        <>
+          <div>
+            <StyledLabel>날짜</StyledLabel>
             <InputContainer>
               <StyledInput
                 type="date"
                 name="date"
-                value={dateTime.date}
-                onChange={handleDateTimeInputChange}
+                value={incomeForm.date || ""}
+                onChange={handleInputChange}
               />
             </InputContainer>
+          </div>
+          <div>
             <StyledLabel>시각</StyledLabel>
             <InputContainer>
               <StyledInput
                 type="time"
                 name="time"
-                value={dateTime.time}
-                onChange={handleDateTimeInputChange}
+                value={incomeForm.time || ""}
+                onChange={handleInputChange}
               />
             </InputContainer>
-          </>
-        )}
-      </div>
+          </div>
+        </>
+      )}
 
-      <StyledLabel>카테고리</StyledLabel>
+      <div>
+        <StyledLabel>카테고리</StyledLabel>
+        <CategoryListContainer>
+          {categoryList.map((category) => (
+            <CategoryButton
+              key={category.categoryId}
+              onClick={() => onClickCategoryButton(category.categoryId)}
+            >
+              <CategoryImage
+                isSelected={incomeForm.categoryId === category.categoryId}
+              >
+                <Image
+                  src={category.imgUrl}
+                  alt={category.name}
+                  layout="fill"
+                />
+              </CategoryImage>
+              <span>{category.name}</span>
+            </CategoryButton>
+          ))}
+        </CategoryListContainer>
+      </div>
 
       <div>
         <StyledLabel>메모</StyledLabel>

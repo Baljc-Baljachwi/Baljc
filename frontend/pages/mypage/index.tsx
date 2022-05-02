@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useRouter } from "next/router";
 
 import Header from "components/common/Header";
 import ProfileCard from "components/mypage/ProfileCard";
@@ -26,30 +27,32 @@ const ProfileCardContainer = styled.div`
   border-radius: 0px 0px 40px 40px;
   height: 30vh;
   color: #ffffff;
-  /* padding: 0 2rem; */
 `;
 
 const ProfileContentListContainer = styled.div`
   display: flex;
   flex-direction: column;
-  /* appearance: none; */
   border: none;
   border-radius: 1rem;
   width: 100%;
   height: 100%;
   background-color: #ffffff;
-  /* filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25)); */
 
   font-size: 1.6rem;
   padding: 1.6rem 2rem;
   gap: 2rem;
 `;
 
-const profile = () => {
+const MyPage = () => {
+  const router = useRouter();
   return (
     <div>
       <Container>
-        <Header label="마이페이지" icon="pencil"></Header>
+        <Header
+          label="마이페이지"
+          icon="pencil"
+          onClickRightButton={() => router.push("/mypage/modify")}
+        ></Header>
         <PageContainer>
           <ProfileCardContainer>
             <ProfileCard />
@@ -63,4 +66,4 @@ const profile = () => {
   );
 };
 
-export default profile;
+export default MyPage;
