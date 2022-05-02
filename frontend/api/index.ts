@@ -32,10 +32,27 @@ function createBasicInstance() {
   });
   const accessToken = LocalStorage.getItem("accessToken");
   if (accessToken) {
-    instance.defaults.headers.common["Authorization"] = accessToken;
+    instance.defaults.headers.common["Authorization"] =
+      JSON.parse(accessToken)["accessToken"];
   }
 
   return instance;
 }
 
+function createFileInstance() {
+  const instance = axios.create({
+    baseURL: process.env.BASE_URL,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  const accessToken = LocalStorage.getItem("accessToken");
+  if (accessToken) {
+    instance.defaults.headers.common["Authorization"] =
+      JSON.parse(accessToken)["accessToken"];
+  }
+  return instance;
+}
+
 export const api = createBasicInstance();
+export const fileApi = createFileInstance();
