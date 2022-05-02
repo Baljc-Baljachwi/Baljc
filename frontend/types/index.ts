@@ -28,9 +28,9 @@ export interface ICategory {
 }
 
 export interface IRoutine {
-  routineId: number;
+  routineId: string;
   title: string;
-  repetition: string;
+  repetition: number;
 }
 
 export interface IMember {

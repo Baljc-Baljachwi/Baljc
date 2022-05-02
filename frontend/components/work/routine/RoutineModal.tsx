@@ -5,7 +5,7 @@ import Icon from "../../common/Icon";
 import ButtonTrashCan from "../../common/ButtonTrashCan";
 import ButtonBottom from "../../common/ButtonBottom";
 import RoutineDaySelect from "./RoutineDaySelect";
-import { IRoutine } from "types";
+import { IRoutine } from "../../../types/index";
 import { putRoutines } from "../../../api/routine";
 
 const ModalWrapper = styled.div<{ visible: boolean }>`
@@ -93,11 +93,7 @@ const ModalFooter = styled.div`
 interface ModalProps {
   open: boolean;
   setOpen: any;
-  list?: {
-    id: number;
-    title: string;
-    repetition: number;
-  };
+  list?: IRoutine;
   label?: string;
 }
 
@@ -117,9 +113,6 @@ export default function RoutineModal({
     title: list?.title || "",
     repetition: list?.repetition || 0,
   });
-
-  // const [day, setDay] = useState<number>(0);
-  // const [title, setTitle] = useState<string>("");
 
   const onClose = () => {
     setOpen(false);
