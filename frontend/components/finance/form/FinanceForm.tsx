@@ -251,9 +251,9 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
     };
     delete params.accountBookId;
 
-    // postAccountBooks(params).then((res) => {
-    //   console.log(res.data);
-    // });
+    postAccountBooks(params).then((res) => {
+      console.log(res.data);
+    });
     console.log(params);
   }
 
