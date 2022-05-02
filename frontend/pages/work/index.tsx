@@ -51,9 +51,6 @@ interface WeekState {
 
 export default function Home() {
   const [week, setWeek] = useState<WeekState[]>([]);
-  // const [week, setWeek] = useState<WeekState>({ day: "", isClicked: false });
-  // const [week, setWeek] = useState<string[]>();
-  // const [isClicked, setIsClicked] = useState<boolean[]>();
 
   const today = dayjs(new Date()).format("YYYY-MM-DD");
   const yoil = ["일", "월", "화", "수", "목", "금", "토"];
@@ -86,7 +83,6 @@ export default function Home() {
   };
 
   const onClick = (item: WeekState, index: number) => {
-    console.log(item);
     setWeek(
       week.map((w) =>
         w.day === item.day
