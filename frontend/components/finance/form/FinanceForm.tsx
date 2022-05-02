@@ -2,12 +2,17 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 
-import { getCategories, postAccountBooks } from "api/accountBook";
+import {
+  getCategories,
+  postAccountbooks,
+  putAccountbooks,
+  deleteAccountbooks,
+} from "api/accountbook";
 import Icon from "../../common/Icon";
 import ButtonTogglePaymentMethod from "./ButtonTogglePaymentMethod";
 import ButtonBottom from "components/common/ButtonBottom";
 import ButtonTrashCan from "components/common/ButtonTrashCan";
-import { IAccountBook, PaymentMethodType } from "types";
+import { IAccountbook, PaymentMethodType } from "types";
 
 const FormContainer = styled.div`
   display: flex;
@@ -119,13 +124,13 @@ const CategoryImage = styled.div<{ isSelected?: boolean }>`
   }
 `;
 
-interface IAccountBookForm extends IAccountBook {
+interface IAccountbookForm extends IAccountbook {
   time: string | null;
 }
 
 interface FinanceFormProps {
   type: "E" | "I";
-  initForm?: IAccountBookForm;
+  initForm?: IAccountbookForm;
 }
 
 interface Category {
@@ -148,10 +153,10 @@ function compareDate(
 }
 
 export default function FinanceForm({ type, initForm }: FinanceFormProps) {
-  const [financeForm, setFinanceForm] = useState<IAccountBookForm>(
+  const [financeForm, setFinanceForm] = useState<IAccountbookForm>(
     initForm ||
       ({
-        accountBookId: "",
+        accountbookId: "",
         type,
         categoryId: "",
         title: "",
@@ -165,7 +170,7 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
         endDate: null,
         date: null,
         time: null,
-      } as IAccountBookForm)
+      } as IAccountbookForm)
   );
 
   const [categoryList, setCategoryList] = useState<Category[]>([]);
@@ -179,16 +184,18 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
         setCategoryList(res.data.data);
       }
     });
-
-    setFinanceForm((prev) => ({
-      ...prev,
-      type,
-      categoryId: "",
-      paymentMethod: "N",
-      fixedExpenditureYn: "N",
-      fixedIncomeYn: "N",
-    }));
-  }, [type]);
+    // 생성 페이지일 때만
+    if (!initForm) {
+      setFinanceForm((prev) => ({
+        ...prev,
+        type,
+        categoryId: "",
+        paymentMethod: "N",
+        fixedExpenditureYn: "N",
+        fixedIncomeYn: "N",
+      }));
+    }
+  }, [type, initForm]);
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const target = event.target;
@@ -249,17 +256,38 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
       startDate: financeForm.startDate ? financeForm.startDate + "-01" : null,
       endDate: financeForm.endDate ? financeForm.endDate + "-28" : null,
     };
-    delete params.accountBookId;
+    delete params.accountbookId;
 
-    postAccountBooks(params).then((res) => {
+    postAccountbooks(params).then((res) => {
       console.log(res.data);
     });
     console.log(params);
   }
 
   function onClickEditButton() {
+    if (!financeForm.accountbookId) {
+      return;
+    }
     console.log("Edit!!");
     console.log(financeForm);
+    const params = {
+      ...financeForm,
+      startDate: financeForm.startDate ? financeForm.startDate + "-01" : null,
+      endDate: financeForm.endDate ? financeForm.endDate + "-28" : null,
+    };
+    putAccountbooks(financeForm.accountbookId, params).then((res) => {
+      console.log(res.data);
+    });
+  }
+
+  function onClickDeleteButton() {
+    console.log("Delete!");
+    if (!financeForm.accountbookId) {
+      return;
+    }
+    deleteAccountbooks(financeForm.accountbookId).then((res) => {
+      console.log(res.data);
+    });
   }
 
   function onClickCategoryButton(categoryId: string) {
@@ -329,6 +357,7 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
       {(type === "E" && financeForm.fixedExpenditureYn === "Y") ||
       (type === "I" && financeForm.fixedIncomeYn === "Y") ? (
         <>
+          {/* 고정 지출 또는 고정 수입일 때*/}
           <div>
             <StyledLabel>날짜</StyledLabel>
             <InputContainer>
@@ -367,6 +396,7 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
         </>
       ) : (
         <>
+          {/* 고정 지출 또는 고정 수입 아닐 때*/}
           <div>
             <StyledLabel>날짜</StyledLabel>
             <InputContainer>
@@ -438,6 +468,7 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
           />
         </InputContainer>
       </div>
+
       {!initForm ? (
         <ButtonBottom
           label="확인"
@@ -445,7 +476,7 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
         ></ButtonBottom>
       ) : (
         <ButtonContainer>
-          <ButtonTrashCan />
+          <ButtonTrashCan onClick={onClickDeleteButton} />
           <ButtonBottom label="수정" onClick={onClickEditButton} />
         </ButtonContainer>
       )}

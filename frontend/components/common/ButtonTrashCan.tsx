@@ -17,9 +17,13 @@ const StyledButton = styled.button`
   cursor: pointer;
 `;
 
-export default function ButtonTrashCan() {
+interface ButtonTrashCanProps {
+  onClick?: () => void;
+}
+
+export default function ButtonTrashCan({ onClick }: ButtonTrashCanProps) {
   return (
-    <StyledButton>
+    <StyledButton onClick={onClick}>
       <Icon mode="fas" icon="trash-can" size="3rem" color="#8E8E8E"></Icon>
     </StyledButton>
   );
