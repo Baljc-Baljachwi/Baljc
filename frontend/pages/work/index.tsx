@@ -57,24 +57,33 @@ export default function Home() {
   const [dow, setDow] = useState<number>(0);
 
   const getTodayYoil = (day: number) => {
+    console.log("2 : " + (1 << (6 - day)));
     setDow(1 << (6 - day));
   };
 
   const getWeekly = () => {
-    const now = new Date();
-    getTodayYoil(now.getDay());
+    var currentDay = new Date();
+    var theYear = currentDay.getFullYear();
+    var theMonth = currentDay.getMonth();
+    var theDate = currentDay.getDate();
+    var theDayOfWeek = currentDay.getDay();
 
-    const sunday = now.getTime() - 86400000 * now.getDay();
-    now.setTime(sunday);
+    var thisWeek = [];
 
-    const result: string[] = [now.toISOString().slice(0, 10)];
+    for (var i = 0; i < 7; i++) {
+      var resultDay = new Date(theYear, theMonth, theDate + (i - theDayOfWeek));
+      var yyyy = resultDay.getFullYear();
+      var mm: string | number = Number(resultDay.getMonth()) + 1;
+      var dd: string | number = resultDay.getDate();
 
-    for (let i = 1; i < 7; i++) {
-      now.setTime(now.getTime() + 86400000);
-      result.push(now.toISOString().slice(0, 10));
+      mm = String(mm).length === 1 ? "0" + mm : mm;
+      dd = String(dd).length === 1 ? "0" + dd : dd;
+
+      thisWeek[i] = yyyy + "-" + mm + "-" + dd;
     }
 
-    for (let d of result) {
+    for (let d of thisWeek) {
+      // console.log(d);
       let is = false;
       if (d === today) is = true;
 
@@ -83,6 +92,7 @@ export default function Home() {
   };
 
   const onClick = (item: WeekState, index: number) => {
+    console.log(week);
     setWeek(
       week.map((w) =>
         w.day === item.day
@@ -96,7 +106,10 @@ export default function Home() {
   useEffect(() => {
     setWeek([]);
     getWeekly();
+    getTodayYoil(new Date().getDay());
   }, []);
+
+  console.log("1 : " + dow);
 
   return (
     <>
