@@ -26,6 +26,7 @@ const RoutineList = styled.div`
 `;
 
 const RoutineListItem = styled.li<{ isEmpty: boolean }>`
+  display: ${(props) => (props.isEmpty ? "" : "flex")};
   list-style: none;
   align-items: center;
   margin-top: 0.2rem;
