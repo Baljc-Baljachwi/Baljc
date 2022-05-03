@@ -47,8 +47,7 @@ export interface IMember {
 }
 
 export interface ITodo {
-  todoId: number;
-  memberId: number;
+  todoId: string;
   date: string;
   content: string;
   completedYn: YNType;
