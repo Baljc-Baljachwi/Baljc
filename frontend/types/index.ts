@@ -34,16 +34,16 @@ export interface IRoutine {
 }
 
 export interface IMember {
-  memberId: number;
-  kakaoId: string;
-  email: string;
+  // memberId: number;
+  // kakaoId: string;
+  // email: string;
   nickname: string;
   profileUrl: string | null;
   salaryType: SalaryType;
   salary: number | null;
   workingHours: number | null;
   budget: number;
-  surveyedYn: YNType;
+  // surveyedYn: YNType;
 }
 
 export interface ITodo {
@@ -55,8 +55,6 @@ export interface ITodo {
 }
 
 export interface IAlarm {
-  pushAlarmId: number;
-  memberId: number;
   accountAlarmYn: YNType;
   accountAlarmTime: string;
   todoAlarmYn: YNType;
