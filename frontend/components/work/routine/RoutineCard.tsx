@@ -73,6 +73,7 @@ export default function RoutineCard(props: { list: IRoutine }) {
           setOpen={setOpen}
           label={"오늘의 일과 수정"}
           list={props.list}
+          modalType={1}
         />
       ) : (
         ""

@@ -9,3 +9,8 @@ export const putRoutines = async (data: object) => {
   console.log(data);
   return await api.post(`/api/routines`, data);
 };
+
+// 일과 수정 API
+export const putRoutines = async (routineId: string, data: object) => {
+  return await api.put(`/api/routines/${routineId}`, data);
+};

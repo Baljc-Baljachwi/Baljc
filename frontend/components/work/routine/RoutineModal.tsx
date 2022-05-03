@@ -93,6 +93,7 @@ const ModalFooter = styled.div`
 interface ModalProps {
   open: boolean;
   setOpen: any;
+  modalType: number;
   list?: IRoutine;
   label?: string;
 }
@@ -105,6 +106,7 @@ interface RoutineInputForm {
 export default function RoutineModal({
   open,
   setOpen,
+  modalType,
   label,
   list,
 }: ModalProps) {
@@ -162,6 +164,20 @@ export default function RoutineModal({
       });
   };
 
+  const editRoutine = () => {
+    const routinId = list?.routineId || "";
+    putRoutines(routinId, routineForm)
+      .then((res) => {
+        console.log(res.data);
+        alert("일과 수정 완료");
+        setOpen(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("일과 수정 실패");
+      });
+  };
+
   useEffect(() => {
     // if (list) {
     //   setRoutineForm((prev) => ({
@@ -204,8 +220,16 @@ export default function RoutineModal({
                 handleWeeklyDayUpdate={handleWeeklyDayUpdate}
               ></RoutineDaySelect>
               <ModalFooter>
-                <ButtonTrashCan />
-                <ButtonBottom label="추가" onClick={() => addRoutine()} />
+                {modalType === 0 ? (
+                  <>
+                    <ButtonBottom label="추가" onClick={() => addRoutine()} />
+                  </>
+                ) : (
+                  <>
+                    <ButtonTrashCan />
+                    <ButtonBottom label="수정" onClick={() => editRoutine()} />
+                  </>
+                )}
               </ModalFooter>
             </ModalInner>
           </ModalWrapper>

@@ -94,6 +94,7 @@ export default function RoutineDetail() {
           open={open}
           setOpen={setOpen}
           label={"오늘의 일과 추가"}
+          modalType={0}
         />
       ) : (
         ""
