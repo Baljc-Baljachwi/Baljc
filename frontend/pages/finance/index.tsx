@@ -1,14 +1,12 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-
+import dayjs from "dayjs";
+import "dayjs/locale/ko";
+import { useRouter } from "next/router";
+import { getAccountbooksList } from "api/accountbook";
 import Header from "../../components/common/Header";
 import FinanceList from "../../components/finance/list/FinanceList";
-import FinanceCard from "../../components/finance/list/FinanceCard";
-import ButtonBottom from "../../components/common/ButtonBottom";
-import ButtonTrashCan from "../../components/common/ButtonTrashCan";
-
-import { WithRouterProps } from "next/dist/client/with-router";
-import { Router, useRouter, withRouter } from "next/router";
-import Link from "next/link";
+import Icon from "../../components/common/Icon";
 
 const Container = styled.div`
   height: 100vh;
@@ -32,12 +30,14 @@ const MonthlyContentContainer = styled.div`
 `;
 
 const MonthlySection = styled.div`
-  /* display: flex; */
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
   font-size: 2rem;
   font-weight: 700;
   font-style: bold;
 `;
-const MonthlyContent = styled.div`
+const MonthlyContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   font-size: 1.4rem;
@@ -45,26 +45,63 @@ const MonthlyContent = styled.div`
   font-style: normal;
   padding: 2rem 0;
 `;
-const MonthlyContentIncome = styled.div`
+
+const MonthlyContent = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
 `;
-const MonthlyContentExpenditure = styled.div`
-  display: flex;
-  justify-content: space-between;
+
+const Typography = styled.div<{
+  fs?: string;
+  fw?: string;
+  color?: string;
+  p?: string;
+  cursor?: string;
+}>`
+  color: ${(props) => (props.color ? props.color : "")};
+  font-size: ${(props) => (props.fs ? props.fs : "1rem")};
+  font-weight: ${(props) => (props.fw ? props.fw : "")};
+  padding: ${(props) => (props.p ? props.p : "0")};
+  cursor: ${(props) => (props.cursor ? props.cursor : "")};
 `;
-// const FinanceCardItem = styled.div<{ backgroundColor: string }>`
-//   background-color: aliceblue;
-//   /* height: 20px; */
-// `;
 
-// const ButtonContainer = styled.div`
-//   display: flex;
-//   gap: 1.6rem;
-// `;
-
-export default function Finance() {
+export default function Finance(): JSX.Element {
   const router = useRouter();
+  const [date, setDate] = useState(new Date());
+  const [month, setMonth] = useState(Number(dayjs(date).format("M")));
+  const [year, setYear] = useState(Number(dayjs(date).format("YYYY")));
+  const [expenditure, setExpenditure] = useState("");
+  const [income, setIncome] = useState("");
+  const [monthlyLog, setMonthlyLog] = useState([]);
+  const amount = Object.entries(monthlyLog); // ['1', [{…}, {…}] ]
+
+  const handleClickPrev = () => {
+    if (month > 1) {
+      setMonth(month - 1);
+    } else {
+      setYear(year - 1);
+      setMonth(12);
+    }
+  };
+
+  const handleClickNext = () => {
+    if (month < 11) {
+      setMonth(month + 1);
+    } else {
+      setYear(year + 1);
+      setMonth(1);
+    }
+  };
+
+  useEffect(() => {
+    getAccountbooksList(year, month).then((res) => {
+      setExpenditure(res.data.data.monthTotal.E);
+      setIncome(res.data.data.monthTotal.I);
+      setMonthlyLog(res.data.data.accountbookMonth);
+    });
+  }, [month, year]);
+  // console.log(monthlyLog); // {1: Array(2), 2: Array(1)} { 1: [{...}, {...}], 2: [{...}, {...}]}
 
   return (
     <>
@@ -77,26 +114,44 @@ export default function Finance() {
         <PageContainer>
           <MonthlyContentContainer>
             <MonthlySection>
-              <span>- 2022.4 -</span>
+              <div onClick={handleClickPrev}>
+                <Icon
+                  mode="fas"
+                  icon="chevron-left"
+                  size="16px"
+                  display="flex"
+                />
+              </div>
+              <span>{year}년 </span>
+              <span>{month}월</span>
+              <div onClick={handleClickNext}>
+                <Icon
+                  mode="fas"
+                  icon="chevron-right"
+                  size="16px"
+                  display="flex"
+                />
+              </div>
             </MonthlySection>
-            <MonthlyContent>
-              <MonthlyContentIncome>
-                <span>월 수입총액</span>
-                <span style={{ color: "#0075FF", fontWeight: "bold" }}>
-                  1,000,000 원
-                </span>
-                {/* <Link href="/detail" shallow={router.asPath === "/detail"}></Link> */}
-              </MonthlyContentIncome>
-              <MonthlyContentExpenditure>
-                <span>월 지출총액</span>
-                <span style={{ color: "#FF3F15", fontWeight: "bold" }}>
-                  512,000 원
-                </span>
-              </MonthlyContentExpenditure>
-            </MonthlyContent>
+            <MonthlyContentWrapper>
+              <MonthlyContent>
+                <Typography fs="1.6rem">지출</Typography>
+                <Typography fs="1.6rem" fw="600" color="#0075ff">
+                  {income.toLocaleString()} 원
+                </Typography>
+              </MonthlyContent>
+              <MonthlyContent>
+                <Typography fs="1.6rem">수입</Typography>
+                <Typography fs="1.6rem" fw="600">
+                  {expenditure.toLocaleString()} 원
+                </Typography>
+              </MonthlyContent>
+            </MonthlyContentWrapper>
             <DivisionLine />
           </MonthlyContentContainer>
-          <FinanceList />
+          {amount
+            ? amount.map((item, idx) => <FinanceList key={idx} item={item} />)
+            : null}
         </PageContainer>
       </Container>
     </>

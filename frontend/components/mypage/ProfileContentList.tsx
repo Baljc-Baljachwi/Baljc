@@ -15,19 +15,29 @@ export default function ProfileContentList() {
     <>
       <PageContainer>
         <ProfileContentCard
-          title="지출 분석"
+          title="내가 쓴 글"
           description="내 생활 습관을 분석해보세요."
           onClick={() => router.push("/mypage/analysis")}
         />
         <ProfileContentCard
-          title="목표를 향해서!"
-          description="내 목표와 얼마나 가까워졌는지 확인해보세요."
-          onClick={() => router.push("/mypage/goals")}
+          title="스크랩한 글"
+          description="내 생활 습관을 분석해보세요."
+          onClick={() => router.push("/mypage/analysis")}
+        />
+        <ProfileContentCard
+          title="목표를 향해서"
+          description="내 생활 습관을 분석해보세요."
+          onClick={() => router.push("/mypage/analysis")}
         />
         <ProfileContentCard
           title="설정"
           description="내 입맛대로 설정을 싸악~ㅋㅎ"
           onClick={() => router.push("/mypage/settings")}
+        />
+        <ProfileContentCard
+          title="목표를 향해서!"
+          description="내 목표와 얼마나 가까워졌는지 확인해보세요."
+          onClick={() => router.push("/mypage/goals")}
         />
       </PageContainer>
     </>

@@ -7,16 +7,16 @@ export type YNType = "Y" | "N"; // boolean 대신 true: "Y", false: "N"
 export interface IAccountbook {
   accountbookId?: string;
   type: AccountType;
-  categoryId: string;
+  categoryId?: string;
   title: string;
   price: number;
-  memo: string | null;
+  memo?: string | null;
   paymentMethod: PaymentMethodType;
   fixedExpenditureYn: YNType;
   fixedIncomeYn: YNType;
   monthlyPeriod: number | null;
-  startDate: string | null;
-  endDate: string | null;
+  startDate?: string | null;
+  endDate?: string | null;
   date: string | null;
 }
 
@@ -61,6 +61,9 @@ export interface IAlarm {
 }
 
 export interface ICalendar {
-  year: number;
-  month: number;
+  year: number | string;
+  month: number | string;
+}
+export interface IDaily extends ICalendar {
+  day: number | string;
 }
