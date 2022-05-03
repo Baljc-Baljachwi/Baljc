@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -32,7 +33,7 @@ public class TodoController {
     }
 
     @GetMapping
-    public ResponseEntity<BaseDataResponse<TodoDto.ResponseByDate>> getTodo(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+    public ResponseEntity<BaseDataResponse<List<TodoDto.Response>>> getTodo(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
         return ResponseEntity.status(HttpStatus.OK).body(new BaseDataResponse<>(1501,
                 "할일 조회에 성공하였습니다.", todoService.getTodoByDate(date)));
     }
