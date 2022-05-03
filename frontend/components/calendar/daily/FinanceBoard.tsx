@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-import FinanceList from "../../finance/list/FinanceList";
+import FinanceBoardList from "../../calendar/daily/FinanceBoardList";
 import Icon from "../../common/Icon";
 import { IAccountbook } from "types";
 
@@ -69,11 +69,30 @@ interface IDayString {
   word?: string;
 }
 
+// interface IAccountBookList extends IAccountbook {
+//   categoryImgUrl: string;
+//   dayOfWeek: string | null;
+// }
+
+interface IAccountBookList {
+  accountBookId: string;
+  type: "E" | "I";
+  categoryImgUrl: string;
+  title: string;
+  price: number;
+  paymentMethod: "M" | "C" | "E" | "N";
+  fixedExpenditureYn: "M" | "H" | "N";
+  fixedIncomeYn: "Y" | "N";
+  monthlyPeriod: number | null;
+  date: string | null;
+}
+
 export default function FinanceBoard({ item }: any) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const router = useRouter();
   const [dayNumber, setDayNumber] = useState<IDayNumber>();
   const [dayString, setDayString] = useState<IDayString>();
+  const [accountBookList, setAccountBookList] = useState<IAccountBookList>();
 
   const handleClick = (e: any) => {
     setIsCollapsed((prev) => !prev);
@@ -82,8 +101,10 @@ export default function FinanceBoard({ item }: any) {
   useEffect(() => {
     setDayNumber(item.dayNumber);
     setDayString(item.dayString);
-    console.log(dayString);
+    setAccountBookList(item.accountBookList);
   }, [item]);
+
+  // console.log(accountBookList); //[{…}, {…}]
 
   return (
     <Container>
@@ -133,7 +154,7 @@ export default function FinanceBoard({ item }: any) {
       <FinanceListContainer>
         {isCollapsed ? (
           <>
-            {/* <FinanceList  /> */}
+            <FinanceBoardList item={accountBookList} />
             <Typography fs="1rem" p="0.5rem 100% 0 100%" onClick={handleClick}>
               <Icon
                 mode="fas"
