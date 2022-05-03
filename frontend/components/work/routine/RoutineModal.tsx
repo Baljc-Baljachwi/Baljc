@@ -7,6 +7,7 @@ import ButtonBottom from "../../common/ButtonBottom";
 import RoutineDaySelect from "./RoutineDaySelect";
 import { IRoutine } from "../../../types/index";
 import { putRoutines } from "../../../api/routine";
+import { deleteRoutines, postRoutines } from "../../../api/routine";
 
 const ModalWrapper = styled.div<{ visible: boolean }>`
   box-sizing: border-box;
@@ -93,6 +94,7 @@ const ModalFooter = styled.div`
 interface ModalProps {
   open: boolean;
   setOpen: any;
+  modalType: number;
   list?: IRoutine;
   label?: string;
 }
@@ -105,6 +107,7 @@ interface RoutineInputForm {
 export default function RoutineModal({
   open,
   setOpen,
+  modalType,
   label,
   list,
 }: ModalProps) {
@@ -150,7 +153,7 @@ export default function RoutineModal({
 
   const addRoutine = () => {
     console.log(routineForm);
-    putRoutines(routineForm)
+    postRoutines(routineForm)
       .then((res) => {
         console.log(res.data);
         alert("일과 등록 완료");
@@ -162,21 +165,33 @@ export default function RoutineModal({
       });
   };
 
-  useEffect(() => {
-    // if (list) {
-    //   setRoutineForm((prev) => ({
-    //     ...prev,
-    //     title: list.title,
-    //     repetition: list.repetition,
-    //   }));
-    // } else {
-    //   setRoutineForm((prev) => ({
-    //     ...prev,
-    //     title: "",
-    //     repetition: 0,
-    //   }));
-    // }
-  }, []);
+  const editRoutine = () => {
+    const routinId = list?.routineId || "";
+    putRoutines(routinId, routineForm)
+      .then((res) => {
+        console.log(res.data);
+        alert("일과 수정 완료");
+        setOpen(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("일과 수정 실패");
+      });
+  };
+
+  const deleteRoutine = () => {
+    const routinId = list?.routineId || "";
+    deleteRoutines(routinId)
+      .then((res) => {
+        console.log(res.data);
+        alert("일과 삭제 완료");
+        setOpen(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("일과 삭제 실패");
+      });
+  };
 
   return (
     <>
@@ -204,8 +219,16 @@ export default function RoutineModal({
                 handleWeeklyDayUpdate={handleWeeklyDayUpdate}
               ></RoutineDaySelect>
               <ModalFooter>
-                <ButtonTrashCan />
-                <ButtonBottom label="추가" onClick={() => addRoutine()} />
+                {modalType === 0 ? (
+                  <>
+                    <ButtonBottom label="추가" onClick={() => addRoutine()} />
+                  </>
+                ) : (
+                  <>
+                    <ButtonTrashCan onClick={() => deleteRoutine()} />
+                    <ButtonBottom label="수정" onClick={() => editRoutine()} />
+                  </>
+                )}
               </ModalFooter>
             </ModalInner>
           </ModalWrapper>

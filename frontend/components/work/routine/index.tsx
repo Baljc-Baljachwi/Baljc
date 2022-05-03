@@ -70,8 +70,8 @@ export default function Routine({ dow }: RoutineProps) {
         </RoutineHeader>
         <RoutineList>
           {routineList.length !== 0 ? (
-            routineList.map((list) => (
-              <RoutineListItem key={list.routineId} isEmpty={false}>
+            routineList.map((list, index) => (
+              <RoutineListItem key={index} isEmpty={false}>
                 <Icon mode="fas" icon="circle" color="#8CBFF2" size="1rem" />
                 <p>{list.title}</p>
               </RoutineListItem>
