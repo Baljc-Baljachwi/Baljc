@@ -9,7 +9,7 @@ import { ITodo } from "../../../types";
 
 const TodoDiv = styled.div`
   width: 100%;
-  margin: 2.5rem 0;
+  margin: 3rem 0;
 `;
 
 const TodoInputDiv = styled.div`
@@ -122,8 +122,8 @@ export default function Todo({ viewOnly, date }: TodoProps) {
             <Image
               src="/assets/img/foot_false.png"
               alt=""
-              width={20}
-              height={20}
+              width={25}
+              height={25}
             />
             <InputDiv>
               <TodoInput
