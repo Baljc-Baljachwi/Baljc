@@ -46,31 +46,30 @@ interface TodoProps {
   date: string;
 }
 
-export default function Todo({ viewOnly }: TodoProps) {
-  // 잠깐 넣어둔 리스트
-  const todoList = [
-    {
-      id: 1,
-      content: "병원 예약하기",
-    },
-    {
-      id: 2,
-      content: "타입스크립트 공부하기",
-    },
-    {
-      id: 3,
-      content: "운동가기",
-    },
-  ];
 interface TodoForm {
   date: string;
   content: string;
 }
+
+export default function Todo({ viewOnly, date }: TodoProps) {
   const [todos, setTodos] = useState<ITodo[]>([]);
   const [inputForm, setInputForm] = useState<TodoForm>({
     date: date,
     content: "",
   });
+
+  const getTodoList = () => {
+    console.log(date);
+    getTodos(date)
+      .then((res) => {
+        console.log(res.data.data.todos);
+        setTodos(res.data.data.todos);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputForm((prev) => ({
       ...prev,
@@ -109,9 +108,14 @@ interface TodoForm {
     <>
       <TodoDiv>
         <>
-          {todoList.map((list) => (
-            <TodoItem key={list.id} list={list} viewOnly={viewOnly} />
-          ))}
+          {todos.length !== 0 ? (
+            todos.map((list, index) => (
+              <TodoItem key={index} list={list} viewOnly={viewOnly} />
+            ))
+          ) : (
+            // <TodoNone>todo list를 채워주세요 !</TodoNone>
+            <></>
+          )}
         </>
         {viewOnly ? null : (
           <TodoInputDiv>
