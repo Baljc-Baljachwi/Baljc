@@ -25,6 +25,7 @@ import java.util.*;
 public class CalendarServiceImpl implements CalendarService {
 
     private final MemberService memberService;
+    private final RoutineService routineService;
     private final TodoService todoService;
     private final AccountBookRepository accountBookRepository;
     private final AccountBookRepositorySupport accountBookRepositorySupport;
@@ -190,11 +191,8 @@ public class CalendarServiceImpl implements CalendarService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate date = LocalDate.parse(strDate, formatter);
 
-        TodoDto.ResponseByDate responseByDate = todoService.getTodoByDate(date);
-        List<RoutineDto.Response> routines = responseByDate.getRoutines();
-        List<TodoDto.Response> todos = responseByDate.getTodos();
 
-        CalendarDto.CalendarByDayResponse response = new CalendarDto.CalendarByDayResponse(mapInteger, mapString, list, routines, todos);
+        CalendarDto.CalendarByDayResponse response = new CalendarDto.CalendarByDayResponse(mapInteger, mapString, list, routineService.getRoutineByRepetition(1 << (6 - (date.getDayOfWeek().getValue() % 7))), todoService.getTodoByDate(date));
         return response;
     }
 
