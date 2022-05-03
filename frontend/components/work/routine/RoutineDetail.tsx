@@ -54,9 +54,11 @@ export default function RoutineDetail() {
   const dow = Number(router.query.dow);
 
   const [open, setOpen] = useState(false);
+  // const [open, setOpen];
   const [routineList, setRoutineList] = useState<IRoutine[]>([]);
 
   const onClick = () => {
+    console.log(open);
     setOpen((prev) => !prev);
   };
 
@@ -69,6 +71,7 @@ export default function RoutineDetail() {
         console.log(err);
       });
   };
+
   useEffect(() => {
     getRoutineList();
   }, []);
@@ -83,7 +86,7 @@ export default function RoutineDetail() {
       <RoutineDiv>
         {routineList.length != 0 ? (
           routineList.map((list, index) => (
-            <RoutineCard key={index} list={list}></RoutineCard>
+            <RoutineCard key={list.routineId} list={list}></RoutineCard>
           ))
         ) : (
           <CardDiv onClick={onClick}>일과를 등록해보세요 !</CardDiv>
@@ -94,6 +97,7 @@ export default function RoutineDetail() {
           open={open}
           setOpen={setOpen}
           label={"오늘의 일과 추가"}
+          modalType={0}
         />
       ) : (
         ""
