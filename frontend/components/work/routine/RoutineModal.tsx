@@ -6,6 +6,7 @@ import ButtonTrashCan from "../../common/ButtonTrashCan";
 import ButtonBottom from "../../common/ButtonBottom";
 import RoutineDaySelect from "./RoutineDaySelect";
 import { IRoutine } from "../../../types/index";
+import { postRoutines } from "../../../api/routine";
 import { putRoutines } from "../../../api/routine";
 
 const ModalWrapper = styled.div<{ visible: boolean }>`
@@ -152,7 +153,7 @@ export default function RoutineModal({
 
   const addRoutine = () => {
     console.log(routineForm);
-    putRoutines(routineForm)
+    postRoutines(routineForm)
       .then((res) => {
         console.log(res.data);
         alert("일과 등록 완료");
