@@ -28,6 +28,11 @@ const ProfileSettingsList = () => {
       setAccessToken({ accessToken: "" });
     });
   };
+
+  function logout() {
+    setAccessToken({ accessToken: "" });
+    router.push("/");
+  }
   return (
     <>
       <PageContainer>
@@ -35,7 +40,11 @@ const ProfileSettingsList = () => {
           title="푸쉬 알림 설정"
           description="푸쉬 알림을 받습니다."
         />
-        <ProfileContentCard title="문의하기" description="1:1 문의를 합니다." />
+        <ProfileContentCard
+          title="로그아웃"
+          description="로그아웃"
+          onClick={logout}
+        />
         <ProfileContentCard
           onClick={handleDeleteMember}
           title="탈퇴하기"
