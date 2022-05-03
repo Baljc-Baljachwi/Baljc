@@ -1,8 +1,11 @@
 import styled from "styled-components";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import TodoItem from "./TodoItem";
 import Image from "next/image";
+
+import { getTodos, postTodos } from "../../../api/todo";
+import { ITodo } from "../../../types";
 
 const TodoDiv = styled.div`
   width: 100%;
@@ -33,8 +36,14 @@ const TodoInput = styled.input`
   }
 `;
 
+const TodoNone = styled.div`
+  width: 100%;
+  font-size: 1.6rem;
+`;
+
 interface TodoProps {
   viewOnly: boolean;
+  date: string;
 }
 
 export default function Todo({ viewOnly }: TodoProps) {
@@ -53,6 +62,48 @@ export default function Todo({ viewOnly }: TodoProps) {
       content: "운동가기",
     },
   ];
+interface TodoForm {
+  date: string;
+  content: string;
+}
+  const [todos, setTodos] = useState<ITodo[]>([]);
+  const [inputForm, setInputForm] = useState<TodoForm>({
+    date: date,
+    content: "",
+  });
+  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputForm((prev) => ({
+      ...prev,
+      date: date,
+      content: e.target.value,
+    }));
+  };
+
+  const onEnter = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      if (inputForm.content.length !== 0) {
+        postTodos(inputForm)
+          .then((res) => {
+            console.log(res.data.data);
+            alert("todo 등록 완료!");
+            setInputForm((prev) => ({
+              ...prev,
+              content: "",
+            }));
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        alert("입력");
+        document.getElementById("todo")?.focus();
+      }
+    }
+  };
+
+  useEffect(() => {
+    getTodoList();
+  }, [date]);
 
   return (
     <>
@@ -73,8 +124,12 @@ export default function Todo({ viewOnly }: TodoProps) {
             <InputDiv>
               <TodoInput
                 name="todo"
+                id="todo"
+                value={inputForm.content}
                 type="text"
                 placeholder="할 일을 입력해주세요"
+                onChange={onInputChange}
+                onKeyPress={onEnter}
               />
             </InputDiv>
           </TodoInputDiv>
