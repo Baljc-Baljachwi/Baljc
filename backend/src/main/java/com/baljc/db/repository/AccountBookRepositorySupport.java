@@ -33,7 +33,9 @@ public class AccountBookRepositorySupport {
         AccountBookDto.AccountBookDetailResponse response = jpaQueryFactory.select(new QAccountBookDto_AccountBookDetailResponse(qAccountBook.accountBookId, qCategory.categoryId, qCategory.name, qAccountBook.type, qAccountBook.title, qAccountBook.price, qAccountBook.memo, qAccountBook.paymentMethod, qAccountBook.fixedExpenditureYn, qAccountBook.fixedIncomeYn, qAccountBook.monthlyPeriod, qAccountBook.date, qAccountBook.startDate, qAccountBook.endDate))
                 .from(qAccountBook)
                 .leftJoin(qCategory).on(qAccountBook.category.eq(qCategory))
-                .where(qAccountBook.accountBookId.eq(accountbookId))
+                .where(
+                        qAccountBook.accountBookId.eq(accountbookId),
+                        qAccountBook.deletedYn.eq('N'))
                 .fetchOne();
 
         return Optional.ofNullable(response);

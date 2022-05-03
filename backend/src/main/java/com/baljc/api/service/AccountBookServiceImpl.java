@@ -6,6 +6,7 @@ import com.baljc.db.entity.Category;
 import com.baljc.db.repository.AccountBookRepository;
 import com.baljc.db.repository.AccountBookRepositorySupport;
 import com.baljc.db.repository.CategoryRepository;
+import com.baljc.exception.NotExistedAccountBookException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -74,7 +75,7 @@ public class AccountBookServiceImpl implements AccountBookService {
 
     @Override
     public AccountBookDto.AccountBookDetailResponse getAccountBookDetail(UUID accountbookId) {
-        return accountBookRepositorySupport.getAccountBookDetail(accountbookId).orElseThrow(() -> new NullPointerException("해당 가계부가 존재하지 않습니다."));
+        return accountBookRepositorySupport.getAccountBookDetail(accountbookId).orElseThrow(() -> new NotExistedAccountBookException("해당 가계부가 존재하지 않습니다."));
     }
 
     @Override
