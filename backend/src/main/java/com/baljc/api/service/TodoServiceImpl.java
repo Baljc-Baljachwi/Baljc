@@ -1,6 +1,5 @@
 package com.baljc.api.service;
 
-import com.baljc.api.dto.RoutineDto;
 import com.baljc.api.dto.TodoDto;
 import com.baljc.db.entity.Todo;
 import com.baljc.db.repository.TodoRepository;
@@ -43,17 +42,17 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public TodoDto.ResponseByDate getTodoByDate(LocalDate date) {
-        List<RoutineDto.Response> routines = routineService
-                .getRoutineByRepetition(1 << (6 - (date.getDayOfWeek().getValue() % 7)));
-        List<TodoDto.Response> todos = memberService.getMemberByAuthentication()
+    public List<TodoDto.Response> getTodoByDate(LocalDate date) {
+//        List<RoutineDto.Response> routines = routineService
+//                .getRoutineByRepetition(1 << (6 - (date.getDayOfWeek().getValue() % 7)));
+        return memberService.getMemberByAuthentication()
                 .getTodoList()
                 .stream()
                 .filter(todo -> todo.getDeletedYn() == 'N' && todo.getDate().equals(date))
                 .map(todo -> new TodoDto.Response(todo.getTodoId(), todo.getDate(),
                         todo.getContent(), todo.getCompletedYn()))
                 .collect(Collectors.toList());
-        return new TodoDto.ResponseByDate(routines, todos);
+//        return new TodoDto.ResponseByDate(routines, todos);
     }
 
     @Override
