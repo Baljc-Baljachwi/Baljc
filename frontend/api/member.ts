@@ -7,3 +7,11 @@ export const kakaoLogin = async (code: string) => {
 export const putMembers = async (data: FormData) => {
   return await fileApi.put(`/api/members`, data);
 };
+
+export const deleteMembers = async () => {
+  return await api.delete(`/api/members`);
+};
+
+export const getMemberInfo = async () => {
+  return await api.get(`/api/members`);
+};
