@@ -1,8 +1,8 @@
-import { Fragment } from "react";
 import { useState } from "react";
 import styled from "styled-components";
 import Icon from "../../common/Icon";
 import RoutineModal from "./RoutineModal";
+import { IRoutine } from "../../../types/index";
 
 const CardDiv = styled.div`
   margin: 2rem;
@@ -32,13 +32,8 @@ const RoutineDayDiv = styled.div`
 `;
 
 const RoutineDay = styled.p``;
-interface listProps {
-  id: number;
-  title: string;
-  repetition: number;
-}
 
-export default function RoutineCard(props: { list: listProps }) {
+export default function RoutineCard(props: { list: IRoutine }) {
   const [open, setOpen] = useState(false);
 
   const onClick = () => {

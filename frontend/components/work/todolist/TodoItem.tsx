@@ -51,9 +51,7 @@ export default function TodoItem(props: {
     } else {
       setTodoClicked(true);
     }
-    // setTodoClicked((prev) => !prev);
   }
-  console.log(2, "todoitem", props.viewOnly);
 
   useEffect(() => {
     window.addEventListener("mousedown", todoItemClick);

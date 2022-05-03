@@ -4,8 +4,8 @@ export type PeriodType = "M" | "W" | "D" | "N"; // [주기유형] M : 매월, W:
 export type SalaryType = "M" | "H" | "N"; // [급여유형] M: 월급, H: 시급, N: 없음
 export type YNType = "Y" | "N"; // boolean 대신 true: "Y", false: "N"
 
-export interface IAccountBook {
-  accountBookId?: string;
+export interface IAccountbook {
+  accountbookId?: string;
   type: AccountType;
   categoryId: string;
   title: string;
@@ -28,11 +28,9 @@ export interface ICategory {
 }
 
 export interface IRoutine {
-  routineId: number;
-  memberId: number;
+  routineId: string;
   title: string;
-  content: string;
-  repetition: string;
+  repetition: number;
 }
 
 export interface IMember {

@@ -122,4 +122,61 @@ public class AccountBookRepositorySupport {
 
         return Optional.ofNullable(response);
     }
+
+    public Optional<List<AccountBookDto.AccountBookMonth>> getAccountBookDayFixed(int year, int month, int day, Member member) {
+        String temp = String.valueOf(month);
+        if (temp.length() == 1) {
+            temp = "0" + temp;
+        }
+        String sDate = year + "-" + temp + "-15";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(sDate, formatter);
+
+        List<AccountBookDto.AccountBookMonth> response = jpaQueryFactory.select(new QAccountBookDto_AccountBookMonth(qAccountBook.accountBookId, qAccountBook.type, qAccountBook.price, qCategory.imgUrl, qCategory.name, qAccountBook.title, qAccountBook.paymentMethod, qAccountBook.monthlyPeriod, qAccountBook.date, qAccountBook.fixedExpenditureYn, qAccountBook.fixedIncomeYn))
+                .from(qAccountBook)
+                .leftJoin(qCategory).on(qAccountBook.category.eq(qCategory))
+                .where(
+                        qAccountBook.member.eq(member),
+                        qAccountBook.startDate.loe(date),
+                        qAccountBook.endDate.goe(date),
+                        qAccountBook.monthlyPeriod.eq(day),
+                        qAccountBook.deletedYn.eq('N'),
+                        qAccountBook.fixedExpenditureYn.eq('Y').or(qAccountBook.fixedIncomeYn.eq('Y'))
+                )
+                .fetch();
+
+        return Optional.ofNullable(response);
+    }
+
+    public Optional<List<AccountBookDto.AccountBookMonth>> getAccountBookDay(int year, int month, int day, Member member) {
+        String temp = String.valueOf(month);
+        if (temp.length() == 1) {
+            temp = "0" + temp;
+        }
+        String dayTemp = String.valueOf(day);
+        if (dayTemp.length() == 1) {
+            dayTemp = "0" + dayTemp;
+        }
+        String startDate = year + "-" + temp + "-" + dayTemp + " 00:00:00";
+        String endDate = year + "-" + temp + "-" + dayTemp + " 23:59:59";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime start = LocalDateTime.parse(startDate, formatter);
+        LocalDateTime end = LocalDateTime.parse(endDate, formatter);
+
+        List<AccountBookDto.AccountBookMonth> response = jpaQueryFactory.select(new QAccountBookDto_AccountBookMonth(qAccountBook.accountBookId, qAccountBook.type, qAccountBook.price, qCategory.imgUrl, qCategory.name, qAccountBook.title, qAccountBook.paymentMethod, qAccountBook.monthlyPeriod, qAccountBook.date, qAccountBook.fixedExpenditureYn, qAccountBook.fixedIncomeYn))
+                .from(qAccountBook)
+                .leftJoin(qCategory).on(qAccountBook.category.eq(qCategory))
+                .where(
+                        qAccountBook.member.eq(member),
+                        qAccountBook.date.goe(start),
+                        qAccountBook.date.loe(end),
+                        qAccountBook.deletedYn.eq('N'),
+                        qAccountBook.fixedExpenditureYn.ne('Y').and(qAccountBook.fixedIncomeYn.ne('Y'))
+                )
+                .orderBy(qAccountBook.date.desc())
+                .fetch();
+
+        return Optional.ofNullable(response);
+    }
+
 }

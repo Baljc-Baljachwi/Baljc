@@ -5,7 +5,8 @@ import Icon from "../../common/Icon";
 import ButtonTrashCan from "../../common/ButtonTrashCan";
 import ButtonBottom from "../../common/ButtonBottom";
 import RoutineDaySelect from "./RoutineDaySelect";
-import { IRoutine } from "types";
+import { IRoutine } from "../../../types/index";
+import { putRoutines } from "../../../api/routine";
 
 const ModalWrapper = styled.div<{ visible: boolean }>`
   box-sizing: border-box;
@@ -92,12 +93,13 @@ const ModalFooter = styled.div`
 interface ModalProps {
   open: boolean;
   setOpen: any;
-  list?: {
-    id: number;
-    title: string;
-    repetition: number;
-  };
+  list?: IRoutine;
   label?: string;
+}
+
+interface RoutineInputForm {
+  title: string;
+  repetition: number;
 }
 
 export default function RoutineModal({
@@ -107,8 +109,10 @@ export default function RoutineModal({
   list,
 }: ModalProps) {
   // 나중에 API 형식으로 받아오기
-  const [day, setDay] = useState<number>(0);
-  const [title, setTitle] = useState<string>("");
+  const [routineForm, setRoutineForm] = useState<RoutineInputForm>({
+    title: list?.title || "",
+    repetition: list?.repetition || 0,
+  });
 
   const onClose = () => {
     setOpen(false);
@@ -122,31 +126,56 @@ export default function RoutineModal({
 
   function handleWeeklyDayUpdate(value: number) {
     let newValue = 0;
-    if (!day) {
+    if (!routineForm.repetition) {
       newValue = 1 << value;
-    } else if (day & (1 << value)) {
+    } else if (routineForm.repetition & (1 << value)) {
       // 이미 선택된 경우
-      newValue = day - (1 << value);
+      newValue = routineForm.repetition - (1 << value);
     } else {
       // 새로 선택한 경우
-      newValue = day + (1 << value);
+      newValue = routineForm.repetition + (1 << value);
     }
-    setDay(newValue);
+    setRoutineForm((prev) => ({
+      ...prev,
+      repetition: newValue,
+    }));
   }
 
   function onChange(e: React.ChangeEvent<HTMLInputElement>) {
-    // console.log(e.target.value);
-    setTitle(e.target.value);
+    setRoutineForm((prev) => ({
+      ...prev,
+      title: e.target.value,
+    }));
   }
 
+  const addRoutine = () => {
+    console.log(routineForm);
+    putRoutines(routineForm)
+      .then((res) => {
+        console.log(res.data);
+        alert("일과 등록 완료");
+        setOpen(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("일과 등록 실패");
+      });
+  };
+
   useEffect(() => {
-    if (list) {
-      setDay(list.repetition);
-      setTitle(list.title);
-    } else {
-      setDay(0);
-      setTitle("");
-    }
+    // if (list) {
+    //   setRoutineForm((prev) => ({
+    //     ...prev,
+    //     title: list.title,
+    //     repetition: list.repetition,
+    //   }));
+    // } else {
+    //   setRoutineForm((prev) => ({
+    //     ...prev,
+    //     title: "",
+    //     repetition: 0,
+    //   }));
+    // }
   }, []);
 
   return (
@@ -165,18 +194,18 @@ export default function RoutineModal({
               <ModalLable>제목</ModalLable>
               <ModalInput
                 type="text"
-                value={title}
+                value={routineForm.title}
                 onChange={onChange}
                 placeholder="일과를 입력해주세요."
               />
               <ModalLable>반복</ModalLable>
               <RoutineDaySelect
-                selectedDays={day}
+                selectedDays={routineForm.repetition}
                 handleWeeklyDayUpdate={handleWeeklyDayUpdate}
               ></RoutineDaySelect>
               <ModalFooter>
                 <ButtonTrashCan />
-                <ButtonBottom label="추가" />
+                <ButtonBottom label="추가" onClick={() => addRoutine()} />
               </ModalFooter>
             </ModalInner>
           </ModalWrapper>

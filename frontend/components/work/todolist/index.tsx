@@ -6,6 +6,7 @@ import Image from "next/image";
 
 const TodoDiv = styled.div`
   width: 100%;
+  margin: 2.5rem 0;
 `;
 
 const TodoInputDiv = styled.div`
@@ -52,7 +53,7 @@ export default function Todo({ viewOnly }: TodoProps) {
       content: "운동가기",
     },
   ];
-  console.log(1, "index", viewOnly); // true
+
   return (
     <>
       <TodoDiv>
