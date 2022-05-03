@@ -21,8 +21,7 @@ const ProfileSettingsList = () => {
   const handleDeleteMember = () => {
     console.log("탈퇴하기 안녀엉...");
     deleteMembers().then((res) => {
-      console.log("여긴오냐...");
-      console.log(res.data);
+      // console.log(res.data);
       console.log("메세지 찍어본다!" + res.data.message);
       router.push(res.data.code === 1003 ? "/login" : "/mypage/settings");
       setAccessToken({ accessToken: "" });
