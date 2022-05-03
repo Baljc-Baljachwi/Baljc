@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { accessTokenState } from "states";
 import { deleteMembers } from "../../../api/member";
+import { getAlarms } from "../../../api/alarm";
 
 const PageContainer = styled.main`
   display: flex;
@@ -27,10 +28,23 @@ const ProfileSettingsList = () => {
       setAccessToken({ accessToken: "" });
     });
   };
+
+  const handleClickToAlarmPage = () => {
+    console.log("알림 설정 페이지로 이동");
+    getAlarms().then((res) => {
+      console.log(res.data);
+      console.log("메세지 찍어본다!" + res.data.message);
+      if (res.data.code === 1200) {
+        router.push("/mypage/settings/alarm");
+      }
+    });
+  };
+
   return (
     <>
       <PageContainer>
         <ProfileContentCard
+          onClick={handleClickToAlarmPage}
           title="푸쉬 알림 설정"
           description="푸쉬 알림을 받습니다."
         />

@@ -1,7 +1,14 @@
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Header from "components/common/Header";
 import ProfileContentCard from "components/mypage/ProfileContentCard";
 import ToggleButton from "components/mypage/settings/ToggleButton";
+
+import { useRouter } from "next/router";
+import { useRecoilState } from "recoil";
+import { accessTokenState } from "states";
+import { getAlarms } from "../../../api/alarm";
+import { IAlarm, YNType } from "../../../types";
 
 const Container = styled.div`
   height: 100vh;
@@ -111,7 +118,114 @@ interface ProfileMenuContentProps {
   title: string;
   description: string;
 }
-const alarm = ({ title, description }: ProfileMenuContentProps) => {
+
+// interface IAlarmParams extends IAlarm {
+//   accountAlarmYn: YNType;
+//   accountAlarmTime: string;
+//   todoAlarmYn: YNType;
+//   todoAlarmTime: string;
+// }
+
+const Alarm = () => {
+  const router = useRouter();
+
+  const [alarms, setAlarms] = useState<IAlarm>();
+  const [accountAlarm, setAccountAlarm] = useState();
+  const [accountAlarmTime, setAccountAlarmTime] = useState("오후 9시");
+  const [todoAlarm, setTodoAlarm] = useState();
+  const [todoAlarmTime, setTodoAlarmTime] = useState("오전 9시");
+  //   const UserInfo = useRecoilValue(userInfoState);
+
+  // setAlarms 각 항목 settting
+  useEffect(() => {
+    getAlarms().then((res) => {
+      console.log(res.data);
+      if (res.data.code === 1200) {
+        console.log("1200도 넘어왔음!");
+        console.log(res.data.data);
+        setAlarms(res.data.data);
+        setAccountAlarm(res.data.data.accountAlarmYn);
+        setAccountAlarmTime(res.data.data.accountAlarmTime);
+        setTodoAlarm(res.data.data.todoAlarmYn);
+        setTodoAlarmTime(res.data.data.todoAlarmTime);
+      } else {
+        console.log(res.data.message);
+      }
+    });
+  }, []);
+
+  // setAccountAlarm
+  useEffect(() => {
+    getAlarms().then((res) => {
+      console.log(res.data);
+      if (res.data.code === 1200) {
+        // console.log("1200도 넘어왔음!");
+        console.log("setAccountAlarm 하기 전! " + res.data.data.accountAlarmYn);
+        // setAlarms(res.data.data);
+        setAccountAlarm(res.data.data.accountAlarmYn);
+        console.log(
+          "setAccountAlarm 하고 나서!! " + res.data.data.accountAlarmYn
+        );
+      } else {
+        console.log(res.data.message);
+      }
+    });
+  }, [setAccountAlarm]);
+
+  // setAccountAlarmTime
+  useEffect(() => {
+    getAlarms().then((res) => {
+      console.log(res.data);
+      if (res.data.code === 1200) {
+        // console.log("1200도 넘어왔음!");
+        console.log(
+          "setAccountAlarmTime 하기 전! " + res.data.data.accountAlarmTime
+        );
+        // setAlarms(res.data.data);
+        setAccountAlarmTime(res.data.data.accountAlarmTime);
+        console.log(
+          "setAccountAlarm 하고 나서!! " + res.data.data.accountAlarmTime
+        );
+      } else {
+        console.log(res.data.message);
+      }
+    });
+  }, [setAccountAlarmTime]);
+
+  // setTodoAlarm
+  useEffect(() => {
+    getAlarms().then((res) => {
+      console.log(res.data);
+      if (res.data.code === 1200) {
+        // console.log("1200도 넘어왔음!");
+        console.log("setTodoAlarm 하기 전! " + res.data.data.todoAlarmYn);
+        // setAlarms(res.data.data);
+        setTodoAlarm(res.data.data.todoAlarmYn);
+        console.log("setTodoAlarm 하고 나서!! " + res.data.data.todoAlarmYn);
+      } else {
+        console.log(res.data.message);
+      }
+    });
+  }, [setTodoAlarm]);
+
+  // setTodoAlarmTime
+  useEffect(() => {
+    getAlarms().then((res) => {
+      console.log(res.data);
+      if (res.data.code === 1200) {
+        // console.log("1200도 넘어왔음!");
+        console.log("setTodoAlarmTime 하기 전! " + res.data.data.todoAlarmTime);
+        // setAlarms(res.data.data);
+        setTodoAlarmTime(res.data.data.todoAlarmTime);
+        console.log(
+          "setTodoAlarmTime 하고 나서!! " + res.data.data.todoAlarmTime
+        );
+      } else {
+        console.log(res.data.message);
+      }
+    });
+  }, [setTodoAlarmTime]);
+
   return (
     <>
       <Container>
@@ -129,23 +243,20 @@ const alarm = ({ title, description }: ProfileMenuContentProps) => {
               <SettingAlarmItem>
                 <span>가계부</span>
                 <div className="right-content">
-                  <span>오후 9:00</span>
+                  <span>{accountAlarmTime} == 오후 9:00</span>
+                  {accountAlarm}
                   <ToggleButton />
                 </div>
               </SettingAlarmItem>
               <SettingAlarmItem>
                 <span>할 일</span>
                 <div className="right-content">
-                  <span>오전 9:00</span>
+                  <span>{todoAlarmTime} == 오전 9:00</span>
+                  {todoAlarm}
                   <ToggleButton />
                 </div>
               </SettingAlarmItem>
             </SettingAlarmItemList>
-            {/* <ProfileContentCard
-              title="푸쉬 알림 설정"
-              description="푸쉬 알림을 받습니다."
-            /> */}
-            {/* <ProfileSettingsList /> */}
           </ProfileContentListContainer>
         </PageContainer>
       </Container>
@@ -153,4 +264,10 @@ const alarm = ({ title, description }: ProfileMenuContentProps) => {
   );
 };
 
-export default alarm;
+export default Alarm;
+
+// <ProfileContentCard
+//               title="푸쉬 알림 설정"
+//               description="푸쉬 알림을 받습니다."
+//             />
+//             <ProfileSettingsList />
