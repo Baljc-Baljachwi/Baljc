@@ -1,6 +1,7 @@
 package com.baljc.api.controller;
 
 import com.baljc.common.response.BaseResponse;
+import com.baljc.exception.NotExistedAccountBookException;
 import com.baljc.exception.UnauthenticatedMemberException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -102,5 +103,12 @@ public class ExceptionController {
         log.error("UnauthenticatedMemberException - {}", e.getMessage());
         // 401
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new BaseResponse(3000, e.getMessage()));
+    }
+
+    @ExceptionHandler(NotExistedAccountBookException.class)
+    public ResponseEntity<BaseResponse> NotExistedAccountBookExceptionHandler(NotExistedAccountBookException e) {
+        log.error("NotExistedAccountBookException - {}", e.getMessage());
+        // 400
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse(3300, e.getMessage()));
     }
 }
