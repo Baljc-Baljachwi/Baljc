@@ -65,8 +65,8 @@ export default function TodoItem(props: { list: ITodo; viewOnly: boolean }) {
           <Image
             src="/assets/img/foot_true.png"
             alt=""
-            width={20}
-            height={20}
+            width={25}
+            height={25}
             onClick={todoComplete}
           />
         ) : (

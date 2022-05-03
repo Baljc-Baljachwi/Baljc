@@ -21,7 +21,6 @@ const TodoInputDiv = styled.div`
 
 const InputDiv = styled.div`
   width: 100%;
-  border-bottom: 1px solid #cccccc;
 `;
 
 const TodoInput = styled.input`
@@ -30,6 +29,7 @@ const TodoInput = styled.input`
   font-size: 1.6rem;
   color: #3d3d3d;
   border: none;
+  border-bottom: 1px solid #cccccc;
   outline: none;
   ::placeholder {
     color: #cccccc;
@@ -89,6 +89,7 @@ export default function Todo({ viewOnly, date }: TodoProps) {
               ...prev,
               content: "",
             }));
+            getTodoList();
           })
           .catch((err) => {
             console.log(err);
