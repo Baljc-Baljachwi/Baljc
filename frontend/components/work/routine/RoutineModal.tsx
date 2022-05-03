@@ -179,21 +179,6 @@ export default function RoutineModal({
       });
   };
 
-  useEffect(() => {
-    // if (list) {
-    //   setRoutineForm((prev) => ({
-    //     ...prev,
-    //     title: list.title,
-    //     repetition: list.repetition,
-    //   }));
-    // } else {
-    //   setRoutineForm((prev) => ({
-    //     ...prev,
-    //     title: "",
-    //     repetition: 0,
-    //   }));
-    // }
-  }, []);
   const deleteRoutine = () => {
     const routinId = list?.routineId || "";
     deleteRoutines(routinId)
