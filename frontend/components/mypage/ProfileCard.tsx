@@ -17,7 +17,6 @@ const Container = styled.div`
 
 const PageContainer = styled.main`
   font-family: "Noto Sans KR", sans-serif;
-  /* padding: 0 2rem; */
   background-color: #ffffff;
   color: #3d3d3d;
   display: flex;
@@ -29,6 +28,7 @@ const ProfileCardContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   background: #2e437a;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 0px 0px 40px 40px;
@@ -92,13 +92,8 @@ interface IMemberInfoProps {
 const ProfileCard = ({}) => {
   const router = useRouter();
   const [memberInfo, setMemberInfo] = useState<IMemberInfoProps>();
-  // const [nickname, setNickname] = useState();
-  // const [profileUrl, setProfileUrl] = useState();
-  // const [salaryType, setSalaryType] = useState();
-  // const [salary, setSalary] = useState();
-  // const [workingHours, setWorkingHours] = useState();
-  // const [budget, setBudget] = useState();
   // const UserInfo = useRecoilValue(userInfoState);
+
   useEffect(() => {
     getMemberInfo().then((res) => {
       // console.log(res.data);
@@ -106,12 +101,6 @@ const ProfileCard = ({}) => {
         // console.log("1001도 넘어왔음!");
         // console.log(res.data.data);
         setMemberInfo(res.data.data);
-        // setNickname(res.data.data.nickname);
-        // setProfileUrl(res.data.data.profileUrl);
-        // setBudget(res.data.data.budget);
-        // setSalaryType(res.data.data.salaryType);
-        // setSalary(res.data.data.salary);
-        // setWorkingHours(res.data.data.workingHours);
       } else {
         console.log(res.data.message);
       }
@@ -144,23 +133,6 @@ const ProfileCard = ({}) => {
               ] | {memberInfo?.salary} 원
             </span>
             <span>한 달 예산 | {memberInfo?.budget} 원</span>
-            {/* <div className="salaryInfo">
-              <div className="eachSalaryInfo">
-                <span>급여 </span>
-                <span>
-                  {memberInfo?.salaryType === "M"
-                    ? "월급"
-                    : memberInfo?.salaryType === "H"
-                    ? "시급"
-                    : ""}{" "}
-                  {memberInfo?.salary} 원
-                </span>
-              </div>
-              <div className="eachSalaryInfo">
-                <span>한 달 예산 </span>
-                <span> {memberInfo?.budget} 원</span>
-              </div>
-            </div> */}
           </ProfileInfo>
         </ProfileCardContainer>
       </Container>
@@ -169,3 +141,35 @@ const ProfileCard = ({}) => {
 };
 
 export default ProfileCard;
+
+// const [nickname, setNickname] = useState();
+// const [profileUrl, setProfileUrl] = useState();
+// const [salaryType, setSalaryType] = useState();
+// const [salary, setSalary] = useState();
+// const [workingHours, setWorkingHours] = useState();
+// const [budget, setBudget] = useState();
+
+// setNickname(res.data.data.nickname);
+// setProfileUrl(res.data.data.profileUrl);
+// setBudget(res.data.data.budget);
+// setSalaryType(res.data.data.salaryType);
+// setSalary(res.data.data.salary);
+// setWorkingHours(res.data.data.workingHours);
+
+/* <div className="salaryInfo">
+    <div className="eachSalaryInfo">
+      <span>급여 </span>
+      <span>
+        {memberInfo?.salaryType === "M"
+          ? "월급"
+          : memberInfo?.salaryType === "H"
+          ? "시급"
+          : ""}{" "}
+        {memberInfo?.salary} 원
+      </span>
+    </div>
+    <div className="eachSalaryInfo">
+      <span>한 달 예산 </span>
+      <span> {memberInfo?.budget} 원</span>
+    </div>
+  </div> */
