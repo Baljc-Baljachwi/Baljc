@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Calendar from "react-calendar";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
@@ -7,6 +7,18 @@ import styled from "styled-components";
 import Daily from "./daily/index";
 import { getMonthlyCalendar } from "api/calendar";
 
+const StyledHeader = styled.header`
+  width: 100%;
+  height: 6.6rem;
+  background-color: #2e437a;
+  font-size: 2rem;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+  justify-content: space-between;
+`;
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -14,7 +26,37 @@ const Container = styled.div`
 
 const CalendarWrapper = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const MonthlyTotal = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 2.5rem;
+  padding: 2rem 2rem 0 2rem;
+  font-weight: 700;
+  .title {
+    font-size: 1.5rem;
+
+    color: #3d3d3d;
+    padding-bottom: 1rem;
+  }
+  .flex_wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 45%;
+  }
+  .label {
+    font-weight: 300;
+    font-size: 1.3rem;
+    padding: 0 1rem 0 0;
+  }
+  .e_content {
+    color: #2e437a;
+  }
 `;
 
 export default function Monthly() {
@@ -22,6 +64,9 @@ export default function Monthly() {
   const [mounted, setMounted] = useState(false);
   const year = Number(dayjs(date).format("YYYY"));
   const month = Number(dayjs(date).format("MM"));
+  const [expenditure, setExpenditure] = useState("");
+  const [income, setIncome] = useState("");
+  const ref = React.useRef(null);
 
   // 기록 있는 날짜
   const [mark, setMark] = useState([]);
@@ -34,7 +79,7 @@ export default function Monthly() {
   const amount = Object.entries(mark);
   // [['2022-05-1', {E: 3500, I: 1000}], ['2022-05-2', {E: 10000}]]
 
-  const day = dayjs(date).format("DD일 dddd");
+  const day = dayjs(date).format("D일 dddd");
 
   dayjs.locale("ko");
 
@@ -46,6 +91,8 @@ export default function Monthly() {
     getMonthlyCalendar({ year: year, month: month }).then((res) => {
       if (res.data.code === 1600) {
         setMark(res.data.data.calendarMonth);
+        setExpenditure(res.data.data.monthTotal.E);
+        setIncome(res.data.data.monthTotal.I);
       }
     });
   }, [year, month]);
@@ -63,42 +110,62 @@ export default function Monthly() {
 
   if (!mounted) return null;
   return (
-    <Container>
-      <CalendarWrapper>
-        <Calendar
-          onChange={setDate}
-          value={date}
-          calendarType="US" // 일요일 시작
-          formatDay={(locale, date) => dayjs(date).format("D")} // 날짜 표기 방식 변경
-          formatMonthYear={(locale, date) => dayjs(date).format("M월")} // 월 표기 방식 변경
-          showNeighboringMonth={false} // 이전, 이후 달 날짜 보이지 않도록
-          next2Label={null} // 연 단위 이동 삭제
-          prev2Label={null}
-          minDetail="month" // month 클릭시 year 이동 방지
-          tileContent={({ date }) => (
-            <>
-              {saved ? (
-                saved.find((x) => x === dayjs(date).format("YYYY-MM-D")) ? (
-                  <div className="img"></div>
-                ) : null
-              ) : null}
-              {amount
-                ? amount.map((item, idx) =>
-                    item[0] === dayjs(date).format("YYYY-MM-D") ? (
-                      item[1]["E"] ? (
-                        <div key={idx} className="finance-wrapper">
-                          <div className="cost">-{item[1]["E"]}</div>
-                          <div className="income">{item[1]["I"]}</div>
-                        </div>
-                      ) : null
+    <>
+      <Container>
+        <StyledHeader>
+          <div className="title">이번 달 요약</div>
+        </StyledHeader>
+
+        <MonthlyTotal>
+          <div className="flex_wrapper">
+            <div className="label">지출</div>
+            <div className="e_content">-{expenditure}원</div>
+          </div>
+          <div className="flex_wrapper">
+            <div className="label">수입</div>
+            <div className="i_cotent">{income}원</div>
+          </div>
+        </MonthlyTotal>
+
+        <CalendarWrapper>
+          <Calendar
+            onChange={setDate}
+            value={date}
+            calendarType="US" // 일요일 시작
+            formatDay={(locale, date) => dayjs(date).format("D")} // 날짜 표기 방식 변경
+            formatMonthYear={(locale, date) => dayjs(date).format("M월")} // 월 표기 방식 변경
+            inputRef={ref}
+            showNeighboringMonth={false} // 이전, 이후 달 날짜 보이지 않도록
+            next2Label={null} // 연 단위 이동 삭제
+            prev2Label={null}
+            minDetail="month" // month 클릭시 year 이동 방지
+            tileContent={({ date, view }) =>
+              view === "month" ? (
+                <>
+                  {saved ? (
+                    saved.find((x) => x === dayjs(date).format("YYYY-MM-D")) ? (
+                      <div className="img"></div>
                     ) : null
-                  )
-                : null}
-            </>
-          )}
-        />
-      </CalendarWrapper>
-      <Daily day={day} />
-    </Container>
+                  ) : null}
+                  {amount
+                    ? amount.map((item, idx) =>
+                        item[0] === dayjs(date).format("YYYY-MM-D") ? (
+                          item[1]["E"] ? (
+                            <div key={idx} className="finance-wrapper">
+                              <div className="cost">-{item[1]["E"]}</div>
+                              <div className="income">{item[1]["I"]}</div>
+                            </div>
+                          ) : null
+                        ) : null
+                      )
+                    : null}
+                </>
+              ) : null
+            }
+          />
+        </CalendarWrapper>
+        <Daily day={day} />
+      </Container>
+    </>
   );
 }
