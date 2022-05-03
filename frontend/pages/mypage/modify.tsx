@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import Header from "../../components/common/Header";
 import ButtonBottom from "../../components/common/ButtonBottom";
 import ButtonToggleSalaryType from "../../components/mypage/survey/ButtonToggleSalaryType";
-import { putMembers } from "api/member";
+import { getMemberInfo, putMembers } from "api/member";
 
 const PageContainer = styled.main`
   padding: 0 2rem 6rem 2rem;
@@ -14,7 +14,10 @@ const LabelProfileImageContiainer = styled.div`
   width: 100%;
   margin: 5rem 0 4rem 0;
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
+  gap: 1rem;
 `;
 
 const LabelProfileImage = styled.label<{ image: string }>`
@@ -82,6 +85,16 @@ const ButtonToggleContainer = styled.div`
   margin-top: 1.6rem;
 `;
 
+const DefaultImageButton = styled.div`
+  width: 12rem;
+  border-radius: 0.5rem;
+  color: #ffffff;
+  font-size: 1.2rem;
+  text-align: center;
+  line-height: 2.4rem;
+  background-color: #2e437a;
+`;
+
 type TypeSalary = "M" | "H" | "N";
 
 interface SurveyInputForm {
@@ -91,19 +104,48 @@ interface SurveyInputForm {
   workingHours: number;
   budget: number;
   profileImage: Blob | null;
+  profileUpdated: boolean;
 }
 
-export default function Survey() {
+export default function ProfileModify() {
   const [surveyForm, setSurveyForm] = useState<SurveyInputForm>({
     nickname: "",
     salaryType: "M",
     salary: 0,
+    profileUpdated: false,
     profileImage: null,
     workingHours: 0,
     budget: 0,
   } as SurveyInputForm);
 
   const [imagePreview, setImagePreview] = useState<string>("");
+
+  useEffect(() => {
+    getMemberInfo().then((res) => {
+      console.log(res.data);
+      if (res.data.code === 1001) {
+        const {
+          nickname,
+          profileUrl,
+          salary,
+          salaryType,
+          workingHours,
+          budget,
+        } = res.data.data;
+        setSurveyForm((prev) => ({
+          ...prev,
+          nickname,
+          salaryType,
+          salary,
+          workingHours,
+          budget,
+        }));
+        setImagePreview(profileUrl);
+      } else {
+        console.log(res.data.message);
+      }
+    });
+  }, []);
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const target = event.target;
@@ -123,6 +165,7 @@ export default function Survey() {
         setSurveyForm((prev) => ({
           ...prev,
           [name]: file as Blob,
+          profileUpdated: true,
         }));
       } else {
         // 파일을 없앤 경우
@@ -130,9 +173,24 @@ export default function Survey() {
         setSurveyForm((prev) => ({
           ...prev,
           [name]: new Blob(),
+          profileUpdated: true,
         }));
       }
     }
+  }
+
+  function onClickDefaultImageButton() {
+    console.log("Clicked!");
+    if (!imagePreview) {
+      return;
+    }
+    console.log("Clicked!");
+    setSurveyForm((prev) => ({
+      ...prev,
+      profileImage: new Blob(),
+      profileUpdated: true,
+    }));
+    setImagePreview("");
   }
 
   function handleToggleButton(value: TypeSalary) {
@@ -148,8 +206,8 @@ export default function Survey() {
     console.log("click");
     const memberInfo = {
       nickname: surveyForm.nickname,
-      profileUpdated:
-        !!surveyForm.profileImage && surveyForm.profileImage.size > 0,
+      profileUpdated: surveyForm.profileUpdated,
+      // !!surveyForm.profileImage && surveyForm.profileImage.size > 0,
       salaryType: surveyForm.salaryType,
       salary: +surveyForm.salary,
       workingHours: +surveyForm.workingHours,
@@ -175,9 +233,12 @@ export default function Survey() {
 
   return (
     <>
-      <Header label="설문 조사"></Header>
+      <Header label="내 정보 수정" />
       <LabelProfileImageContiainer>
         <LabelProfileImage image={imagePreview} htmlFor="profileImage" />
+        <DefaultImageButton onClick={onClickDefaultImageButton}>
+          기본 이미지로 변경
+        </DefaultImageButton>
       </LabelProfileImageContiainer>
       <input
         type="file"
@@ -247,11 +308,7 @@ export default function Survey() {
           <InputUnit hasValue={surveyForm.budget > 0}>원</InputUnit>
         </InputContainer>
 
-        <ButtonBottom label="가입" onClick={onClickSubmitButton} />
-        {/* <ButtonContainer>
-          <ButtonTrashCan />
-          <ButtonBottom label="수정" />
-        </ButtonContainer> */}
+        <ButtonBottom label="수정" onClick={onClickSubmitButton} />
       </PageContainer>
     </>
   );
