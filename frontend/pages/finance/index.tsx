@@ -1,14 +1,17 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import dayjs from "dayjs";
+import "dayjs/locale/ko";
+import { WithRouterProps } from "next/dist/client/with-router";
+import { Router, useRouter, withRouter } from "next/router";
+import Link from "next/link";
+import { getAccountbooksList } from "api/accountbook";
 
 import Header from "../../components/common/Header";
 import FinanceList from "../../components/finance/list/FinanceList";
 import FinanceCard from "../../components/finance/list/FinanceCard";
 import ButtonBottom from "../../components/common/ButtonBottom";
 import ButtonTrashCan from "../../components/common/ButtonTrashCan";
-
-import { WithRouterProps } from "next/dist/client/with-router";
-import { Router, useRouter, withRouter } from "next/router";
-import Link from "next/link";
 
 const Container = styled.div`
   height: 100vh;
@@ -37,7 +40,7 @@ const MonthlySection = styled.div`
   font-weight: 700;
   font-style: bold;
 `;
-const MonthlyContent = styled.div`
+const MonthlyContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   font-size: 1.4rem;
@@ -45,14 +48,27 @@ const MonthlyContent = styled.div`
   font-style: normal;
   padding: 2rem 0;
 `;
-const MonthlyContentIncome = styled.div`
+
+const MonthlyContent = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
 `;
-const MonthlyContentExpenditure = styled.div`
-  display: flex;
-  justify-content: space-between;
+
+const Typography = styled.div<{
+  fs?: string;
+  fw?: string;
+  color?: string;
+  p?: string;
+  cursor?: string;
+}>`
+  color: ${(props) => (props.color ? props.color : "")};
+  font-size: ${(props) => (props.fs ? props.fs : "1rem")};
+  font-weight: ${(props) => (props.fw ? props.fw : "")};
+  padding: ${(props) => (props.p ? props.p : "0")};
+  cursor: ${(props) => (props.cursor ? props.cursor : "")};
 `;
+
 // const FinanceCardItem = styled.div<{ backgroundColor: string }>`
 //   background-color: aliceblue;
 //   /* height: 20px; */
@@ -65,6 +81,33 @@ const MonthlyContentExpenditure = styled.div`
 
 export default function Finance() {
   const router = useRouter();
+  const [date, setDate] = useState(new Date());
+  const month = dayjs(date).format("M");
+  const year = dayjs(date).format("YYYY");
+  const [expenditure, setExpenditure] = useState("");
+  const [income, setIncome] = useState("");
+  const [monthlyLog, setMonthlyLog] = useState([]);
+  const amount = Object.entries(monthlyLog); // ['1', [{…}, {…}] ]
+
+  useEffect(() => {
+    getAccountbooksList(year, month).then((res) => {
+      setExpenditure(res.data.data.monthTotal.E);
+      setIncome(res.data.data.monthTotal.I);
+      setMonthlyLog(res.data.data.accountbookMonth);
+      // "accountbookMonth": {
+      //     "21": [
+      //         {  "accountbookId": "e655794f-9b85-4ce8-9eba-911ff405f0fa",
+      //             "type": "E",
+      //             ...
+      //         },
+      //         {...} // 21일에 소비한 내역
+      //     ],
+      //     "8": [ {...}, {...} // 일에 소비한 내역
+      //     ]
+      // }
+    });
+  }, []);
+  // console.log(monthlyLog); // {1: Array(2), 2: Array(1)} { 1: [{...}, {...}], 2: [{...}, {...}]}
 
   return (
     <>
@@ -77,26 +120,30 @@ export default function Finance() {
         <PageContainer>
           <MonthlyContentContainer>
             <MonthlySection>
-              <span>- 2022.4 -</span>
+              <span>{year}년 </span>
+              <span>{month}월</span>
             </MonthlySection>
-            <MonthlyContent>
-              <MonthlyContentIncome>
-                <span>월 수입총액</span>
-                <span style={{ color: "#0075FF", fontWeight: "bold" }}>
-                  1,000,000 원
-                </span>
+            <MonthlyContentWrapper>
+              <MonthlyContent>
+                <Typography fs="1.6rem">지출</Typography>
+                <Typography fs="1.6rem" fw="600" color="#0075ff">
+                  {income.toLocaleString()} 원
+                </Typography>
+              </MonthlyContent>
+              <MonthlyContent>
+                <Typography fs="1.6rem">수입</Typography>
+                <Typography fs="1.6rem" fw="600">
+                  {expenditure.toLocaleString()} 원
+                </Typography>
                 {/* <Link href="/detail" shallow={router.asPath === "/detail"}></Link> */}
-              </MonthlyContentIncome>
-              <MonthlyContentExpenditure>
-                <span>월 지출총액</span>
-                <span style={{ color: "#FF3F15", fontWeight: "bold" }}>
-                  512,000 원
-                </span>
-              </MonthlyContentExpenditure>
-            </MonthlyContent>
+              </MonthlyContent>
+            </MonthlyContentWrapper>
             <DivisionLine />
           </MonthlyContentContainer>
-          <FinanceList />
+          {amount
+            ? amount.map((item, idx) => <FinanceList key={idx} item={item} />)
+            : null}
+          {/* <FinanceList financeList={financeList || null} /> */}
         </PageContainer>
       </Container>
     </>
