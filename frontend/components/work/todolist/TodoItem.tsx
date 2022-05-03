@@ -3,6 +3,7 @@ import React, { RefObject, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 import Icon from "../../common/Icon";
+import { ITodo } from "../../../types";
 
 const TodoListItem = styled.div`
   display: flex;
@@ -28,15 +29,12 @@ const IconDiv = styled.div<{ isClicked: boolean }>`
   gap: 1rem;
   display: ${(props) => (props.isClicked ? "flex" : "none")};
 `;
-interface listProps {
-  id: number;
-  content: string;
-}
+// interface listProps {
+//   id: number;
+//   content: string;
+// }
 
-export default function TodoItem(props: {
-  list: listProps;
-  viewOnly: boolean;
-}) {
+export default function TodoItem(props: { list: ITodo; viewOnly: boolean }) {
   const [isCompleted, setIsCompleted] = useState(false);
   const [todoClicked, setTodoClicked] = useState(false);
   const todoRef = useRef() as React.MutableRefObject<HTMLSpanElement>;
@@ -67,16 +65,16 @@ export default function TodoItem(props: {
           <Image
             src="/assets/img/foot_true.png"
             alt=""
-            width={20}
-            height={20}
+            width={25}
+            height={25}
             onClick={todoComplete}
           />
         ) : (
           <Image
             src="/assets/img/foot_false.png"
             alt=""
-            width={20}
-            height={20}
+            width={25}
+            height={25}
             onClick={todoComplete}
           />
         )}

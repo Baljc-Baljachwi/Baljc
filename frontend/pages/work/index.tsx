@@ -55,10 +55,14 @@ export default function Home() {
   const today = dayjs(new Date()).format("YYYY-MM-DD");
   const yoil = ["일", "월", "화", "수", "목", "금", "토"];
   const [dow, setDow] = useState<number>(0);
+  const [date, setDate] = useState<string>("");
 
-  const getTodayYoil = (day: number) => {
-    console.log("2 : " + (1 << (6 - day)));
+  const getClickedDow = (day: number) => {
     setDow(1 << (6 - day));
+  };
+
+  const getClickedDay = (day: string) => {
+    setDate(day);
   };
 
   const getWeekly = () => {
@@ -83,7 +87,6 @@ export default function Home() {
     }
 
     for (let d of thisWeek) {
-      // console.log(d);
       let is = false;
       if (d === today) is = true;
 
@@ -92,7 +95,7 @@ export default function Home() {
   };
 
   const onClick = (item: WeekState, index: number) => {
-    console.log(week);
+    setDate(item.day);
     setWeek(
       week.map((w) =>
         w.day === item.day
@@ -100,16 +103,16 @@ export default function Home() {
           : { ...w, isClicked: false }
       )
     );
-    getTodayYoil(index);
+    getClickedDow(index);
   };
 
   useEffect(() => {
     setWeek([]);
     getWeekly();
-    getTodayYoil(new Date().getDay());
+    getClickedDow(new Date().getDay());
+    console.log(today);
+    getClickedDay(today);
   }, []);
-
-  console.log("1 : " + dow);
 
   return (
     <>
@@ -146,7 +149,7 @@ export default function Home() {
           </DateDiv>
         </WeeklyDiv>
         <Routine dow={dow}></Routine>
-        <Todo viewOnly={false}></Todo>
+        <Todo viewOnly={false} date={date}></Todo>
       </StyledDiv>
     </>
   );
