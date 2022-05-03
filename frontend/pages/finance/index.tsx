@@ -2,16 +2,11 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
-import { WithRouterProps } from "next/dist/client/with-router";
-import { Router, useRouter, withRouter } from "next/router";
-import Link from "next/link";
+import { useRouter } from "next/router";
 import { getAccountbooksList } from "api/accountbook";
-
 import Header from "../../components/common/Header";
 import FinanceList from "../../components/finance/list/FinanceList";
-import FinanceCard from "../../components/finance/list/FinanceCard";
-import ButtonBottom from "../../components/common/ButtonBottom";
-import ButtonTrashCan from "../../components/common/ButtonTrashCan";
+import Icon from "../../components/common/Icon";
 
 const Container = styled.div`
   height: 100vh;
@@ -35,7 +30,9 @@ const MonthlyContentContainer = styled.div`
 `;
 
 const MonthlySection = styled.div`
-  /* display: flex; */
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
   font-size: 2rem;
   font-weight: 700;
   font-style: bold;
@@ -69,44 +66,41 @@ const Typography = styled.div<{
   cursor: ${(props) => (props.cursor ? props.cursor : "")};
 `;
 
-// const FinanceCardItem = styled.div<{ backgroundColor: string }>`
-//   background-color: aliceblue;
-//   /* height: 20px; */
-// `;
-
-// const ButtonContainer = styled.div`
-//   display: flex;
-//   gap: 1.6rem;
-// `;
-
-export default function Finance() {
+export default function Finance(): JSX.Element {
   const router = useRouter();
   const [date, setDate] = useState(new Date());
-  const month = dayjs(date).format("M");
-  const year = dayjs(date).format("YYYY");
+  const [month, setMonth] = useState(Number(dayjs(date).format("M")));
+  const [year, setYear] = useState(Number(dayjs(date).format("YYYY")));
   const [expenditure, setExpenditure] = useState("");
   const [income, setIncome] = useState("");
   const [monthlyLog, setMonthlyLog] = useState([]);
   const amount = Object.entries(monthlyLog); // ['1', [{…}, {…}] ]
+
+  const handleClickPrev = () => {
+    if (month > 1) {
+      setMonth(month - 1);
+    } else {
+      setYear(year - 1);
+      setMonth(12);
+    }
+  };
+
+  const handleClickNext = () => {
+    if (month < 11) {
+      setMonth(month + 1);
+    } else {
+      setYear(year + 1);
+      setMonth(1);
+    }
+  };
 
   useEffect(() => {
     getAccountbooksList(year, month).then((res) => {
       setExpenditure(res.data.data.monthTotal.E);
       setIncome(res.data.data.monthTotal.I);
       setMonthlyLog(res.data.data.accountbookMonth);
-      // "accountbookMonth": {
-      //     "21": [
-      //         {  "accountbookId": "e655794f-9b85-4ce8-9eba-911ff405f0fa",
-      //             "type": "E",
-      //             ...
-      //         },
-      //         {...} // 21일에 소비한 내역
-      //     ],
-      //     "8": [ {...}, {...} // 일에 소비한 내역
-      //     ]
-      // }
     });
-  }, []);
+  }, [month, year]);
   // console.log(monthlyLog); // {1: Array(2), 2: Array(1)} { 1: [{...}, {...}], 2: [{...}, {...}]}
 
   return (
@@ -120,8 +114,24 @@ export default function Finance() {
         <PageContainer>
           <MonthlyContentContainer>
             <MonthlySection>
+              <div onClick={handleClickPrev}>
+                <Icon
+                  mode="fas"
+                  icon="chevron-left"
+                  size="16px"
+                  display="flex"
+                />
+              </div>
               <span>{year}년 </span>
               <span>{month}월</span>
+              <div onClick={handleClickNext}>
+                <Icon
+                  mode="fas"
+                  icon="chevron-right"
+                  size="16px"
+                  display="flex"
+                />
+              </div>
             </MonthlySection>
             <MonthlyContentWrapper>
               <MonthlyContent>
@@ -135,7 +145,6 @@ export default function Finance() {
                 <Typography fs="1.6rem" fw="600">
                   {expenditure.toLocaleString()} 원
                 </Typography>
-                {/* <Link href="/detail" shallow={router.asPath === "/detail"}></Link> */}
               </MonthlyContent>
             </MonthlyContentWrapper>
             <DivisionLine />
@@ -143,7 +152,6 @@ export default function Finance() {
           {amount
             ? amount.map((item, idx) => <FinanceList key={idx} item={item} />)
             : null}
-          {/* <FinanceList financeList={financeList || null} /> */}
         </PageContainer>
       </Container>
     </>
