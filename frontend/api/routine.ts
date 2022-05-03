@@ -16,3 +16,8 @@ export const postRoutines = async (data: object) => {
 export const putRoutines = async (routineId: string, data: object) => {
   return await api.put(`/api/routines/${routineId}`, data);
 };
+
+// 일과 삭제 API
+export const deleteRoutines = async (routineId: string) => {
+  return await api.delete(`/api/routines/${routineId}`);
+};

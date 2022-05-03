@@ -6,8 +6,8 @@ import ButtonTrashCan from "../../common/ButtonTrashCan";
 import ButtonBottom from "../../common/ButtonBottom";
 import RoutineDaySelect from "./RoutineDaySelect";
 import { IRoutine } from "../../../types/index";
-import { postRoutines } from "../../../api/routine";
 import { putRoutines } from "../../../api/routine";
+import { deleteRoutines, postRoutines } from "../../../api/routine";
 
 const ModalWrapper = styled.div<{ visible: boolean }>`
   box-sizing: border-box;
@@ -194,6 +194,19 @@ export default function RoutineModal({
     //   }));
     // }
   }, []);
+  const deleteRoutine = () => {
+    const routinId = list?.routineId || "";
+    deleteRoutines(routinId)
+      .then((res) => {
+        console.log(res.data);
+        alert("일과 삭제 완료");
+        setOpen(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("일과 삭제 실패");
+      });
+  };
 
   return (
     <>
@@ -227,7 +240,7 @@ export default function RoutineModal({
                   </>
                 ) : (
                   <>
-                    <ButtonTrashCan />
+                    <ButtonTrashCan onClick={() => deleteRoutine()} />
                     <ButtonBottom label="수정" onClick={() => editRoutine()} />
                   </>
                 )}
