@@ -53,7 +53,6 @@ const ProfileImage = styled.div`
 `;
 
 const ProfileInfo = styled.div`
-  font-family: "InkLipquidFonts";
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -106,7 +105,7 @@ const ProfileCard = ({}) => {
       if (res.data.code === 1001) {
         // console.log("1001도 넘어왔음!");
         // console.log(res.data.data);
-        // setMemberInfo(res.data.data);
+        setMemberInfo(res.data.data);
         // setNickname(res.data.data.nickname);
         // setProfileUrl(res.data.data.profileUrl);
         // setBudget(res.data.data.budget);
@@ -136,13 +135,13 @@ const ProfileCard = ({}) => {
           <ProfileInfo>
             {memberInfo?.nickname}
             <span>
-              급여 | [
+              급여 [
               {memberInfo?.salaryType === "M"
                 ? "월급"
                 : memberInfo?.salaryType === "H"
                 ? "시급"
                 : ""}
-              ] {memberInfo?.salary} 원
+              ] | {memberInfo?.salary} 원
             </span>
             <span>한 달 예산 | {memberInfo?.budget} 원</span>
             {/* <div className="salaryInfo">
