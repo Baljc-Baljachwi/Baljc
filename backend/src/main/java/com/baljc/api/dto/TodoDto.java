@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.List;
 import java.util.UUID;
 
 public class TodoDto {
@@ -41,12 +40,12 @@ public class TodoDto {
         private String completedYn;
     }
 
-    @Getter
-    @AllArgsConstructor
-    public static class ResponseByDate {
-        private List<RoutineDto.Response> routines;
-        private List<Response> todos;
-    }
+//    @Getter
+//    @AllArgsConstructor
+//    public static class ResponseByDate {
+//        private List<RoutineDto.Response> routines;
+//        private List<Response> todos;
+//    }
 
     @Getter
     @AllArgsConstructor

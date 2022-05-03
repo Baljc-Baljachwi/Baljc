@@ -1,9 +1,10 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-import FinanceList from "../../finance/list/FinanceList";
+import FinanceBoardList from "../../calendar/daily/FinanceBoardList";
 import Icon from "../../common/Icon";
+import { IAccountbook } from "types";
 
 const Container = styled.div`
   background-color: #4d5f8f;
@@ -55,14 +56,55 @@ const FinanceListContainer = styled.div`
   align-items: center;
 `;
 
-export default function FinanceBoard() {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+interface IDayNumber {
+  cntExpenditure: number;
+  fixedExpenditure: number;
+  remainingBudget: number;
+  totalExpenditure: number;
+  totalIncome: number;
+}
 
+interface IDayString {
+  dayOfWeek: string;
+  word?: string;
+}
+
+// interface IAccountBookList extends IAccountbook {
+//   categoryImgUrl: string;
+//   dayOfWeek: string | null;
+// }
+
+interface IAccountBookList {
+  accountBookId: string;
+  type: "E" | "I";
+  categoryImgUrl: string;
+  title: string;
+  price: number;
+  paymentMethod: "M" | "C" | "E" | "N";
+  fixedExpenditureYn: "M" | "H" | "N";
+  fixedIncomeYn: "Y" | "N";
+  monthlyPeriod: number | null;
+  date: string | null;
+}
+
+export default function FinanceBoard({ item }: any) {
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const router = useRouter();
+  const [dayNumber, setDayNumber] = useState<IDayNumber>();
+  const [dayString, setDayString] = useState<IDayString>();
+  const [accountBookList, setAccountBookList] = useState<IAccountBookList>();
 
   const handleClick = (e: any) => {
     setIsCollapsed((prev) => !prev);
   };
+
+  useEffect(() => {
+    setDayNumber(item.dayNumber);
+    setDayString(item.dayString);
+    setAccountBookList(item.accountBookList);
+  }, [item]);
+
+  // console.log(accountBookList); //[{…}, {…}]
 
   return (
     <Container>
@@ -84,21 +126,27 @@ export default function FinanceBoard() {
       </Header>
       <div onClick={handleClick}>
         <TextWrapper>
-          <Typography fs="1.5rem">고정지출비용 {}원</Typography>
+          <Typography fs="1.5rem">
+            {dayNumber?.fixedExpenditure
+              ? `고정지출비용 ${dayNumber?.fixedExpenditure.toLocaleString()}원`
+              : null}
+          </Typography>
           <FlexContainer>
-            <Typography fs="3.2rem">12,000{} 원</Typography>
+            <Typography fs="3.2rem">
+              {dayNumber?.remainingBudget.toLocaleString()}원
+            </Typography>
             <Typography fs="1.5rem" p="0 0 0 0.5rem">
               남았습니다.
             </Typography>
           </FlexContainer>
           <FlexContainer style={{ justifyContent: "space-between" }}>
-            <Typography fs="1.5rem">오늘 소비 8,000 {}원</Typography>
+            <Typography fs="1.5rem">
+              오늘 소비 {dayNumber?.totalExpenditure.toLocaleString()}원
+            </Typography>
             <FlexContainer>
-              <Typography>이 돈으로</Typography>
-              <Typography color="#FFD469" p="0 0 0 0.5rem">
-                떡볶이 3인분
+              <Typography color="#FFD469" fs="1.2rem">
+                {dayString?.word}
               </Typography>
-              <Typography>을 먹을 수 있었어요.</Typography>
             </FlexContainer>
           </FlexContainer>
         </TextWrapper>
@@ -106,7 +154,7 @@ export default function FinanceBoard() {
       <FinanceListContainer>
         {isCollapsed ? (
           <>
-            <FinanceList />
+            <FinanceBoardList item={accountBookList} />
             <Typography fs="1rem" p="0.5rem 100% 0 100%" onClick={handleClick}>
               <Icon
                 mode="fas"

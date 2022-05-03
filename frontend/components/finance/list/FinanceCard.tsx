@@ -1,10 +1,10 @@
 import styled from "styled-components";
+import { useRouter } from "next/router";
+
 import { colors } from "../../../styles/colors";
 
 const FinanceCardItem = styled.div<{ backgroundColor: string }>`
-  /* width: 32rem; */
-  /* margin-left: 2rem; */
-  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25));
+  filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
   display: flex;
   flex-direction: column;
   background-color: ${(props) => props.backgroundColor};
@@ -34,10 +34,11 @@ const FinanceCardTitle = styled.span`
   font-weight: 400;
 `;
 
-const FinanceCardPrice = styled.span<{ color: string }>`
+const FinanceCardPrice = styled.span<{ color?: string }>`
   color: ${(props) => props.color};
   font-weight: 500;
   font-style: medium;
+  padding-bottom: 1rem;
 `;
 
 const FinanceCardDetail = styled.span`
@@ -57,43 +58,53 @@ const subtitleColor = {
 };
 
 interface FinanceCardProps {
-  // backgroundColor: string;
   isFixed: boolean;
-  isExpenditure: boolean;
-  //   (type==='E'? FinanceCardProps.color=" #FFD469": color="#F4F4F4"): string; // erd에선 char로 E: 지출, I: 수입 이지만 우선 string으로 해뒀습니다.
-  // type: string;
+  type: string;
   title: string;
-  price: string;
+  price: number;
   method: string;
   category: string;
-  // price: number;
-
-  //   fixed_expenditure_yn: boolean;
-  //   fixed_income_yn: boolean;
-  //   inExpenditure: boolean;
 }
 
 export default function FinanceCard({
-  // type,
-  // isFixed,
+  type,
   title,
   price,
   method,
   category,
   isFixed,
-  isExpenditure,
 }: FinanceCardProps) {
+  const router = useRouter();
+  const handleClick = () => {
+    router.push({
+      pathname: "/finance/detail",
+      query: { title },
+    });
+  };
   return (
     <>
-      <FinanceCardItem backgroundColor={isFixed ? "#ffd469" : "#F4F4F4"}>
+      <FinanceCardItem
+        backgroundColor={isFixed ? "#ffd469" : "#F4F4F4"}
+        onClick={handleClick}
+      >
         <FinanceCardContent>
           <FinanceCardTitle>{title}</FinanceCardTitle>
-          <FinanceCardPrice color={isExpenditure ? "#FF3F15" : "#0075FF"}>
-            {price}
+          <FinanceCardPrice>
+            {type === "E" ? "-" : null}
+            {price.toLocaleString()}원
           </FinanceCardPrice>
         </FinanceCardContent>
         <FinanceCardDetail>
-          {category} | {method}
+          {category} |{" "}
+          {method === "C"
+            ? "카드"
+            : method === "M"
+            ? "현금"
+            : method === "E"
+            ? "기타"
+            : method === "N"
+            ? "-"
+            : "-"}
         </FinanceCardDetail>
       </FinanceCardItem>
     </>
