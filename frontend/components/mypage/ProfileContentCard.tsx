@@ -44,19 +44,19 @@ const ProfileMenuCardDetail = styled.span`
 interface ProfileContentProps {
   title: string;
   description: string;
-  onClickCard?: () => void;
+  onClick?: () => void;
 }
 
 const ProfileContentCard = ({
   title,
   description,
-  onClickCard,
+  onClick,
 }: ProfileContentProps) => {
   const router = useRouter();
 
   return (
     <>
-      <ProfileMenuCardItem onClick={onClickCard}>
+      <ProfileMenuCardItem onClick={onClick}>
         <ProfileMenuCardContent>
           <ProfileMenuCardTitle>{title}</ProfileMenuCardTitle>
         </ProfileMenuCardContent>
