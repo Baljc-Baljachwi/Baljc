@@ -55,8 +55,6 @@ export interface ITodo {
 }
 
 export interface IAlarm {
-  pushAlarmId: number;
-  memberId: number;
   accountAlarmYn: YNType;
   accountAlarmTime: string;
   todoAlarmYn: YNType;
