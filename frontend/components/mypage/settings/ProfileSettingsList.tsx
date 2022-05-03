@@ -2,7 +2,6 @@ import styled from "styled-components";
 import ProfileContentCard from "../ProfileContentCard";
 
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { accessTokenState } from "states";
 import { deleteMembers } from "../../../api/member";
@@ -13,6 +12,7 @@ const PageContainer = styled.main`
   gap: 1.8rem;
   width: 100%;
 `;
+
 const ProfileSettingsList = () => {
   const [_, setAccessToken] = useRecoilState(accessTokenState);
   const router = useRouter();
@@ -20,22 +20,14 @@ const ProfileSettingsList = () => {
 
   const handleDeleteMember = () => {
     console.log("탈퇴하기 안녀엉...");
-  };
-  useEffect(() => {
-    if (!code) return;
-    deleteMembers(code as string).then((res) => {
+    deleteMembers().then((res) => {
+      console.log("여긴오냐...");
       console.log(res.data);
-      if (res.data.code === 1000) {
-        const accessToken = res.headers.authorization;
-        console.log(`accessToken : ${accessToken}`);
-        setAccessToken(() => ({ accessToken }));
-        console.log(res.data);
-        console.log(res.data.data);
-        // router.push(res.data.data.surveyedYn ? "/" : "/mypage/survey");
-        router.push(res.data.data.surveyedYn ? "/" : "/mypage/survey");
-      }
+      console.log("메세지 찍어본다!" + res.data.message);
+      router.push(res.data.code === 1003 ? "/login" : "/mypage/settings");
+      setAccessToken({ accessToken: "" });
     });
-  }, [code, router, setAccessToken]);
+  };
   return (
     <>
       <PageContainer>
