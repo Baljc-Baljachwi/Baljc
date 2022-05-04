@@ -13,6 +13,7 @@ import ButtonTogglePaymentMethod from "./ButtonTogglePaymentMethod";
 import ButtonBottom from "components/common/ButtonBottom";
 import ButtonTrashCan from "components/common/ButtonTrashCan";
 import { IAccountbook, PaymentMethodType } from "types";
+import { useRouter } from "next/router";
 
 const FormContainer = styled.div`
   display: flex;
@@ -153,6 +154,7 @@ function compareDate(
 }
 
 export default function FinanceForm({ type, initForm }: FinanceFormProps) {
+  const router = useRouter();
   const [financeForm, setFinanceForm] = useState<IAccountbookForm>(
     initForm ||
       ({
@@ -182,6 +184,9 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
       if (res.data.code === 1300) {
         console.log(res.data.data);
         setCategoryList(res.data.data);
+      } else {
+        console.log(res.data.message);
+        confirm("카테고리 조회 실패!");
       }
     });
     // 생성 페이지일 때만
@@ -260,6 +265,11 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
 
     postAccountbooks(params).then((res) => {
       console.log(res.data);
+      if (res.data.code === 1301) {
+        router.push("/finance");
+      } else {
+        confirm("가계부 생성 실패!");
+      }
     });
     console.log(params);
   }
@@ -277,6 +287,11 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
     };
     putAccountbooks(financeForm.accountbookId, params).then((res) => {
       console.log(res.data);
+      if (res.data.code === 1304) {
+        router.push("/finance");
+      } else {
+        confirm("가계부 수정 실패!");
+      }
     });
   }
 
@@ -287,6 +302,11 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
     }
     deleteAccountbooks(financeForm.accountbookId).then((res) => {
       console.log(res.data);
+      if (res.data.code === 1305) {
+        router.push("/finance");
+      } else {
+        confirm("가계부 삭제 실패!");
+      }
     });
   }
 
