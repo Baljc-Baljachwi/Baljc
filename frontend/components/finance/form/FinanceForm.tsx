@@ -58,6 +58,9 @@ const StyledInput = styled.input`
   ::placeholder {
     color: #cccccc;
   }
+  :invalid {
+    border: 3px solid red;
+  }
 `;
 
 const StyledLabel = styled.label`
@@ -314,7 +317,7 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
             type="number"
             placeholder="0"
             name="price"
-            value={financeForm.price}
+            value={financeForm.price || ""}
             onChange={handleInputChange}
           />
           <InputUnit hasValue={financeForm.price > 0}>원</InputUnit>
