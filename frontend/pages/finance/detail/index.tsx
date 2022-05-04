@@ -203,3 +203,5 @@ const FinanceDetail = ({
 };
 
 export default FinanceDetail;
+
+FinanceDetail.requireAuth = true;

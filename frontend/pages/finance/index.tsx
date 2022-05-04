@@ -157,3 +157,5 @@ export default function Finance(): JSX.Element {
     </>
   );
 }
+
+Finance.requireAuth = true;

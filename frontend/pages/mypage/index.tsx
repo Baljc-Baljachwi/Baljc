@@ -67,3 +67,5 @@ const MyPage = () => {
 };
 
 export default MyPage;
+
+MyPage.requireAuth = true;

@@ -58,3 +58,5 @@ export default function FinanceCreateForm() {
     </>
   );
 }
+
+FinanceCreateForm.requireAuth = true;
