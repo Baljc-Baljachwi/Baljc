@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
+import { useForm } from "react-hook-form";
 
 import {
   getCategories,
@@ -9,27 +10,33 @@ import {
   deleteAccountbooks,
 } from "api/accountbook";
 import Icon from "../../common/Icon";
-import ButtonTogglePaymentMethod from "./ButtonTogglePaymentMethod";
 import ButtonBottom from "components/common/ButtonBottom";
 import ButtonTrashCan from "components/common/ButtonTrashCan";
-import { IAccountbook, PaymentMethodType } from "types";
+import { IAccountbook } from "types";
+import { useRouter } from "next/router";
 
-const FormContainer = styled.div`
+const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   gap: 4rem;
   padding-bottom: 10rem;
 `;
 
-const InputContainer = styled.div`
+const InputDiv = styled.div<{ isError?: boolean }>`
   width: 100%;
-  border-bottom: 1px solid #cccccc;
-  margin: 1.6rem 0 0 0;
-  color: #cccccc;
+  border-bottom: ${(props) =>
+    props.isError ? "1px solid #ff0000" : "1px solid #cccccc"};
+  margin: ${(props) =>
+      props.isError ? "1.6rem 0 0 0" : "1.6rem 0 1.6rem 0"}1.6rem
+    0 0 0;
+  span {
+    color: ${(props) => (props.isError ? "#ff0000" : "#cccccc")};
+  }
   :focus-within {
-    border-bottom: 1px solid #3d3d3d;
+    border-bottom: ${(props) =>
+      props.isError ? "1px solid #ff0000" : "1px solid #3d3d3d"};
     span {
-      color: #3d3d3d;
+      color: ${(props) => (props.isError ? "#ff0000" : "#3d3d3d")};
     }
   }
   font-size: 2rem;
@@ -38,10 +45,9 @@ const InputContainer = styled.div`
 `;
 
 // 입력 Input 뒤에 단위 나타내는 텍스트
-const InputUnit = styled.span<{ hasValue: boolean }>`
+const InputUnit = styled.span`
   line-height: 2.8rem;
   word-break: keep-all;
-  color: ${(props) => (props.hasValue ? "#3d3d3d" : "#cccccc")};
 `;
 
 const StyledInput = styled.input`
@@ -58,9 +64,6 @@ const StyledInput = styled.input`
   ::placeholder {
     color: #cccccc;
   }
-  :invalid {
-    border: 3px solid red;
-  }
 `;
 
 const StyledLabel = styled.label`
@@ -70,6 +73,14 @@ const StyledLabel = styled.label`
   display: inline-block;
   margin-top: 1.6rem;
   cursor: pointer;
+`;
+
+const ErrorMessage = styled.p`
+  color: #ff0000;
+  font-size: 1.4rem;
+  text-align: end;
+  line-height: 1.6rem;
+  height: 1.6rem;
 `;
 
 const CheckboxContainer = styled.div`
@@ -82,7 +93,7 @@ const CheckboxContainer = styled.div`
   margin-bottom: 3rem;
 `;
 
-const StyledCheckBox = styled.input`
+const DisplayNoneInput = styled.input`
   display: none;
 `;
 
@@ -114,7 +125,7 @@ const CategoryButton = styled.div<{ isSelected?: boolean }>`
   height: 7.4rem;
 `;
 
-const CategoryImage = styled.div<{ isSelected?: boolean }>`
+const CategoryImage = styled.label<{ isSelected?: boolean }>`
   position: relative;
   width: ${(props) => (props.isSelected ? "4.8rem" : "4.4rem")};
   height: ${(props) => (props.isSelected ? "4.8rem" : "4.4rem")};
@@ -125,6 +136,26 @@ const CategoryImage = styled.div<{ isSelected?: boolean }>`
     font-size: ${(props) => (props.isSelected ? "1.4rem" : "1.2rem")};
     font-weight: ${(props) => (props.isSelected ? "500" : "400")};
   }
+`;
+
+const PaymentLabel = styled.label<{ isSelected: boolean }>`
+  background-color: ${(props) => (props.isSelected ? "#ffd469" : "#f5f6fa")};
+  color: ${(props) => (props.isSelected ? "#3d3d3d" : "#797979")};
+  width: 100%;
+  font-size: 1.4rem;
+  padding: 0.8rem 0;
+  font-weight: 700;
+  border: none;
+  border-radius: 0.5rem;
+  text-align: center;
+  cursor: pointer;
+`;
+
+const PaymentContainer = styled.div`
+  display: flex;
+  width: 23.5rem;
+  gap: 1rem;
+  padding: 2rem 0;
 `;
 
 interface IAccountbookForm extends IAccountbook {
@@ -143,38 +174,54 @@ interface Category {
   imgUrl: string;
 }
 
-function compareDate(
-  startDate: string | null,
-  endDate: string | null
-): boolean {
-  if (!startDate || !endDate) {
-    return false;
-  }
-  const start = new Date(startDate);
-  const end = new Date(endDate);
-  return start > end;
-}
-
 export default function FinanceForm({ type, initForm }: FinanceFormProps) {
-  const [financeForm, setFinanceForm] = useState<IAccountbookForm>(
-    initForm ||
-      ({
-        accountbookId: "",
-        type,
-        categoryId: "",
-        title: "",
-        price: 0,
-        memo: null,
-        paymentMethod: "N",
-        fixedExpenditureYn: "N",
-        fixedIncomeYn: "N",
-        monthlyPeriod: null,
-        startDate: null,
-        endDate: null,
-        date: null,
-        time: null,
-      } as IAccountbookForm)
-  );
+  const router = useRouter();
+  const {
+    register,
+    watch,
+    handleSubmit,
+    setValue,
+    getValues,
+    formState: { errors },
+  } = useForm({
+    mode: "all",
+    defaultValues: {
+      accountbookId: initForm?.accountbookId || "",
+      type,
+      categoryId: initForm?.categoryId || "",
+      title: initForm?.title || "",
+      price: initForm?.price.toString() || "",
+      memo: initForm?.memo || "",
+      paymentMethod: initForm?.paymentMethod || "N",
+      fixedExpenditureYn: initForm?.fixedExpenditureYn === "Y" || false,
+      fixedIncomeYn: initForm?.fixedIncomeYn === "Y" || false,
+      monthlyPeriod: initForm?.monthlyPeriod || "",
+      startDate: initForm?.startDate || "",
+      endDate: initForm?.endDate || "",
+      date: initForm?.date || "",
+      time: initForm?.time || "",
+    },
+  });
+
+  // const [financeForm, setFinanceForm] = useState<IAccountbookForm>(
+  //   initForm ||
+  //     ({
+  //       accountbookId: "",
+  //       type,
+  //       categoryId: "",
+  //       title: "",
+  //       price: 0,
+  //       memo: null,
+  //       paymentMethod: "N",
+  //       fixedExpenditureYn: "N",
+  //       fixedIncomeYn: "N",
+  //       monthlyPeriod: null,
+  //       startDate: null,
+  //       endDate: null,
+  //       date: null,
+  //       time: null,
+  //     } as IAccountbookForm)
+  // );
 
   const [categoryList, setCategoryList] = useState<Category[]>([]);
 
@@ -185,160 +232,134 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
       if (res.data.code === 1300) {
         console.log(res.data.data);
         setCategoryList(res.data.data);
+      } else {
+        console.log(res.data.message);
+        confirm("카테고리 조회 실패");
       }
     });
     // 생성 페이지일 때만
     if (!initForm) {
-      setFinanceForm((prev) => ({
-        ...prev,
-        type,
-        categoryId: "",
-        paymentMethod: "N",
-        fixedExpenditureYn: "N",
-        fixedIncomeYn: "N",
-      }));
+      setValue("categoryId", "");
+      setValue("paymentMethod", "N");
+      setValue("fixedExpenditureYn", false);
+      setValue("fixedIncomeYn", false);
+      setValue("startDate", "");
+      setValue("endDate", "");
     }
-  }, [type, initForm]);
+  }, [type, initForm, setValue]);
 
-  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const target = event.target;
-    const name = target.name;
-    const value = target.value;
-
-    // 시작날짜보다 끝날짜가 빠른 경우 대처
-    if (name === "startDate" && compareDate(value, financeForm.endDate || "")) {
-      setFinanceForm((prev) => ({
-        ...prev,
-        endDate: value,
-        [name]: value,
-      }));
-    } else if (name === "price") {
-      setFinanceForm((prev) => ({
-        ...prev,
-        [name]: +value,
-      }));
-    } else if (name === "monthlyPeriod") {
-      const newValue = Math.min(+value, 28);
-      setFinanceForm((prev) => ({
-        ...prev,
-        [name]: newValue,
-      }));
-    } else {
-      setFinanceForm((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
-  }
-
-  function handleCheckBoxChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const target = event.target;
-    const name = target.name;
-    const newData = target.checked
-      ? { date: null, time: null }
-      : { monthlyPeriod: null, startDate: null, endDate: null };
-
-    setFinanceForm((prev) => ({
-      ...prev,
-      [name]: target.checked ? "Y" : "N",
-      ...newData,
-    }));
-  }
-
-  function handleTogglePaymentMethod(value: PaymentMethodType) {
-    setFinanceForm((prev) => ({
-      ...prev,
-      paymentMethod: value,
-    }));
-  }
-
-  function onClickConfirmButton() {
+  function onSubmit(data: any) {
     console.log("Confirm!!");
+
+    const isFixed =
+      (type === "E" && data.fixedExpenditureYn) ||
+      (type === "I" && data.fixedIncomeYn);
+
     const params = {
-      ...financeForm,
-      startDate: financeForm.startDate ? financeForm.startDate + "-01" : null,
-      endDate: financeForm.endDate ? financeForm.endDate + "-28" : null,
+      ...data,
+      price: +data.price,
+      fixedExpenditureYn: data.fixedExpenditureYn ? "Y" : "N",
+      fixedIncomeYn: data.fixedIncomeYn ? "Y" : "N",
+
+      date: isFixed ? null : data.date,
+      time: isFixed ? null : data.time,
+      monthlyPeriod: isFixed ? +data.monthlyPeriod : null,
+      startDate: isFixed ? data.startDate + "-01" : null,
+      endDate: isFixed ? data.endDate + "-28" : null,
     };
     delete params.accountbookId;
 
-    postAccountbooks(params).then((res) => {
-      console.log(res.data);
-    });
-    console.log(params);
-  }
+    // 수정 페이지에서
+    if (initForm && initForm.accountbookId) {
+      putAccountbooks(initForm.accountbookId, params).then((res) => {
+        console.log(res.data);
+        if (res.data.code === 1304) {
+          router.push("/finance");
+        } else {
+          confirm("가계부 삭제 실패");
+        }
+      });
+      console.log(params);
 
-  function onClickEditButton() {
-    if (!financeForm.accountbookId) {
-      return;
+      // 추가 페이지에서
+    } else {
+      postAccountbooks(params).then((res) => {
+        console.log(res.data);
+        if (res.data.code === 1301) {
+          router.push("/finance");
+        } else {
+          confirm("가계부 생성 실패");
+        }
+      });
+      console.log(params);
     }
-    console.log("Edit!!");
-    console.log(financeForm);
-    const params = {
-      ...financeForm,
-      startDate: financeForm.startDate ? financeForm.startDate + "-01" : null,
-      endDate: financeForm.endDate ? financeForm.endDate + "-28" : null,
-    };
-    putAccountbooks(financeForm.accountbookId, params).then((res) => {
-      console.log(res.data);
-    });
   }
 
   function onClickDeleteButton() {
     console.log("Delete!");
-    if (!financeForm.accountbookId) {
+    if (!initForm || !initForm.accountbookId) {
       return;
     }
-    deleteAccountbooks(financeForm.accountbookId).then((res) => {
+
+    deleteAccountbooks(initForm.accountbookId).then((res) => {
       console.log(res.data);
+      if (res.data.code === 1305) {
+        router.push("/finance");
+      } else {
+        confirm("가계부 삭제 실패");
+      }
     });
   }
+  // console.log(watch());
 
-  function onClickCategoryButton(categoryId: string) {
-    console.log(categoryId);
-    setFinanceForm((prev) => ({ ...prev, categoryId }));
-  }
+  const fixedExpenditureTF = watch("fixedExpenditureYn");
+  const fixedIncomeTF = watch("fixedIncomeYn");
+  const categoryId = watch("categoryId");
+  const paymentMethod = watch("paymentMethod");
 
   return (
-    <FormContainer>
+    <FormContainer onSubmit={handleSubmit(onSubmit)}>
       <div>
         <StyledLabel>제목</StyledLabel>
-        <InputContainer>
+        <InputDiv isError={!!errors.title}>
           <StyledInput
-            name="title"
-            value={financeForm.title}
-            onChange={handleInputChange}
+            {...register("title", {
+              required: { value: true, message: "제목을 입력해주세요" },
+              maxLength: { value: 18, message: "1~18자로 입력해주세요" },
+            })}
           />
-        </InputContainer>
+        </InputDiv>
+        <ErrorMessage>{errors.title?.message}</ErrorMessage>
       </div>
+
       <div>
         <StyledLabel>금액</StyledLabel>
-        <InputContainer>
+        <InputDiv isError={!!errors.price}>
           <StyledInput
             type="number"
+            {...register("price", {
+              required: { value: true, message: "금액을 입력해주세요" },
+              min: { value: 0, message: "금액을 입력해주세요" },
+              max: { value: 2147483647, message: "너무 큰 금액입니다" },
+              pattern: { value: /[0-9]/, message: "숫자만 입력해주세요" },
+            })}
             placeholder="0"
-            name="price"
-            value={financeForm.price || ""}
-            onChange={handleInputChange}
           />
-          <InputUnit hasValue={financeForm.price > 0}>원</InputUnit>
-        </InputContainer>
+          <InputUnit>원</InputUnit>
+        </InputDiv>
+        <ErrorMessage>{errors.price?.message}</ErrorMessage>
 
         <CheckboxContainer>
-          <StyledCheckBox
+          <DisplayNoneInput
             type="checkbox"
+            {...register(type === "E" ? "fixedExpenditureYn" : "fixedIncomeYn")}
             id={type === "E" ? "fixedExpenditureYn" : "fixedIncomeYn"}
-            name={type === "E" ? "fixedExpenditureYn" : "fixedIncomeYn"}
-            checked={
-              (type === "E" && financeForm.fixedExpenditureYn === "Y") ||
-              (type === "I" && financeForm.fixedIncomeYn === "Y")
-            }
-            onChange={handleCheckBoxChange}
           />
           <CheckLabel
             htmlFor={type === "E" ? "fixedExpenditureYn" : "fixedIncomeYn"}
           >
-            {(type === "E" && financeForm.fixedExpenditureYn === "Y") ||
-            (type === "I" && financeForm.fixedIncomeYn === "Y") ? (
+            {(type === "E" && fixedExpenditureTF) ||
+            (type === "I" && fixedIncomeTF) ? (
               <Icon
                 mode="fas"
                 icon="square-check"
@@ -357,44 +378,56 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
         </CheckboxContainer>
       </div>
 
-      {(type === "E" && financeForm.fixedExpenditureYn === "Y") ||
-      (type === "I" && financeForm.fixedIncomeYn === "Y") ? (
+      {(type === "E" && getValues("fixedExpenditureYn")) ||
+      (type === "I" && getValues("fixedIncomeYn")) ? (
         <>
           {/* 고정 지출 또는 고정 수입일 때*/}
           <div>
             <StyledLabel>날짜</StyledLabel>
-            <InputContainer>
+            <InputDiv isError={!!errors.startDate || !!errors.endDate}>
               <StyledInput
                 type="month"
-                name="startDate"
-                value={financeForm.startDate || ""}
-                onChange={handleInputChange}
+                {...register("startDate", {
+                  required: { value: true, message: "종료일을 입력해주세요" },
+                })}
               />
-              <InputUnit hasValue={!!financeForm.startDate}>부터</InputUnit>
+              <InputUnit>부터</InputUnit>
               <StyledInput
                 type="month"
-                name="endDate"
-                value={financeForm.endDate || ""}
-                min={financeForm.startDate || ""}
-                onChange={handleInputChange}
+                {...register("endDate", {
+                  required: { value: true, message: "종료일을 입력해주세요" },
+                  min: {
+                    value: getValues("startDate"),
+                    message: "시작일보다 빠를 수 없습니다",
+                  },
+                })}
               />
-              <InputUnit hasValue={!!financeForm.endDate}>까지</InputUnit>
-            </InputContainer>
+              <InputUnit>까지</InputUnit>
+            </InputDiv>
           </div>
           <div>
-            <InputContainer>
-              <InputUnit hasValue={!!financeForm.monthlyPeriod}>매월</InputUnit>
+            <InputDiv isError={!!errors.monthlyPeriod}>
+              <InputUnit>매월</InputUnit>
               <StyledInput
                 type="number"
-                name="monthlyPeriod"
-                max={28}
-                value={Math.min(financeForm.monthlyPeriod || 0, 28) || ""}
-                onChange={handleInputChange}
+                {...register("monthlyPeriod", {
+                  required: {
+                    value: true,
+                    message: "주기를 입력해주세요",
+                  },
+                  min: {
+                    value: 1,
+                    message: "주기는 1일부터 28일까지만 가능합니다",
+                  },
+                  max: {
+                    value: 28,
+                    message: "주기는 1일부터 28일까지만 가능합니다",
+                  },
+                })}
               />
-              <InputUnit hasValue={!!financeForm.monthlyPeriod}>
-                일마다
-              </InputUnit>
-            </InputContainer>
+              <InputUnit>일마다</InputUnit>
+            </InputDiv>
+            <ErrorMessage>{errors.monthlyPeriod?.message}</ErrorMessage>
           </div>
         </>
       ) : (
@@ -402,25 +435,27 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
           {/* 고정 지출 또는 고정 수입 아닐 때*/}
           <div>
             <StyledLabel>날짜</StyledLabel>
-            <InputContainer>
+            <InputDiv isError={!!errors.date}>
               <StyledInput
                 type="date"
-                name="date"
-                value={financeForm.date || ""}
-                onChange={handleInputChange}
+                {...register("date", {
+                  required: { value: true, message: "날짜를 입력해주세요" },
+                })}
               />
-            </InputContainer>
+            </InputDiv>
+            <ErrorMessage>{errors.date?.message}</ErrorMessage>
           </div>
           <div>
             <StyledLabel>시각</StyledLabel>
-            <InputContainer>
+            <InputDiv isError={!!errors.time}>
               <StyledInput
                 type="time"
-                name="time"
-                value={financeForm.time || ""}
-                onChange={handleInputChange}
+                {...register("time", {
+                  required: { value: true, message: "시각을 입력해주세요" },
+                })}
               />
-            </InputContainer>
+            </InputDiv>
+            <ErrorMessage>{errors.time?.message}</ErrorMessage>
           </div>
         </>
       )}
@@ -430,10 +465,12 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
           {categoryList.map((category) => (
             <CategoryButton
               key={category.categoryId}
-              onClick={() => onClickCategoryButton(category.categoryId)}
+              // onClick={() => onClickCategoryButton(category.categoryId)}
             >
               <CategoryImage
-                isSelected={financeForm.categoryId === category.categoryId}
+                htmlFor={category.categoryId}
+                isSelected={categoryId === category.categoryId}
+                // isSelected={financeForm.categoryId === category.categoryId}
               >
                 <Image
                   src={category.imgUrl}
@@ -442,45 +479,75 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
                 />
               </CategoryImage>
               <span>{category.name}</span>
+              <DisplayNoneInput
+                {...register("categoryId", {
+                  required: { value: true, message: "카테고리를 선택해주세요" },
+                })}
+                type="radio"
+                value={category.categoryId}
+                id={category.categoryId}
+              />
             </CategoryButton>
           ))}
         </CategoryListContainer>
+        <ErrorMessage>{errors.categoryId?.message}</ErrorMessage>
       </div>
 
       {type === "E" && (
         <>
           <div>
             <StyledLabel>결제 수단</StyledLabel>
-            <ButtonTogglePaymentMethod
-              selectedPaymentMethod={financeForm.paymentMethod}
-              handleToggleButton={handleTogglePaymentMethod}
-            />
+            <PaymentContainer>
+              {[
+                { name: "카드", value: "C" },
+                { name: "현금", value: "M" },
+                { name: "없음", value: "N" },
+              ].map((obj) => (
+                <Fragment key={obj.value}>
+                  <PaymentLabel
+                    isSelected={paymentMethod === obj.value}
+                    htmlFor={obj.value}
+                  >
+                    {obj.name}
+                  </PaymentLabel>
+                  <DisplayNoneInput
+                    {...register("paymentMethod", {
+                      required: {
+                        value: true,
+                        message: "결제 수단을 선택해주세요",
+                      },
+                    })}
+                    type="radio"
+                    value={obj.value}
+                    id={obj.value}
+                  />
+                </Fragment>
+              ))}
+            </PaymentContainer>
           </div>
         </>
       )}
 
       <div>
         <StyledLabel>메모</StyledLabel>
-        <InputContainer>
+        <InputDiv isError={!!errors.memo}>
           <StyledInput
             type="text"
-            name="memo"
+            {...register("memo", {
+              maxLength: { value: 100, message: "100자를 넘을 수 없습니다" },
+            })}
             placeholder="메모 남기기"
-            value={financeForm.memo || ""}
-            onChange={handleInputChange}
           />
-        </InputContainer>
+        </InputDiv>
+        <ErrorMessage>{errors.memo?.message}</ErrorMessage>
       </div>
 
       {!initForm ? (
-        <ButtonBottom
-          label="확인"
-          onClick={onClickConfirmButton}
-        ></ButtonBottom>
+        <ButtonBottom label="확인" type="submit"></ButtonBottom>
       ) : (
         <ButtonContainer>
           <ButtonTrashCan onClick={onClickDeleteButton} />
-          <ButtonBottom label="수정" onClick={onClickEditButton} />
+          <ButtonBottom label="수정" type="submit" />
         </ButtonContainer>
       )}
     </FormContainer>
