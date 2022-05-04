@@ -92,7 +92,7 @@ public class MemberServiceImpl implements MemberService {
             pushAlarmRepository.save(PushAlarm.builder()
                     .member(member)
                     .accountAlarmYn('Y')
-                    .accountAlarmTime(LocalTime.parse("09:00:00"))
+                    .accountAlarmTime(LocalTime.parse("21:00:00"))
                     .todoAlarmYn('Y')
                     .todoAlarmTime(LocalTime.parse("09:00:00"))
                     .build());
