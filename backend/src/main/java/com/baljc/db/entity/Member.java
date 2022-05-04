@@ -26,6 +26,7 @@ public class Member {
     @Column(columnDefinition = "BINARY(16)")
     private UUID memberId;
     private String kakaoId;
+    private String fcmToken;
     private String email;
     private String nickname;
     private String profileUrl;
@@ -39,9 +40,10 @@ public class Member {
     private LocalDateTime createdAt;
 
     @Builder
-    public Member(String kakaoId, String email, String nickname, String profileUrl, Character salaryType,
+    public Member(String kakaoId, String fcmToken, String email, String nickname, String profileUrl, Character salaryType,
                   Integer salary, Integer workingHours, Integer budget, Character surveyedYn) {
         this.kakaoId = kakaoId;
+        this.fcmToken = fcmToken;
         this.email = email;
         this.nickname = nickname;
         this.profileUrl = profileUrl;
@@ -60,6 +62,18 @@ public class Member {
     List<Todo> todoList = new ArrayList<>();
     @OneToOne(mappedBy = "member")
     PushAlarm pushAlarm;
+    @OneToMany(mappedBy = "member")
+    List<Board> boardList = new ArrayList<>();
+    @OneToMany(mappedBy = "member")
+    List<Heart> heartList = new ArrayList<>();
+    @OneToMany(mappedBy = "member")
+    List<Scrap> scrapList = new ArrayList<>();
+    @OneToMany(mappedBy = "member")
+    List<Comment> commentList = new ArrayList<>();
+    @OneToMany(mappedBy = "member1")
+    List<Room> roomList1 = new ArrayList<>();
+    @OneToMany(mappedBy = "member2")
+    List<Room> roomList2 = new ArrayList<>();
 
     public void argsNullSetter() {
         this.kakaoId = null;
