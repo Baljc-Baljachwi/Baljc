@@ -92,6 +92,7 @@ public class AccountBookRepositorySupport {
                         qAccountBook.deletedYn.eq('N'),
                         qAccountBook.fixedExpenditureYn.eq('Y').or(qAccountBook.fixedIncomeYn.eq('Y'))
                 )
+                .orderBy(qAccountBook.monthlyPeriod.desc())
                 .fetch();
 
         return Optional.ofNullable(response);
@@ -145,6 +146,7 @@ public class AccountBookRepositorySupport {
                         qAccountBook.deletedYn.eq('N'),
                         qAccountBook.fixedExpenditureYn.eq('Y').or(qAccountBook.fixedIncomeYn.eq('Y'))
                 )
+                .orderBy(qAccountBook.monthlyPeriod.desc())
                 .fetch();
 
         return Optional.ofNullable(response);
