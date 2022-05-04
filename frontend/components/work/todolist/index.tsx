@@ -1,11 +1,12 @@
 import styled from "styled-components";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import TodoItem from "./TodoItem";
 import Image from "next/image";
 
 import { getTodos, postTodos } from "../../../api/todo";
 import { ITodo } from "../../../types";
+import { atom, useRecoilState } from "recoil";
 
 const TodoDiv = styled.div`
   width: 100%;
@@ -58,17 +59,16 @@ export default function Todo({ viewOnly, date }: TodoProps) {
     content: "",
   });
 
-  const getTodoList = () => {
+  const getTodoList = useCallback(() => {
     console.log(date);
     getTodos(date)
       .then((res) => {
-        console.log(res.data.data.todos);
-        setTodos(res.data.data.todos);
+        setTodos(res.data.data);
       })
       .catch((err) => {
         console.log(err);
       });
-  };
+  }, [date]);
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputForm((prev) => ({
@@ -103,7 +103,7 @@ export default function Todo({ viewOnly, date }: TodoProps) {
 
   useEffect(() => {
     getTodoList();
-  }, [date]);
+  }, [getTodoList]);
 
   return (
     <>

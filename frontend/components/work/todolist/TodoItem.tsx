@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import Icon from "../../common/Icon";
 import { ITodo } from "../../../types";
+import { completedTodo } from "../../../api/todo";
 
 const TodoListItem = styled.div`
   display: flex;
@@ -29,18 +30,30 @@ const IconDiv = styled.div<{ isClicked: boolean }>`
   gap: 1rem;
   display: ${(props) => (props.isClicked ? "flex" : "none")};
 `;
-// interface listProps {
-//   id: number;
-//   content: string;
-// }
 
 export default function TodoItem(props: { list: ITodo; viewOnly: boolean }) {
-  const [isCompleted, setIsCompleted] = useState(false);
+  const [isCompleted, setCompleted] = useState(false);
   const [todoClicked, setTodoClicked] = useState(false);
   const todoRef = useRef() as React.MutableRefObject<HTMLSpanElement>;
 
   const todoComplete = (e: any) => {
-    setIsCompleted((prev) => !prev);
+    // console.log("isCompleted : " + isCompleted);
+    if (!isCompleted) {
+      completedTodo(props.list.todoId, { completedYn: "Y" })
+        .then((res) => {
+          console.log(res.data.data);
+          setCompleted((prev) => !prev);
+        })
+        .catch((err) => console.log(err));
+    } else {
+      completedTodo(props.list.todoId, { completedYn: "N" })
+        .then((res) => {
+          console.log(res.data.data);
+          setCompleted((prev) => !prev);
+          // setCompleted(false);
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   function todoItemClick(e: any) {
@@ -52,11 +65,16 @@ export default function TodoItem(props: { list: ITodo; viewOnly: boolean }) {
   }
 
   useEffect(() => {
+    // console.log(props.list.completedYn);
+    if (props.list.completedYn === "Y") {
+      setCompleted(true);
+    } else setCompleted(false);
+
     window.addEventListener("mousedown", todoItemClick);
     return () => {
       window.removeEventListener("mousedown", todoItemClick);
     };
-  });
+  }, [props]);
 
   return (
     <>
