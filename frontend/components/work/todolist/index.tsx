@@ -17,7 +17,6 @@ const TodoInputDiv = styled.div`
   display: flex;
   align-items: center;
   gap: 1.6rem;
-  margin: 0.5rem 0;
 `;
 
 const InputDiv = styled.div`
