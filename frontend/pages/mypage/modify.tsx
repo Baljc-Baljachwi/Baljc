@@ -324,3 +324,5 @@ export default function ProfileModify() {
     </>
   );
 }
+
+ProfileModify.requireAuth = true;

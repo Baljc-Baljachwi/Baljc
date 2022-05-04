@@ -5,3 +5,5 @@ export default function Community() {
     </div>
   );
 }
+
+Community.requireAuth = true;

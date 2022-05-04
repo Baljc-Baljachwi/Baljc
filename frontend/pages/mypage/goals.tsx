@@ -189,3 +189,5 @@ const goals = () => {
 };
 
 export default goals;
+
+goals.requireAuth = true;
