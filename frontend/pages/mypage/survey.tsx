@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useRouter } from "next/router";
 
 import Header from "../../components/common/Header";
 import ButtonBottom from "../../components/common/ButtonBottom";
@@ -94,6 +95,7 @@ interface SurveyInputForm {
 }
 
 export default function Survey() {
+  const router = useRouter();
   const [surveyForm, setSurveyForm] = useState<SurveyInputForm>({
     nickname: "",
     salaryType: "M",
@@ -170,6 +172,11 @@ export default function Survey() {
     putMembers(data).then((res) => {
       console.log(res);
       console.log(res.data);
+      if (res.data.code === 1002) {
+        router.push("/calendar");
+      } else {
+        confirm("설문조사 생성 실패!");
+      }
     });
   }
 

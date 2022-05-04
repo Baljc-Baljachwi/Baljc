@@ -35,6 +35,7 @@ export default function FinanceList({ item }: FinanceListProps) {
                     ? true
                     : false
                 }
+                accountbookId={data.accountbookId}
                 type={data.type}
                 title={data.title}
                 price={data.price}

@@ -92,6 +92,7 @@ const FinanceDetail = ({
           setFinanceDetailInfo(res.data.data);
         } else {
           console.log(res.data.message);
+          confirm("가계부 상세 조회 실패!");
         }
       });
     }
