@@ -5,6 +5,7 @@ import Header from "../../components/common/Header";
 import ButtonBottom from "../../components/common/ButtonBottom";
 import ButtonToggleSalaryType from "../../components/mypage/survey/ButtonToggleSalaryType";
 import { getMemberInfo, putMembers } from "api/member";
+import { useRouter } from "next/router";
 
 const PageContainer = styled.main`
   padding: 0 2rem 6rem 2rem;
@@ -111,6 +112,7 @@ interface SurveyInputForm {
 }
 
 export default function ProfileModify() {
+  const router = useRouter();
   const [surveyForm, setSurveyForm] = useState<SurveyInputForm>({
     nickname: "",
     salaryType: "M",
@@ -146,6 +148,7 @@ export default function ProfileModify() {
         setImagePreview(profileUrl);
       } else {
         console.log(res.data.message);
+        confirm("회원정보 조회 실패!");
       }
     });
   }, []);
@@ -231,6 +234,11 @@ export default function ProfileModify() {
     putMembers(data).then((res) => {
       console.log(res);
       console.log(res.data);
+      if (res.data.code === 1002) {
+        router.push("/mypage");
+      } else {
+        confirm("회원정보 수정 실패!");
+      }
     });
   }
 

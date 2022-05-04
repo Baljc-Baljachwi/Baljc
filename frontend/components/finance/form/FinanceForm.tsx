@@ -203,26 +203,6 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
     },
   });
 
-  // const [financeForm, setFinanceForm] = useState<IAccountbookForm>(
-  //   initForm ||
-  //     ({
-  //       accountbookId: "",
-  //       type,
-  //       categoryId: "",
-  //       title: "",
-  //       price: 0,
-  //       memo: null,
-  //       paymentMethod: "N",
-  //       fixedExpenditureYn: "N",
-  //       fixedIncomeYn: "N",
-  //       monthlyPeriod: null,
-  //       startDate: null,
-  //       endDate: null,
-  //       date: null,
-  //       time: null,
-  //     } as IAccountbookForm)
-  // );
-
   const [categoryList, setCategoryList] = useState<Category[]>([]);
 
   useEffect(() => {
@@ -234,7 +214,7 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
         setCategoryList(res.data.data);
       } else {
         console.log(res.data.message);
-        confirm("카테고리 조회 실패");
+        confirm("카테고리 조회 실패!");
       }
     });
     // 생성 페이지일 때만
@@ -306,7 +286,7 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
       if (res.data.code === 1305) {
         router.push("/finance");
       } else {
-        confirm("가계부 삭제 실패");
+        confirm("가계부 삭제 실패!");
       }
     });
   }
