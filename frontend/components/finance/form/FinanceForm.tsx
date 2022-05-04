@@ -203,7 +203,7 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
     const value = target.value;
 
     // 시작날짜보다 끝날짜가 빠른 경우 대처
-    if (name === "startDate" && compareDate(value, financeForm.endDate)) {
+    if (name === "startDate" && compareDate(value, financeForm.endDate || "")) {
       setFinanceForm((prev) => ({
         ...prev,
         endDate: value,
