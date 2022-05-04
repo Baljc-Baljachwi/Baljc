@@ -69,6 +69,9 @@ const StyledInput = styled.input`
   ::placeholder {
     color: #cccccc;
   }
+  :invalid {
+    border: 3px solid red;
+  }
 `;
 
 const StyledLabel = styled.label`
@@ -213,6 +216,7 @@ export default function Survey() {
             handleToggleButton={handleToggleButton}
           />
         </ButtonToggleContainer>
+        {+surveyForm.salary}
         {surveyForm?.salaryType !== "N" && (
           <>
             <InputContainer>
@@ -220,7 +224,7 @@ export default function Survey() {
                 name="salary"
                 type="number"
                 placeholder="0"
-                value={surveyForm.salary || ""}
+                value={+surveyForm.salary || ""}
                 onChange={handleInputChange}
               />
               <InputUnit hasValue={surveyForm.salary > 0}>원</InputUnit>
@@ -234,7 +238,7 @@ export default function Survey() {
                 name="workingHours"
                 type="number"
                 placeholder="0"
-                value={surveyForm.workingHours || ""}
+                value={+surveyForm.workingHours || ""}
                 onChange={handleInputChange}
               />
               <InputUnit hasValue={surveyForm.workingHours > 0}>시간</InputUnit>
@@ -248,7 +252,7 @@ export default function Survey() {
             name="budget"
             type="number"
             placeholder="0"
-            value={surveyForm.budget || 0}
+            value={+surveyForm.budget || ""}
             onChange={handleInputChange}
           />
           <InputUnit hasValue={surveyForm.budget > 0}>원</InputUnit>

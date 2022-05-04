@@ -19,9 +19,18 @@ const StyledButton = styled.button`
 
 interface ButtonBottomProps {
   label: string;
+  type?: "button" | "submit" | "reset";
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-export default function ButtonBottom({ label, onClick }: ButtonBottomProps) {
-  return <StyledButton onClick={onClick}>{label}</StyledButton>;
+export default function ButtonBottom({
+  label,
+  type,
+  onClick,
+}: ButtonBottomProps) {
+  return (
+    <StyledButton onClick={onClick} type={type}>
+      {label}
+    </StyledButton>
+  );
 }
