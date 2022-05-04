@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -34,6 +35,8 @@ public class Member {
     private Integer budget;
     private Character surveyedYn;
     private LocalDateTime deletedAt;
+    @CreatedDate
+    private LocalDateTime createdAt;
 
     @Builder
     public Member(String kakaoId, String email, String nickname, String profileUrl, Character salaryType,
@@ -68,6 +71,7 @@ public class Member {
         this.workingHours = null;
         this.budget = null;
         this.surveyedYn = null;
+        this.createdAt = null;
         this.deletedAt = LocalDateTime.now();
     }
 

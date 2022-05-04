@@ -24,6 +24,7 @@ export default function FinanceList({ item }: any) {
         {item?.map((data: any, idx: string) => (
           <FinanceCard
             key={idx}
+            accountbookId={data.accountbookId}
             isFixed={
               data.fixedExpenditureYn === "Y" || data.fixedIncomeYn === "Y"
                 ? true

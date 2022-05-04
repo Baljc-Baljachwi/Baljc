@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { IRoutine } from "types";
 
 import Icon from "../../common/Icon";
 
@@ -23,7 +24,7 @@ const RoutineList = styled.div`
   color: #ffffff;
 `;
 
-const RoutineListItem = styled.div`
+const RoutineListItem = styled.li`
   display: flex;
   align-items: center;
   margin-top: 0.2rem;
@@ -31,25 +32,14 @@ const RoutineListItem = styled.div`
   font-size: 1.6rem;
 `;
 
-export default function RoutineBoard() {
-  // API 연동 전
-  const routine = [
-    {
-      id: 1,
-      content: "분리수거",
-    },
-    {
-      id: 2,
-      content: "헬스장",
-    },
-  ];
+export default function RoutineBoard({ routines }: any) {
   return (
     <Container>
       <Title>일과</Title>
       <RoutineList>
         <ul>
-          {routine.map((item) => (
-            <RoutineListItem key={item.id}>
+          {routines?.map((routine: IRoutine) => (
+            <RoutineListItem key={routine.routineId}>
               <Icon
                 mode="fas"
                 icon="circle"
@@ -57,7 +47,7 @@ export default function RoutineBoard() {
                 size="1rem"
                 display="flex"
               />
-              {item.content}
+              {routine.title}
             </RoutineListItem>
           ))}
         </ul>

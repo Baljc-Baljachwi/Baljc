@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -18,12 +19,10 @@ import java.util.stream.Collectors;
 public class TodoServiceImpl implements TodoService {
 
     private final MemberService memberService;
-    private final RoutineService routineService;
     private final TodoRepository todoRepository;
 
-    public TodoServiceImpl(MemberService memberService, RoutineService routineService, TodoRepository todoRepository) {
+    public TodoServiceImpl(MemberService memberService, TodoRepository todoRepository) {
         this.memberService = memberService;
-        this.routineService = routineService;
         this.todoRepository = todoRepository;
     }
 
@@ -49,6 +48,7 @@ public class TodoServiceImpl implements TodoService {
                 .getTodoList()
                 .stream()
                 .filter(todo -> todo.getDeletedYn() == 'N' && todo.getDate().equals(date))
+                .sorted(Comparator.comparing(Todo::getCreatedAt))
                 .map(todo -> new TodoDto.Response(todo.getTodoId(), todo.getDate(),
                         todo.getContent(), todo.getCompletedYn()))
                 .collect(Collectors.toList());
