@@ -12,11 +12,6 @@ const PageContainer = styled.main`
   width: 100%;
 `;
 
-const Day = styled.div`
-  font-size: 1.5rem;
-  padding-top: 1.5rem;
-`;
-
 export default function FinanceList({ item }: any) {
   return (
     <>
