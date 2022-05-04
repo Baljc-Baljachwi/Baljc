@@ -6,7 +6,7 @@ import ToggleButton from "components/mypage/settings/ToggleButton";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { getAlarms, putAlarms } from "../../../api/alarm";
-import { IAlarm, YNType, IUpdateAlarm } from "../../../types";
+import { YNType } from "../../../types";
 import ButtonBottom from "components/common/ButtonBottom";
 
 const Container = styled.div`
