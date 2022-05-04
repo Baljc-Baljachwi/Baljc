@@ -7,6 +7,7 @@ import Image from "next/image";
 import { getTodos, postTodos } from "../../../api/todo";
 import { ITodo } from "../../../types";
 import { atom, useRecoilState } from "recoil";
+import { todosState, ITodoTypes } from "../../../atoms/atoms";
 
 const TodoDiv = styled.div`
   width: 100%;
@@ -52,7 +53,9 @@ interface TodoForm {
 }
 
 export default function Todo({ viewOnly, date }: TodoProps) {
-  const [todos, setTodos] = useState<ITodo[]>([]);
+  const [todos, setTodos] = useRecoilState<ITodoTypes[]>(todosState);
+
+  // const [todos, setTodos] = useState<ITodo[]>([]);
   const [inputForm, setInputForm] = useState<TodoForm>({
     date: date,
     content: "",
@@ -62,12 +65,13 @@ export default function Todo({ viewOnly, date }: TodoProps) {
     console.log(date);
     getTodos(date)
       .then((res) => {
+        console.log(res.data.data);
         setTodos(res.data.data);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [date]);
+  }, [date, setTodos]);
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputForm((prev) => ({
@@ -108,10 +112,22 @@ export default function Todo({ viewOnly, date }: TodoProps) {
     <>
       <TodoDiv>
         <>
-          {todos.length !== 0 ? (
-            todos.map((list, index) => (
-              <TodoItem key={index} list={list} viewOnly={viewOnly} />
-            ))
+          {todos.length > 0 ? (
+            todos.map((todo, index) => {
+              const { todoId, date, content, completedYn } = todo;
+              return (
+                <TodoItem
+                  key={todoId}
+                  todoId={todoId}
+                  date={date}
+                  content={content}
+                  completedYn={completedYn}
+                  viewOnly={viewOnly}
+                  todos={todos}
+                  setTodos={setTodos}
+                ></TodoItem>
+              );
+            })
           ) : (
             // <TodoNone>todo list를 채워주세요 !</TodoNone>
             <></>

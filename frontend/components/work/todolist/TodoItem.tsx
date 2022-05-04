@@ -1,16 +1,12 @@
 import Image from "next/image";
-import React, {
-  RefObject,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { RefObject, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 import Icon from "../../common/Icon";
 import { ITodo } from "../../../types";
 import { completedTodos, editTodos, deleteTodos } from "../../../api/todo";
+import { ITodoTypes, todosState } from "../../../atoms/atoms";
+import { SetterOrUpdater } from "recoil";
 
 const TodoListItem = styled.div`
   display: flex;
@@ -54,7 +50,26 @@ interface contentState {
   content: string;
 }
 
-export default function TodoItem(props: { list: ITodo; viewOnly: boolean }) {
+interface PropTypes {
+  todoId: string;
+  date: string;
+  content: string;
+  completedYn: string;
+  viewOnly: boolean;
+
+  todos: ITodoTypes[];
+  setTodos: SetterOrUpdater<ITodoTypes[]>;
+}
+
+export default function TodoItem({
+  todoId,
+  date,
+  content,
+  completedYn,
+  viewOnly,
+  todos,
+  setTodos,
+}: PropTypes) {
   const [isCompleted, setCompleted] = useState(false);
   const [todoClicked, setTodoClicked] = useState(false); // 수정 삭제 아이콘을 위한
   const [isClicked, setClicked] = useState(true); // todo 클릭 시, readOnly 변경 위한
@@ -65,14 +80,22 @@ export default function TodoItem(props: { list: ITodo; viewOnly: boolean }) {
   const todoComplete = (e: any) => {
     // console.log("isCompleted : " + isCompleted);
     if (!isCompleted) {
-      completedTodos(props.list.todoId, { completedYn: "Y" })
+      completedTodos(todoId, { completedYn: "Y" })
         .then((res) => {
           console.log(res.data.data);
+          // 객체 업데이트
+          // setTodos(
+          //   todos.map((todo: ITodoTypes) => {
+          //     return todo.todoId === todoId
+          //       ? { ...todo, completedYn: "Y" }
+          //       : todo;
+          //   })
+          // );
           setCompleted((prev) => !prev);
         })
         .catch((err) => console.log(err));
     } else {
-      completedTodos(props.list.todoId, { completedYn: "N" })
+      completedTodos(todoId, { completedYn: "N" })
         .then((res) => {
           console.log(res.data.data);
           setCompleted((prev) => !prev);
@@ -82,20 +105,17 @@ export default function TodoItem(props: { list: ITodo; viewOnly: boolean }) {
     }
   };
 
-  const todoItemClick = (e: any) => {
+  function todoItemClick(e: any) {
     if (todoRef && !todoRef.current.contains(e.target)) {
       // console.log(11, todoRef);
       setTodoClicked(false);
       setClicked(true);
     } else {
-      // console.log(todoRef.current.contains(e.target));
-      // console.log(e.target.id); // todoId
-      // console.log(content);
       setTodoClicked(true);
       setClicked(false);
       console.log(contentForm.content);
     }
-  };
+  }
 
   // React.KeyboardEvent
   const onEnter = (e: any) => {
@@ -122,23 +142,24 @@ export default function TodoItem(props: { list: ITodo; viewOnly: boolean }) {
 
   const editTodo = () => {
     console.log(todoClicked);
-    console.log(props.list.content, "변경하자");
+    console.log(content, "변경하자");
     // 수정 중에 다른 곳으로 이동하면 ?
   };
 
   const deleteTodo = () => {
-    console.log(props.list.content);
-    deleteTodos(props.list.todoId)
+    console.log(content);
+    deleteTodos(todoId)
       .then((res) => {
         console.log(res);
+        setTodos(todos.filter((todo: ITodoTypes) => todo.todoId !== todoId));
       })
       .catch((err) => console.log(err));
   };
 
   useEffect(() => {
-    setContentForm({ content: props.list.content });
+    setContentForm({ content: content });
 
-    if (props.list.completedYn === "Y") {
+    if (completedYn === "Y") {
       setCompleted(true);
     } else setCompleted(false);
 
@@ -169,13 +190,9 @@ export default function TodoItem(props: { list: ITodo; viewOnly: boolean }) {
           />
         )}
         <TodoItemDiv>
-          <TodoText
-            isCompleted={isCompleted}
-            viewOnly={props.viewOnly}
-            ref={todoRef}
-          >
+          <TodoText isCompleted={isCompleted} viewOnly={viewOnly} ref={todoRef}>
             <TodoInput
-              id={props.list.todoId}
+              id={todoId}
               value={contentForm.content}
               onChange={onInputChange}
               isClicked={todoClicked}
