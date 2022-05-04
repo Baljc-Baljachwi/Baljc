@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -43,6 +44,7 @@ public class RoutineServiceImpl implements RoutineService {
                 .getRoutineList()
                 .stream()
                 .filter(routine -> routine.getDeletedYn() == 'N')
+                .sorted(Comparator.comparing(Routine::getCreatedAt))
                 .map(routine -> new RoutineDto.Response(routine.getRoutineId(),
                         routine.getTitle(), routine.getRepetition()))
                 .collect(Collectors.toList());
@@ -54,6 +56,7 @@ public class RoutineServiceImpl implements RoutineService {
                 .getRoutineList()
                 .stream()
                 .filter(routine -> routine.getDeletedYn() == 'N' && (routine.getRepetition() & repetition) != 0)
+                .sorted(Comparator.comparing(Routine::getCreatedAt))
                 .map(routine -> new RoutineDto.Response(routine.getRoutineId(),
                         routine.getTitle(), routine.getRepetition()))
                 .collect(Collectors.toList());
