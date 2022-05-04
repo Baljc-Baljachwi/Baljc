@@ -7,3 +7,4 @@ export default function RoutineHome() {
     </>
   );
 }
+RoutineHome.requireAuth = true;

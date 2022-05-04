@@ -7,3 +7,5 @@ export default function Calendar() {
     </>
   );
 }
+
+Calendar.requireAuth = true;

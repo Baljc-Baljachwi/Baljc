@@ -7,7 +7,7 @@ import ToggleButton from "components/mypage/settings/ToggleButton";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { accessTokenState } from "states";
-import { getAlarms } from "../../../api/alarm";
+import { getAlarms, putAlarms } from "../../../api/alarm";
 import { IAlarm, YNType } from "../../../types";
 
 const Container = styled.div`
@@ -130,10 +130,12 @@ const Alarm = () => {
   const router = useRouter();
 
   const [alarms, setAlarms] = useState<IAlarm>();
-  const [accountAlarm, setAccountAlarm] = useState();
+  const [accountAlarm, setAccountAlarm] = useState<YNType>("Y");
   const [accountAlarmTime, setAccountAlarmTime] = useState("오후 9시");
-  const [todoAlarm, setTodoAlarm] = useState();
+  const [todoAlarm, setTodoAlarm] = useState<YNType>("Y");
   const [todoAlarmTime, setTodoAlarmTime] = useState("오전 9시");
+  const [toggleAccountAlarm, setToggleAccountAlarm] = useState(true);
+  const [toggleTodoAlarm, setToggleTodoAlarm] = useState(true);
   //   const UserInfo = useRecoilValue(userInfoState);
 
   // setAlarms 각 항목 settting
@@ -170,7 +172,7 @@ const Alarm = () => {
         console.log(res.data.message);
       }
     });
-  }, [setAccountAlarm]);
+  }, [accountAlarm]);
 
   // setAccountAlarmTime
   useEffect(() => {
@@ -190,7 +192,7 @@ const Alarm = () => {
         console.log(res.data.message);
       }
     });
-  }, [setAccountAlarmTime]);
+  }, [accountAlarmTime]);
 
   // setTodoAlarm
   useEffect(() => {
@@ -206,7 +208,7 @@ const Alarm = () => {
         console.log(res.data.message);
       }
     });
-  }, [setTodoAlarm]);
+  }, [todoAlarm]);
 
   // setTodoAlarmTime
   useEffect(() => {
@@ -224,7 +226,33 @@ const Alarm = () => {
         console.log(res.data.message);
       }
     });
-  }, [setTodoAlarmTime]);
+  }, [todoAlarmTime]);
+
+  //알람 변경 API
+  // useEffect(() => {
+  //   putAlarms(params).then((res) => {
+  //     console.log(res.data);
+  //     if (res.data.code === 1200) {
+  //       console.log("1200도 넘어왔음!");
+  //       console.log(res.data.data);
+  //       // setAlarms(res.data.data);
+  //       // setAccountAlarm(res.data.data.accountAlarmYn);
+  //       // setAccountAlarmTime(res.data.data.accountAlarmTime);
+  //       // setTodoAlarm(res.data.data.todoAlarmYn);
+  //       // setTodoAlarmTime(res.data.data.todoAlarmTime);
+  //     } else {
+  //       console.log(res.data.message);
+  //     }
+  //   });
+  // }, []);
+
+  const onClickAccountAlarm = () => {
+    setAccountAlarm((prev) => (prev === "Y" ? "N" : "Y"));
+  };
+
+  const onClickTodoAlarm = () => {
+    setTodoAlarm((prev) => (prev === "Y" ? "N" : "Y"));
+  };
 
   return (
     <>
@@ -245,7 +273,10 @@ const Alarm = () => {
                 <div className="right-content">
                   <span>{accountAlarmTime} == 오후 9:00</span>
                   {accountAlarm}
-                  <ToggleButton />
+                  <ToggleButton
+                    isOn={accountAlarm}
+                    onClick={onClickAccountAlarm}
+                  />
                 </div>
               </SettingAlarmItem>
               <SettingAlarmItem>
@@ -253,7 +284,7 @@ const Alarm = () => {
                 <div className="right-content">
                   <span>{todoAlarmTime} == 오전 9:00</span>
                   {todoAlarm}
-                  <ToggleButton />
+                  <ToggleButton isOn={todoAlarm} onClick={onClickTodoAlarm} />
                 </div>
               </SettingAlarmItem>
             </SettingAlarmItemList>

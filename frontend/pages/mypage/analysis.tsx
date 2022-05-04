@@ -276,3 +276,5 @@ const data1 = {
     },
   ],
 };
+
+analysis.requireAuth = true;
