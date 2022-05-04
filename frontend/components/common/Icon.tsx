@@ -16,6 +16,7 @@ interface IconProps {
   color?: string;
   size?: string;
   display?: string;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const StyledIcon = styled.span<{
@@ -30,13 +31,20 @@ const StyledIcon = styled.span<{
   }
 `;
 
-export default function Icon({ mode, icon, color, size, display }: IconProps) {
+export default function Icon({
+  mode,
+  icon,
+  color,
+  size,
+  display,
+  onClick,
+}: IconProps) {
   library.add(fas, far);
   const iconLookup: IconLookup = { prefix: mode, iconName: icon };
   const iconDefinition: IconDefinition = findIconDefinition(iconLookup);
 
   return (
-    <StyledIcon color={color} size={size} display={display}>
+    <StyledIcon color={color} size={size} display={display} onClick={onClick}>
       <FontAwesomeIcon icon={iconDefinition} />
     </StyledIcon>
   );
