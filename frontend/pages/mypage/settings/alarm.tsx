@@ -63,6 +63,7 @@ const SettingAlarmItemList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  margin-bottom: 1rem;
 `;
 
 const SettingAlarmItem = styled.div`
@@ -153,7 +154,6 @@ const Alarm = () => {
                 <span>가계부</span>
                 <div className="right-content">
                   <span>{accountAlarmTime}</span>
-                  {accountAlarmYN}
                   <ToggleButton
                     isOn={accountAlarmYN}
                     onClick={onClickaccountAlarmYN}
@@ -164,15 +164,14 @@ const Alarm = () => {
                 <span>할 일</span>
                 <div className="right-content">
                   <span>{todoAlarmTime}</span>
-                  {todoAlarmYN}
                   <ToggleButton
                     isOn={todoAlarmYN}
                     onClick={onClicktodoAlarmYN}
                   />
                 </div>
               </SettingAlarmItem>
-              <ButtonBottom label="저장" onClick={onClickSaveButton} />
             </SettingAlarmItemList>
+            <ButtonBottom label="저장" onClick={onClickSaveButton} />
           </ProfileContentListContainer>
         </PageContainer>
       </Container>
