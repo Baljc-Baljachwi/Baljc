@@ -6,7 +6,7 @@ import ToggleButton from "components/mypage/settings/ToggleButton";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { getAlarms, putAlarms } from "../../../api/alarm";
-import { IAlarm, YNType, IUpdateAlarm } from "../../../types";
+import { YNType } from "../../../types";
 import ButtonBottom from "components/common/ButtonBottom";
 
 const Container = styled.div`
@@ -153,7 +153,6 @@ const Alarm = () => {
                 <span>가계부</span>
                 <div className="right-content">
                   <span>{accountAlarmTime}</span>
-                  {accountAlarmYN}
                   <ToggleButton
                     isOn={accountAlarmYN}
                     onClick={onClickaccountAlarmYN}
@@ -164,7 +163,6 @@ const Alarm = () => {
                 <span>할 일</span>
                 <div className="right-content">
                   <span>{todoAlarmTime}</span>
-                  {todoAlarmYN}
                   <ToggleButton
                     isOn={todoAlarmYN}
                     onClick={onClicktodoAlarmYN}
