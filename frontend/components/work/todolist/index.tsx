@@ -16,7 +16,7 @@ const TodoDiv = styled.div`
 const TodoInputDiv = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.6rem;
   margin: 0.5rem 0;
 `;
 
@@ -27,7 +27,7 @@ const InputDiv = styled.div`
 const TodoInput = styled.input`
   width: 100%;
   font-family: "Noto Sans KR";
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   color: #3d3d3d;
   border: none;
   border-bottom: 1px solid #cccccc;
@@ -123,8 +123,8 @@ export default function Todo({ viewOnly, date }: TodoProps) {
             <Image
               src="/assets/img/foot_false.png"
               alt=""
-              width={25}
-              height={25}
+              width={30}
+              height={30}
             />
             <InputDiv>
               <TodoInput
