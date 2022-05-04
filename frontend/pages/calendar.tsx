@@ -12,3 +12,5 @@ export default function Calendar() {
     </Container>
   );
 }
+
+Calendar.requireAuth = true;

@@ -70,3 +70,5 @@ export default function FinanceEditForm({ accountbook }: FinanceEditFormProps) {
     </>
   );
 }
+
+FinanceEditForm.requireAuth = true;
