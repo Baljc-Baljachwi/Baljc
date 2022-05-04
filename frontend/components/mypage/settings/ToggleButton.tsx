@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { YNType } from "types";
 
 const ToggleButtonContainer = styled.div`
   width: 4rem;
@@ -27,17 +28,20 @@ const ToggleButtonCircle = styled.div<{ isOn: boolean }>`
   left: ${(props) => (props.isOn ? "calc(100% - 2.4rem)" : "0")};
   transition: linear 0.03s;
 `;
+interface IToggleProps {
+  isOn: YNType;
+  onClick?: () => void;
+}
+export default function ToggleButton({ isOn, onClick }: IToggleProps) {
+  // const [isOn, setIsOn] = useState<boolean>(false);
 
-export default function ToggleButton() {
-  const [isOn, setIsOn] = useState<boolean>(false);
-
-  function handleToggleButton(event: any) {
-    setIsOn((prev) => !prev);
-  }
+  // function handleToggleButton(event: any) {
+  //   setIsOn((prev) => !prev);
+  // }
   return (
-    <ToggleButtonContainer onClick={handleToggleButton}>
-      <ToggleButtonBackGround isOn={isOn} />
-      <ToggleButtonCircle isOn={isOn} />
+    <ToggleButtonContainer onClick={onClick}>
+      <ToggleButtonBackGround isOn={isOn === "Y"} />
+      <ToggleButtonCircle isOn={isOn === "Y"} />
     </ToggleButtonContainer>
   );
 }
