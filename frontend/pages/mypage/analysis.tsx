@@ -1,16 +1,18 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-
-import Image from "next/image";
+import styles from "../../styles/Home.module.css";
 
 import Header from "components/common/Header";
 import ProfileCard from "components/mypage/ProfileCard";
-import { Line } from "react-chartjs-2";
-import { Doughnut } from "react-chartjs-2";
+// import { Line } from "react-chartjs-2";
+// import { Doughnut } from "react-chartjs-2";
 // import Chart from "chart.js/auto";
 // import { CategoryScale } from "chart.js";
 // Chart.register(CategoryScale);
-import styles from "../../styles/Home.module.css";
+
+import { getBudget } from "../../api/mypage";
+import { useResetRecoilState } from "recoil";
+import { budgetsState, IBudgetTypes } from "atoms/atoms";
 
 const Container = styled.div`
   height: 100vh;
@@ -66,7 +68,7 @@ const ProfileMenuCardItem = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: #f4f4f4;
+  background-color: #ffffff;
 
   width: 100%;
   /* width: 32rem; */
@@ -108,9 +110,14 @@ const ProfileMenuCardDetail = styled.span`
   font-size: 1rem;
   font-weight: 400;
 `;
+
 const DivisionLine = styled.hr`
-  border-top: 2px solid lightgray;
+  border-top: 2px solid lightslategray;
+  /* border-color: #f6f6f6; */
 `;
+
+const ContentsDiv = styled.div``;
+
 const GoalsItemList = styled.div`
   display: flex;
   flex-direction: column;
@@ -147,7 +154,28 @@ interface ProfileMenuContentProps {
   description: string;
 }
 
-const analysis = () => {
+interface IBudgetProps {
+  date: string;
+}
+
+const analysis = ({ date }: IBudgetProps) => {
+  // const [budgets, setBudgets] = useResetRecoilState<IBudgetTypes[]>{budgetsState}
+  // const [budgets, setBudgets] = useState<number>(0);
+  // useEffect(() => {
+  //   getBudget(date)
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       console.log("알림 조회 성공! 🤸‍♀️🔥");
+  //       setaccountAlarmYN(res.data.data.accountAlarmYn);
+  //       setAccountAlarmTime(res.data.data.accountAlarmTime);
+  //       settodoAlarmYN(res.data.data.todoAlarmYn);
+  //       setTodoAlarmTime(res.data.data.todoAlarmTime);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err.response);
+  //       console.log("😥🙀 알림 조회 실팩ㄱ");
+  //     });
+  // }, []);
   return (
     <>
       <Container>
@@ -159,16 +187,27 @@ const analysis = () => {
           <ProfileContentListContainer>
             <ProfileMenuCardItem>
               <ProfileMenuCardContent>
-                <ProfileMenuCardTitle>지출 분석</ProfileMenuCardTitle>
+                <ProfileMenuCardTitle>목표를 향해서!</ProfileMenuCardTitle>
                 <ProfileMenuCardDetail>
                   내 생활 습관을 분석해보세요.
                 </ProfileMenuCardDetail>
               </ProfileMenuCardContent>
               <DivisionLine />
+              <ContentsDiv>
+                <h5>이번 달 남은 예산</h5>
+                <h4>300,000 원 남음</h4>
+                <h6>하루에 12,000원씩 쓸 수 있습니다.</h6>
+                <h6>이 속도로 소비하면 총 1,000,000원을 쓰게 됩니다.</h6>
+              </ContentsDiv>
+              <DivisionLine />
               <GoalsItemList>
+                {/* -- GoalsItemList --
+                <h5>이번 달 남은 예산</h5>
+                <h4>300,000 원 남음</h4> */}
                 {/* <GoalsItem>
                   <span>지출 관련 분석 여기에 넣기</span>
                 </GoalsItem> */}
+                <h4>카테고리별 지출 통계</h4>
                 {/* chart started 
                 <div className={styles.charts}>
                   bar chart
@@ -181,6 +220,10 @@ const analysis = () => {
                     <h2>카테고리별 지출 통계</h2>
                     <Doughnut data={data1} width={400} height={400} />
                   </div>
+                </div> */}
+                {/* <div className={styles.circle}>
+                  <h2>카테고리별 지출 통계</h2>
+                  <Doughnut data={data1} width={400} height={400} />
                 </div> */}
               </GoalsItemList>
             </ProfileMenuCardItem>

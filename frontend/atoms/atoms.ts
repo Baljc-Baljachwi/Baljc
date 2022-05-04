@@ -11,3 +11,14 @@ export const todosState = atom<ITodoTypes[]>({
   key: "todos",
   default: [],
 });
+
+export interface IBudgetTypes {
+  remainingBudget: number;
+  dailyExpenditure: number;
+  estimatedExpenditure: number;
+}
+
+export const budgetsState = atom<IBudgetTypes[]>({
+  key: "budgets",
+  default: [],
+});
