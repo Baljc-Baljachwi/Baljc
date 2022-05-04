@@ -18,3 +18,10 @@ export const completedTodo = async (todoId: string, completedYn: object) => {
   // console.log(completedYn);
   return await api.patch(`/api/todos/${todoId}/done`, completedYn);
 };
+
+// todo 수정 API
+export const editTodos = async (todoId: string, content: object) => {
+  console.log(todoId);
+  console.log(content);
+  return await api.patch(`/api/todos/${todoId}`, content);
+};
