@@ -58,6 +58,7 @@ const subtitleColor = {
 };
 
 interface FinanceCardProps {
+  accountbookId: string;
   isFixed: boolean;
   type: string;
   title: string;
@@ -67,6 +68,7 @@ interface FinanceCardProps {
 }
 
 export default function FinanceCard({
+  accountbookId,
   type,
   title,
   price,
@@ -78,7 +80,7 @@ export default function FinanceCard({
   const handleClick = () => {
     router.push({
       pathname: "/finance/detail",
-      query: { title },
+      query: { accountbookId },
     });
   };
   return (
