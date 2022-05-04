@@ -1,5 +1,11 @@
 import Image from "next/image";
-import React, { RefObject, useEffect, useRef, useState } from "react";
+import React, {
+  RefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import styled from "styled-components";
 
 import Icon from "../../common/Icon";
@@ -120,6 +126,14 @@ export default function TodoItem(props: { list: ITodo; viewOnly: boolean }) {
     // 수정 중에 다른 곳으로 이동하면 ?
   };
 
+  const deleteTodo = () => {
+    console.log(props.list.content);
+    deleteTodos(props.list.todoId)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
+  };
 
   useEffect(() => {
     setContentForm({ content: props.list.content });
@@ -177,6 +191,14 @@ export default function TodoItem(props: { list: ITodo; viewOnly: boolean }) {
                 size="1.8rem"
                 onClick={() => editTodo()}
               /> */}
+              <Icon
+                mode="fas"
+                icon="trash-can"
+                color="#cccccc"
+                size="1.8rem"
+                onClick={() => deleteTodo()}
+              />
+            </IconDiv>
           </TodoText>
         </TodoItemDiv>
       </TodoListItem>
