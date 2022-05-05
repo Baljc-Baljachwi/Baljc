@@ -10,6 +10,9 @@ public class MyPageDto {
         private Integer remainingBudget;
         private Integer dailyExpenditure;
         private Integer estimatedExpenditure;
+        private Integer budget;
+        private Integer expenditurePercent;
+        private Integer remainingBudgetPercent;
     }
 
     @Getter
