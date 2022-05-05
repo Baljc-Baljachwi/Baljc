@@ -3,6 +3,7 @@ import Header from "components/common/Header";
 import ProfileCard from "components/mypage/ProfileCard";
 import ProfileSettingsList from "components/mypage/settings/ProfileSettingsList";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
 const Container = styled.div`
   height: 100vh;
@@ -50,6 +51,7 @@ const ProfileContentListContainer = styled.div`
 `;
 
 const Settings = () => {
+  const router = useRouter();
   const [ready, setReady] = useState(false);
   useEffect(() => {
     setReady(true);
@@ -60,7 +62,11 @@ const Settings = () => {
   return (
     <div>
       <Container>
-        <Header label="마이페이지" icon="pencil"></Header>
+        <Header
+          label="마이페이지"
+          icon="pencil"
+          onClickRightButton={() => router.push("/mypage/modify")}
+        ></Header>
         <PageContainer>
           <ProfileCardContainer>
             <ProfileCard />
