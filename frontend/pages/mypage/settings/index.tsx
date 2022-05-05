@@ -2,6 +2,7 @@ import styled from "styled-components";
 import Header from "components/common/Header";
 import ProfileCard from "components/mypage/ProfileCard";
 import ProfileSettingsList from "components/mypage/settings/ProfileSettingsList";
+import { useState, useEffect } from "react";
 
 const Container = styled.div`
   height: 100vh;
@@ -48,7 +49,14 @@ const ProfileContentListContainer = styled.div`
   gap: 2rem;
 `;
 
-const settings = () => {
+const Settings = () => {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    setReady(true);
+  }, []);
+  if (!ready) {
+    return null;
+  }
   return (
     <div>
       <Container>
@@ -67,4 +75,4 @@ const settings = () => {
   );
 };
 
-export default settings;
+export default Settings;
