@@ -202,10 +202,15 @@ export default function RoutineModal({
   };
 
   const deleteRoutine = () => {
-    const routinId = list?.routineId || "";
+    const routinId = routineId || "";
     deleteRoutines(routinId)
       .then((res) => {
         console.log(res.data);
+        setRoutineList(
+          routineList.filter(
+            (routine: IRoutine) => routine.routineId !== routineId
+          )
+        );
         alert("일과 삭제 완료");
         setOpen(false);
       })
