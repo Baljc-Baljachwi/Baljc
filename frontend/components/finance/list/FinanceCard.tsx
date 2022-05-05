@@ -28,19 +28,19 @@ const FinanceCardItem = styled.div<{ backgroundColor: string }>`
   cursor: pointer;
 `;
 
-const FlexContainer = styled.div`
-  display: flex;
+const GridContainer = styled.div`
+  display: grid;
+  grid-template-columns: 2fr 8fr;
 `;
 
 const FlexColumnContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
-  padding-left: 1.5rem;
 `;
 
 const FinanceCardContent = styled.div`
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
 `;
 
@@ -129,11 +129,12 @@ export default function FinanceCard({
         backgroundColor={isFixed ? "#ffd469" : "#F4F4F4"}
         onClick={handleClick}
       >
-        <FlexContainer>
+        <GridContainer>
           {categoryImg ? (
             <Image
               src={categoryImg}
               alt={categoryName}
+              layout="fixed"
               width="50px"
               height="50px"
             />
@@ -159,7 +160,7 @@ export default function FinanceCard({
                 : "-"}
             </FinanceCardDetail>
           </FlexColumnContainer>
-        </FlexContainer>
+        </GridContainer>
       </FinanceCardItem>
     </>
   );
