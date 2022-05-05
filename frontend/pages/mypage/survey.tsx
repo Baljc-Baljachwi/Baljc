@@ -161,6 +161,7 @@ export default function Survey() {
   const [ready, setReady] = useState(false);
   const [profileImageFile, setProfileImageFile] = useState<Blob>();
   const [imagePreview, setImagePreview] = useState<string>("");
+  const [imageError, setImageError] = useState<boolean>(false);
 
   useEffect(() => {
     setReady(true);
@@ -170,14 +171,25 @@ export default function Survey() {
     return null;
   }
 
+  function validFile(file: any) {
+    if (file.size > 2097152) {
+      return false;
+    }
+    const extensions = ["png", "jpeg", "jpg", "bmp"];
+    const fileExt = file.name.split(".").at(-1);
+    return extensions.includes(fileExt);
+  }
+
   function handleInputProfileImage(event: React.ChangeEvent<HTMLInputElement>) {
     const target = event.target;
+    setImageError(false);
     if (!target.files) {
       return;
     }
 
     if (target.files.length > 0) {
       const file = target.files[0];
+      setImageError(!validFile(file));
       setImagePreview(URL.createObjectURL(file));
       setValue("profileUpdated", true);
       setProfileImageFile(file as Blob);
@@ -190,11 +202,23 @@ export default function Survey() {
 
   function onClickDefaultImageButton() {
     setValue("profileUpdated", true);
+    setProfileImageFile(new Blob());
     setImagePreview("");
+    setImageError(false);
   }
 
   function onSubmit(data: any) {
-    console.log(data);
+    if (
+      profileImageFile &&
+      profileImageFile.size > 0 &&
+      !validFile(profileImageFile)
+    ) {
+      setImageError(true);
+      return;
+    }
+    if (imageError) {
+      return;
+    }
     const memberInfo = {
       nickname: data.nickname,
       profileUpdated: data.profileUpdated,
@@ -236,11 +260,14 @@ export default function Survey() {
         <DefaultImageButton onClick={onClickDefaultImageButton}>
           기본 이미지로 변경
         </DefaultImageButton>
+        <ErrorMessage>
+          {imageError && "2MB 이하 이미지(.png, .jpeg, .bmp) 파일만 가능합니다"}
+        </ErrorMessage>
       </LabelProfileImageContiainer>
       <DisplayNoneInput
         type="file"
         id="profileImage"
-        accept="image/*"
+        accept="image/png, image/jpeg, image/bmp"
         name="profileImage"
         onChange={handleInputProfileImage}
       />
