@@ -8,6 +8,7 @@ import RoutineDaySelect from "./RoutineDaySelect";
 import { IRoutine } from "../../../types/index";
 import { putRoutines } from "../../../api/routine";
 import { deleteRoutines, postRoutines } from "../../../api/routine";
+import { SetterOrUpdater } from "recoil";
 
 const ModalWrapper = styled.div<{ visible: boolean }>`
   box-sizing: border-box;
@@ -95,7 +96,11 @@ interface ModalProps {
   open: boolean;
   setOpen: any;
   modalType: number;
-  list?: IRoutine;
+  routineList: IRoutine[];
+  setRoutineList: SetterOrUpdater<IRoutine[]>;
+  routineId?: string;
+  title?: string;
+  repetition?: number;
   label?: string;
 }
 
@@ -109,12 +114,16 @@ export default function RoutineModal({
   setOpen,
   modalType,
   label,
-  list,
+  routineList,
+  setRoutineList,
+  routineId,
+  title,
+  repetition,
 }: ModalProps) {
   // 나중에 API 형식으로 받아오기
   const [routineForm, setRoutineForm] = useState<RoutineInputForm>({
-    title: list?.title || "",
-    repetition: list?.repetition || 0,
+    title: title || "",
+    repetition: repetition || 0,
   });
 
   const onClose = () => {

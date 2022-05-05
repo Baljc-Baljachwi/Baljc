@@ -60,11 +60,7 @@ export default function Routine({ dow }: RoutineProps) {
 
   return (
     <>
-      <RoutineDiv
-        onClick={() =>
-          router.push({ pathname: "/work/routine", query: { dow: dow } })
-        }
-      >
+      <RoutineDiv onClick={() => router.push({ pathname: "/work/routine" })}>
         <RoutineHeader>
           <Icon mode="fas" icon="thumbtack" color="#EB3232" size="1.6rem" />
           <h1>오늘의 일과</h1>
