@@ -165,6 +165,7 @@ export default function RoutineModal({
     postRoutines(routineForm)
       .then((res) => {
         console.log(res.data);
+        setRoutineList([...routineList, res.data.data]);
         alert("일과 등록 완료");
         setOpen(false);
       })
