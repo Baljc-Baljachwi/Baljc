@@ -161,6 +161,7 @@ export default function Survey() {
   const [ready, setReady] = useState(false);
   const [profileImageFile, setProfileImageFile] = useState<Blob>();
   const [imagePreview, setImagePreview] = useState<string>("");
+  const [imageError, setImageError] = useState<boolean>(false);
 
   useEffect(() => {
     setReady(true);
@@ -172,12 +173,19 @@ export default function Survey() {
 
   function handleInputProfileImage(event: React.ChangeEvent<HTMLInputElement>) {
     const target = event.target;
+    setImageError(false);
     if (!target.files) {
       return;
     }
 
     if (target.files.length > 0) {
       const file = target.files[0];
+      console.log(file.size);
+      if (file.size > 2097152) {
+        setImageError(true);
+      } else {
+        setImageError(false);
+      }
       setImagePreview(URL.createObjectURL(file));
       setValue("profileUpdated", true);
       setProfileImageFile(file as Blob);
@@ -190,11 +198,21 @@ export default function Survey() {
 
   function onClickDefaultImageButton() {
     setValue("profileUpdated", true);
+    setProfileImageFile(new Blob());
     setImagePreview("");
+    setImageError(false);
   }
 
   function onSubmit(data: any) {
     console.log(data);
+    console.log(profileImageFile?.size);
+    if (profileImageFile && profileImageFile.size > 2097152) {
+      setImageError(true);
+      return;
+    }
+    if (imageError) {
+      return;
+    }
     const memberInfo = {
       nickname: data.nickname,
       profileUpdated: data.profileUpdated,
@@ -236,11 +254,14 @@ export default function Survey() {
         <DefaultImageButton onClick={onClickDefaultImageButton}>
           기본 이미지로 변경
         </DefaultImageButton>
+        <ErrorMessage>
+          {imageError && "2MB 이하 이미지(.png, .jpeg) 파일만 가능합니다"}
+        </ErrorMessage>
       </LabelProfileImageContiainer>
       <DisplayNoneInput
         type="file"
         id="profileImage"
-        accept="image/*"
+        accept="image/png, image/jpeg"
         name="profileImage"
         onChange={handleInputProfileImage}
       />
