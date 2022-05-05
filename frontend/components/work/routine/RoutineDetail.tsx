@@ -5,8 +5,10 @@ import RoutineModal from "./RoutineModal";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { getRoutines } from "../../../api/routine";
+import { getRoutines, getAllRoutines } from "../../../api/routine";
 import { IRoutine } from "../../../types/index";
+import { useRecoilState } from "recoil";
+import { routineState } from "../../../atoms/atoms";
 
 const StyledHeader = styled.header`
   width: 100%;
@@ -55,7 +57,8 @@ export default function RoutineDetail() {
 
   const [open, setOpen] = useState(false);
   // const [open, setOpen];
-  const [routineList, setRoutineList] = useState<IRoutine[]>([]);
+  const [routineList, setRoutineList] =
+    useRecoilState<IRoutine[]>(routineState);
 
   const onClick = () => {
     console.log(open);
@@ -63,13 +66,19 @@ export default function RoutineDetail() {
   };
 
   const getRoutineList = () => {
-    getRoutines(dow)
+    // getRoutines(dow)
+    //   .then((res) => {
+    //     setRoutineList(res.data.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+    getAllRoutines()
       .then((res) => {
+        console.log(res.data.data);
         setRoutineList(res.data.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => console.log(err.response));
   };
 
   useEffect(() => {
@@ -85,9 +94,19 @@ export default function RoutineDetail() {
       />
       <RoutineDiv>
         {routineList.length != 0 ? (
-          routineList.map((list, index) => (
-            <RoutineCard key={list.routineId} list={list}></RoutineCard>
-          ))
+          routineList.map((routine, index) => {
+            const { routineId, title, repetition } = routine;
+            return (
+              <RoutineCard
+                key={index}
+                routineId={routineId}
+                title={title}
+                repetition={repetition}
+                routineList={routineList}
+                setRoutineList={setRoutineList}
+              ></RoutineCard>
+            );
+          })
         ) : (
           <CardDiv onClick={onClick}>일과를 등록해보세요 !</CardDiv>
         )}
@@ -98,6 +117,8 @@ export default function RoutineDetail() {
           setOpen={setOpen}
           label={"오늘의 일과 추가"}
           modalType={0}
+          routineList={routineList}
+          setRoutineList={setRoutineList}
         />
       ) : (
         ""

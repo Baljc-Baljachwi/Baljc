@@ -1,4 +1,5 @@
 import { atom } from "recoil";
+import { ITodo, IRoutine } from "../types";
 import LocalStorage from "utils/localStorage";
 
 // atom localStorage 저장
@@ -30,7 +31,14 @@ export interface ITodoTypes {
   completedYn: string;
 }
 
+// todo
 export const todosState = atom<ITodoTypes[]>({
   key: "todos",
+  default: [],
+});
+
+// routine
+export const routineState = atom<IRoutine[]>({
+  key: "routines",
   default: [],
 });
