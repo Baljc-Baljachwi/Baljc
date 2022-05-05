@@ -72,7 +72,7 @@ const Settings = () => {
             <ProfileCard />
           </ProfileCardContainer>
           <ProfileContentListContainer>
-            <PageTitle>설정</PageTitle>
+            {/* <PageTitle>설정</PageTitle> */}
             <ProfileSettingsList />
           </ProfileContentListContainer>
         </PageContainer>

@@ -57,11 +57,11 @@ const ProfileInfo = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-weight: 600;
   gap: 1rem;
   span {
-    font-size: 1.2rem;
+    font-size: 1.6rem;
     font-weight: 400;
     color: #ffd469;
   }
