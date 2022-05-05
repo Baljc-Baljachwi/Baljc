@@ -35,7 +35,9 @@ public class MyPageServiceImpl implements MyPageService {
         int dailyExpenditure = remainingBudget / (date.lengthOfMonth() - date.getDayOfMonth() + 1);
         int estimatedExpenditure = fixedExpenditure +
                 ((totalExpenditure - fixedExpenditure) / date.getDayOfMonth()) * date.lengthOfMonth();
-        return new MyPageDto.NowExpResponse(remainingBudget, dailyExpenditure, estimatedExpenditure);
+        int remainingBudgetPercent = (int)(((double)remainingBudget / budget) * 100);
+        return new MyPageDto.NowExpResponse(remainingBudget, dailyExpenditure, estimatedExpenditure,
+                budget, 100 - remainingBudgetPercent, remainingBudgetPercent);
     }
 
     @Override
