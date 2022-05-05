@@ -54,6 +54,14 @@ export default function FinanceEditForm({ accountbook }: FinanceEditFormProps) {
     }
   }, [router.query.accountbookId]);
 
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    setReady(true);
+  }, []);
+  if (!ready) {
+    return null;
+  }
+
   return (
     <>
       <Header label="가계부 내역 수정"></Header>
