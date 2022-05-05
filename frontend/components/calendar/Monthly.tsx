@@ -94,7 +94,7 @@ export default function Monthly() {
         setIncome(res.data.data.monthTotal.I);
       }
     });
-  }, [year, month]);
+  }, [year, month, date]);
 
   useEffect(() => {
     setSaved([]);
