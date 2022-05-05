@@ -13,6 +13,8 @@ const AwesomeHeader = styled.header`
   height: 25rem;
   background-color: #2e437a;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 4px 8px;
+  position: absolute;
+  top: 0;
 `;
 
 const AwesomeFooter = styled.footer`
@@ -43,12 +45,12 @@ const ButtonContainer = styled.div`
 
 const MainContainer = styled.main`
   width: 100%;
-  height: calc(100vh - 40rem);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 10rem 0;
+  height: 90vh;
 `;
 
 const MessageContainer = styled.article`
