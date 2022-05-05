@@ -38,7 +38,7 @@ const ExpenditureDetailContainer = styled.div`
   border-radius: 1rem;
   width: 100%;
   background-color: #ffffff;
-  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25));
+  filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
 
   font-size: 1.6rem;
   padding: 1.6rem 2rem;
