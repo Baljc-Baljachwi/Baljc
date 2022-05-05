@@ -122,14 +122,18 @@ export default function TodoItem({
 
   // React.KeyboardEvent
   const onEnter = (e: any) => {
-    // console.log(e.target.id);
     if (e.key === "Enter") {
-      if (contentForm.content.length === 0) {
-        e.target.innerHTML = "야";
-      } else {
+      if (contentForm.content.length !== 0) {
         editTodos(e.target.id, contentForm)
           .then((res) => {
             console.log(res);
+            setTodos(
+              todos.map((todo: ITodoTypes) => {
+                return todo.todoId === todoId
+                  ? { ...todo, content: contentForm.content }
+                  : todo;
+              })
+            );
             setTodoClicked(false);
             setClicked(true);
           })
@@ -146,7 +150,6 @@ export default function TodoItem({
   };
 
   const deleteTodo = () => {
-    console.log(content);
     deleteTodos(todoId)
       .then((res) => {
         console.log(res);
@@ -158,12 +161,17 @@ export default function TodoItem({
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {};
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    if (contentForm.content.length === 0) {
-      e.target.innerHTML = "야";
-    } else {
+    if (contentForm.content.length !== 0) {
       editTodos(e.target.id, contentForm)
         .then((res) => {
           console.log(res);
+          setTodos(
+            todos.map((todo: ITodoTypes) => {
+              return todo.todoId === todoId
+                ? { ...todo, content: contentForm.content }
+                : todo;
+            })
+          );
           setTodoClicked(false);
           setClicked(true);
         })
