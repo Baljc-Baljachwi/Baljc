@@ -15,17 +15,18 @@ const ProgressDiv = styled.div`
     border: none;
     position: relative;
     margin: 15px 0;
-    height: 30px;
+    height: 2rem;
     width: 100%;
+
     /* color: #ffffff; */
     /* width: 300px; */
   }
-
   .progress-done {
     /* background: linear-gradient(to left, #ff9472, #ff9472); */
     /* background: linear-gradient(to left, #f2709c, #ff9472); */
     /* background-color: #ffd469; */
     background-color: #2e437a;
+    align-items: flex-end;
 
     /* box-shadow: 0 3px 3px -5px #ffd469, 0 2px 5px #ffb800; */
     box-shadow: 0 3px 3px -5px #ffd469, 0 2px 5px #2e437a;
@@ -38,6 +39,26 @@ const ProgressDiv = styled.div`
     width: 0;
     opacity: 0;
     transition: 1s ease 0.3s;
+  }
+  .progress-value {
+    /* background: linear-gradient(to left, #ff9472, #ff9472); */
+    /* background: linear-gradient(to left, #f2709c, #ff9472); */
+    /* background-color: #ffd469; */
+    /* background-color: #2e437a; */
+    align-items: flex-start;
+    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25));
+    /* box-shadow: 0 3px 3px -5px #ffd469, 0 2px 5px #ffb800; */
+    /* box-shadow: 0 3px 3px -5px #ffd469, 0 2px 5px #2e437a; */
+    border-radius: 20px;
+    color: #2e437a;
+    display: flex;
+    /* align-items: center; */
+    justify-content: flex-end;
+    height: 2rem;
+    width: 0;
+    opacity: 0;
+    transition: 1s ease 0.3s;
+    font-weight: 700;
   }
 `;
 
@@ -55,9 +76,12 @@ const ProgressStaticBar = ({ done }: IPStaticBar) => {
   return (
     <ProgressDiv>
       <div className="progress">
-        <div className="progress-done" style={style}>
+        {/* <div className="doneNnum"> */}
+        <div className="progress-done" style={style}></div>
+        <span className="progress-value" style={style}>
           {done}%
-        </div>
+        </span>
+        {/* </div> */}
       </div>
     </ProgressDiv>
   );

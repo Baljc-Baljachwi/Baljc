@@ -163,14 +163,13 @@ const Analysis = () => {
               <DivisionLine />
 
               <ContentsDiv>
-                <h5>이번 달 남은 예산</h5>
-                <ProgressBar />
+                <h5>이번 달 남은 예산 : </h5>
+                {/* <ProgressBar /> */}
                 <h4>
                   <span className="highlightedText">{remainingBudget}</span> 원
-                  남음
                 </h4>
                 <h6>
-                  하루에{" "}
+                  앞으로는 하루에{" "}
                   <span className="highlightedText">{dailyExpenditure}</span>{" "}
                   원씩 쓸 수 있습니다.
                 </h6>
@@ -187,14 +186,14 @@ const Analysis = () => {
                   height="4rem"
                 /> */}
               </ContentsDiv>
-              <ProgressStaticBar done="expenditurePercent.toString()" />
+              <ProgressStaticBar done={`${expenditurePercent}`} />
               {/* {expenditurePercent} */}
               <DivisionLine />
 
               <ContentsDiv>
                 <div className="charts">
                   <div className="circle">
-                    <h2>카테고리별 지출 통계</h2>
+                    <h2>카테고리 별 지출 통계</h2>
                     {categoryValue.length === 0 ? (
                       <NotFoundTransaction />
                     ) : (
@@ -323,7 +322,9 @@ const ProfileMenuCardContent = styled.div`
 // `;
 
 const DivisionLine = styled.hr`
-  border-top: 2px solid lightslategray;
+  border-top: 2px solid;
+  border-color: #c8c8c8;
+  /* border-top: 2px solid lightslategray; */
   /* border-color: #f6f6f6; */
 `;
 
