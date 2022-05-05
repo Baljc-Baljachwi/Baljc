@@ -3,7 +3,7 @@ import ProfileContentCard from "../ProfileContentCard";
 
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
-import { accessTokenState } from "states";
+import { accessTokenState } from "atoms/atoms";
 import { deleteMembers } from "../../../api/member";
 import { getAlarms } from "../../../api/alarm";
 
@@ -25,7 +25,7 @@ const ProfileSettingsList = () => {
       // console.log(res.data);
       console.log("메세지 찍어본다!" + res.data.message);
       router.push(res.data.code === 1003 ? "/login" : "/mypage/settings");
-      setAccessToken({ accessToken: "" });
+      setAccessToken("");
     });
   };
 
@@ -42,7 +42,7 @@ const ProfileSettingsList = () => {
   };
 
   function logout() {
-    setAccessToken({ accessToken: "" });
+    setAccessToken("");
     router.push("/");
   }
   return (
