@@ -10,6 +10,7 @@ import { getMemberInfo } from "../../api/member";
 import { SalaryType } from "../../types";
 import defaultProfileImg from "@/assets/img/mypage/avatar/avatar_tr1.png";
 import flagImg from "@/assets/img/mypage/avatar/avatar_tr2.png";
+import defaultProfileImage from "public/assets/img/mypage/avatar/default_profile.png";
 
 const Container = styled.div`
   height: 100vh;
@@ -97,6 +98,7 @@ const ProfileCard = ({}) => {
   useEffect(() => {
     getMemberInfo().then((res) => {
       // console.log(res.data);
+      console.log(res.data.data);
       if (res.data.code === 1001) {
         // console.log("1001도 넘어왔음!");
         // console.log(res.data.data);
@@ -112,10 +114,10 @@ const ProfileCard = ({}) => {
       <Container>
         <ProfileCardContainer>
           <ProfileImage>
-            {memberInfo && memberInfo.profileUrl && (
+            {memberInfo && (
               <Image
                 className="profileImg"
-                src={memberInfo?.profileUrl}
+                src={memberInfo?.profileUrl || defaultProfileImage}
                 alt={memberInfo?.nickname}
                 layout="fill"
               />
