@@ -26,10 +26,8 @@ const InputDiv = styled.div<{ isError?: boolean }>`
   width: 100%;
   border-bottom: ${(props) =>
     props.isError ? "1px solid #ff0000" : "1px solid #cccccc"};
-  margin: ${(props) =>
-      props.isError ? "1.6rem 0 0 0" : "1.6rem 0 1.6rem 0"}1.6rem
-    0 0 0;
-  span {
+  margin: ${(props) => (props.isError ? "1.6rem 0 0 0" : "1.6rem 0 1.6rem 0")}
+    span {
     color: ${(props) => (props.isError ? "#ff0000" : "#cccccc")};
   }
   :focus-within {
@@ -480,7 +478,7 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
               {[
                 { name: "카드", value: "C" },
                 { name: "현금", value: "M" },
-                { name: "없음", value: "N" },
+                { name: "기타", value: "E" },
               ].map((obj) => (
                 <Fragment key={obj.value}>
                   <PaymentLabel
