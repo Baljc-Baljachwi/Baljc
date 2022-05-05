@@ -43,7 +43,7 @@ public class MemberController {
 
     @GetMapping("/login/kakao")
     public ResponseEntity<BaseDataResponse<Map<String, Boolean>>> signinMember(
-            @RequestParam(value = "code") String code, @RequestParam(value = "token") String fcmToken
+            @RequestParam(value = "code") String code, @RequestParam(value = "token", required = false) String fcmToken
     ) {
         log.debug("signinMember - code: {}", code);
         MemberDto.SigninInfo signinInfo = memberService.authenticateMember(memberService.signinByKakao(code, fcmToken));
