@@ -35,8 +35,7 @@ const FlexContainer = styled.div`
 const FlexColumnContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
-  padding-left: 1.5rem;
+  padding-left: 2rem;
 `;
 
 const FinanceCardContent = styled.div`
