@@ -237,6 +237,7 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
 
     const params = {
       ...data,
+      type,
       price: +data.price,
       fixedExpenditureYn: data.fixedExpenditureYn ? "Y" : "N",
       fixedIncomeYn: data.fixedIncomeYn ? "Y" : "N",
@@ -252,7 +253,6 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
     // 수정 페이지에서
     if (initForm && initForm.accountbookId) {
       putAccountbooks(initForm.accountbookId, params).then((res) => {
-        console.log(res.data);
         if (res.data.code === 1304) {
           router.push("/finance");
         } else {
@@ -290,7 +290,6 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
       }
     });
   }
-  // console.log(watch());
 
   const fixedExpenditureTF = watch("fixedExpenditureYn");
   const fixedIncomeTF = watch("fixedIncomeYn");
