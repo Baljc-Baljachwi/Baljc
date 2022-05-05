@@ -54,9 +54,7 @@ const StyledInput = styled.input`
   text-align: end;
   border: none;
   outline: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+  background-color: #ffffff;
   color: #3d3d3d;
   font-family: "Noto Sans KR", sans-serif;
   ::placeholder {
