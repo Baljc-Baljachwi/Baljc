@@ -176,10 +176,22 @@ export default function RoutineModal({
   };
 
   const editRoutine = () => {
-    const routinId = list?.routineId || "";
+    const routinId = routineId || "";
     putRoutines(routinId, routineForm)
       .then((res) => {
         console.log(res.data);
+        setRoutineList(
+          routineList.map((routine: IRoutine) => {
+            return routine.routineId === routineId
+              ? {
+                  ...routine,
+                  routineId: routineId,
+                  title: routineForm.title,
+                  repetition: routineForm.repetition,
+                }
+              : routine;
+          })
+        );
         alert("일과 수정 완료");
         setOpen(false);
       })
