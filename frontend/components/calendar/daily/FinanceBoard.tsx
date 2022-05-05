@@ -84,6 +84,7 @@ interface IAccountBookList {
   accountBookId: string;
   type: "E" | "I";
   categoryImgUrl: string;
+  categoryName: string;
   title: string;
   price: number;
   paymentMethod: "M" | "C" | "E" | "N";
@@ -91,6 +92,7 @@ interface IAccountBookList {
   fixedIncomeYn: "Y" | "N";
   monthlyPeriod: number | null;
   date: string | null;
+  dayOfWeek: string | null;
 }
 
 export default function FinanceBoard({ item }: any) {

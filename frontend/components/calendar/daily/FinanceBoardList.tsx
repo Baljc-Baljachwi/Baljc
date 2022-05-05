@@ -1,8 +1,6 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
 
 import FinanceCard from "../../../components/finance/list/FinanceCard";
-import { IAccountbook } from "types";
 
 const PageContainer = styled.main`
   /* padding: 0 2rem; */
@@ -28,8 +26,8 @@ export default function FinanceList({ item }: any) {
             type={data.type}
             title={data.title}
             price={data.price}
-            category={data.categoryName}
             method={data.paymentMethod}
+            categoryName={data.categoryName}
           />
         ))}
       </PageContainer>

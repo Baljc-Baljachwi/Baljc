@@ -39,7 +39,7 @@ export default function FinanceList({ item }: FinanceListProps) {
                 type={data.type}
                 title={data.title}
                 price={data.price}
-                category={data.categoryName}
+                categoryName={data.categoryName}
                 method={data.paymentMethod}
               />
             ))
