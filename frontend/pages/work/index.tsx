@@ -114,6 +114,14 @@ export default function Home() {
     getClickedDay(today);
   }, []);
 
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    setReady(true);
+  }, []);
+  if (!ready) {
+    return null;
+  }
+
   return (
     <>
       <Header label="할 일" />
@@ -154,3 +162,5 @@ export default function Home() {
     </>
   );
 }
+
+Home.requireAuth = true;

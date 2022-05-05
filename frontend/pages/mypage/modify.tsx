@@ -25,6 +25,7 @@ const LabelProfileImage = styled.label<{ image: string }>`
   display: inline-block;
   width: 14rem;
   height: 14rem;
+  border: 4.2px solid #fafafe;
   border-radius: 50%;
   background-color: #cccccc;
   background-image: url(${(props) => (props.image ? props.image : "")});
@@ -72,6 +73,9 @@ const StyledInput = styled.input`
   ::placeholder {
     color: #cccccc;
   }
+  :invalid {
+    border: 3px solid red;
+  }
 `;
 
 const StyledLabel = styled.label`
@@ -110,6 +114,7 @@ interface SurveyInputForm {
 
 export default function ProfileModify() {
   const router = useRouter();
+  const [ready, setReady] = useState(false);
   const [surveyForm, setSurveyForm] = useState<SurveyInputForm>({
     nickname: "",
     salaryType: "M",
@@ -123,6 +128,8 @@ export default function ProfileModify() {
   const [imagePreview, setImagePreview] = useState<string>("");
 
   useEffect(() => {
+    setReady(true);
+
     getMemberInfo().then((res) => {
       console.log(res.data);
       if (res.data.code === 1001) {
@@ -149,6 +156,10 @@ export default function ProfileModify() {
       }
     });
   }, []);
+
+  if (!ready) {
+    return null;
+  }
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const target = event.target;
@@ -282,7 +293,7 @@ export default function ProfileModify() {
                 name="salary"
                 type="number"
                 placeholder="0"
-                value={surveyForm.salary || ""}
+                value={+surveyForm.salary || ""}
                 onChange={handleInputChange}
               />
               <InputUnit hasValue={surveyForm.salary > 0}>원</InputUnit>
@@ -296,7 +307,7 @@ export default function ProfileModify() {
                 name="workingHours"
                 type="number"
                 placeholder="0"
-                value={surveyForm.workingHours || ""}
+                value={+surveyForm.workingHours || ""}
                 onChange={handleInputChange}
               />
               <InputUnit hasValue={surveyForm.workingHours > 0}>시간</InputUnit>
@@ -310,7 +321,7 @@ export default function ProfileModify() {
             name="budget"
             type="number"
             placeholder="0"
-            value={surveyForm.budget || 0}
+            value={+surveyForm.budget || ""}
             onChange={handleInputChange}
           />
           <InputUnit hasValue={surveyForm.budget > 0}>원</InputUnit>
@@ -321,3 +332,5 @@ export default function ProfileModify() {
     </>
   );
 }
+
+ProfileModify.requireAuth = true;

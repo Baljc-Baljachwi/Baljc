@@ -22,6 +22,7 @@ const LabelProfileImage = styled.label<{ image: string }>`
   display: inline-block;
   width: 14rem;
   height: 14rem;
+  border: 4.2px solid #fafafe;
   border-radius: 50%;
   background-color: #cccccc;
   background-image: url(${(props) => (props.image ? props.image : "")});
@@ -68,6 +69,9 @@ const StyledInput = styled.input`
   color: #3d3d3d;
   ::placeholder {
     color: #cccccc;
+  }
+  :invalid {
+    border: 3px solid red;
   }
 `;
 
@@ -213,6 +217,7 @@ export default function Survey() {
             handleToggleButton={handleToggleButton}
           />
         </ButtonToggleContainer>
+        {+surveyForm.salary}
         {surveyForm?.salaryType !== "N" && (
           <>
             <InputContainer>
@@ -220,7 +225,7 @@ export default function Survey() {
                 name="salary"
                 type="number"
                 placeholder="0"
-                value={surveyForm.salary || ""}
+                value={+surveyForm.salary || ""}
                 onChange={handleInputChange}
               />
               <InputUnit hasValue={surveyForm.salary > 0}>원</InputUnit>
@@ -234,7 +239,7 @@ export default function Survey() {
                 name="workingHours"
                 type="number"
                 placeholder="0"
-                value={surveyForm.workingHours || ""}
+                value={+surveyForm.workingHours || ""}
                 onChange={handleInputChange}
               />
               <InputUnit hasValue={surveyForm.workingHours > 0}>시간</InputUnit>
@@ -248,7 +253,7 @@ export default function Survey() {
             name="budget"
             type="number"
             placeholder="0"
-            value={surveyForm.budget || 0}
+            value={+surveyForm.budget || ""}
             onChange={handleInputChange}
           />
           <InputUnit hasValue={surveyForm.budget > 0}>원</InputUnit>

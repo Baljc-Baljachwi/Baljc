@@ -1,5 +1,4 @@
 import { api } from "api";
-import { IAlarm } from "types";
 
 // 알림 설정 조회
 export const getAlarms = async () => {
@@ -7,13 +6,8 @@ export const getAlarms = async () => {
 };
 
 // 알림 설정 변경
-export const putAlarms = async (params: IAlarm) => {
-  return await api.put(`/api/alarms`, params);
+export const putAlarms = async (data: object) => {
+  // console.log("🔥🔥🔥🔥 PUT API 호출하고나서 data 잘 넘어오는지임!! ");
+  // console.log(data);
+  return await api.put(`/api/alarms`, data);
 };
-
-// interface IAlarmParams extends IAlarm {
-//   accountAlarmYn: YNType;
-//   accountAlarmTime: string;
-//   todoAlarmYn: YNType;
-//   todoAlarmTime: string;
-// }

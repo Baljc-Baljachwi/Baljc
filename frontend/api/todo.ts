@@ -13,8 +13,20 @@ export const postTodos = async (data: object) => {
 };
 
 // todo 완료 여부 API
-export const completedTodo = async (todoId: string, completedYn: object) => {
+export const completedTodos = async (todoId: string, completedYn: object) => {
   // console.log(todoId);
   // console.log(completedYn);
   return await api.patch(`/api/todos/${todoId}/done`, completedYn);
+};
+
+// todo 수정 API
+export const editTodos = async (todoId: string, content: object) => {
+  console.log(todoId);
+  console.log(content);
+  return await api.patch(`/api/todos/${todoId}`, content);
+};
+
+// todo 삭제 API
+export const deleteTodos = async (todoId: string) => {
+  return await api.delete(`/api/todos/${todoId}`);
 };

@@ -11,6 +11,7 @@ import { Doughnut } from "react-chartjs-2";
 // import { CategoryScale } from "chart.js";
 // Chart.register(CategoryScale);
 import styles from "../../styles/Home.module.css";
+import { useState, useEffect } from "react";
 
 const Container = styled.div`
   height: 100vh;
@@ -147,7 +148,14 @@ interface ProfileMenuContentProps {
   description: string;
 }
 
-const analysis = () => {
+const Analysis = () => {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    setReady(true);
+  }, []);
+  if (!ready) {
+    return null;
+  }
   return (
     <>
       <Container>
@@ -191,7 +199,7 @@ const analysis = () => {
   );
 };
 
-export default analysis;
+export default Analysis;
 //data for line chart
 const data = {
   labels: [
@@ -276,3 +284,5 @@ const data1 = {
     },
   ],
 };
+
+Analysis.requireAuth = true;

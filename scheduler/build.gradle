@@ -35,6 +35,9 @@ dependencies {
 
 	// Json
 	implementation group: 'org.json', name: 'json', version: '20211205'
+
+	// Firebase Admin SDK
+	implementation 'com.google.firebase:firebase-admin:8.1.0'
 }
 
 tasks.named('test') {

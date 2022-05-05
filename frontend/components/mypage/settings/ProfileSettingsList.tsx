@@ -3,7 +3,7 @@ import ProfileContentCard from "../ProfileContentCard";
 
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
-import { accessTokenState } from "states";
+import { accessTokenState } from "atoms/atoms";
 import { deleteMembers } from "../../../api/member";
 import { getAlarms } from "../../../api/alarm";
 
@@ -25,23 +25,24 @@ const ProfileSettingsList = () => {
       // console.log(res.data);
       console.log("메세지 찍어본다!" + res.data.message);
       router.push(res.data.code === 1003 ? "/login" : "/mypage/settings");
-      setAccessToken({ accessToken: "" });
+      setAccessToken("");
     });
   };
 
   const handleClickToAlarmPage = () => {
-    console.log("알림 설정 페이지로 이동");
-    getAlarms().then((res) => {
-      console.log(res.data);
-      console.log("메세지 찍어본다!" + res.data.message);
-      if (res.data.code === 1200) {
-        router.push("/mypage/settings/alarm");
-      }
-    });
+    router.push("/mypage/settings/alarm");
+    // console.log("알림 설정 페이지로 이동");
+    // getAlarms().then((res) => {
+    //   console.log(res.data);
+    //   console.log("메세지 찍어본다!" + res.data.message);
+    //   if (res.data.code === 1200) {
+    //     router.push("/mypage/settings/alarm");
+    //   }
+    // });
   };
 
   function logout() {
-    setAccessToken({ accessToken: "" });
+    setAccessToken("");
     router.push("/");
   }
   return (

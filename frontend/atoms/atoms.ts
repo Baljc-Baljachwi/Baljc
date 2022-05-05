@@ -1,9 +1,6 @@
 import { atom } from "recoil";
+import { ITodo, IRoutine } from "../types";
 import LocalStorage from "utils/localStorage";
-
-interface IAccessToken {
-  accessToken: string;
-}
 
 // atom localStorage 저장
 const localStorageEffect =
@@ -21,12 +18,27 @@ const localStorageEffect =
     });
   };
 
-const accessTokenState = atom<IAccessToken>({
-  key: "accessTokenState",
-  default: {
-    accessToken: "",
-  },
+export const accessTokenState = atom<string>({
+  key: "accessToken",
+  default: "",
   effects: [localStorageEffect("accessToken")],
 });
 
-export { accessTokenState };
+export interface ITodoTypes {
+  todoId: string;
+  date: string;
+  content: string;
+  completedYn: string;
+}
+
+// todo
+export const todosState = atom<ITodoTypes[]>({
+  key: "todos",
+  default: [],
+});
+
+// routine
+export const routineState = atom<IRoutine[]>({
+  key: "routines",
+  default: [],
+});

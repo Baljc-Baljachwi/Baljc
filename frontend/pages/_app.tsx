@@ -1,3 +1,4 @@
+import { NextPage } from "next";
 import Head from "next/head";
 // import "../styles/globals.css";
 import { ThemeProvider } from "styled-components";
@@ -12,8 +13,18 @@ import { theme } from "../styles/theme";
 config.autoAddCss = false;
 
 import Layout from "../components/Layout";
+import { AuthGuard } from "components/auth/AuthGuard";
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+export type NextApplicationPage<P = any, IP = P> = NextPage<P, IP> & {
+  requireAuth?: boolean;
+};
+
+export default function MyApp(props: AppProps) {
+  const {
+    Component,
+    pageProps,
+  }: { Component: NextApplicationPage; pageProps: any } = props;
+
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -147,7 +158,14 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         </Head>
         <RecoilRoot>
           <Layout>
-            <Component {...pageProps} />
+            {Component.requireAuth ? (
+              <AuthGuard>
+                <Component {...pageProps} />
+              </AuthGuard>
+            ) : (
+              <Component {...pageProps} />
+            )}
+            {/* <Component {...pageProps} /> */}
           </Layout>
         </RecoilRoot>
       </ThemeProvider>

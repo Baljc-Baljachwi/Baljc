@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import Header from "components/common/Header";
 import ProfileCard from "components/mypage/ProfileCard";
 import ProfileContentList from "components/mypage/ProfileContentList";
+import { useState, useEffect } from "react";
 
 const Container = styled.div`
   height: 100vh;
@@ -45,6 +46,13 @@ const ProfileContentListContainer = styled.div`
 
 const MyPage = () => {
   const router = useRouter();
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    setReady(true);
+  }, []);
+  if (!ready) {
+    return null;
+  }
   return (
     <div>
       <Container>
@@ -67,3 +75,5 @@ const MyPage = () => {
 };
 
 export default MyPage;
+
+MyPage.requireAuth = true;
