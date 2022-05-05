@@ -5,8 +5,6 @@ import styled from "styled-components";
 import Header from "../../components/common/Header";
 import ProfileCard from "../../components/mypage/ProfileCard";
 import NotFoundTransaction from "components/common/not-found-transaction/NotFoundTransaction";
-import ProgressBar from "../../components/common/ProgressBar";
-import CustomProgressBar from "components/common/CustomProgressBar";
 import ProgressStaticBar from "components/common/ProgressStaticBar";
 
 import { getBudget, getPieChartValue } from "../../api/mypage";
@@ -47,7 +45,7 @@ const Analysis = () => {
   const month = Number(dayjs(date).format("M"));
   const dateForm = dayjs(date).format("YYYY-MM-DD");
   const [budget, setBudget] = useState(0);
-  const [expenditurePercent, setExpenditurePercent] = useState("100");
+  const [expenditurePercent, setExpenditurePercent] = useState("0");
   const [remainingBudgetPercent, setRemainingBudgetPercent] = useState(0);
 
   // const categoryName = Object.keys(categories).map((idx:any)=> data1.labels[idx]);
@@ -164,22 +162,21 @@ const Analysis = () => {
 
               <ContentsDiv>
                 <h5>이번 달 남은 예산 : </h5>
-                {/* <ProgressBar /> */}
-                <h4>
+                <h2>
                   <span className="highlightedText">{remainingBudget}</span> 원
-                </h4>
-                <h6>
+                </h2>
+                <h4>
                   앞으로는 하루에{" "}
                   <span className="highlightedText">{dailyExpenditure}</span>{" "}
                   원씩 쓸 수 있습니다.
-                </h6>
-                <h6>
+                </h4>
+                <h4>
                   이 속도로 소비하면 총{" "}
                   <span className="highlightedText">
                     {estimatedExpenditure}
                   </span>{" "}
                   원을 쓰게 됩니다.
-                </h6>
+                </h4>
                 {/* <CustomProgressBar
                   bgcolor="#2601cf"
                   progress="30"
