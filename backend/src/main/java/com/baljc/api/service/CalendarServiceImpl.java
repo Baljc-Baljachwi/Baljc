@@ -67,13 +67,17 @@ public class CalendarServiceImpl implements CalendarService {
                 map.put("I", map.getOrDefault("I", 0) + accountBookMonthFixed.getPrice());
             }
 
-            calendarMonth.put(year + "-" + monthTemp + "-" + accountBookMonthFixed.getMonthlyPeriod(), map);
+            String dayTemp = String.valueOf(accountBookMonthFixed.getMonthlyPeriod());
+            if (dayTemp.length() == 1) {
+                dayTemp = "0" + dayTemp;
+            }
+            calendarMonth.put(year + "-" + monthTemp + "-" + dayTemp, map);
         }
 
         List<AccountBookDto.AccountBookMonth> monthList = accountBookRepositorySupport.getAccountBookMonth(year, month, memberService.getMemberByAuthentication()).orElseThrow(() -> new NullPointerException("해당 월의 지출, 수입이 존재하지 않습니다."));
         for (AccountBookDto.AccountBookMonth accountBookMonth : monthList) {
             List<AccountBookDto.AccountBookMonth> temp = new ArrayList<>();
-            int day = Integer.parseInt(accountBookMonth.getDate().toString().substring(8, 10));
+            String day = accountBookMonth.getDate().toString().substring(8, 10);
 
             HashMap<String, Integer> map = new HashMap<>();
             if (calendarMonth.containsKey(year + "-" + monthTemp + "-" + day)) {
