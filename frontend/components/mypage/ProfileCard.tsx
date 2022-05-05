@@ -126,13 +126,13 @@ const ProfileCard = ({}) => {
           <ProfileInfo>
             {memberInfo?.nickname}
             <span>
-              급여 [
+              급여 |{" "}
               {memberInfo?.salaryType === "M"
                 ? "월급"
                 : memberInfo?.salaryType === "H"
                 ? "시급"
-                : ""}
-              ] | {memberInfo?.salary} 원
+                : ""}{" "}
+              {memberInfo?.salary} 원
             </span>
             <span>한 달 예산 | {memberInfo?.budget} 원</span>
           </ProfileInfo>
