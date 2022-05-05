@@ -27,10 +27,26 @@ public class MemberController {
         this.memberService = memberService;
     }
 
+//    @GetMapping("/login/kakao")
+//    public ResponseEntity<BaseDataResponse<Map<String, Boolean>>> signinMember(@RequestParam(value = "code") String code) {
+//        log.debug("signinMember - code: {}", code);
+//        MemberDto.SigninInfo signinInfo = memberService.authenticateMember(memberService.signinByKakao(code));
+//
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + signinInfo.getJwt());
+//        Map<String, Boolean> map = new HashMap<>();
+//        map.put("surveyedYn", signinInfo.getSurveyedYn());
+//
+//        return ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(new BaseDataResponse<>(1000,
+//                "소셜로그인에 성공하였습니다.", map));
+//    }
+
     @GetMapping("/login/kakao")
-    public ResponseEntity<BaseDataResponse<Map<String, Boolean>>> signinMember(@RequestParam(value = "code") String code) {
+    public ResponseEntity<BaseDataResponse<Map<String, Boolean>>> signinMember(
+            @RequestParam(value = "code") String code, @RequestParam(value = "token") String fcmToken
+    ) {
         log.debug("signinMember - code: {}", code);
-        MemberDto.SigninInfo signinInfo = memberService.authenticateMember(memberService.signinByKakao(code));
+        MemberDto.SigninInfo signinInfo = memberService.authenticateMember(memberService.signinByKakao(code, fcmToken));
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + signinInfo.getJwt());
@@ -48,8 +64,10 @@ public class MemberController {
     }
 
     @PutMapping
-    public ResponseEntity<BaseResponse> modifyMember(@Valid @RequestPart(value = "memberInfo") MemberDto.RegisterRequest registerRequest,
-                                               @RequestPart(value = "profileImage", required = false) MultipartFile multipartFile) {
+    public ResponseEntity<BaseResponse> modifyMember(
+            @Valid @RequestPart(value = "memberInfo") MemberDto.RegisterRequest registerRequest,
+            @RequestPart(value = "profileImage", required = false) MultipartFile multipartFile
+    ) {
         log.debug("modifyMember - {}", multipartFile.isEmpty());
         memberService.updateMember(registerRequest, multipartFile);
         return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse(1002, "회원정보 변경이 완료되었습니다."));
@@ -59,5 +77,11 @@ public class MemberController {
     public ResponseEntity<BaseResponse> removeMember() {
         memberService.deleteMember();
         return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse(1003, "회원탈퇴가 완료되었습니다."));
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<BaseResponse> signoutMember() {
+        memberService.signoutMember();
+        return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse(1004, "로그아웃이 완료되었습니다."));
     }
 }

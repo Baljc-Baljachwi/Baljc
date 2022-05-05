@@ -77,6 +77,7 @@ public class Member {
 
     public void argsNullSetter() {
         this.kakaoId = null;
+        this.fcmToken = null;
         this.email = null;
         this.nickname = null;
         this.profileUrl = null;
@@ -99,4 +100,6 @@ public class Member {
     }
 
     public void updateProfileUrl(String profileUrl) { this.profileUrl = profileUrl; }
+
+    public void updateFcmToken(String fcmToken) { this.fcmToken = fcmToken; }
 }
