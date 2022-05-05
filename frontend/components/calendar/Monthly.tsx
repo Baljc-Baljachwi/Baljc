@@ -33,9 +33,11 @@ const CalendarWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 0 2rem;
-  .finance-wrapper {
-    position: relative;
-  }
+`;
+
+const FinanceWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 const MonthlyTotal = styled.div`
@@ -196,7 +198,7 @@ export default function Monthly() {
                     ? amount.map((item, idx) =>
                         item[0] === dayjs(date).format("YYYY-MM-D") ? (
                           item[1]["E"] ? (
-                            <div key={idx} className="finance-wrapper">
+                            <FinanceWrapper key={idx}>
                               <div className="cost">
                                 -
                                 {item[1]["E"]
@@ -208,7 +210,7 @@ export default function Monthly() {
                                   ? Number(item[1]["I"]).toLocaleString()
                                   : null}
                               </div>
-                            </div>
+                            </FinanceWrapper>
                           ) : null
                         ) : null
                       )
