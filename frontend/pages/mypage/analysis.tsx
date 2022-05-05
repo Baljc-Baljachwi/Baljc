@@ -175,9 +175,22 @@ const Analysis = () => {
 
               <ContentsDiv>
                 <h5>이번 달 남은 예산</h5>
-                <h4>300,000 원 남음</h4>
-                <h6>하루에 12,000원씩 쓸 수 있습니다.</h6>
-                <h6>이 속도로 소비하면 총 1,000,000원을 쓰게 됩니다.</h6>
+                <h4>
+                  <span className="highlightedText">{remainingBudget}</span> 원
+                  남음
+                </h4>
+                <h6>
+                  하루에{" "}
+                  <span className="highlightedText">{dailyExpenditure}</span>{" "}
+                  원씩 쓸 수 있습니다.
+                </h6>
+                <h6>
+                  이 속도로 소비하면 총{" "}
+                  <span className="highlightedText">
+                    {estimatedExpenditure}
+                  </span>{" "}
+                  원을 쓰게 됩니다.
+                </h6>
               </ContentsDiv>
 
               <DivisionLine />
@@ -315,6 +328,9 @@ const DivisionLine = styled.hr`
 `;
 
 const ContentsDiv = styled.div`
+  .highlightedText {
+    color: orange;
+  }
   .charts {
     flex-direction: column;
     justify-content: center;
