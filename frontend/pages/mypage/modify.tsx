@@ -25,6 +25,7 @@ const LabelProfileImage = styled.label<{ image: string }>`
   display: inline-block;
   width: 14rem;
   height: 14rem;
+  border: 4.2px solid #fafafe;
   border-radius: 50%;
   background-color: #cccccc;
   background-image: url(${(props) => (props.image ? props.image : "")});
@@ -113,6 +114,7 @@ interface SurveyInputForm {
 
 export default function ProfileModify() {
   const router = useRouter();
+  const [ready, setReady] = useState(false);
   const [surveyForm, setSurveyForm] = useState<SurveyInputForm>({
     nickname: "",
     salaryType: "M",
@@ -126,6 +128,8 @@ export default function ProfileModify() {
   const [imagePreview, setImagePreview] = useState<string>("");
 
   useEffect(() => {
+    setReady(true);
+
     getMemberInfo().then((res) => {
       console.log(res.data);
       if (res.data.code === 1001) {
@@ -152,6 +156,10 @@ export default function ProfileModify() {
       }
     });
   }, []);
+
+  if (!ready) {
+    return null;
+  }
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const target = event.target;

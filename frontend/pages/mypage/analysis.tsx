@@ -356,3 +356,5 @@ const ContentsDiv = styled.div`
     }
   }
 `;
+
+Analysis.requireAuth = true;

@@ -1,7 +1,11 @@
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 import { colors } from "../../../styles/colors";
+import { useEffect, useState } from "react";
+import { getCategories } from "api/accountbook";
+import { ICategory } from "types";
 
 const FinanceCardItem = styled.div<{ backgroundColor: string }>`
   filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
@@ -22,6 +26,17 @@ const FinanceCardItem = styled.div<{ backgroundColor: string }>`
   border: none;
   border-radius: 1rem;
   cursor: pointer;
+`;
+
+const FlexContainer = styled.div`
+  display: flex;
+`;
+
+const FlexColumnContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-left: 1.5rem;
 `;
 
 const FinanceCardContent = styled.div`
@@ -64,7 +79,7 @@ interface FinanceCardProps {
   title: string;
   price: number;
   method: string;
-  category: string;
+  categoryName: string;
 }
 
 export default function FinanceCard({
@@ -73,41 +88,71 @@ export default function FinanceCard({
   title,
   price,
   method,
-  category,
+  categoryName,
   isFixed,
 }: FinanceCardProps) {
   const router = useRouter();
+  const [categories, setCategories] = useState<ICategory[]>([]);
+  const [categoryImg, setCategoryImg] = useState("");
+
   const handleClick = () => {
     router.push({
       pathname: "/finance/detail",
       query: { accountbookId },
     });
   };
+
+  useEffect(() => {
+    getCategories("E").then((res) => {
+      setCategories(res.data.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    categories?.map((category, idx) =>
+      category.name === categoryName ? setCategoryImg(category.imgUrl) : null
+    );
+  }, [categories]);
+
+  console.log(1, categoryImg);
+
   return (
     <>
       <FinanceCardItem
         backgroundColor={isFixed ? "#ffd469" : "#F4F4F4"}
         onClick={handleClick}
       >
-        <FinanceCardContent>
-          <FinanceCardTitle>{title}</FinanceCardTitle>
-          <FinanceCardPrice>
-            {type === "E" ? "-" : null}
-            {price.toLocaleString()}원
-          </FinanceCardPrice>
-        </FinanceCardContent>
-        <FinanceCardDetail>
-          {category} |{" "}
-          {method === "C"
-            ? "카드"
-            : method === "M"
-            ? "현금"
-            : method === "E"
-            ? "기타"
-            : method === "N"
-            ? "-"
-            : "-"}
-        </FinanceCardDetail>
+        <FlexContainer>
+          {categoryImg ? (
+            <Image
+              src={categoryImg}
+              alt={categoryName}
+              width="50px"
+              height="50px"
+            />
+          ) : null}
+          <FlexColumnContainer>
+            <FinanceCardContent>
+              <FinanceCardTitle>{title}</FinanceCardTitle>
+              <FinanceCardPrice>
+                {type === "E" ? "-" : null}
+                {price.toLocaleString()}원
+              </FinanceCardPrice>
+            </FinanceCardContent>
+            <FinanceCardDetail>
+              {categoryName} |{" "}
+              {method === "C"
+                ? "카드"
+                : method === "M"
+                ? "현금"
+                : method === "E"
+                ? "기타"
+                : method === "N"
+                ? "-"
+                : "-"}
+            </FinanceCardDetail>
+          </FlexColumnContainer>
+        </FlexContainer>
       </FinanceCardItem>
     </>
   );

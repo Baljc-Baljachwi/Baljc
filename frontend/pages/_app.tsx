@@ -165,6 +165,7 @@ export default function MyApp(props: AppProps) {
             ) : (
               <Component {...pageProps} />
             )}
+            {/* <Component {...pageProps} /> */}
           </Layout>
         </RecoilRoot>
       </ThemeProvider>

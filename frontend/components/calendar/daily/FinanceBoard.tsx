@@ -33,12 +33,14 @@ const TextWrapper = styled.div`
 
 const Typography = styled.div<{
   fs?: string;
+  fw?: string;
   color?: string;
   p?: string;
   cursor?: string;
 }>`
   color: ${(props) => (props.color ? props.color : "#ffffff")};
   font-size: ${(props) => (props.fs ? props.fs : "1rem")};
+  font-weight: ${(props) => (props.fw ? props.fw : "")};
   padding: ${(props) => (props.p ? props.p : "0")};
   cursor: ${(props) => (props.cursor ? props.cursor : "")};
 `;
@@ -50,12 +52,21 @@ const FlexContainer = styled.div<{ jc?: string }>`
   justify-content: ${(props) => (props.jc ? props.jc : "")};
 `;
 
+const TotalContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 0;
+`;
+
 const FinanceListContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
 `;
 
+const Hr = styled.div`
+  border: 0.1px #ffffff solid;
+`;
 interface IDayNumber {
   cntExpenditure: number;
   fixedExpenditure: number;
@@ -69,15 +80,11 @@ interface IDayString {
   word?: string;
 }
 
-// interface IAccountBookList extends IAccountbook {
-//   categoryImgUrl: string;
-//   dayOfWeek: string | null;
-// }
-
 interface IAccountBookList {
   accountBookId: string;
   type: "E" | "I";
   categoryImgUrl: string;
+  categoryName: string;
   title: string;
   price: number;
   paymentMethod: "M" | "C" | "E" | "N";
@@ -85,6 +92,7 @@ interface IAccountBookList {
   fixedIncomeYn: "Y" | "N";
   monthlyPeriod: number | null;
   date: string | null;
+  dayOfWeek: string | null;
 }
 
 export default function FinanceBoard({ item }: any) {
@@ -126,11 +134,11 @@ export default function FinanceBoard({ item }: any) {
       </Header>
       <div onClick={handleClick}>
         <TextWrapper>
-          <Typography fs="1.5rem">
-            {dayNumber?.fixedExpenditure
-              ? `고정지출비용 ${dayNumber?.fixedExpenditure.toLocaleString()}원`
-              : null}
-          </Typography>
+          {dayNumber?.fixedExpenditure ? (
+            <Typography fs="1.5rem">
+              고정지출비용 {dayNumber?.fixedExpenditure.toLocaleString()}원
+            </Typography>
+          ) : null}
           <FlexContainer>
             <Typography fs="3.2rem">
               {dayNumber?.remainingBudget.toLocaleString()}원
@@ -140,7 +148,7 @@ export default function FinanceBoard({ item }: any) {
             </Typography>
           </FlexContainer>
           <FlexContainer style={{ justifyContent: "space-between" }}>
-            <Typography fs="1.5rem">
+            <Typography fs="1.5rem" p="0 0 0.5rem 0">
               오늘 소비 {dayNumber?.totalExpenditure.toLocaleString()}원
             </Typography>
             <FlexContainer>
@@ -154,8 +162,26 @@ export default function FinanceBoard({ item }: any) {
       <FinanceListContainer>
         {isCollapsed ? (
           <>
+            <Hr />
+            {dayNumber ? (
+              <TotalContainer>
+                <Typography fs="1.3rem" fw="100">
+                  총 결제 건수 {dayNumber?.cntExpenditure}건
+                </Typography>
+                <Typography fs="1.3rem" fw="100">
+                  총수입 {dayNumber?.totalIncome.toLocaleString()}원
+                </Typography>
+                <Typography fs="1.3rem" fw="100">
+                  총지출 {dayNumber?.totalExpenditure.toLocaleString()}원
+                </Typography>
+              </TotalContainer>
+            ) : null}
             <FinanceBoardList item={accountBookList} />
-            <Typography fs="1rem" p="0.5rem 100% 0 100%" onClick={handleClick}>
+            <Typography
+              fs="1rem"
+              style={{ alignSelf: "center" }}
+              onClick={handleClick}
+            >
               <Icon
                 mode="fas"
                 icon="caret-up"
@@ -166,7 +192,11 @@ export default function FinanceBoard({ item }: any) {
             </Typography>
           </>
         ) : (
-          <Typography fs="1rem" p="0 100%" onClick={handleClick}>
+          <Typography
+            fs="1rem"
+            style={{ alignSelf: "center" }}
+            onClick={handleClick}
+          >
             <Icon
               mode="fas"
               icon="caret-down"

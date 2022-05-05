@@ -103,6 +103,14 @@ export default function Finance(): JSX.Element {
   }, [month, year]);
   // console.log(monthlyLog); // {1: Array(2), 2: Array(1)} { 1: [{...}, {...}], 2: [{...}, {...}]}
 
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    setReady(true);
+  }, []);
+  if (!ready) {
+    return <></>;
+  }
+
   return (
     <>
       <Container>

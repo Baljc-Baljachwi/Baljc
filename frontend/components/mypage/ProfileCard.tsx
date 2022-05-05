@@ -5,7 +5,7 @@ import Image from "next/image";
 
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
-import { accessTokenState } from "states";
+import { accessTokenState } from "atoms/atoms";
 import { getMemberInfo } from "../../api/member";
 import { SalaryType } from "../../types";
 import defaultProfileImg from "@/assets/img/mypage/avatar/avatar_tr1.png";

@@ -1,6 +1,7 @@
-import { getAccountbooks } from "api/accountbook";
+import { getAccountbooks, getCategories } from "api/accountbook";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import Image from "next/image";
+import { useState, useEffect, Fragment } from "react";
 import styled from "styled-components";
 import { IAccountbook } from "types";
 import Header from "../../../components/common/Header";
@@ -57,31 +58,40 @@ const DetailContents = styled.div`
   }
 `;
 
+const CategoryContent = styled.div`
+  display: flex;
+  align-items: center;
+  span {
+    padding-left: 1rem;
+    line-height: 3.4rem;
+  }
+`;
+
+const CategoryImage = styled.label`
+  position: relative;
+  width: 3.2rem;
+  height: 3.2rem;
+  box-sizing: content-box;
+  border-radius: 50%;
+`;
+
 // type TypeTitle = "지출" | "수입";
 interface IFinanceDetail extends IAccountbook {
   categoryName: string;
 }
 
-interface FinanceDetailProps {
-  isFixed: boolean;
-  isExpenditure: boolean;
-  // title: TypeTitle;
-  title: string;
-  price: string;
-  method: string;
-  category: string;
+interface Category {
+  categoryId: string;
+  type: "E" | "I";
+  name: string;
+  imgUrl: string;
 }
 
-const FinanceDetail = ({
-  isFixed,
-  isExpenditure,
-  title,
-  price,
-  method,
-  category,
-}: FinanceDetailProps) => {
+const FinanceDetail = () => {
   const router = useRouter();
   const [financeDetailInfo, setFinanceDetailInfo] = useState<IFinanceDetail>();
+  const [categoryList, setCategoryList] = useState<Category[]>([]);
+  const [categoryImageUrl, setCategoryImageUrl] = useState<string>();
 
   useEffect(() => {
     const accountbookId = router.query.accountbookId;
@@ -90,6 +100,16 @@ const FinanceDetail = ({
         console.log(res.data);
         if (res.data.code === 1302) {
           setFinanceDetailInfo(res.data.data);
+          getCategories(res.data.data.type).then((res) => {
+            console.log(res.data);
+            if (res.data.code === 1300) {
+              console.log(res.data.data);
+              setCategoryList(res.data.data);
+            } else {
+              console.log(res.data.message);
+              confirm("카테고리 조회 실패");
+            }
+          });
         } else {
           console.log(res.data.message);
           confirm("가계부 상세 조회 실패!");
@@ -97,6 +117,20 @@ const FinanceDetail = ({
       });
     }
   }, [router.query.accountbookId]);
+
+  useEffect(() => {
+    setCategoryImageUrl(
+      categoryList.find(
+        (category) => category.categoryId === financeDetailInfo?.categoryId
+      )?.imgUrl
+    );
+  }, [categoryList, setCategoryImageUrl, financeDetailInfo]);
+
+  console.log(
+    categoryList.find(
+      (category) => category.categoryId === financeDetailInfo?.categoryId
+    )?.imgUrl
+  );
 
   // YYYY-MM-DDTHH:MM:SS => YYYY년 MM월 DD일 HH시 MM분
   function datetimeParsing(datetime: string) {
@@ -131,6 +165,14 @@ const FinanceDetail = ({
       pathname: "/finance/financeEditForm",
       query: { accountbookId: financeDetailInfo.accountbookId },
     });
+  }
+
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    setReady(true);
+  }, []);
+  if (!ready) {
+    return null;
   }
 
   return (
@@ -189,7 +231,18 @@ const FinanceDetail = ({
 
             <DetailContents>
               카테고리
-              <span>{financeDetailInfo?.categoryName}</span>
+              <CategoryContent>
+                {categoryImageUrl && (
+                  <CategoryImage>
+                    <Image
+                      src={categoryImageUrl}
+                      alt={financeDetailInfo?.categoryName}
+                      layout="fill"
+                    />
+                  </CategoryImage>
+                )}
+                <span>{financeDetailInfo?.categoryName}</span>
+              </CategoryContent>
             </DetailContents>
             <DetailContents>
               메모

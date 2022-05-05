@@ -135,6 +135,13 @@ const Alarm = () => {
         console.log("😥🙀 알림 변경사항 저장 실패!");
       });
   };
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    setReady(true);
+  }, []);
+  if (!ready) {
+    return null;
+  }
 
   return (
     <>
