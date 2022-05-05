@@ -200,6 +200,15 @@ export default function ProfileModify() {
     return null;
   }
 
+  function validFile(file: any) {
+    if (file.size > 2097152) {
+      return false;
+    }
+    const extensions = ["png", "jpeg", "jpg", "bmp"];
+    const fileExt = file.name.split(".").at(-1);
+    return extensions.includes(fileExt);
+  }
+
   function handleInputProfileImage(event: React.ChangeEvent<HTMLInputElement>) {
     const target = event.target;
     setImageError(false);
@@ -209,11 +218,7 @@ export default function ProfileModify() {
 
     if (target.files.length > 0) {
       const file = target.files[0];
-      if (file.size > 2097152) {
-        setImageError(true);
-      } else {
-        setImageError(false);
-      }
+      setImageError(!validFile(file));
       setImagePreview(URL.createObjectURL(file));
       setValue("profileUpdated", true);
       setProfileImageFile(file as Blob);
@@ -231,19 +236,19 @@ export default function ProfileModify() {
     setImageError(false);
   }
 
-  function onError(data: any) {
-    console.log(data);
-  }
-
   function onSubmit(data: any) {
-    console.log(profileImageFile?.size);
-    if (profileImageFile && profileImageFile.size > 2097152) {
+    if (
+      profileImageFile &&
+      profileImageFile.size > 0 &&
+      !validFile(profileImageFile)
+    ) {
       setImageError(true);
       return;
     }
     if (imageError) {
       return;
     }
+
     const memberInfo = {
       nickname: data.nickname,
       profileUpdated: data.profileUpdated,
@@ -287,19 +292,19 @@ export default function ProfileModify() {
           기본 이미지로 변경
         </DefaultImageButton>
         <ErrorMessage>
-          {imageError && "2MB 이하 이미지(.png, .jpeg) 파일만 가능합니다"}
+          {imageError && "2MB 이하 이미지(.png, .jpeg, .bmp) 파일만 가능합니다"}
         </ErrorMessage>
       </LabelProfileImageContiainer>
       <DisplayNoneInput
         type="file"
         id="profileImage"
-        accept="image/png, image/jpeg"
+        accept="image/png, image/jpeg, image/bmp"
         name="profileImage"
         onChange={handleInputProfileImage}
       />
 
       <PageContainer>
-        <FormContainer onSubmit={handleSubmit(onSubmit, onError)}>
+        <FormContainer onSubmit={handleSubmit(onSubmit)}>
           <div>
             <StyledLabel htmlFor="nickname">닉네임</StyledLabel>
             <InputDiv isError={!!errors.nickname}>
