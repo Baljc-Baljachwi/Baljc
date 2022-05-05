@@ -143,15 +143,15 @@ export default function Finance(): JSX.Element {
             </MonthlySection>
             <MonthlyContentWrapper>
               <MonthlyContent>
-                <Typography fs="1.6rem">지출</Typography>
+                <Typography fs="1.6rem">수입</Typography>
                 <Typography fs="1.6rem" fw="600" color="#0075ff">
                   {income.toLocaleString()} 원
                 </Typography>
               </MonthlyContent>
               <MonthlyContent>
-                <Typography fs="1.6rem">수입</Typography>
+                <Typography fs="1.6rem">지출</Typography>
                 <Typography fs="1.6rem" fw="600">
-                  {expenditure.toLocaleString()} 원
+                  - {expenditure.toLocaleString()} 원
                 </Typography>
               </MonthlyContent>
             </MonthlyContentWrapper>
