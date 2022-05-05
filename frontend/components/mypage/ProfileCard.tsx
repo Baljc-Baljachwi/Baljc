@@ -85,7 +85,7 @@ interface IMemberInfoProps {
   nickname: string;
   profileUrl: string | null;
   salaryType: SalaryType;
-  salary: number | null;
+  salary: number;
   workingHours: number | null;
   budget: number;
 }
@@ -127,14 +127,16 @@ const ProfileCard = ({}) => {
             {memberInfo?.nickname}
             <span>
               급여 |{" "}
-              {memberInfo?.salaryType === "M"
-                ? "월급"
-                : memberInfo?.salaryType === "H"
-                ? "시급"
-                : ""}{" "}
-              {memberInfo?.salary} 원
+              {memberInfo
+                ? memberInfo.salaryType === "M"
+                  ? `월급 ${memberInfo.salary.toLocaleString()} 원`
+                  : memberInfo.salaryType === "H"
+                  ? `시급 ${memberInfo.salary.toLocaleString()} 원`
+                  : "급여를 등록해주세요."
+                : null}
+              {/* .toLocaleString() */}
             </span>
-            <span>한 달 예산 | {memberInfo?.budget} 원</span>
+            <span>한 달 예산 | {memberInfo?.budget.toLocaleString()} 원</span>
           </ProfileInfo>
         </ProfileCardContainer>
       </Container>

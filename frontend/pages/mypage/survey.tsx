@@ -32,7 +32,7 @@ const LabelProfileImageContiainer = styled.div`
 
 const ProfileImage = styled.label`
   border: 4.2px solid #fafafe;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.5));
+  filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
   border-radius: 50%;
   width: 14rem;
   height: 14rem;

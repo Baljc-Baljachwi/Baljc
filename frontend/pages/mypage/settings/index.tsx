@@ -43,7 +43,7 @@ const ProfileContentListContainer = styled.div`
   width: 100%;
   height: 100%;
   background-color: #ffffff;
-  /* filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25)); */
+  /* filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25)); */
 
   font-size: 1.6rem;
   padding: 1.6rem 2rem;

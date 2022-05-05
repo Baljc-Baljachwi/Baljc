@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 
 const ProfileMenuCardItem = styled.div`
-  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25));
+  filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
   display: flex;
   flex-direction: column;
   justify-content: center;
