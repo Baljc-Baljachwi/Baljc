@@ -82,7 +82,6 @@ const ErrorMessage = styled.p`
 `;
 
 const CheckboxContainer = styled.div`
-  position: absolute;
   right: 2rem;
   display: flex;
   justify-content: end;
