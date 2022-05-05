@@ -36,7 +36,7 @@ const MonthlyTotal = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  font-size: 2rem;
+  font-size: 2.3rem;
   padding: 2rem 2rem 0 2rem;
   font-weight: 700;
   .title {
@@ -53,7 +53,7 @@ const MonthlyTotal = styled.div`
   }
   .label {
     font-weight: 300;
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     padding: 0 2rem 0 0;
   }
   .e_content {

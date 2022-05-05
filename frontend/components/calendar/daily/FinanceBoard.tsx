@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 
 import FinanceBoardList from "../../calendar/daily/FinanceBoardList";
 import Icon from "../../common/Icon";
-import { IAccountbook } from "types";
 
 const Container = styled.div`
   background-color: #4d5f8f;
