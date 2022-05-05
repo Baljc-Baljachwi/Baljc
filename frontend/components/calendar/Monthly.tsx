@@ -122,6 +122,7 @@ export default function Monthly() {
         setMark(res.data.data.calendarMonth);
         setExpenditure(res.data.data.monthTotal.E);
         setIncome(res.data.data.monthTotal.I);
+        console.log(res.data.data);
       }
     });
   }, [year, month, date]);
@@ -130,7 +131,7 @@ export default function Monthly() {
     setSaved([]);
     for (let day in mark) {
       const types = mark[day];
-      if ("A" in types) {
+      if (types["A"] === 1) {
         setSaved((prev) => [...prev, day]);
         // setSaved([...saved, day]); 이렇게 쓰면 쥬금
       }
@@ -190,13 +191,15 @@ export default function Monthly() {
               view === "month" ? (
                 <>
                   {saved ? (
-                    saved.find((x) => x === dayjs(date).format("YYYY-MM-D")) ? (
+                    saved.find(
+                      (x) => x === dayjs(date).format("YYYY-MM-DD")
+                    ) ? (
                       <div className="img"></div>
                     ) : null
                   ) : null}
                   {amount
                     ? amount.map((item, idx) =>
-                        item[0] === dayjs(date).format("YYYY-MM-D") ? (
+                        item[0] === dayjs(date).format("YYYY-MM-DD") ? (
                           item[1]["E"] ? (
                             <FinanceWrapper key={idx}>
                               <div className="cost">

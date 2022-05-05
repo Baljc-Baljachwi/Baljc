@@ -75,7 +75,7 @@ abbr[title] {
   padding: 0;
   background: none;
   text-align: center;
-  line-height: 1.5rem;
+  line-height: 1.8rem;
   color: #676c76;
 }
 
@@ -117,8 +117,7 @@ abbr[title] {
   object-fit: cover;
   background-image: url("/assets/img/foot_true.png");
   background-size: cover;
-  position: absolute;
-  margin: -2rem 0 0 1.7rem;
+  margin: -2rem 0 0 0.3rem;
   opacity: 80%;
   z-index: -100000;
 }
