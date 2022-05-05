@@ -36,12 +36,15 @@ public class Member {
     private Integer budget;
     private Character surveyedYn;
     private LocalDateTime deletedAt;
+    private Double latitude;
+    private Double longitude;
+    private String dong;
     @CreatedDate
     private LocalDateTime createdAt;
 
     @Builder
     public Member(String kakaoId, String fcmToken, String email, String nickname, String profileUrl, Character salaryType,
-                  Integer salary, Integer workingHours, Integer budget, Character surveyedYn) {
+                  Integer salary, Integer workingHours, Integer budget, Character surveyedYn, Double latitude, Double longitude, String dong) {
         this.kakaoId = kakaoId;
         this.fcmToken = fcmToken;
         this.email = email;
@@ -52,6 +55,9 @@ public class Member {
         this.workingHours = workingHours;
         this.budget = budget;
         this.surveyedYn = surveyedYn;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.dong = dong;
     }
 
     @OneToMany(mappedBy = "member")
@@ -77,6 +83,7 @@ public class Member {
 
     public void argsNullSetter() {
         this.kakaoId = null;
+        this.fcmToken = null;
         this.email = null;
         this.nickname = null;
         this.profileUrl = null;
@@ -99,4 +106,6 @@ public class Member {
     }
 
     public void updateProfileUrl(String profileUrl) { this.profileUrl = profileUrl; }
+
+    public void updateFcmToken(String fcmToken) { this.fcmToken = fcmToken; }
 }
