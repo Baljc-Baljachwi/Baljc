@@ -13,17 +13,19 @@ const ToggleCostIncome = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: 3.4rem;
+  margin-bottom: 2rem;
+  gap: 1rem;
 `;
 
 const CostIncomeButton = styled.button<{ isSelected: boolean }>`
-  padding: 1rem 5rem;
+  padding: 2rem 4rem;
   color: ${(props) => (props.isSelected ? "#3d3d3d" : "#cacaca")};
   font-weight: ${(props) => (props.isSelected ? "700" : "400")};
   border: none;
   background-color: #ffffff;
   font-family: "Noto Sans KR";
   font-size: 2.4rem;
+  border-bottom: ${(props) => (props.isSelected ? "2px solid #000000" : "")};
 `;
 
 export default function FinanceCreateForm() {
