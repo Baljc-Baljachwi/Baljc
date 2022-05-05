@@ -31,13 +31,17 @@ const TodoText = styled.span<{ isCompleted: boolean; viewOnly: boolean }>`
   justify-content: space-between;
 `;
 
-const TodoInput = styled.input<{ isClicked: boolean; isEdit: boolean }>`
+const TodoInput = styled.input<{
+  isClicked: boolean;
+  isEdit: boolean;
+  viewOnly: boolean;
+}>`
   font-family: "Noto Sans KR";
   font-size: 1.8rem;
-  color: #3d3d3d;
+  color: ${(props) => (props.viewOnly ? "#ffffff" : "#000000")};
+  background-color: ${(props) => (props.viewOnly ? "#4d5f8f" : "")};
   border: none;
-  border-bottom: ${(props) =>
-    props.isEdit ? "1px solid #ffffff" : " 1px solid #cccccc"};
+  border-bottom: ${(props) => (props.isEdit ? "" : " 1px solid #cccccc")};
   outline: none;
 `;
 
@@ -212,6 +216,7 @@ export default function TodoItem({
               readOnly={isClicked} // false일 때, 수정 가능
               onFocus={handleFocus}
               onBlur={handleBlur}
+              viewOnly={viewOnly}
             />
             <IconDiv isClicked={todoClicked}>
               {/* <Icon

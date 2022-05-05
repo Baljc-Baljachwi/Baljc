@@ -10,7 +10,7 @@ const PageContainer = styled.main`
   width: 100%;
 `;
 
-export default function FinanceList({ item }: any) {
+export default function FinanceList({ item }: any, date: string) {
   return (
     <>
       <PageContainer>
@@ -28,6 +28,7 @@ export default function FinanceList({ item }: any) {
             price={data.price}
             method={data.paymentMethod}
             categoryName={data.categoryName}
+            date={date}
           />
         ))}
       </PageContainer>

@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import { IRoutine } from "types";
+import { useRouter } from "next/router";
 
+import { IRoutine } from "types";
 import Icon from "../../common/Icon";
 
 const Container = styled.div`
@@ -33,23 +34,36 @@ const RoutineListItem = styled.li`
 `;
 
 export default function RoutineBoard({ routines }: any) {
+  const router = useRouter();
   return (
     <Container>
       <Title>일과</Title>
       <RoutineList>
         <ul>
-          {routines?.map((routine: IRoutine) => (
-            <RoutineListItem key={routine.routineId}>
-              <Icon
-                mode="fas"
-                icon="circle"
-                color="#FFD469"
-                size="1rem"
-                display="flex"
-              />
-              {routine.title}
-            </RoutineListItem>
-          ))}
+          {routines ? (
+            routines.length !== 0 ? (
+              routines.map((routine: IRoutine) => (
+                <RoutineListItem key={routine.routineId}>
+                  <Icon
+                    mode="fas"
+                    icon="circle"
+                    color="#FFD469"
+                    size="1rem"
+                    display="flex"
+                  />
+                  {routine.title}
+                </RoutineListItem>
+              ))
+            ) : (
+              <RoutineListItem
+                onClick={() => router.push({ pathname: "/work/routine" })}
+                style={{ padding: "1rem 0", flexWrap: "wrap" }}
+              >
+                <p>등록된 일과가 없습니다! </p>
+                <p>추가하려면 클릭하세요.</p>
+              </RoutineListItem>
+            )
+          ) : null}
         </ul>
       </RoutineList>
     </Container>

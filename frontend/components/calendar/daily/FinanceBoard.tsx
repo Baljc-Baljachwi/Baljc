@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 
 import FinanceBoardList from "../../calendar/daily/FinanceBoardList";
 import Icon from "../../common/Icon";
-import { IAccountbook } from "types";
 
 const Container = styled.div`
   background-color: #4d5f8f;
@@ -95,7 +94,7 @@ interface IAccountBookList {
   dayOfWeek: string | null;
 }
 
-export default function FinanceBoard({ item }: any) {
+export default function FinanceBoard({ item }: any, date: string) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const router = useRouter();
   const [dayNumber, setDayNumber] = useState<IDayNumber>();
@@ -111,8 +110,6 @@ export default function FinanceBoard({ item }: any) {
     setDayString(item.dayString);
     setAccountBookList(item.accountBookList);
   }, [item]);
-
-  // console.log(accountBookList); //[{…}, {…}]
 
   return (
     <Container>
@@ -176,7 +173,7 @@ export default function FinanceBoard({ item }: any) {
                 </Typography>
               </TotalContainer>
             ) : null}
-            <FinanceBoardList item={accountBookList} />
+            <FinanceBoardList item={accountBookList} date={date} />
             <Typography
               fs="1rem"
               style={{ alignSelf: "center" }}

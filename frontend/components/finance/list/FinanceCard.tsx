@@ -80,6 +80,7 @@ interface FinanceCardProps {
   price: number;
   method: string;
   categoryName: string;
+  date?: string;
 }
 
 export default function FinanceCard({
@@ -90,9 +91,11 @@ export default function FinanceCard({
   method,
   categoryName,
   isFixed,
+  date,
 }: FinanceCardProps) {
   const router = useRouter();
-  const [categories, setCategories] = useState<ICategory[]>([]);
+  const [exCategories, setExCategories] = useState<ICategory[]>([]);
+  const [inCategories, setInCategories] = useState<ICategory[]>([]);
   const [categoryImg, setCategoryImg] = useState("");
 
   const handleClick = () => {
@@ -104,17 +107,21 @@ export default function FinanceCard({
 
   useEffect(() => {
     getCategories("E").then((res) => {
-      setCategories(res.data.data);
+      setExCategories(res.data.data);
     });
-  }, []);
+    getCategories("I").then((res) => {
+      setInCategories(res.data.data);
+    });
+  }, [date]);
 
   useEffect(() => {
-    categories?.map((category, idx) =>
+    exCategories?.map((category, idx) =>
       category.name === categoryName ? setCategoryImg(category.imgUrl) : null
     );
-  }, [categories]);
-
-  console.log(1, categoryImg);
+    inCategories?.map((category, idx) =>
+      category.name === categoryName ? setCategoryImg(category.imgUrl) : null
+    );
+  }, [exCategories, inCategories, categoryName]);
 
   return (
     <>

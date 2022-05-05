@@ -24,16 +24,18 @@ const InputDiv = styled.div`
   width: 100%;
 `;
 
-const TodoInput = styled.input`
+const TodoInput = styled.input<{ viewOnly: boolean }>`
   width: 100%;
   font-family: "Noto Sans KR";
   font-size: 1.8rem;
-  color: #3d3d3d;
+  color: ${(props) => (props.viewOnly ? "#ffffff" : "#000000")};
+  background-color: ${(props) => (props.viewOnly ? "#4d5f8f" : "")};
   border: none;
   border-bottom: 1px solid #cccccc;
   outline: none;
   ::placeholder {
     color: #cccccc;
+    color: ${(props) => (props.viewOnly ? "#ffffff" : "#cccccc")};
   }
 `;
 
@@ -133,25 +135,28 @@ export default function Todo({ viewOnly, date }: TodoProps) {
             <></>
           )}
         </>
-        <TodoInputDiv>
-          <Image
-            src="/assets/img/foot_false.png"
-            alt=""
-            width={30}
-            height={30}
-          />
-          <InputDiv>
-            <TodoInput
-              name="todo"
-              id="todo"
-              value={inputForm.content}
-              type="text"
-              placeholder="할 일을 입력해주세요"
-              onChange={onInputChange}
-              onKeyPress={onEnter}
+        {
+          <TodoInputDiv>
+            <Image
+              src="/assets/img/foot_false.png"
+              alt=""
+              width={30}
+              height={30}
             />
-          </InputDiv>
-        </TodoInputDiv>
+            <InputDiv>
+              <TodoInput
+                name="todo"
+                id="todo"
+                value={inputForm.content}
+                type="text"
+                placeholder="할 일을 입력해주세요"
+                onChange={onInputChange}
+                onKeyPress={onEnter}
+                viewOnly={viewOnly}
+              />
+            </InputDiv>
+          </TodoInputDiv>
+        }
       </TodoDiv>
     </>
   );
