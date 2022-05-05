@@ -130,6 +130,7 @@ abbr[title] {
 
 .cost {
   font-size: 0.5rem;
+  line-height: 1rem;
   color: #3d3d3d;
   font-weight: 300;
   text-decoration: none;
@@ -137,6 +138,7 @@ abbr[title] {
 
 .income {
   font-size: 0.5rem;
+  line-height: 1.2rem;
   color: #8cbff2;
   font-weight: 300;
   text-decoration: none;
