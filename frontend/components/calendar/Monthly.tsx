@@ -79,6 +79,7 @@ export default function Monthly() {
   // [['2022-05-1', {E: 3500, I: 1000}], ['2022-05-2', {E: 10000}]]
 
   const dayYoil = dayjs(date).format("D일 dddd");
+  const dayMonthYear = dayjs(date).format("YYYY-MM-DD");
   dayjs.locale("ko");
 
   useEffect(() => {
@@ -160,7 +161,13 @@ export default function Monthly() {
             }
           />
         </CalendarWrapper>
-        <Daily dayYoil={dayYoil} day={day} year={year} month={month} />
+        <Daily
+          date={dayMonthYear}
+          dayYoil={dayYoil}
+          day={day}
+          year={year}
+          month={month}
+        />
       </Container>
     </>
   );

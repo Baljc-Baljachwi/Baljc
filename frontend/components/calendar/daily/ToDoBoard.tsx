@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import styled from "styled-components";
 import TodoList from "../../work/todolist/index";
 
@@ -17,11 +18,14 @@ const Title = styled.div`
   border-radius: 3px;
 `;
 
-export default function ToDoBoard() {
+interface ToDoBoardProps {
+  date: string;
+}
+export default function ToDoBoard({ date }: ToDoBoardProps) {
   return (
     <Container>
       <Title>할 일</Title>
-      {/* <TodoList viewOnly={true} /> */}
+      <TodoList viewOnly={true} date={date} />
     </Container>
   );
 }

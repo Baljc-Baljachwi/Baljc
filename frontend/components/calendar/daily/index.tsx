@@ -6,7 +6,7 @@ import RoutineBoard from "./RoutineBoard";
 import ToDoBoard from "./ToDoBoard";
 import { getDailyCalendar } from "api/calendar";
 import { useEffect } from "react";
-import { IRoutine } from "types";
+import { IRoutine, ITodo } from "types";
 
 const Container = styled.div`
   display: flex;
@@ -24,12 +24,12 @@ interface DailyProps {
   month: string;
   day: string;
   dayYoil: string;
+  date: string;
 }
 
-export default function Daily({ dayYoil, day, month, year }: DailyProps) {
+export default function Daily({ date, dayYoil, day, month, year }: DailyProps) {
   const [result, setResult] = useState<Array<any>>([]);
   const [routines, setRoutines] = useState<IRoutine[]>();
-
   useEffect(() => {
     getDailyCalendar({ year: year, month: month, day: day }).then((res) => {
       setResult(res.data.data);
@@ -42,7 +42,7 @@ export default function Daily({ dayYoil, day, month, year }: DailyProps) {
       <Title>{dayYoil}</Title>
       <FinanceBoard item={result} />
       <RoutineBoard routines={routines} />
-      <ToDoBoard />
+      <ToDoBoard date={date} />
     </Container>
   );
 }
