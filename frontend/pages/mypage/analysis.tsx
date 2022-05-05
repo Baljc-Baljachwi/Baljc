@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import Header from "../../components/common/Header";
 import ProfileCard from "../../components/mypage/ProfileCard";
+import NotFoundTransaction from "components/common/not-found-transaction/NotFoundTransaction";
 
 import { getBudget, getPieChartValue } from "../../api/mypage";
 
@@ -175,7 +176,11 @@ const Analysis = () => {
                 <div className="charts">
                   <div className="circle">
                     <h2>카테고리별 지출 통계</h2>
-                    <Doughnut data={data1} width={400} height={400} />
+                    {categoryValue.length === 0 ? (
+                      <NotFoundTransaction />
+                    ) : (
+                      <Doughnut data={data1} width={400} height={400} />
+                    )}
                   </div>
                 </div>
               </ContentsDiv>
