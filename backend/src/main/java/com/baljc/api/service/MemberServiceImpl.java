@@ -71,9 +71,38 @@ public class MemberServiceImpl implements MemberService {
         this.profileImagePath = profileImagePath;
     }
 
+//    @Override
+//    @Transactional(rollbackFor = Exception.class)
+//    public Member signinByKakao(String code) {
+//        // 인가코드 -> 엑세스 토큰
+//        String accessToken = getAccessTokenByKakao(code);
+//        log.debug("authenticateMember - accessToken: {}", accessToken);
+//
+//        // 엑세스 토큰 -> 카카오 사용자 정보
+//        Map<String, String> kakaoUser = getMemberInfoByKakaoToken(accessToken);
+//
+//        Member member = memberRepository.findByKakaoId(kakaoUser.get("socialId")).orElse(null);
+//        if (member == null) {
+//            member = Member.builder()
+//                    .kakaoId(kakaoUser.get("socialId"))
+//                    .email(kakaoUser.get("email"))
+//                    .surveyedYn('N')
+//                    .build();
+//            memberRepository.save(member);
+//            pushAlarmRepository.save(PushAlarm.builder()
+//                    .member(member)
+//                    .accountAlarmYn('Y')
+//                    .accountAlarmTime(LocalTime.parse("21:00:00"))
+//                    .todoAlarmYn('Y')
+//                    .todoAlarmTime(LocalTime.parse("09:00:00"))
+//                    .build());
+//        }
+//        return member;
+//    }
+
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Member signinByKakao(String code) {
+    public Member signinByKakao(String code, String fcmToken) {
         // 인가코드 -> 엑세스 토큰
         String accessToken = getAccessTokenByKakao(code);
         log.debug("authenticateMember - accessToken: {}", accessToken);
@@ -86,6 +115,7 @@ public class MemberServiceImpl implements MemberService {
             member = Member.builder()
                     .kakaoId(kakaoUser.get("socialId"))
                     .email(kakaoUser.get("email"))
+                    .fcmToken(fcmToken)
                     .surveyedYn('N')
                     .build();
             memberRepository.save(member);
@@ -217,6 +247,12 @@ public class MemberServiceImpl implements MemberService {
         }
         if (member.getProfileUrl() != null) fileService.deleteImage(member.getProfileUrl());
         member.argsNullSetter();
+        SecurityContextHolder.clearContext();
+    }
+
+    @Override
+    public void signoutMember() {
+        getMemberByAuthentication().updateFcmToken(null);
         SecurityContextHolder.clearContext();
     }
 }
