@@ -163,17 +163,22 @@ const Analysis = () => {
               <ContentsDiv>
                 <h5>이번 달 남은 예산 : </h5>
                 <h2>
-                  <span className="highlightedText">{remainingBudget}</span> 원
+                  <span className="highlightedText">
+                    {remainingBudget.toLocaleString()}
+                  </span>{" "}
+                  원
                 </h2>
                 <h4>
                   앞으로는 하루에{" "}
-                  <span className="highlightedText">{dailyExpenditure}</span>{" "}
+                  <span className="highlightedText">
+                    {dailyExpenditure.toLocaleString()}
+                  </span>{" "}
                   원씩 쓸 수 있습니다.
                 </h4>
                 <h4>
                   이 속도로 소비하면 총{" "}
                   <span className="highlightedText">
-                    {estimatedExpenditure}
+                    {estimatedExpenditure.toLocaleString()}
                   </span>{" "}
                   원을 쓰게 됩니다.
                 </h4>
