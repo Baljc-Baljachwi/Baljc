@@ -12,7 +12,7 @@ const Container = styled.nav`
   left: 0;
   bottom: 0;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   z-index: 10000;
 `;
 
@@ -33,7 +33,7 @@ export default function NavBar() {
   const router = useRouter();
   return (
     <Container>
-      <Item onClick={() => router.push("/community")}>
+      {/* <Item onClick={() => router.push("/community")}>
         <Icon
           mode="fas"
           icon="comments"
@@ -43,6 +43,19 @@ export default function NavBar() {
         <Link href="/community">
           <a className={router.pathname === "/community" ? "" : "active"}>
             커뮤니티
+          </a>
+        </Link>
+      </Item> */}
+      <Item onClick={() => router.push("/calendar")}>
+        <Icon
+          mode="fas"
+          icon="calendar-days"
+          size="2rem"
+          color={router.pathname === "/calendar" ? undefined : "#cdcdcd"}
+        />
+        <Link href="/calendar">
+          <a className={router.pathname === "/calendar" ? "" : "active"}>
+            캘린더
           </a>
         </Link>
       </Item>
@@ -56,19 +69,6 @@ export default function NavBar() {
         <Link href="/finance">
           <a className={router.pathname === "/finance" ? "" : "active"}>
             가계부
-          </a>
-        </Link>
-      </Item>
-      <Item onClick={() => router.push("/calendar")}>
-        <Icon
-          mode="fas"
-          icon="calendar-days"
-          size="2rem"
-          color={router.pathname === "/calendar" ? undefined : "#cdcdcd"}
-        />
-        <Link href="/calendar">
-          <a className={router.pathname === "/calendar" ? "" : "active"}>
-            캘린더
           </a>
         </Link>
       </Item>
