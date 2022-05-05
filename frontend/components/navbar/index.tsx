@@ -14,6 +14,7 @@ const Container = styled.nav`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   z-index: 10000;
+  height: 5.6rem;
 `;
 
 const Item = styled.div`
