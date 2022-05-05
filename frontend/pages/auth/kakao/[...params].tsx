@@ -21,7 +21,7 @@ export default function KakaoAuth() {
         console.log(res.data);
         console.log(res.data.data);
 
-        router.push(res.data.data.surveyedYn ? "/" : "/mypage/survey");
+        router.push(res.data.data.surveyedYn ? "/calendar" : "/mypage/survey");
       }
     });
   }, [code, router, setAccessToken]);
