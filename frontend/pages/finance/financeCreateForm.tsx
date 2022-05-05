@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import Header from "../../components/common/Header";
@@ -31,6 +31,14 @@ export default function FinanceCreateForm() {
 
   function handleToggleAccountType(event: any) {
     setAccountType(event.target.value);
+  }
+
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    setReady(true);
+  }, []);
+  if (!ready) {
+    return null;
   }
   return (
     <>
