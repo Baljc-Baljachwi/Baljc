@@ -32,8 +32,8 @@ public class FileServiceImpl implements FileService {
         } catch (IOException e) {
             throw new IllegalArgumentException("파일 변환 중 에러가 발생했습니다.");
         }
-        if (!mimeType.startsWith("image"))
-            throw new IllegalArgumentException("image 타입의 파일이 아닙니다.");
+        if (!mimeType.startsWith("image") || mimeType.endsWith("gif"))
+            throw new IllegalArgumentException("image 타입(jpg/png/bmp/webp)의 파일이 아닙니다.");
         return amazonS3Service.upload(multipartFile, folderPath);
     }
 
