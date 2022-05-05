@@ -133,27 +133,25 @@ export default function Todo({ viewOnly, date }: TodoProps) {
             <></>
           )}
         </>
-        {viewOnly ? null : (
-          <TodoInputDiv>
-            <Image
-              src="/assets/img/foot_false.png"
-              alt=""
-              width={30}
-              height={30}
+        <TodoInputDiv>
+          <Image
+            src="/assets/img/foot_false.png"
+            alt=""
+            width={30}
+            height={30}
+          />
+          <InputDiv>
+            <TodoInput
+              name="todo"
+              id="todo"
+              value={inputForm.content}
+              type="text"
+              placeholder="할 일을 입력해주세요"
+              onChange={onInputChange}
+              onKeyPress={onEnter}
             />
-            <InputDiv>
-              <TodoInput
-                name="todo"
-                id="todo"
-                value={inputForm.content}
-                type="text"
-                placeholder="할 일을 입력해주세요"
-                onChange={onInputChange}
-                onKeyPress={onEnter}
-              />
-            </InputDiv>
-          </TodoInputDiv>
-        )}
+          </InputDiv>
+        </TodoInputDiv>
       </TodoDiv>
     </>
   );

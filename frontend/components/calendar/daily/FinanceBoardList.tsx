@@ -1,8 +1,6 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
 
 import FinanceCard from "../../../components/finance/list/FinanceCard";
-import { IAccountbook } from "types";
 
 const PageContainer = styled.main`
   /* padding: 0 2rem; */
@@ -10,11 +8,6 @@ const PageContainer = styled.main`
   flex-direction: column;
   gap: 1rem;
   width: 100%;
-`;
-
-const Day = styled.div`
-  font-size: 1.5rem;
-  padding-top: 1.5rem;
 `;
 
 export default function FinanceList({ item }: any) {
@@ -33,8 +26,8 @@ export default function FinanceList({ item }: any) {
             type={data.type}
             title={data.title}
             price={data.price}
-            category={data.categoryName}
             method={data.paymentMethod}
+            categoryName={data.categoryName}
           />
         ))}
       </PageContainer>

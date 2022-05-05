@@ -2,10 +2,6 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Monthly from "../components/calendar/Monthly";
 
-const Container = styled.div`
-  padding-bottom: 7rem;
-`;
-
 export default function Calendar() {
   const [ready, setReady] = useState(false);
   useEffect(() => {
@@ -15,9 +11,9 @@ export default function Calendar() {
     return null;
   }
   return (
-    <Container>
+    <>
       <Monthly />
-    </Container>
+    </>
   );
 }
 
