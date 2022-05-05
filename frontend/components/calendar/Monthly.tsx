@@ -18,6 +18,9 @@ const StyledHeader = styled.header`
   align-items: center;
   padding: 0 2rem;
   justify-content: space-between;
+  position: fixed;
+  top: 0;
+  z-index: 10000;
 `;
 
 const Container = styled.div`
@@ -30,6 +33,9 @@ const CalendarWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 0 2rem;
+  .finance-wrapper {
+    position: relative;
+  }
 `;
 
 const MonthlyTotal = styled.div`
