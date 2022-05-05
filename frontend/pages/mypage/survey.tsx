@@ -22,6 +22,7 @@ const LabelProfileImage = styled.label<{ image: string }>`
   display: inline-block;
   width: 14rem;
   height: 14rem;
+  border: 4.2px solid #fafafe;
   border-radius: 50%;
   background-color: #cccccc;
   background-image: url(${(props) => (props.image ? props.image : "")});
