@@ -1,11 +1,13 @@
 import React, { Fragment, useEffect, useState } from "react";
 import styled from "styled-components";
+import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
+import Image from "next/image";
 
 import Header from "../../components/common/Header";
 import ButtonBottom from "../../components/common/ButtonBottom";
 import { putMembers } from "api/member";
-import { useRouter } from "next/router";
-import { useForm } from "react-hook-form";
+import defaultProfileImage from "public/assets/img/mypage/avatar/default_profile.png";
 
 const PageContainer = styled.main`
   padding: 0 2rem 2rem 2rem;
@@ -28,20 +30,19 @@ const LabelProfileImageContiainer = styled.div`
   gap: 1rem;
 `;
 
-const LabelProfileImage = styled.label<{ image: string }>`
-  display: inline-block;
+const ProfileImage = styled.label`
+  border: 4.2px solid #fafafe;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.5));
+  border-radius: 50%;
   width: 14rem;
   height: 14rem;
-  border: 4.2px solid #fafafe;
-  border-radius: 50%;
-  background-color: #cccccc;
-  background-image: url(${(props) => (props.image ? props.image : "")});
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-clip: border-box;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-  cursor: pointer;
+  position: relative;
+  .profileImg {
+    border: 3px solid #fafafe;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+  }
 `;
 
 const InputDiv = styled.div<{ isError?: boolean }>`
@@ -142,6 +143,7 @@ export default function Survey() {
     setValue,
     watch,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm({
     mode: "all",
@@ -223,7 +225,14 @@ export default function Survey() {
     <>
       <Header label="설문조사" />
       <LabelProfileImageContiainer>
-        <LabelProfileImage image={imagePreview} htmlFor="profileImage" />
+        <ProfileImage htmlFor="profileImage">
+          <Image
+            className="profileImg"
+            src={imagePreview || defaultProfileImage}
+            alt={getValues("nickname")}
+            layout="fill"
+          />
+        </ProfileImage>
         <DefaultImageButton onClick={onClickDefaultImageButton}>
           기본 이미지로 변경
         </DefaultImageButton>
