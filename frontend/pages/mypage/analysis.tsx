@@ -5,6 +5,9 @@ import styled from "styled-components";
 import Header from "../../components/common/Header";
 import ProfileCard from "../../components/mypage/ProfileCard";
 import NotFoundTransaction from "components/common/not-found-transaction/NotFoundTransaction";
+import ProgressBar from "../../components/common/ProgressBar";
+import CustomProgressBar from "components/common/CustomProgressBar";
+import ProgressStaticBar from "components/common/ProgressStaticBar";
 
 import { getBudget, getPieChartValue } from "../../api/mypage";
 
@@ -43,6 +46,9 @@ const Analysis = () => {
   const year = Number(dayjs(date).format("YYYY"));
   const month = Number(dayjs(date).format("M"));
   const dateForm = dayjs(date).format("YYYY-MM-DD");
+  const [budget, setBudget] = useState(0);
+  const [expenditurePercent, setExpenditurePercent] = useState("100");
+  const [remainingBudgetPercent, setRemainingBudgetPercent] = useState(0);
 
   // const categoryName = Object.keys(categories).map((idx:any)=> data1.labels[idx]);
   const categoryName = Object.keys(categories);
@@ -69,9 +75,15 @@ const Analysis = () => {
       .then((res) => {
         console.log(res.data);
         console.log("예산 조회 성공! 🤸‍♀️🔥");
+        console.log(expenditurePercent);
+        console.log("퍼센트 toString");
+        console.log(expenditurePercent.toString());
         setRemainingBudget(res.data.data.remainingBudget);
         setDailyExpenditure(res.data.data.dailyExpenditure);
         setEstimatedExpenditure(res.data.data.estimatedExpenditure);
+        setBudget(res.data.data.budget);
+        setExpenditurePercent(res.data.data.expenditurePercent);
+        setRemainingBudgetPercent(res.data.data.remainingBudgetPercent);
       })
       .catch((err) => {
         console.log(err.response);
@@ -151,13 +163,13 @@ const Analysis = () => {
               <DivisionLine />
 
               <ContentsDiv>
-                <h5>이번 달 남은 예산</h5>
+                <h5>이번 달 남은 예산 : </h5>
+                {/* <ProgressBar /> */}
                 <h4>
                   <span className="highlightedText">{remainingBudget}</span> 원
-                  남음
                 </h4>
                 <h6>
-                  하루에{" "}
+                  앞으로는 하루에{" "}
                   <span className="highlightedText">{dailyExpenditure}</span>{" "}
                   원씩 쓸 수 있습니다.
                 </h6>
@@ -168,14 +180,20 @@ const Analysis = () => {
                   </span>{" "}
                   원을 쓰게 됩니다.
                 </h6>
+                {/* <CustomProgressBar
+                  bgcolor="#2601cf"
+                  progress="30"
+                  height="4rem"
+                /> */}
               </ContentsDiv>
-
+              <ProgressStaticBar done={`${expenditurePercent}`} />
+              {/* {expenditurePercent} */}
               <DivisionLine />
 
               <ContentsDiv>
                 <div className="charts">
                   <div className="circle">
-                    <h2>카테고리별 지출 통계</h2>
+                    <h2>카테고리 별 지출 통계</h2>
                     {categoryValue.length === 0 ? (
                       <NotFoundTransaction />
                     ) : (
@@ -304,7 +322,9 @@ const ProfileMenuCardContent = styled.div`
 // `;
 
 const DivisionLine = styled.hr`
-  border-top: 2px solid lightslategray;
+  border-top: 2px solid;
+  border-color: #c8c8c8;
+  /* border-top: 2px solid lightslategray; */
   /* border-color: #f6f6f6; */
 `;
 
