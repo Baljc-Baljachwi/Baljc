@@ -187,7 +187,7 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
       title: initForm?.title || "",
       price: initForm?.price.toString() || "",
       memo: initForm?.memo || "",
-      paymentMethod: initForm?.paymentMethod || "N",
+      paymentMethod: initForm?.paymentMethod || (type === "E" ? "C" : "N"),
       fixedExpenditureYn: initForm?.fixedExpenditureYn === "Y" || false,
       fixedIncomeYn: initForm?.fixedIncomeYn === "Y" || false,
       monthlyPeriod: initForm?.monthlyPeriod || "",
@@ -215,7 +215,7 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
     // 생성 페이지일 때만
     if (!initForm) {
       setValue("categoryId", "");
-      setValue("paymentMethod", "N");
+      setValue("paymentMethod", type === "E" ? "C" : "N");
       setValue("fixedExpenditureYn", false);
       setValue("fixedIncomeYn", false);
       setValue("startDate", "");
