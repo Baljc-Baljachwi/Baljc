@@ -113,7 +113,6 @@ export default function TodoItem({
     } else {
       setTodoClicked(true);
       setClicked(false);
-      console.log(contentForm.content);
     }
   }
 
@@ -121,29 +120,25 @@ export default function TodoItem({
   const onEnter = (e: any) => {
     // console.log(e.target.id);
     if (e.key === "Enter") {
-      editTodos(e.target.id, contentForm)
-        .then((res) => {
-          console.log(res);
-          setTodoClicked(false);
-          setClicked(true);
-        })
-        .catch((err) => console.log(err));
+      if (contentForm.content.length === 0) {
+        e.target.innerHTML = "야";
+      } else {
+        editTodos(e.target.id, contentForm)
+          .then((res) => {
+            console.log(res);
+            setTodoClicked(false);
+            setClicked(true);
+          })
+          .catch((err) => console.log(err));
+      }
     }
   };
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
     setContentForm((prev) => ({
       ...prev,
       content: e.target.value,
     }));
-    console.log(contentForm.content);
-  };
-
-  const editTodo = () => {
-    console.log(todoClicked);
-    console.log(content, "변경하자");
-    // 수정 중에 다른 곳으로 이동하면 ?
   };
 
   const deleteTodo = () => {
@@ -154,6 +149,22 @@ export default function TodoItem({
         setTodos(todos.filter((todo: ITodoTypes) => todo.todoId !== todoId));
       })
       .catch((err) => console.log(err));
+  };
+
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {};
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    if (contentForm.content.length === 0) {
+      e.target.innerHTML = "야";
+    } else {
+      editTodos(e.target.id, contentForm)
+        .then((res) => {
+          console.log(res);
+          setTodoClicked(false);
+          setClicked(true);
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   useEffect(() => {
@@ -199,6 +210,8 @@ export default function TodoItem({
               isEdit={isClicked} // false일 때, input 밑줄 생기게
               onKeyPress={onEnter}
               readOnly={isClicked} // false일 때, 수정 가능
+              onFocus={handleFocus}
+              onBlur={handleBlur}
             />
             <IconDiv isClicked={todoClicked}>
               {/* <Icon
