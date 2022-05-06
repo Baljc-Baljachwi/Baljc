@@ -11,4 +11,5 @@ public interface BoardService {
     List<BoardDto.BoardCategoryResponse> getBoardCategory();
     void insertBoard(BoardDto.BoardRequest boardRequest, List<MultipartFile> files);
     void insertComment(UUID boardId, BoardDto.CommentRequest commentRequest);
+    void deleteComment(UUID commentId);
 }

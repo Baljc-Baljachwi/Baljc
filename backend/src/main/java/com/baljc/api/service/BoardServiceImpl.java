@@ -106,4 +106,10 @@ public class BoardServiceImpl implements BoardService {
                 .deletedYn('N')
                 .build());
     }
+
+    @Override
+    public void deleteComment(UUID commentId) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new NullPointerException("해당 댓글이 존재하지 않습니다."));
+        comment.deleteComment();
+    }
 }
