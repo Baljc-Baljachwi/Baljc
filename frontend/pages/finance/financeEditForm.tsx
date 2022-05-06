@@ -64,7 +64,10 @@ export default function FinanceEditForm({ accountbook }: FinanceEditFormProps) {
 
   return (
     <>
-      <Header label="가계부 내역 수정"></Header>
+      <Header
+        label="가계부 내역 수정"
+        onClickBackButton={() => router.back()}
+      />
       <PageContainer>
         <CostIncomeTitle>
           {initForm?.type === "E"

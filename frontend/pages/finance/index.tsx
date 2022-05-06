@@ -145,6 +145,7 @@ export default function Finance(): JSX.Element {
           label="가계부 목록"
           icon="plus"
           onClickRightButton={() => router.push("/finance/financeCreateForm")}
+          onClickBackButton={() => router.push("/calendar")}
         ></Header>
         <PageContainer>
           <MonthlyContentContainer>

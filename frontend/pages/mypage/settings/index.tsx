@@ -67,6 +67,7 @@ const Settings = () => {
           label="마이페이지"
           icon="pencil"
           onClickRightButton={() => router.push("/mypage/modify")}
+          onClickBackButton={() => router.push("/mypage")}
         ></Header>
         <PageContainer>
           <ProfileCardContainer>
