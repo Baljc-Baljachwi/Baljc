@@ -9,8 +9,17 @@ import ButtonBottom from "../../components/common/ButtonBottom";
 import { putMembers } from "api/member";
 import defaultProfileImage from "public/assets/img/mypage/avatar/default_profile.png";
 
+const Container = styled.div`
+  margin-top: 5.5rem;
+  background-color: #ffffff;
+`;
+
 const PageContainer = styled.main`
   padding: 0 2rem 2rem 2rem;
+  background-color: #ffffff;
+`;
+const UpperContainer = styled.div`
+  background-color: #ffffff;
 `;
 
 const FormContainer = styled.form`
@@ -20,9 +29,24 @@ const FormContainer = styled.form`
   padding-bottom: 5rem;
 `;
 
+const StyledHeader = styled.header`
+  width: 100%;
+  height: 6.6rem;
+  background-color: #2e437a;
+  font-size: 2rem;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  z-index: 10000;
+`;
+
 const LabelProfileImageContiainer = styled.div`
   width: 100%;
-  margin: 5rem 0 4rem 0;
+  padding: 5rem 0 4rem 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -246,31 +270,34 @@ export default function Survey() {
   }
 
   return (
-    <>
-      <Header label="설문조사" />
-      <LabelProfileImageContiainer>
-        <ProfileImage htmlFor="profileImage">
-          <Image
-            className="profileImg"
-            src={imagePreview || defaultProfileImage}
-            alt={getValues("nickname")}
-            layout="fill"
-          />
-        </ProfileImage>
-        <DefaultImageButton onClick={onClickDefaultImageButton}>
-          기본 이미지로 변경
-        </DefaultImageButton>
-        <ErrorMessage>
-          {imageError && "2MB 이하 이미지(.png, .jpeg, .bmp) 파일만 가능합니다"}
-        </ErrorMessage>
-      </LabelProfileImageContiainer>
-      <DisplayNoneInput
-        type="file"
-        id="profileImage"
-        accept="image/png, image/jpeg, image/bmp"
-        name="profileImage"
-        onChange={handleInputProfileImage}
-      />
+    <Container>
+      <UpperContainer>
+        <StyledHeader>설문조사</StyledHeader>
+        <LabelProfileImageContiainer>
+          <ProfileImage htmlFor="profileImage">
+            <Image
+              className="profileImg"
+              src={imagePreview || defaultProfileImage}
+              alt={getValues("nickname")}
+              layout="fill"
+            />
+          </ProfileImage>
+          <DefaultImageButton onClick={onClickDefaultImageButton}>
+            기본 이미지로 변경
+          </DefaultImageButton>
+          <ErrorMessage>
+            {imageError &&
+              "2MB 이하 이미지(.png, .jpeg, .bmp) 파일만 가능합니다"}
+          </ErrorMessage>
+        </LabelProfileImageContiainer>
+        <DisplayNoneInput
+          type="file"
+          id="profileImage"
+          accept="image/png, image/jpeg, image/bmp"
+          name="profileImage"
+          onChange={handleInputProfileImage}
+        />
+      </UpperContainer>
 
       <PageContainer>
         <FormContainer onSubmit={handleSubmit(onSubmit)}>
@@ -416,7 +443,7 @@ export default function Survey() {
           <ButtonBottom label="가입" type="submit" />
         </FormContainer>
       </PageContainer>
-    </>
+    </Container>
   );
 }
 

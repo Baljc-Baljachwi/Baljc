@@ -17,13 +17,15 @@ export default function Layout({ children }: React.PropsWithChildren<unknown>) {
       <PageContent
         isLogin={
           router.pathname === "/" ||
-          router.pathname === "/auth/kakao/[...params]"
+          router.pathname === "/auth/kakao/[...params]" ||
+          router.pathname === "/mypage/survey"
         }
       >
         {children}
       </PageContent>
       {router.pathname === "/" ||
-      router.pathname === "/auth/kakao/[...params]" ? (
+      router.pathname === "/auth/kakao/[...params]" ||
+      router.pathname === "/mypage/survey" ? (
         <></>
       ) : (
         <Navbar />
