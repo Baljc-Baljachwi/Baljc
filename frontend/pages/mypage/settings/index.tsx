@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 const Container = styled.div`
-  height: 100vh;
+  /* height: 100vh; */
 `;
 const PageContainer = styled.main`
   font-family: "Noto Sans KR", sans-serif;
@@ -35,6 +35,7 @@ const PageTitle = styled.span`
   color: #33487f;
 `;
 const ProfileContentListContainer = styled.div`
+  margin-top: 2rem;
   display: flex;
   flex-direction: column;
   /* appearance: none; */

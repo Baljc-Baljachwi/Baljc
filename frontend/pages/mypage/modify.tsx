@@ -16,8 +16,8 @@ const PageContainer = styled.main`
 const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 4rem;
-  padding-bottom: 10rem;
+  gap: 3rem;
+  padding-bottom: 5rem;
 `;
 
 const LabelProfileImageContiainer = styled.div`
@@ -29,22 +29,6 @@ const LabelProfileImageContiainer = styled.div`
   align-items: center;
   gap: 1rem;
 `;
-
-// const LabelProfileImage = styled.label<{ image: string }>`
-//   display: inline-block;
-//   width: 14rem;
-//   height: 14rem;
-//   border: 4.2px solid #fafafe;
-//   border-radius: 50%;
-//   background-color: #cccccc;
-//   background-image: url(${(props) => (props.image ? props.image : "")});
-//   background-size: cover;
-//   background-repeat: no-repeat;
-//   background-position: center;
-//   background-clip: border-box;
-//   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-//   cursor: pointer;
-// `;
 
 const ProfileImage = styled.label`
   border: 4.2px solid #fafafe;

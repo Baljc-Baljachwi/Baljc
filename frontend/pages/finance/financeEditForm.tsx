@@ -14,7 +14,7 @@ const PageContainer = styled.main`
 const CostIncomeTitle = styled.div`
   font-size: 2.4rem;
   font-weight: 500;
-  margin: 3.4rem 0 1.6rem 0;
+  margin: 3rem 0;
 `;
 
 interface FinanceEditFormProps {

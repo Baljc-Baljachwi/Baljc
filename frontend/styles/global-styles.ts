@@ -13,7 +13,9 @@ export const GlobalStyle = createGlobalStyle`
   html, body, #__next {
     height: 100%;
   }
-  body { font-family: 'Noto Sans KR', sans-serif; }
+  body { font-family: 'Noto Sans KR', sans-serif;
+  background-color: #2e437a;
+}
     .normal		{ font-weight: 400 }
     .bold		  { font-weight: 700 }
     .bolder		{ font-weight: 800 }

@@ -7,7 +7,7 @@ import ProfileContentList from "components/mypage/ProfileContentList";
 import { useState, useEffect } from "react";
 
 const Container = styled.div`
-  height: 100vh;
+  /* height: 100vh; */
 `;
 
 const PageContainer = styled.main`
@@ -38,7 +38,7 @@ const ProfileContentListContainer = styled.div`
   width: 100%;
   height: 100%;
   background-color: #ffffff;
-
+  margin-top: 2rem;
   font-size: 1.6rem;
   padding: 1.6rem 2rem;
   gap: 2rem;

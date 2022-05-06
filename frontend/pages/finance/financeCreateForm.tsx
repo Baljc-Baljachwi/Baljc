@@ -18,7 +18,7 @@ const ToggleCostIncome = styled.div`
 `;
 
 const CostIncomeButton = styled.button<{ isSelected: boolean }>`
-  padding: 2rem 4rem;
+  padding: 1.5rem 3rem;
   color: ${(props) => (props.isSelected ? "#3d3d3d" : "#cacaca")};
   font-weight: ${(props) => (props.isSelected ? "700" : "400")};
   border: none;
@@ -26,6 +26,7 @@ const CostIncomeButton = styled.button<{ isSelected: boolean }>`
   font-family: "Noto Sans KR";
   font-size: 2.4rem;
   border-bottom: ${(props) => (props.isSelected ? "2px solid #000000" : "")};
+  margin-bottom: 1.5rem;
 `;
 
 export default function FinanceCreateForm() {
