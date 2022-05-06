@@ -48,6 +48,7 @@ export default function MyApp(props: AppProps) {
           <meta name="apple-mobile-web-app-title" content="발자취" />
           <meta name="application-name" content="발자취" />
           <meta name="description" content="슬기로운 자취생활 길잡이" />
+          <meta property="og:image" content="icons/192x192.png"></meta>
           {/* <meta
             name="theme-color"
             content="#f4f4f5"
@@ -110,8 +111,62 @@ export default function MyApp(props: AppProps) {
           <link
             rel="icon"
             type="image/png"
+            sizes="36x36"
+            href="/icons/android-icon-36x36.png"
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="48x48"
+            href="/icons/android-icon-48x48.png"
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="72x72"
+            href="/icons/android-icon-72x72.png"
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="96x96"
+            href="/icons/android-icon-96x96.png"
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="144x144"
+            href="/icons/android-icon-144x144.png"
+          />
+          <link
+            rel="icon"
+            type="image/png"
             sizes="192x192"
             href="/icons/android-icon-192x192.png"
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="256x256"
+            href="/icons/256x256.png"
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="384x384"
+            href="/icons/384x384.png"
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="512x512"
+            href="/icons/512x512.png"
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/icons/favicon-16x16.png"
           />
           <link
             rel="icon"
