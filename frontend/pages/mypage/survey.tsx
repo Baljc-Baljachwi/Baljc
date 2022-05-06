@@ -17,7 +17,7 @@ const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   gap: 4rem;
-  padding-bottom: 10rem;
+  padding-bottom: 5rem;
 `;
 
 const LabelProfileImageContiainer = styled.div`
