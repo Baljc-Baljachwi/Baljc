@@ -10,7 +10,7 @@ import { YNType } from "../../../types";
 import ButtonBottom from "components/common/ButtonBottom";
 
 const Container = styled.div`
-  height: 100vh;
+  /* height: 100vh; */
 `;
 
 const PageContainer = styled.main`

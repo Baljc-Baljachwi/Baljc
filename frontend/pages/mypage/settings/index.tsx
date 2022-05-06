@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 const Container = styled.div`
-  height: 100vh;
+  /* height: 100vh; */
 `;
 const PageContainer = styled.main`
   font-family: "Noto Sans KR", sans-serif;
