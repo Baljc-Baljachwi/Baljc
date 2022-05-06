@@ -36,7 +36,7 @@ const ProfileContentListContainer = styled.div`
   border-radius: 1rem;
   width: 100%;
   height: 100%;
-
+  /* margin-top: 2rem; */
   font-size: 1.6rem;
   padding: 1.6rem 2rem;
   gap: 2rem;
@@ -50,12 +50,12 @@ const ProfileMenuCardContent = styled.div`
 const ProfileMenuCardTitle = styled.span`
   color: #33487f;
   font-weight: 700;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
 `;
 
 const ProfileMenuCardDetail = styled.span`
   color: #696969;
-  font-size: 1rem;
+  font-size: 1.4rem;
   font-weight: 400;
 `;
 
@@ -160,7 +160,8 @@ const Alarm = () => {
               <SettingAlarmItem>
                 <span>가계부</span>
                 <div className="right-content">
-                  <span>{accountAlarmTime}</span>
+                  <span>오후 9시</span>
+                  {/* <span>{accountAlarmTime}</span> */}
                   <ToggleButton
                     isOn={accountAlarmYN}
                     onClick={onClickaccountAlarmYN}
@@ -170,7 +171,8 @@ const Alarm = () => {
               <SettingAlarmItem>
                 <span>할 일</span>
                 <div className="right-content">
-                  <span>{todoAlarmTime}</span>
+                  <span>오전 9시</span>
+                  {/* <span>{todoAlarmTime}</span> */}
                   <ToggleButton
                     isOn={todoAlarmYN}
                     onClick={onClicktodoAlarmYN}

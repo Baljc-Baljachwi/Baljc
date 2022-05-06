@@ -161,27 +161,29 @@ const Analysis = () => {
               <DivisionLine />
 
               <ContentsDiv>
-                <h5>이번 달 남은 예산 : </h5>
-                <h2>
-                  <span className="highlightedText">
+                <span>이번 달 남은 예산 : </span>
+                <span>
+                  <span className="highlightedText-primary">
                     {remainingBudget.toLocaleString()}
                   </span>{" "}
                   원
-                </h2>
-                <h4>
+                </span>
+                <br />
+                <span>
                   앞으로는 하루에{" "}
                   <span className="highlightedText">
                     {dailyExpenditure.toLocaleString()}
                   </span>{" "}
                   원씩 쓸 수 있습니다.
-                </h4>
-                <h4>
-                  이 속도로 소비하면 총{" "}
+                </span>
+                <br />
+                <span>
+                  이 속도라면 이번 달에 총{" "}
                   <span className="highlightedText">
                     {estimatedExpenditure.toLocaleString()}
                   </span>{" "}
                   원을 쓰게 됩니다.
-                </h4>
+                </span>
                 {/* <CustomProgressBar
                   bgcolor="#2601cf"
                   progress="30"
@@ -247,6 +249,7 @@ const PageTitle = styled.span`
 `;
 
 const ProfileContentListContainer = styled.div`
+  margin-top: 2rem;
   /* filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25)); */
   display: flex;
   flex-direction: column;
@@ -302,11 +305,11 @@ const ProfileMenuCardContent = styled.div`
   .title {
     color: #33487f;
     font-weight: 700;
-    font-size: 1.6rem;
+    font-size: 1.8rem;
   }
   .description {
     color: #696969;
-    font-size: 1rem;
+    font-size: 1.4rem;
     font-weight: 400;
   }
 `;
@@ -331,8 +334,15 @@ const DivisionLine = styled.hr`
 `;
 
 const ContentsDiv = styled.div`
+  font-weight: 600;
+  .highlightedText-primary {
+    color: orange;
+    font-weight: 700;
+    font-size: 2rem;
+  }
   .highlightedText {
     color: orange;
+    font-weight: 700;
   }
   .charts {
     flex-direction: column;
