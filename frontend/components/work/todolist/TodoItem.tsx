@@ -36,6 +36,7 @@ const TodoInput = styled.input<{
   isEdit: boolean;
   viewOnly: boolean;
 }>`
+  width: 90%;
   font-family: "Noto Sans KR";
   font-size: 1.8rem;
   color: ${(props) => (props.viewOnly ? "#ffffff" : "#000000")};

@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import React, { useCallback, useEffect, useState } from "react";
+import Image from "next/image";
 
 import TodoItem from "./TodoItem";
-import Image from "next/image";
+import Icon from "../../common/Icon";
 
 import { getTodos, postTodos } from "../../../api/todo";
 import { ITodo } from "../../../types";
@@ -17,26 +18,35 @@ const TodoDiv = styled.div`
 const TodoInputDiv = styled.div`
   display: flex;
   align-items: center;
-  gap: 1.6rem;
+  gap: 1.5rem;
+  margin: 1rem 0;
 `;
 
 const InputDiv = styled.div`
   width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
-const TodoInput = styled.input<{ viewOnly: boolean }>`
-  width: 100%;
+const TodoInput = styled.input<{ isFocus: boolean; viewOnly: boolean }>`
+  width: 90%;
   font-family: "Noto Sans KR";
   font-size: 1.8rem;
   color: ${(props) => (props.viewOnly ? "#ffffff" : "#000000")};
   background-color: ${(props) => (props.viewOnly ? "#4d5f8f" : "")};
   border: none;
-  border-bottom: 1px solid #cccccc;
+  border-bottom: ${(props) => (props.isFocus ? "1px solid #cccccc" : " ")};
   outline: none;
   ::placeholder {
     color: #cccccc;
     color: ${(props) => (props.viewOnly ? "#ffffff" : "#cccccc")};
   }
+`;
+
+const IconDiv = styled.div<{ isClicked: boolean }>`
+  gap: 1rem;
+  display: ${(props) => (props.isClicked ? "flex" : "none")};
 `;
 
 const TodoNone = styled.div`
@@ -56,8 +66,8 @@ interface TodoForm {
 
 export default function Todo({ viewOnly, date }: TodoProps) {
   const [todos, setTodos] = useRecoilState<ITodoTypes[]>(todosState);
+  const [focus, setFocus] = useState(false);
 
-  // const [todos, setTodos] = useState<ITodo[]>([]);
   const [inputForm, setInputForm] = useState<TodoForm>({
     date: date,
     content: "",
@@ -83,27 +93,40 @@ export default function Todo({ viewOnly, date }: TodoProps) {
     }));
   };
 
+  const postTodosFunc = () => {
+    if (inputForm.content.length !== 0) {
+      postTodos(inputForm)
+        .then((res) => {
+          console.log(res.data.data);
+          // alert("todo 등록 완료!");
+          setInputForm((prev) => ({
+            ...prev,
+            content: "",
+          }));
+          getTodoList();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    // else {
+    // document.getElementById("todo")?.focus();
+    // }
+  };
+
   const onEnter = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
-      if (inputForm.content.length !== 0) {
-        postTodos(inputForm)
-          .then((res) => {
-            console.log(res.data.data);
-            alert("todo 등록 완료!");
-            setInputForm((prev) => ({
-              ...prev,
-              content: "",
-            }));
-            getTodoList();
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      } else {
-        alert("입력");
-        document.getElementById("todo")?.focus();
-      }
+      postTodosFunc();
     }
+  };
+
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    setFocus((prev) => !prev);
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    setFocus((prev) => !prev);
+    postTodosFunc();
   };
 
   useEffect(() => {
@@ -152,8 +175,27 @@ export default function Todo({ viewOnly, date }: TodoProps) {
                 placeholder="할 일을 입력해주세요"
                 onChange={onInputChange}
                 onKeyPress={onEnter}
+                isFocus={focus}
                 viewOnly={viewOnly}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
               />
+              <IconDiv isClicked={focus}>
+                {/* <Icon
+                mode="fas"
+                icon="pen"
+                color="#cccccc"
+                size="1.8rem"
+                onClick={() => editTodo()}
+              /> */}
+                <Icon
+                  mode="fas"
+                  icon="check"
+                  color="#cccccc"
+                  size="2rem"
+                  onClick={() => postTodosFunc()}
+                />
+              </IconDiv>
             </InputDiv>
           </TodoInputDiv>
         }
