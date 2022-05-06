@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,5 +34,17 @@ public class BoardController {
                                                     @RequestPart(value = "boardImg", required = false) List<MultipartFile> files) {
         boardService.insertBoard(boardRequest, files);
         return ResponseEntity.status(200).body(new BaseResponse(1701, "게시글 추가 성공"));
+    }
+
+    @PostMapping("/{boardId}/comments")
+    public ResponseEntity<BaseResponse> insertComment(@PathVariable("boardId") UUID boardId, @Valid @RequestBody BoardDto.CommentRequest commentRequest) {
+        boardService.insertComment(boardId, commentRequest);
+        return ResponseEntity.status(200).body(new BaseResponse(1706, "댓글 추가 성공"));
+    }
+
+    @DeleteMapping("/{boardId}/comments/{commentId}")
+    public ResponseEntity<BaseResponse> deleteComment(@PathVariable("boardId") UUID boardId, @PathVariable("commentId") UUID commentId) {
+        boardService.deleteComment(commentId);
+        return ResponseEntity.status(200).body(new BaseResponse(1707, "댓글 삭제 성공"));
     }
 }

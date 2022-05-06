@@ -48,4 +48,8 @@ public class Comment {
 
     @OneToMany(mappedBy = "comment")
     List<Comment> commentList = new ArrayList<>();
+
+    public void deleteComment() {
+        this.deletedYn = 'Y';
+    }
 }
