@@ -67,6 +67,17 @@ const Typography = styled.div<{
   cursor: ${(props) => (props.cursor ? props.cursor : "")};
 `;
 
+const NoContentMessage = styled.p`
+  text-align: center;
+  font-size: 2.4rem;
+  font-weight: 700;
+  padding: 1rem;
+  &.small {
+    font-size: 1.8rem;
+    font-weight: 500;
+  }
+`;
+
 export default function Finance(): JSX.Element {
   const router = useRouter();
   const [date, setDate] = useState(new Date());
@@ -104,6 +115,7 @@ export default function Finance(): JSX.Element {
   }, [month, year]);
   // console.log(monthlyLog); // {1: Array(2), 2: Array(1)} { 1: [{...}, {...}], 2: [{...}, {...}]}
 
+  console.log(amount);
   const [ready, setReady] = useState(false);
   useEffect(() => {
     setReady(true);
@@ -158,9 +170,16 @@ export default function Finance(): JSX.Element {
             </MonthlyContentWrapper>
             <DivisionLine />
           </MonthlyContentContainer>
-          {amount
-            ? amount.map((item, idx) => <FinanceList key={idx} item={item} />)
-            : null}
+          {amount && amount.length > 0 ? (
+            amount.map((item, idx) => <FinanceList key={idx} item={item} />)
+          ) : (
+            <>
+              <NoContentMessage>가계부 내역이 없습니다!</NoContentMessage>
+              <NoContentMessage className="small">
+                + 버튼을 눌러 새로운 내용을 추가해보세요
+              </NoContentMessage>
+            </>
+          )}
         </PageContainer>
       </Container>
     </>
