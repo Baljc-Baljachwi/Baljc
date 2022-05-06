@@ -22,10 +22,11 @@ const TodoItemDiv = styled.div`
   justify-content: space-between;
 `;
 
-const TodoText = styled.span<{ isCompleted: boolean; viewOnly: boolean }>`
+const TodoText = styled.span<{ isCompleted: string; viewOnly: boolean }>`
   width: 100%;
   font-size: 1.8rem;
-  text-decoration: ${(props) => (props.isCompleted ? "line-through" : "")};
+  text-decoration: ${(props) =>
+    props.isCompleted === "Y" ? "line-through" : ""};
   color: ${(props) => (props.viewOnly ? "#ffffff" : "")};
   display: flex;
   justify-content: space-between;
@@ -75,7 +76,6 @@ export default function TodoItem({
   todos,
   setTodos,
 }: PropTypes) {
-  const [isCompleted, setCompleted] = useState(false);
   const [todoClicked, setTodoClicked] = useState(false); // 수정 삭제 아이콘을 위한
   const [isClicked, setClicked] = useState(true); // todo 클릭 시, readOnly 변경 위한
   const [contentForm, setContentForm] = useState<contentState>({ content: "" });
@@ -83,28 +83,31 @@ export default function TodoItem({
   const todoRef = useRef() as React.MutableRefObject<HTMLSpanElement>;
 
   const todoComplete = (e: any) => {
-    // console.log("isCompleted : " + isCompleted);
-    if (!isCompleted) {
+    if (completedYn === "N") {
       completedTodos(todoId, { completedYn: "Y" })
         .then((res) => {
           console.log(res.data.data);
           // 객체 업데이트
-          // setTodos(
-          //   todos.map((todo: ITodoTypes) => {
-          //     return todo.todoId === todoId
-          //       ? { ...todo, completedYn: "Y" }
-          //       : todo;
-          //   })
-          // );
-          setCompleted((prev) => !prev);
+          setTodos(
+            todos.map((todo: ITodoTypes) => {
+              return todo.todoId === todoId
+                ? { ...todo, completedYn: "Y" }
+                : todo;
+            })
+          );
         })
         .catch((err) => console.log(err));
     } else {
       completedTodos(todoId, { completedYn: "N" })
         .then((res) => {
           console.log(res.data.data);
-          setCompleted((prev) => !prev);
-          // setCompleted(false);
+          setTodos(
+            todos.map((todo: ITodoTypes) => {
+              return todo.todoId === todoId
+                ? { ...todo, completedYn: "N" }
+                : todo;
+            })
+          );
         })
         .catch((err) => console.log(err));
     }
@@ -112,7 +115,6 @@ export default function TodoItem({
 
   function todoItemClick(e: any) {
     if (todoRef && !todoRef.current.contains(e.target)) {
-      // console.log(11, todoRef);
       setTodoClicked(false);
       setClicked(true);
     } else {
@@ -183,10 +185,6 @@ export default function TodoItem({
   useEffect(() => {
     setContentForm({ content: content });
 
-    if (completedYn === "Y") {
-      setCompleted(true);
-    } else setCompleted(false);
-
     window.addEventListener("mousedown", todoItemClick);
     return () => {
       window.removeEventListener("mousedown", todoItemClick);
@@ -196,7 +194,7 @@ export default function TodoItem({
   return (
     <>
       <TodoListItem>
-        {isCompleted ? (
+        {completedYn === "Y" ? (
           <Image
             src="/assets/img/foot_true.png"
             alt=""
@@ -214,7 +212,7 @@ export default function TodoItem({
           />
         )}
         <TodoItemDiv>
-          <TodoText isCompleted={isCompleted} viewOnly={viewOnly} ref={todoRef}>
+          <TodoText isCompleted={completedYn} viewOnly={viewOnly} ref={todoRef}>
             <TodoInput
               id={todoId}
               value={contentForm.content}
@@ -222,7 +220,7 @@ export default function TodoItem({
               isClicked={todoClicked}
               isEdit={isClicked} // false일 때, input 밑줄 생기게
               onKeyPress={onEnter}
-              readOnly={isClicked} // false일 때, 수정 가능
+              // readOnly={isClicked} // false일 때, 수정 가능
               onFocus={handleFocus}
               onBlur={handleBlur}
               viewOnly={viewOnly}
