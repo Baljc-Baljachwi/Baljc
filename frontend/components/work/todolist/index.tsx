@@ -64,10 +64,8 @@ export default function Todo({ viewOnly, date }: TodoProps) {
   });
 
   const getTodoList = useCallback(() => {
-    console.log(date);
     getTodos(date)
       .then((res) => {
-        console.log(res.data.data);
         setTodos(res.data.data);
       })
       .catch((err) => {
