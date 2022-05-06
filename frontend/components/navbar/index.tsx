@@ -22,7 +22,7 @@ const Item = styled.div`
   flex-direction: column;
   cursor: pointer;
   align-items: center;
-  a {
+  div {
     color: #3d3d3d;
   }
   .active {
@@ -41,11 +41,9 @@ export default function NavBar() {
           size="2rem"
           color={router.pathname === "/community" ? undefined : "#cbcbcb"}
         />
-        <Link href="/community">
-          <a className={router.pathname === "/community" ? "" : "active"}>
+          <div className={router.pathname === "/community" ? "" : "active"}>
             커뮤니티
-          </a>
-        </Link>
+          </div>
       </Item> */}
       <Item onClick={() => router.push("/calendar")}>
         <Icon
@@ -54,11 +52,9 @@ export default function NavBar() {
           size="2rem"
           color={router.pathname === "/calendar" ? undefined : "#cdcdcd"}
         />
-        <Link href="/calendar">
-          <a className={router.pathname === "/calendar" ? "" : "active"}>
-            캘린더
-          </a>
-        </Link>
+        <div className={router.pathname === "/calendar" ? "" : "active"}>
+          캘린더
+        </div>
       </Item>
       <Item onClick={() => router.push("/finance")}>
         <Icon
@@ -67,11 +63,9 @@ export default function NavBar() {
           size="2rem"
           color={router.pathname === "/finance" ? undefined : "#cdcdcd"}
         />
-        <Link href="/finance">
-          <a className={router.pathname === "/finance" ? "" : "active"}>
-            가계부
-          </a>
-        </Link>
+        <div className={router.pathname === "/finance" ? "" : "active"}>
+          가계부
+        </div>
       </Item>
       <Item onClick={() => router.push("/work")}>
         <Icon
@@ -80,9 +74,7 @@ export default function NavBar() {
           size="2rem"
           color={router.pathname === "/work" ? undefined : "#cdcdcd"}
         />
-        <Link href="/work">
-          <a className={router.pathname === "/work" ? "" : "active"}>할 일</a>
-        </Link>
+        <div className={router.pathname === "/work" ? "" : "active"}>할 일</div>{" "}
       </Item>
       <Item onClick={() => router.push("/mypage")}>
         <Icon
@@ -91,11 +83,9 @@ export default function NavBar() {
           size="2rem"
           color={router.pathname === "/mypage" ? undefined : "#cdcdcd"}
         />
-        <Link href="/mypage">
-          <a className={router.pathname === "/mypage" ? "" : "active"}>
-            마이페이지
-          </a>
-        </Link>
+        <div className={router.pathname === "/mypage" ? "" : "active"}>
+          마이페이지
+        </div>
       </Item>
     </Container>
   );
