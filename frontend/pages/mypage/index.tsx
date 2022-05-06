@@ -7,7 +7,7 @@ import ProfileContentList from "components/mypage/ProfileContentList";
 import { useState, useEffect } from "react";
 
 const Container = styled.div`
-  height: 100vh;
+  /* height: 100vh; */
 `;
 
 const PageContainer = styled.main`
