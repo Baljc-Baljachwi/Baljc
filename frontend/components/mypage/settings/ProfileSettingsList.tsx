@@ -24,7 +24,7 @@ const ProfileSettingsList = () => {
     deleteMembers().then((res) => {
       // console.log(res.data);
       console.log("메세지 찍어본다!" + res.data.message);
-      router.push(res.data.code === 1003 ? "/login" : "/mypage/settings");
+      router.push(res.data.code === 1003 ? "/" : "/mypage/settings");
       setAccessToken("");
     });
   };
