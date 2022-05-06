@@ -30,7 +30,7 @@ const FinanceCardItem = styled.div<{ backgroundColor: string }>`
 
 const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: 2fr 8fr;
+  grid-template-columns: 2fr 6fr;
 `;
 
 const FlexColumnContainer = styled.div`
