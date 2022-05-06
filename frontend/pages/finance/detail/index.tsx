@@ -7,7 +7,7 @@ import { IAccountbook } from "types";
 import Header from "../../../components/common/Header";
 
 const Container = styled.div`
-  height: 100vh;
+  /* height: 100%; */
 `;
 
 const PageContainer = styled.main`
@@ -24,12 +24,13 @@ const PageTitle = styled.span`
   display: flex;
   font-size: 2.4rem;
   font-weight: 500;
-  padding: 2rem 0;
+  padding: 1rem 0;
+  margin-top: 1rem;
 `;
 
-const DivisionLine = styled.hr`
-  border-top: 2px solid lightgray;
-`;
+// const DivisionLine = styled.hr`
+//   border-top: 2px solid lightgray;
+// `;
 
 const ExpenditureDetailContainer = styled.div`
   display: flex;
@@ -37,18 +38,19 @@ const ExpenditureDetailContainer = styled.div`
   border: none;
   border-radius: 1rem;
   width: 100%;
-  background-color: #ffffff;
+  background-color: #f4f4f4;
   filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
 
   font-size: 1.6rem;
   padding: 1.6rem 2rem;
-  gap: 2rem;
+  gap: 2.5rem;
 `;
 
 const DetailContents = styled.div`
   display: flex;
   flex-direction: column;
   font-size: 1.6rem;
+  gap: 0.5rem;
   span {
     font-size: 2rem;
   }
@@ -190,7 +192,7 @@ const FinanceDetail = () => {
           <PageTitle>
             {financeDetailInfo?.type === "E" ? "지출" : "수입"}
           </PageTitle>
-          <DivisionLine />
+          {/* <DivisionLine /> */}
           <ExpenditureDetailContainer>
             <DetailContents>
               제목

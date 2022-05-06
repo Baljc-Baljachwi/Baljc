@@ -9,8 +9,9 @@ import FinanceList from "../../components/finance/list/FinanceList";
 import Icon from "../../components/common/Icon";
 
 const Container = styled.div`
-  height: 100vh;
+  /* height: 100vh; */
   /* background-color: #ebeced; */
+  padding-bottom: 2rem;
 `;
 
 const PageContainer = styled.main`
