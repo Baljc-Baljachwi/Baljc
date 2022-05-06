@@ -13,7 +13,7 @@ import flagImg from "@/assets/img/mypage/avatar/avatar_tr2.png";
 import defaultProfileImage from "public/assets/img/mypage/avatar/default_profile.png";
 
 const Container = styled.div`
-  height: 100vh;
+  height: 100%;
 `;
 
 const PageContainer = styled.main`
