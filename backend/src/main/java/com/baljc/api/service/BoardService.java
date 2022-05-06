@@ -4,10 +4,11 @@ import com.baljc.api.dto.BoardDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface BoardService {
 
     List<BoardDto.BoardCategoryResponse> getBoardCategory();
     void insertBoard(BoardDto.BoardRequest boardRequest, List<MultipartFile> files);
-    void insertComment(BoardDto.CommentRequest commentRequest);
+    void insertComment(UUID boardId, BoardDto.CommentRequest commentRequest);
 }

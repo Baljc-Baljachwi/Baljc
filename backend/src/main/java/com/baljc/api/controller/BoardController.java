@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -36,8 +37,8 @@ public class BoardController {
     }
 
     @PostMapping("/{boardId}/comments")
-    public ResponseEntity<BaseResponse> insertComment(@Valid @RequestBody BoardDto.CommentRequest commentRequest) {
-        boardService.insertComment(commentRequest);
+    public ResponseEntity<BaseResponse> insertComment(@PathVariable("boardId") UUID boardId, @Valid @RequestBody BoardDto.CommentRequest commentRequest) {
+        boardService.insertComment(boardId, commentRequest);
         return ResponseEntity.status(200).body(new BaseResponse(1706, "댓글 추가 성공"));
     }
 }

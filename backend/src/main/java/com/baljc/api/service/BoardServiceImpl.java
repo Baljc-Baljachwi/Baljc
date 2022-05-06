@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -90,9 +91,9 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void insertComment(BoardDto.CommentRequest commentRequest) {
+    public void insertComment(UUID boardId, BoardDto.CommentRequest commentRequest) {
         Member member = memberService.getMemberByAuthentication();
-        Board board = boardRepository.findById(commentRequest.getBoardId()).orElseThrow(() -> new NullPointerException("해당 게시글이 존재하지 않습니다."));
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new NullPointerException("해당 게시글이 존재하지 않습니다."));
         Comment comment = null;
         if (commentRequest.getParentId() != null) {
             comment = commentRepository.findById(commentRequest.getParentId()).orElseThrow(() -> new NullPointerException("해당 부모 댓글이 존재하지 않습니다."));

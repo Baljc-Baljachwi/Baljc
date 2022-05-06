@@ -29,7 +29,6 @@ public class BoardDto {
     @Getter
     @NoArgsConstructor
     public static class CommentRequest {
-        private UUID boardId;
         private UUID parentId;
     }
 }
