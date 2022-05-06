@@ -18,8 +18,15 @@ import { useRouter } from "next/router";
 const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 4rem;
-  padding-bottom: 10rem;
+  gap: 3rem;
+  padding-bottom: 5rem;
+`;
+
+const InputContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 2rem;
 `;
 
 const InputDiv = styled.div<{ isError?: boolean }>`
@@ -40,6 +47,13 @@ const InputDiv = styled.div<{ isError?: boolean }>`
   font-size: 2rem;
   display: flex;
   gap: 1rem;
+  input[type="month"] {
+    font-size: 1.5rem;
+    + span {
+      font-size: 1.2rem;
+      color: red;
+    }
+  }
 `;
 
 // 입력 Input 뒤에 단위 나타내는 텍스트
@@ -65,10 +79,9 @@ const StyledInput = styled.input`
 const StyledLabel = styled.label`
   font-size: 2rem;
   color: #3d3d3d;
-  /* font-weight: 500; */
   display: inline-block;
-  margin-top: 1.6rem;
   cursor: pointer;
+  min-width: fit-content;
 `;
 
 const ErrorMessage = styled.p`
@@ -294,33 +307,37 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
   return (
     <FormContainer onSubmit={handleSubmit(onSubmit)}>
       <div>
-        <StyledLabel>제목</StyledLabel>
-        <InputDiv isError={!!errors.title}>
-          <StyledInput
-            {...register("title", {
-              required: { value: true, message: "제목을 입력해주세요" },
-              maxLength: { value: 18, message: "1~18자로 입력해주세요" },
-            })}
-          />
-        </InputDiv>
+        <InputContainer>
+          <StyledLabel>제목</StyledLabel>
+          <InputDiv isError={!!errors.title}>
+            <StyledInput
+              {...register("title", {
+                required: { value: true, message: "제목을 입력해주세요" },
+                maxLength: { value: 18, message: "1~18자로 입력해주세요" },
+              })}
+            />
+          </InputDiv>
+        </InputContainer>
         <ErrorMessage>{errors.title?.message}</ErrorMessage>
       </div>
 
       <div>
-        <StyledLabel>금액</StyledLabel>
-        <InputDiv isError={!!errors.price}>
-          <StyledInput
-            type="number"
-            {...register("price", {
-              required: { value: true, message: "금액을 입력해주세요" },
-              min: { value: 0, message: "금액을 입력해주세요" },
-              max: { value: 2147483647, message: "너무 큰 금액입니다" },
-              pattern: { value: /[0-9]/, message: "숫자만 입력해주세요" },
-            })}
-            placeholder="0"
-          />
-          <InputUnit>원</InputUnit>
-        </InputDiv>
+        <InputContainer>
+          <StyledLabel>금액</StyledLabel>
+          <InputDiv isError={!!errors.price}>
+            <StyledInput
+              type="number"
+              {...register("price", {
+                required: { value: true, message: "금액을 입력해주세요" },
+                min: { value: 0, message: "금액을 입력해주세요" },
+                max: { value: 2147483647, message: "너무 큰 금액입니다" },
+                pattern: { value: /[0-9]/, message: "숫자만 입력해주세요" },
+              })}
+              placeholder="0"
+            />
+            <InputUnit>원</InputUnit>
+          </InputDiv>
+        </InputContainer>
         <ErrorMessage>{errors.price?.message}</ErrorMessage>
 
         <CheckboxContainer>
@@ -357,50 +374,54 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
         <>
           {/* 고정 지출 또는 고정 수입일 때*/}
           <div>
-            <StyledLabel>날짜</StyledLabel>
-            <InputDiv isError={!!errors.startDate || !!errors.endDate}>
-              <StyledInput
-                type="month"
-                {...register("startDate", {
-                  required: { value: true, message: "종료일을 입력해주세요" },
-                })}
-              />
-              <InputUnit>부터</InputUnit>
-              <StyledInput
-                type="month"
-                {...register("endDate", {
-                  required: { value: true, message: "종료일을 입력해주세요" },
-                  min: {
-                    value: getValues("startDate"),
-                    message: "시작일보다 빠를 수 없습니다",
-                  },
-                })}
-              />
-              <InputUnit>까지</InputUnit>
-            </InputDiv>
+            <InputContainer>
+              <StyledLabel>날짜</StyledLabel>
+              <InputDiv isError={!!errors.startDate || !!errors.endDate}>
+                <StyledInput
+                  type="month"
+                  {...register("startDate", {
+                    required: { value: true, message: "종료일을 입력해주세요" },
+                  })}
+                />
+                <InputUnit>부터</InputUnit>
+                <StyledInput
+                  type="month"
+                  {...register("endDate", {
+                    required: { value: true, message: "종료일을 입력해주세요" },
+                    min: {
+                      value: getValues("startDate"),
+                      message: "시작일보다 빠를 수 없습니다",
+                    },
+                  })}
+                />
+                <InputUnit>까지</InputUnit>
+              </InputDiv>
+            </InputContainer>
           </div>
           <div>
-            <InputDiv isError={!!errors.monthlyPeriod}>
-              <InputUnit>매월</InputUnit>
-              <StyledInput
-                type="number"
-                {...register("monthlyPeriod", {
-                  required: {
-                    value: true,
-                    message: "주기를 입력해주세요",
-                  },
-                  min: {
-                    value: 1,
-                    message: "주기는 1일부터 28일까지만 가능합니다",
-                  },
-                  max: {
-                    value: 28,
-                    message: "주기는 1일부터 28일까지만 가능합니다",
-                  },
-                })}
-              />
-              <InputUnit>일마다</InputUnit>
-            </InputDiv>
+            <InputContainer>
+              <InputDiv isError={!!errors.monthlyPeriod}>
+                <InputUnit>매월</InputUnit>
+                <StyledInput
+                  type="number"
+                  {...register("monthlyPeriod", {
+                    required: {
+                      value: true,
+                      message: "주기를 입력해주세요",
+                    },
+                    min: {
+                      value: 1,
+                      message: "주기는 1일부터 28일까지만 가능합니다",
+                    },
+                    max: {
+                      value: 28,
+                      message: "주기는 1일부터 28일까지만 가능합니다",
+                    },
+                  })}
+                />
+                <InputUnit>일마다</InputUnit>
+              </InputDiv>
+            </InputContainer>
             <ErrorMessage>{errors.monthlyPeriod?.message}</ErrorMessage>
           </div>
         </>
@@ -408,27 +429,31 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
         <>
           {/* 고정 지출 또는 고정 수입 아닐 때*/}
           <div>
-            <StyledLabel>날짜</StyledLabel>
-            <InputDiv isError={!!errors.date}>
-              <StyledInput
-                type="date"
-                {...register("date", {
-                  required: { value: true, message: "날짜를 입력해주세요" },
-                })}
-              />
-            </InputDiv>
+            <InputContainer>
+              <StyledLabel>날짜</StyledLabel>
+              <InputDiv isError={!!errors.date}>
+                <StyledInput
+                  type="date"
+                  {...register("date", {
+                    required: { value: true, message: "날짜를 입력해주세요" },
+                  })}
+                />
+              </InputDiv>
+            </InputContainer>
             <ErrorMessage>{errors.date?.message}</ErrorMessage>
           </div>
           <div>
-            <StyledLabel>시각</StyledLabel>
-            <InputDiv isError={!!errors.time}>
-              <StyledInput
-                type="time"
-                {...register("time", {
-                  required: { value: true, message: "시각을 입력해주세요" },
-                })}
-              />
-            </InputDiv>
+            <InputContainer>
+              <StyledLabel>시각</StyledLabel>
+              <InputDiv isError={!!errors.time}>
+                <StyledInput
+                  type="time"
+                  {...register("time", {
+                    required: { value: true, message: "시각을 입력해주세요" },
+                  })}
+                />
+              </InputDiv>
+            </InputContainer>
             <ErrorMessage>{errors.time?.message}</ErrorMessage>
           </div>
         </>
@@ -503,16 +528,18 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
       )}
 
       <div>
-        <StyledLabel>메모</StyledLabel>
-        <InputDiv isError={!!errors.memo}>
-          <StyledInput
-            type="text"
-            {...register("memo", {
-              maxLength: { value: 100, message: "100자를 넘을 수 없습니다" },
-            })}
-            placeholder="메모 남기기"
-          />
-        </InputDiv>
+        <InputContainer>
+          <StyledLabel>메모</StyledLabel>
+          <InputDiv isError={!!errors.memo}>
+            <StyledInput
+              type="text"
+              {...register("memo", {
+                maxLength: { value: 100, message: "100자를 넘을 수 없습니다" },
+              })}
+              placeholder="메모 남기기"
+            />
+          </InputDiv>
+        </InputContainer>
         <ErrorMessage>{errors.memo?.message}</ErrorMessage>
       </div>
 
