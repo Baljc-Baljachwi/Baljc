@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import styled from "styled-components";
 import Icon from "../../common/Icon";
 import RoutineModal from "./RoutineModal";
@@ -72,11 +72,9 @@ export default function RoutineCard({
                   ? true
                   : false;
               return (
-                <>
-                  {checked ? (
-                    <RoutineDay key={index}>{value}</RoutineDay>
-                  ) : null}
-                </>
+                <Fragment key={index}>
+                  {checked ? <RoutineDay>{value}</RoutineDay> : null}
+                </Fragment>
               );
             })}
           </RoutineDayDiv>
