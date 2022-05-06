@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Header from "../../components/common/Header";
 import FinanceForm from "components/finance/form/FinanceForm";
 import { AccountType } from "types";
+import { useRouter } from "next/router";
 
 const PageContainer = styled.main`
   padding: 0 2rem;
@@ -30,6 +31,7 @@ const CostIncomeButton = styled.button<{ isSelected: boolean }>`
 `;
 
 export default function FinanceCreateForm() {
+  const router = useRouter();
   const [accountType, setAccountType] = useState<AccountType>("E");
 
   function handleToggleAccountType(event: any) {
@@ -45,7 +47,10 @@ export default function FinanceCreateForm() {
   }
   return (
     <>
-      <Header label="가계부 내역 추가" />
+      <Header
+        label="가계부 내역 추가"
+        onClickBackButton={() => router.push("/finance")}
+      />
       <PageContainer>
         <ToggleCostIncome>
           <CostIncomeButton

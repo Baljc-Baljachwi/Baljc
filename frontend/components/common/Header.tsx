@@ -33,17 +33,16 @@ interface HeaderProps {
   label: string;
   icon?: IconName;
   onClickRightButton?: () => void;
+  onClickBackButton?: () => void;
 }
 
 export default function Header({
   label,
   icon,
   onClickRightButton,
+  onClickBackButton,
 }: HeaderProps) {
   const router = useRouter();
-  function onClickBackButton() {
-    router.back();
-  }
 
   return (
     <StyledHeader>

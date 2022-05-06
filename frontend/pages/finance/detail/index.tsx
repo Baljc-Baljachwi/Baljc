@@ -184,6 +184,7 @@ const FinanceDetail = () => {
           label="가계부 내역 상세 조회"
           icon="pencil"
           onClickRightButton={onClickEditButton}
+          onClickBackButton={() => router.push("/finance")}
         />
         <PageContainer>
           {/* <PageTitle

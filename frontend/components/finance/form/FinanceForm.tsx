@@ -51,7 +51,6 @@ const InputDiv = styled.div<{ isError?: boolean }>`
     font-size: 1.5rem;
     + span {
       font-size: 1.2rem;
-      color: red;
     }
   }
 `;

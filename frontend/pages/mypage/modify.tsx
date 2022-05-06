@@ -261,7 +261,10 @@ export default function ProfileModify() {
 
   return (
     <>
-      <Header label="내 정보 수정" />
+      <Header
+        label="내 정보 수정"
+        onClickBackButton={() => router.push("/mypage")}
+      />
       <LabelProfileImageContiainer>
         {/* <LabelProfileImage image={imagePreview} htmlFor="profileImage" /> */}
         <ProfileImage htmlFor="profileImage">

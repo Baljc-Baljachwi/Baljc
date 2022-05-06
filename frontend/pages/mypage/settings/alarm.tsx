@@ -146,7 +146,10 @@ const Alarm = () => {
   return (
     <>
       <Container>
-        <Header label="알림 설정"></Header>
+        <Header
+          label="알림 설정"
+          onClickBackButton={() => router.push("/mypage/settings")}
+        />
         <PageContainer>
           <ProfileContentListContainer>
             <ProfileMenuCardContent>

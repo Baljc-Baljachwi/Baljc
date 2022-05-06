@@ -60,6 +60,7 @@ const MyPage = () => {
           label="마이페이지"
           icon="pencil"
           onClickRightButton={() => router.push("/mypage/modify")}
+          onClickBackButton={() => router.push("/calendar")}
         ></Header>
         <PageContainer>
           <ProfileCardContainer>

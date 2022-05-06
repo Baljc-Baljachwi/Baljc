@@ -14,6 +14,7 @@ import dayjs from "dayjs";
 import { Doughnut } from "react-chartjs-2";
 import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js";
+import { useRouter } from "next/router";
 Chart.register(CategoryScale);
 
 interface ICalendar {
@@ -35,6 +36,7 @@ interface AnalysisProps {
 }
 
 const Analysis = () => {
+  const router = useRouter();
   // const [budgets, setBudgets] = useState(0);
   const [date, setDate] = useState(new Date());
   const [remainingBudget, setRemainingBudget] = useState(0);
@@ -151,7 +153,10 @@ const Analysis = () => {
   return (
     <>
       <Container>
-        <Header label="마이페이지" />
+        <Header
+          label="마이페이지"
+          onClickBackButton={() => router.push("/mypage")}
+        />
         <PageContainer>
           <ProfileCardContainer>
             <ProfileCard />

@@ -91,6 +91,7 @@ export default function RoutineDetail() {
         label="오늘의 일과"
         icon="plus"
         onClickRightButton={() => onClick()}
+        onClickBackButton={() => router.push("/work")}
       />
       <RoutineDiv>
         {routineList.length != 0 ? (

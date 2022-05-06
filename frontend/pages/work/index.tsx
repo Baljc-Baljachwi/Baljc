@@ -5,6 +5,7 @@ import Todo from "../../components/work/todolist/index";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import { useRouter } from "next/router";
 import { type } from "os";
 
 const StyledDiv = styled.div`
@@ -50,6 +51,7 @@ interface WeekState {
 }
 
 export default function Home() {
+  const router = useRouter();
   const [week, setWeek] = useState<WeekState[]>([]);
 
   const today = dayjs(new Date()).format("YYYY-MM-DD");
@@ -124,7 +126,10 @@ export default function Home() {
 
   return (
     <>
-      <Header label="할 일" />
+      <Header
+        label="할 일"
+        onClickBackButton={() => router.push("/calendar")}
+      />
       <StyledDiv>
         <WeeklyDiv>
           <WeeklyHeader>
