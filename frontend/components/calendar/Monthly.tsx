@@ -45,7 +45,7 @@ const MonthlyTotal = styled.div`
   flex-direction: column;
   align-items: flex-start;
   font-size: 2.3rem;
-  padding: 2rem 2rem 0 2rem;
+  padding: 2rem 3rem 0 3rem;
   font-weight: 700;
   .title {
     font-size: 1.5rem;
@@ -103,13 +103,17 @@ export default function Monthly() {
   dayjs.locale("ko");
 
   const handleClickLeft = () => {
-    setDate(new Date(date.setMonth(date.getMonth() - 1)));
-    console.log("한달 전", date);
+    const y = date.getFullYear();
+    const m = date.getMonth();
+    const lastDay = new Date(y, m, 0);
+    setDate(lastDay);
   };
 
   const handleClickRight = () => {
-    setDate(new Date(date.setMonth(date.getMonth() + 1)));
-    console.log("한달 전", date);
+    const y = date.getFullYear();
+    const m = date.getMonth();
+    const firstDay = new Date(y, m + 1, 1);
+    setDate(firstDay);
   };
 
   useEffect(() => {
@@ -122,7 +126,6 @@ export default function Monthly() {
         setMark(res.data.data.calendarMonth);
         setExpenditure(res.data.data.monthTotal.E);
         setIncome(res.data.data.monthTotal.I);
-        console.log(res.data.data);
       }
     });
   }, [year, month, date]);
@@ -137,6 +140,10 @@ export default function Monthly() {
       }
     }
   }, [mark]);
+
+  const callDay = (e: any) => {
+    console.log(e);
+  };
 
   if (!mounted) return null;
   return (
@@ -177,7 +184,9 @@ export default function Monthly() {
 
         <CalendarWrapper>
           <Calendar
+            activeStartDate={date}
             onChange={setDate}
+            onClickDay={callDay}
             value={date}
             calendarType="US" // 일요일 시작
             formatDay={(locale, date) => dayjs(date).format("D")} // 날짜 표기 방식 변경

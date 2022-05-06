@@ -36,6 +36,22 @@
   cursor: pointer;
 }
 
+/* navigator */
+.react-calendar__navigation {
+  display: flex;
+  height: 44px;
+  margin-bottom: 1em;
+}
+.react-calendar__navigation button {
+  min-width: 44px;
+  background: none;
+  font-size: 2rem;
+}
+.react-calendar__navigation button:disabled {
+  /* background-color: #f0f0f0; */
+  color: #000000;
+}
+
 /* 요일 */
 abbr[title] {
   text-decoration: none;
