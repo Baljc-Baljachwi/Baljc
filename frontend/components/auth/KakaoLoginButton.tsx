@@ -8,39 +8,12 @@ import kakaoLoginButtonImage from "../../public/assets/img/login/kakao_login_med
 
 const kakaoGetAuthCodeURL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&response_type=code`;
 
-const AwesomeHeader = styled.header`
-  width: 100%;
-  height: 25rem;
-  background-color: #2e437a;
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 4px 8px;
-  position: absolute;
-  top: 0;
-`;
-
-const AwesomeFooter = styled.footer`
-  width: 100%;
-  height: 25rem;
-  background-color: #ffefc6;
-  position: absolute;
-  bottom: 0;
-  box-shadow: rgba(0, 0, 0, 0.15) 0px -1px 8px;
-`;
-
-const Title = styled.div`
-  position: absolute;
-  top: 10rem;
-  left: 4rem;
-  font-size: 4.8rem;
-  color: #ffffff;
-`;
-
 const ButtonContainer = styled.div`
   position: relative;
   border-radius: 1.2rem;
   height: 45px;
   width: 183px;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
-    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
 `;
 
 const MainContainer = styled.main`
@@ -49,27 +22,43 @@ const MainContainer = styled.main`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 10rem 0;
-  height: 90vh;
+  // padding: 10rem 0;
+  height: 100vh;
+  gap: 1.5rem;
+  background-color: #2e437a;
 `;
 
-const MessageContainer = styled.article`
-  color: #3d3d3d;
-  font-size: 1.4rem;
-  margin-bottom: 1.5rem;
+const LoginTitle = styled.article`
+  color: white;
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 1rem;
+`;
+
+const LoginContent = styled.div`
+  color: white;
+  font-size: 1.6rem;
+  text-align: center;
+  font-weight: 500;
+  margin-bottom: 1rem;
 `;
 
 export default function KakaoLoginButton() {
   return (
     <>
-      <AwesomeHeader />
-      <Title>발자취</Title>
       <MainContainer>
-        <MessageContainer>
-          저희 발자취는
-          <br />
-          자취생 여러분의 김 한장을 응원합니다.
-        </MessageContainer>
+        <Image
+          src="/assets/img/login/login_logo_white.png"
+          alt=""
+          width={130}
+          height={130}
+        />
+        <LoginTitle>슬기로운 자취생활 길잡이</LoginTitle>
+        <LoginContent>
+          가계부부터 지출분석, 일정 관리까지 <br></br>
+          나만의 발자취를 남겨보세요!
+        </LoginContent>
         <ButtonContainer>
           <Link href={kakaoGetAuthCodeURL}>
             <a>
@@ -82,7 +71,6 @@ export default function KakaoLoginButton() {
           </Link>
         </ButtonContainer>
       </MainContainer>
-      <AwesomeFooter />
     </>
   );
 }
