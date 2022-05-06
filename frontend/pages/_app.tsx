@@ -199,6 +199,7 @@ export default function MyApp(props: AppProps) {
             sizes="32x32"
           />
           <link rel="manifest" href="/manifest.json" />
+          <link rel="assetlinks" href="/.well-known/assetlinks.json" />
 
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" />
