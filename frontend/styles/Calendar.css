@@ -1,4 +1,5 @@
 .react-calendar {
+  width: 95vw;
   max-width: 100%;
   font-family: "Noto Sans KR", sans-serif;
   line-height: 1.125em;
