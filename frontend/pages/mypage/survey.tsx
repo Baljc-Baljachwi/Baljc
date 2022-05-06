@@ -223,8 +223,8 @@ export default function Survey() {
       nickname: data.nickname,
       profileUpdated: data.profileUpdated,
       salaryType: data.salaryType,
-      salary: +data.salary,
-      workingHours: +data.workingHours,
+      salary: salaryType === "N" ? null : +data.salary,
+      workingHours: salaryType === "N" ? null : +data.workingHours,
       budget: +data.budget,
     };
 

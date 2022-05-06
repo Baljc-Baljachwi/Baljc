@@ -11,10 +11,23 @@ const PageContent = styled.div<{ isLogin: boolean }>`
 
 export default function Layout({ children }: React.PropsWithChildren<unknown>) {
   const router = useRouter();
+
   return (
     <>
-      <PageContent isLogin={router.pathname === "/"}>{children}</PageContent>
-      {router.pathname === "/" ? <></> : <Navbar />}
+      <PageContent
+        isLogin={
+          router.pathname === "/" ||
+          router.pathname === "/auth/kakao/[...params]"
+        }
+      >
+        {children}
+      </PageContent>
+      {router.pathname === "/" ||
+      router.pathname === "/auth/kakao/[...params]" ? (
+        <></>
+      ) : (
+        <Navbar />
+      )}
     </>
   );
 }

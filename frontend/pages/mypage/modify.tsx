@@ -237,8 +237,8 @@ export default function ProfileModify() {
       nickname: data.nickname,
       profileUpdated: data.profileUpdated,
       salaryType: data.salaryType,
-      salary: +data.salary,
-      workingHours: +data.workingHours,
+      salary: salaryType === "N" ? 0 : +data.salary,
+      workingHours: salaryType === "N" ? 0 : +data.workingHours,
       budget: +data.budget,
     };
 
@@ -248,6 +248,8 @@ export default function ProfileModify() {
       "memberInfo",
       new Blob([JSON.stringify(memberInfo)], { type: "application/json" })
     );
+
+    console.log(memberInfo);
 
     putMembers(formData).then((res) => {
       console.log(res.data);
