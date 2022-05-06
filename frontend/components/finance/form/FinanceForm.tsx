@@ -96,9 +96,8 @@ const CheckboxContainer = styled.div`
   right: 2rem;
   display: flex;
   justify-content: end;
-  padding-top: 1rem;
   gap: 0.5rem;
-  margin-bottom: 3rem;
+  margin: 1rem 0;
 `;
 
 const DisplayNoneInput = styled.input`
