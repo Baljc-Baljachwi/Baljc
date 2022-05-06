@@ -22,7 +22,7 @@ const Item = styled.div`
   flex-direction: column;
   cursor: pointer;
   align-items: center;
-  a {
+  div {
     color: #3d3d3d;
   }
   .active {
@@ -41,9 +41,9 @@ export default function NavBar() {
           size="2rem"
           color={router.pathname === "/community" ? undefined : "#cbcbcb"}
         />
-          <a className={router.pathname === "/community" ? "" : "active"}>
+          <div className={router.pathname === "/community" ? "" : "active"}>
             커뮤니티
-          </a>
+          </div>
       </Item> */}
       <Item onClick={() => router.push("/calendar")}>
         <Icon
@@ -52,9 +52,9 @@ export default function NavBar() {
           size="2rem"
           color={router.pathname === "/calendar" ? undefined : "#cdcdcd"}
         />
-        <a className={router.pathname === "/calendar" ? "" : "active"}>
+        <div className={router.pathname === "/calendar" ? "" : "active"}>
           캘린더
-        </a>
+        </div>
       </Item>
       <Item onClick={() => router.push("/finance")}>
         <Icon
@@ -63,7 +63,9 @@ export default function NavBar() {
           size="2rem"
           color={router.pathname === "/finance" ? undefined : "#cdcdcd"}
         />
-        <a className={router.pathname === "/finance" ? "" : "active"}>가계부</a>
+        <div className={router.pathname === "/finance" ? "" : "active"}>
+          가계부
+        </div>
       </Item>
       <Item onClick={() => router.push("/work")}>
         <Icon
@@ -72,7 +74,7 @@ export default function NavBar() {
           size="2rem"
           color={router.pathname === "/work" ? undefined : "#cdcdcd"}
         />
-        <a className={router.pathname === "/work" ? "" : "active"}>할 일</a>
+        <div className={router.pathname === "/work" ? "" : "active"}>할 일</div>{" "}
       </Item>
       <Item onClick={() => router.push("/mypage")}>
         <Icon
@@ -81,9 +83,9 @@ export default function NavBar() {
           size="2rem"
           color={router.pathname === "/mypage" ? undefined : "#cdcdcd"}
         />
-        <a className={router.pathname === "/mypage" ? "" : "active"}>
+        <div className={router.pathname === "/mypage" ? "" : "active"}>
           마이페이지
-        </a>
+        </div>
       </Item>
     </Container>
   );
