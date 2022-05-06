@@ -140,6 +140,14 @@ const Analysis = () => {
     ],
   };
 
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    setReady(true);
+  }, []);
+  if (!ready) {
+    return null;
+  }
+
   return (
     <>
       <Container>
