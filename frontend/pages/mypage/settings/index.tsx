@@ -35,6 +35,7 @@ const PageTitle = styled.span`
   color: #33487f;
 `;
 const ProfileContentListContainer = styled.div`
+  margin-top: 2rem;
   display: flex;
   flex-direction: column;
   /* appearance: none; */

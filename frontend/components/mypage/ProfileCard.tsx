@@ -23,6 +23,7 @@ const PageContainer = styled.main`
   display: flex;
   flex-direction: column;
   /* gap: 1rem; */
+  /* padding-bottom: 2rem; */
 `;
 
 const ProfileCardContainer = styled.div`
@@ -33,7 +34,7 @@ const ProfileCardContainer = styled.div`
   background: #2e437a;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 0px 0px 40px 40px;
-  height: 30vh;
+  height: 100%;
   color: #ffffff;
   gap: 1.4rem;
 `;
@@ -60,6 +61,7 @@ const ProfileInfo = styled.div`
   font-size: 1.8rem;
   font-weight: 600;
   gap: 1rem;
+  margin-bottom: 2rem;
   span {
     font-size: 1.6rem;
     font-weight: 400;
@@ -124,7 +126,9 @@ const ProfileCard = ({}) => {
             )}
           </ProfileImage>
           <ProfileInfo>
-            {memberInfo?.nickname}
+            {memberInfo?.nickname.length === 0
+              ? " 닉네임 "
+              : memberInfo?.nickname}
             <span>
               급여 |{" "}
               {memberInfo
