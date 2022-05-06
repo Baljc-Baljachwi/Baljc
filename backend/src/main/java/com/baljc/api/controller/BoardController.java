@@ -34,4 +34,10 @@ public class BoardController {
         boardService.insertBoard(boardRequest, files);
         return ResponseEntity.status(200).body(new BaseResponse(1701, "게시글 추가 성공"));
     }
+
+    @PostMapping("/{boardId}/comments")
+    public ResponseEntity<BaseResponse> insertComment(@Valid @RequestBody BoardDto.CommentRequest commentRequest) {
+        boardService.insertComment(commentRequest);
+        return ResponseEntity.status(200).body(new BaseResponse(1706, "댓글 추가 성공"));
+    }
 }

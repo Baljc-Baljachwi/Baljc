@@ -1,13 +1,12 @@
 package com.baljc.api.service;
 
 import com.baljc.api.dto.BoardDto;
-import com.baljc.db.entity.Board;
-import com.baljc.db.entity.BoardCategory;
-import com.baljc.db.entity.BoardImg;
-import com.baljc.db.entity.Member;
+import com.baljc.db.entity.*;
 import com.baljc.db.repository.BoardCategoryRepository;
 import com.baljc.db.repository.BoardImgRepository;
 import com.baljc.db.repository.BoardRepository;
+import com.baljc.db.repository.CommentRepository;
+import com.baljc.exception.NotExistedAccountBookException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +27,7 @@ public class BoardServiceImpl implements BoardService {
     private final BoardCategoryRepository boardCategoryRepository;
     private final BoardRepository boardRepository;
     private final BoardImgRepository boardImgRepository;
+    private final CommentRepository commentRepository;
     private final String boardImagePath;
 
     public BoardServiceImpl(MemberService memberService,
@@ -35,6 +35,7 @@ public class BoardServiceImpl implements BoardService {
                             BoardCategoryRepository boardCategoryRepository,
                             BoardRepository boardRepository,
                             BoardImgRepository boardImgRepository,
+                            CommentRepository commentRepository,
                             @Value("${cloud.aws.s3.folder.boardImage}") String boardImagePath
     ) {
         this.memberService = memberService;
@@ -42,6 +43,7 @@ public class BoardServiceImpl implements BoardService {
         this.boardCategoryRepository = boardCategoryRepository;
         this.boardRepository = boardRepository;
         this.boardImgRepository = boardImgRepository;
+        this.commentRepository = commentRepository;
         this.boardImagePath = boardImagePath;
     }
 
@@ -84,5 +86,23 @@ public class BoardServiceImpl implements BoardService {
                         .build());
             }
         }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void insertComment(BoardDto.CommentRequest commentRequest) {
+        Member member = memberService.getMemberByAuthentication();
+        Board board = boardRepository.findById(commentRequest.getBoardId()).orElseThrow(() -> new NullPointerException("해당 게시글이 존재하지 않습니다."));
+        Comment comment = null;
+        if (commentRequest.getParentId() != null) {
+            comment = commentRepository.findById(commentRequest.getParentId()).orElseThrow(() -> new NullPointerException("해당 부모 댓글이 존재하지 않습니다."));
+        }
+
+        commentRepository.save(Comment.builder()
+                .board(board)
+                .member(member)
+                .comment(comment)
+                .deletedYn('N')
+                .build());
     }
 }

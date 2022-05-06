@@ -25,4 +25,11 @@ public class BoardDto {
         private String imgUrl;
         private String name;
     }
+
+    @Getter
+    @NoArgsConstructor
+    public static class CommentRequest {
+        private UUID boardId;
+        private UUID parentId;
+    }
 }
