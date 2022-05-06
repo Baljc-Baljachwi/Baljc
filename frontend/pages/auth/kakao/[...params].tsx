@@ -9,7 +9,6 @@ export default function KakaoAuth() {
   const [_, setAccessToken] = useRecoilState(accessTokenState);
   const router = useRouter();
   const { code } = router.query;
-
   useEffect(() => {
     if (!code) return;
     kakaoLogin(code as string).then((res) => {
@@ -18,13 +17,11 @@ export default function KakaoAuth() {
         const accessToken = res.headers.authorization;
         console.log(`accessToken : ${accessToken}`);
         setAccessToken(accessToken);
-        console.log(res.data);
         console.log(res.data.data);
 
         router.push(res.data.data.surveyedYn ? "/calendar" : "/mypage/survey");
       }
     });
   }, [code, router, setAccessToken]);
-  console.log(code);
-  return <div>Login...</div>;
+  return null;
 }
