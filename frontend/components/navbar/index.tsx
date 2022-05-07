@@ -12,7 +12,7 @@ const Container = styled.nav`
   left: 0;
   bottom: 0;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   z-index: 10000;
   height: 5.6rem;
 `;
@@ -34,17 +34,17 @@ export default function NavBar() {
   const router = useRouter();
   return (
     <Container>
-      {/* <Item onClick={() => router.push("/community")}>
+      <Item onClick={() => router.push("/community")}>
         <Icon
           mode="fas"
           icon="comments"
           size="2rem"
           color={router.pathname === "/community" ? undefined : "#cbcbcb"}
         />
-          <div className={router.pathname === "/community" ? "" : "active"}>
-            커뮤니티
-          </div>
-      </Item> */}
+        <div className={router.pathname === "/community" ? "" : "active"}>
+          커뮤니티
+        </div>
+      </Item>
       <Item onClick={() => router.push("/calendar")}>
         <Icon
           mode="fas"
