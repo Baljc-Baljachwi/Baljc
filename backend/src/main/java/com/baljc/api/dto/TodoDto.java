@@ -18,6 +18,7 @@ public class TodoDto {
     @Getter
     @NoArgsConstructor
     public static class Request {
+        @NotBlank(message = "날짜 입력은 필수입니다.")
         private LocalDate date;
         @NotBlank(message = "내용 입력은 필수입니다.")
         @Size(min = 1, max = 30, message = "내용은 1자이상 30자이하입니다.")

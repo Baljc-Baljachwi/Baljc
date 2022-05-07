@@ -37,7 +37,8 @@ public class PushAlarmScheduler {
         log.debug("scheduleByMinute - now: {}", now);
         List<PushAlarm> pushAlarmList = pushAlarmRepository.findAll()
                 .stream()
-                .filter(pushAlarm -> pushAlarm.getMember().getFcmToken() != null)
+                .filter(pushAlarm -> pushAlarm.getMember().getSurveyedYn() == 'Y'
+                        && pushAlarm.getMember().getFcmToken() != null)
                 .collect(Collectors.toList());
 
         // 가계부 푸시 알람
@@ -50,7 +51,7 @@ public class PushAlarmScheduler {
 
         notificationService.sendMessageByTokenList(accountFcmTokenList, Notification.builder()
                 .title("가계부의 발자취 '(^모^)'")
-                .body("가계부에 오늘의 지출을 기록해 보아요!!!")
+                .body("가계부에 오늘의 지출을 기록해 보아요 ('v')")
                 .build());
 
         // 할 일 푸시 알람
@@ -63,7 +64,7 @@ public class PushAlarmScheduler {
 
         notificationService.sendMessageByTokenList(todoFcmTokenList, Notification.builder()
                 .title("할 일의 발자취 '(^모^)'")
-                .body("할 일 목록에 오늘의 할 일을 기록해 보아요!!!")
+                .body("할 일 목록에 오늘의 할 일을 기록해 보아요 ('v')")
                 .build());
     }
 }
