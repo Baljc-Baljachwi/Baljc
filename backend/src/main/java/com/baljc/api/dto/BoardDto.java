@@ -30,5 +30,7 @@ public class BoardDto {
     @NoArgsConstructor
     public static class CommentRequest {
         private UUID parentId;
+        @Size(min = 1, max = 100, message = "올바른 내용 형식(1자이상 100자이하)이 아닙니다.")
+        private String content;
     }
 }

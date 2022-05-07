@@ -103,6 +103,7 @@ public class BoardServiceImpl implements BoardService {
                 .board(board)
                 .member(member)
                 .comment(comment)
+                .content(commentRequest.getContent())
                 .deletedYn('N')
                 .build());
     }
