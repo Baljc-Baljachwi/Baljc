@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { useRouter } from "next/router";
+// import { useRecoilState } from "recoil";
+
 import Header from "components/common/Header";
 import ToggleButton from "components/mypage/settings/ToggleButton";
+import ButtonBottom from "components/common/ButtonBottom";
 
-import { useRouter } from "next/router";
-import { useRecoilState } from "recoil";
 import { getAlarms, putAlarms } from "../../../api/alarm";
 import { YNType } from "../../../types";
-import ButtonBottom from "components/common/ButtonBottom";
 
 const Container = styled.div`
   /* height: 100vh; */
@@ -79,11 +80,25 @@ const SettingAlarmItem = styled.div`
   }
 `;
 
+const TimePicker = styled.input`
+  width: 100%;
+  font-size: 1.6rem;
+  text-align: end;
+  border: none;
+  outline: none;
+  background-color: #f4f4f4;
+  color: #3d3d3d;
+  font-family: "Noto Sans KR", sans-serif;
+  ::placeholder {
+    color: #cccccc;
+  }
+`;
+
 const Alarm = () => {
   const router = useRouter();
   // const [alarms, setAlarms] = useState<IAlarm>();
   const [accountAlarmYN, setaccountAlarmYN] = useState<YNType>("Y");
-  const [accountAlarmTime, setAccountAlarmTime] = useState("09:00:00");
+  const [accountAlarmTime, setAccountAlarmTime] = useState("21:00:00");
   const [todoAlarmYN, settodoAlarmYN] = useState<YNType>("Y");
   const [todoAlarmTime, setTodoAlarmTime] = useState("09:00:00");
   //   const UserInfo = useRecoilValue(userInfoState);
@@ -113,6 +128,13 @@ const Alarm = () => {
     settodoAlarmYN((prev) => (prev === "Y" ? "N" : "Y"));
   };
 
+  const onAccountTimeChangeHandler = (e: any) => {
+    setAccountAlarmTime(e.target.value);
+  };
+  const onTodoTimeChangeHandler = (e: any) => {
+    setTodoAlarmTime(e.target.value);
+  };
+
   const onClickSaveButton = () => {
     console.log("저장 버튼 click!");
     const alarmInfo = {
@@ -121,9 +143,6 @@ const Alarm = () => {
       todoAlarmYn: todoAlarmYN,
       todoAlarmTime: todoAlarmTime,
     };
-    // const data = new alarmInfo();
-    // console.log("저장버튼 눌렀을 때임!! put api 호출 전! 🔥🔥🔥");
-    // console.log(alarmInfo);
 
     putAlarms(alarmInfo)
       .then((res) => {
@@ -163,8 +182,13 @@ const Alarm = () => {
               <SettingAlarmItem>
                 <span>가계부</span>
                 <div className="right-content">
-                  <span>오후 9시</span>
                   {/* <span>{accountAlarmTime}</span> */}
+                  <TimePicker
+                    className="TimePicker"
+                    type="time"
+                    value={accountAlarmTime}
+                    onChange={onAccountTimeChangeHandler}
+                  />
                   <ToggleButton
                     isOn={accountAlarmYN}
                     onClick={onClickaccountAlarmYN}
@@ -174,8 +198,13 @@ const Alarm = () => {
               <SettingAlarmItem>
                 <span>할 일</span>
                 <div className="right-content">
-                  <span>오전 9시</span>
                   {/* <span>{todoAlarmTime}</span> */}
+                  <TimePicker
+                    className="TimePicker"
+                    type="time"
+                    value={todoAlarmTime}
+                    onChange={onTodoTimeChangeHandler}
+                  />
                   <ToggleButton
                     isOn={todoAlarmYN}
                     onClick={onClicktodoAlarmYN}
@@ -193,36 +222,4 @@ const Alarm = () => {
 
 export default Alarm;
 
-// <ProfileContentCard
-//               title="푸쉬 알림 설정"
-//               description="푸쉬 알림을 받습니다."
-//             />
-//             <ProfileSettingsList />
-
-// // setAlarms 각 항목 settting
-// useEffect(() => {
-//   getAlarms()
-//     .then((res) => {
-//       console.log(res.data);
-//       console.log("알림 조회 성공! 🤸‍♀️🔥");
-//       setaccountAlarmYN(res.data.data.accountAlarmYn);
-//       setAccountAlarmTime(res.data.data.accountAlarmTime);
-//       settodoAlarmYN(res.data.data.todoAlarmYn);
-//       setTodoAlarmTime(res.data.data.todoAlarmTime);
-//       // if (res.data.code === 1200) {
-//       //   // console.log("1200도 넘어왔음!");
-//       //   console.log(res.data.data);
-//       //   // setAlarms(res.data.data);
-//       //   setaccountAlarmYN(res.data.data.accountAlarmYn);
-//       //   setAccountAlarmTime(res.data.data.accountAlarmTime);
-//       //   settodoAlarmYN(res.data.data.todoAlarmYn);
-//       //   setTodoAlarmTime(res.data.data.todoAlarmTime);
-//       // } else {
-//       //   console.log(res.data.message);
-//       // }
-//     })
-//     .catch((err) => {
-//       console.log(err.response);
-//       console.log("😥🙀 알림 조회 실팩ㄱ");
-//     });
-// }, []);
+Alarm.requireAuth = true;

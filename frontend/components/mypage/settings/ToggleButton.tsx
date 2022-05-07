@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { YNType } from "types";
 
 const ToggleButtonContainer = styled.div`
-  width: 4rem;
+  width: 5.4rem;
   position: relative;
   display: flex;
   align-items: center;
