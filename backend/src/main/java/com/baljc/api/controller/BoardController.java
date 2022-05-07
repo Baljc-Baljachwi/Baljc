@@ -5,6 +5,8 @@ import com.baljc.api.dto.BoardDto;
 import com.baljc.api.service.BoardService;
 import com.baljc.common.response.BaseDataResponse;
 import com.baljc.common.response.BaseResponse;
+import com.baljc.db.entity.Board;
+import com.baljc.db.entity.Comment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -47,4 +49,11 @@ public class BoardController {
         boardService.deleteComment(commentId);
         return ResponseEntity.status(200).body(new BaseResponse(1707, "댓글 삭제 성공"));
     }
+
+    @PostMapping("/{boardId}/like")
+    public ResponseEntity<BaseResponse> updateHeart(@PathVariable("boardId") UUID boardId, @Valid @RequestBody BoardDto.HeartRequest heartRequest) {
+        boardService.updateHeart(boardId, heartRequest);
+        return ResponseEntity.status(200).body(new BaseResponse(1708, "좋아요/좋아요 취소 성공"));
+    }
+
 }

@@ -2,10 +2,7 @@ package com.baljc.api.service;
 
 import com.baljc.api.dto.BoardDto;
 import com.baljc.db.entity.*;
-import com.baljc.db.repository.BoardCategoryRepository;
-import com.baljc.db.repository.BoardImgRepository;
-import com.baljc.db.repository.BoardRepository;
-import com.baljc.db.repository.CommentRepository;
+import com.baljc.db.repository.*;
 import com.baljc.exception.NotExistedAccountBookException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +26,7 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
     private final BoardImgRepository boardImgRepository;
     private final CommentRepository commentRepository;
+    private final HeartRepository heartRepository;
     private final String boardImagePath;
 
     public BoardServiceImpl(MemberService memberService,
@@ -37,6 +35,7 @@ public class BoardServiceImpl implements BoardService {
                             BoardRepository boardRepository,
                             BoardImgRepository boardImgRepository,
                             CommentRepository commentRepository,
+                            HeartRepository heartRepository,
                             @Value("${cloud.aws.s3.folder.boardImage}") String boardImagePath
     ) {
         this.memberService = memberService;
@@ -45,6 +44,7 @@ public class BoardServiceImpl implements BoardService {
         this.boardRepository = boardRepository;
         this.boardImgRepository = boardImgRepository;
         this.commentRepository = commentRepository;
+        this.heartRepository = heartRepository;
         this.boardImagePath = boardImagePath;
     }
 
@@ -114,4 +114,22 @@ public class BoardServiceImpl implements BoardService {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new NullPointerException("해당 댓글이 존재하지 않습니다."));
         comment.deleteComment();
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateHeart(UUID boardId, BoardDto.HeartRequest heartRequest) {
+        Member member = memberService.getMemberByAuthentication();
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new NullPointerException("해당 게시글이 존재하지 않습니다."));
+
+        if (heartRequest.getHeartYn().charAt(0) == 'Y') {
+            heartRepository.save(Heart.builder()
+                    .member(member)
+                    .board(board)
+                    .build());
+        } else {
+            Heart heart = heartRepository.findByMemberAndBoard(member, board).orElseThrow(() -> new NullPointerException("해당 좋아요가 존재하지 않습니다."));
+            heartRepository.deleteById(heart.getHeartId());
+        }
+    }
+
 }
