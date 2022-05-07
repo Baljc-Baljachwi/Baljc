@@ -45,17 +45,6 @@ export default function NavBar() {
           커뮤니티
         </div>
       </Item>
-      <Item onClick={() => router.push("/calendar")}>
-        <Icon
-          mode="fas"
-          icon="calendar-days"
-          size="2rem"
-          color={router.pathname === "/calendar" ? undefined : "#cdcdcd"}
-        />
-        <div className={router.pathname === "/calendar" ? "" : "active"}>
-          캘린더
-        </div>
-      </Item>
       <Item onClick={() => router.push("/finance")}>
         <Icon
           mode="fas"
@@ -65,6 +54,17 @@ export default function NavBar() {
         />
         <div className={router.pathname === "/finance" ? "" : "active"}>
           가계부
+        </div>
+      </Item>
+      <Item onClick={() => router.push("/calendar")}>
+        <Icon
+          mode="fas"
+          icon="calendar-days"
+          size="2rem"
+          color={router.pathname === "/calendar" ? undefined : "#cdcdcd"}
+        />
+        <div className={router.pathname === "/calendar" ? "" : "active"}>
+          캘린더
         </div>
       </Item>
       <Item onClick={() => router.push("/work")}>
