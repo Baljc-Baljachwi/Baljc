@@ -39,4 +39,10 @@ public class BoardDto {
     public static class HeartRequest {
         private String heartYn;
     }
+
+    @Getter
+    @NoArgsConstructor
+    public static class ScrapRequest {
+        private String scrapYn;
+    }
 }

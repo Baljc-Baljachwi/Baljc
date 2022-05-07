@@ -27,6 +27,7 @@ public class BoardServiceImpl implements BoardService {
     private final BoardImgRepository boardImgRepository;
     private final CommentRepository commentRepository;
     private final HeartRepository heartRepository;
+    private final ScrapRepository scrapRepository;
     private final String boardImagePath;
 
     public BoardServiceImpl(MemberService memberService,
@@ -36,6 +37,7 @@ public class BoardServiceImpl implements BoardService {
                             BoardImgRepository boardImgRepository,
                             CommentRepository commentRepository,
                             HeartRepository heartRepository,
+                            ScrapRepository scrapRepository,
                             @Value("${cloud.aws.s3.folder.boardImage}") String boardImagePath
     ) {
         this.memberService = memberService;
@@ -45,6 +47,7 @@ public class BoardServiceImpl implements BoardService {
         this.boardImgRepository = boardImgRepository;
         this.commentRepository = commentRepository;
         this.heartRepository = heartRepository;
+        this.scrapRepository = scrapRepository;
         this.boardImagePath = boardImagePath;
     }
 
@@ -129,6 +132,23 @@ public class BoardServiceImpl implements BoardService {
         } else {
             Heart heart = heartRepository.findByMemberAndBoard(member, board).orElseThrow(() -> new NullPointerException("해당 좋아요가 존재하지 않습니다."));
             heartRepository.deleteById(heart.getHeartId());
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateScrap(UUID boardId, BoardDto.ScrapRequest scrapRequest) {
+        Member member = memberService.getMemberByAuthentication();
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new NullPointerException("해당 게시글이 존재하지 않습니다."));
+
+        if (scrapRequest.getScrapYn().charAt(0) == 'Y') {
+            scrapRepository.save(Scrap.builder()
+                    .member(member)
+                    .board(board)
+                    .build());
+        } else {
+            Scrap scrap = scrapRepository.findByMemberAndBoard(member, board).orElseThrow(() -> new NullPointerException("해당 스크랩이 존재하지 않습니다."));
+            scrapRepository.deleteById(scrap.getScrapId());
         }
     }
 

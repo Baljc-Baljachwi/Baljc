@@ -56,4 +56,10 @@ public class BoardController {
         return ResponseEntity.status(200).body(new BaseResponse(1708, "좋아요/좋아요 취소 성공"));
     }
 
+    @PostMapping("/{boardId}/scrap")
+    public ResponseEntity<BaseResponse> updateScrap(@PathVariable("boardId") UUID boardId, @Valid @RequestBody BoardDto.ScrapRequest scrapRequest) {
+        boardService.updateScrap(boardId, scrapRequest);
+        return ResponseEntity.status(200).body(new BaseResponse(1709, "스크랩/스크랩 취소 성공"));
+    }
+
 }
