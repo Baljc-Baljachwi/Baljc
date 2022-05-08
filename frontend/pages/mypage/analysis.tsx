@@ -7,37 +7,39 @@ import ProfileCard from "../../components/mypage/ProfileCard";
 import NotFoundTransaction from "components/common/not-found-transaction/NotFoundTransaction";
 import ProgressStaticBar from "components/common/ProgressStaticBar";
 
-import { getBudget, getPieChartValue } from "../../api/mypage";
+import {
+  getBudget,
+  getPieChartValue,
+  getFixedExpenditure,
+  getLineGraphValue,
+} from "../../api/mypage";
 
 import dayjs from "dayjs";
-
-import { Doughnut } from "react-chartjs-2";
+import {
+  //   Chart as ChartJS,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { Doughnut, Line } from "react-chartjs-2";
 import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js";
 import { useRouter } from "next/router";
-Chart.register(CategoryScale);
-
-interface ICalendar {
-  year: number | string;
-  month: number | string;
-}
-interface IDaily extends ICalendar {
-  day: number | string;
-}
-
-// interface ICategories {
-//   categoryName: string;
-//   value: number;
-// }
-interface AnalysisProps {
-  date?: string;
-  year: number | string;
-  month: number | string;
-}
+Chart.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const Analysis = () => {
   const router = useRouter();
-  // const [budgets, setBudgets] = useState(0);
   const [date, setDate] = useState(new Date());
   const [remainingBudget, setRemainingBudget] = useState(0);
   const [dailyExpenditure, setDailyExpenditure] = useState(0);
@@ -49,8 +51,10 @@ const Analysis = () => {
   const [budget, setBudget] = useState(0);
   const [expenditurePercent, setExpenditurePercent] = useState("0");
   const [remainingBudgetPercent, setRemainingBudgetPercent] = useState(0);
+  const [fixedExpenditure, setFixedExpenditure] = useState(0);
+  const [totalExpenditure, setTotalExpenditure] = useState(0);
+  const [xdays, setXdays] = useState([]);
 
-  // const categoryName = Object.keys(categories).map((idx:any)=> data1.labels[idx]);
   const categoryName = Object.keys(categories);
   const categoryValue = Object.values(categories);
   const categoryContents = Object.entries(categories).map((entrie, idx) => {
@@ -59,6 +63,9 @@ const Analysis = () => {
   console.log(categoryContents);
   console.log(categoryName);
   console.log(categoryValue);
+  const xdaysName = Object.keys(xdays);
+  const xdaysValue = Object.values(xdays);
+
   useEffect(() => {
     console.log(year);
     console.log(month);
@@ -70,7 +77,21 @@ const Analysis = () => {
         console.log(err.response);
         console.log("😥🙀 도넛 차트 조회 실패");
       });
-
+    getLineGraphValue(year, month)
+      .then((res) => {
+        console.log(res.data.data);
+        setXdays(res.data.data);
+        console.log("하이");
+        console.log(xdays);
+      })
+      .catch((err) => {
+        console.log(err.response);
+        console.log("😥🙀 도넛 차트 조회 실패");
+      });
+    console.log("xdaysName");
+    console.log(xdaysName);
+    console.log("xdaysValue");
+    console.log(xdaysValue);
     getBudget(dateForm)
       .then((res) => {
         console.log(res.data);
@@ -90,25 +111,8 @@ const Analysis = () => {
         console.log("😥🙀 예산 조회 실팩ㄱ");
       });
   }, [month, year]);
-  // doughnut chart data set
-  // const getKeys = categoryName.map((entrie, idx) => {
-  //   return data1.labels[idx];
-  // });
 
   const data1 = {
-    // labels: [
-    //   categoryName,
-    //   "문화/여가",
-    //   "육아/반려",
-    //   "교육/학습",
-    //   "경조사비",
-    //   "미분류",
-    //   "의료/건강",
-    //   "교통비",
-    //   "쇼핑",
-    //   "식비",
-    //   "주거/통신",
-    // ],
     labels: categoryName,
     datasets: [
       {
@@ -141,7 +145,54 @@ const Analysis = () => {
       },
     ],
   };
-
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top" as const,
+      },
+      title: {
+        display: false,
+        text: "Chart.js Line Chart",
+      },
+    },
+  };
+  const data2 = {
+    labels: xdaysName,
+    datasets: [
+      {
+        label: "일 별 지출 추이",
+        // data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
+        // data: [65, 59, 80, 81, 56, 55, 40],
+        data: xdaysValue,
+        // data: xdays,
+        // data: xdaysValue.map(() => xdaysValue),
+        fill: true,
+        lineTension: 0.3,
+        backgroundColor: "rgba(75,192,192,0.4)",
+        borderColor: "rgba(75,192,192,1)",
+        // borderCapStyle: "butt",
+        borderDash: [],
+        borderDashOffset: 0.0,
+        // borderJoinStyle: "miter",
+        pointBorderColor: "rgba(75,192,192,1)",
+        // pointBackgroundColor: "rgba(75,192,192,1)",
+        pointBackgroundColor: "#fff",
+        // pointBorderWidth: 1,
+        // pointHoverRadius: 5,
+        pointBorderWidth: 0,
+        pointHoverRadius: 0,
+        pointHoverBackgroundColor: "rgba(75,192,192,1)",
+        pointHoverBorderColor: "rgba(220,220,220,1)",
+        // pointHoverBorderWidth: 2,
+        // pointRadius: 1,
+        // pointHitRadius: 10,
+        pointHoverBorderWidth: 0,
+        pointRadius: 0,
+        pointHitRadius: 0,
+      },
+    ],
+  };
   const [ready, setReady] = useState(false);
   useEffect(() => {
     setReady(true);
@@ -197,16 +248,27 @@ const Analysis = () => {
                   </span>{" "}
                   원을 쓰게 됩니다.
                 </span>
-                {/* <CustomProgressBar
-                  bgcolor="#2601cf"
-                  progress="30"
-                  height="4rem"
-                /> */}
               </ContentsDiv>
               <ProgressStaticBar done={`${expenditurePercent}`} />
-              {/* {expenditurePercent} */}
               <DivisionLine />
 
+              {/* 고정 지출 */}
+              <ContentsDiv>
+                <div className="charts">
+                  <div className="circle">
+                    <h2>4월</h2>
+                    <span>이번 달 고정 지출</span>
+                    {/* {categoryValue.length === 0 ? (
+                      <NotFoundTransaction />
+                    ) : (
+                      <Doughnut data={data1} width={400} height={400} />
+                    )} */}
+                  </div>
+                </div>
+              </ContentsDiv>
+              <DivisionLine />
+
+              {/* 카테고리 별 통계 - 도넛 차트 */}
               <ContentsDiv>
                 <div className="charts">
                   <div className="circle">
@@ -216,6 +278,27 @@ const Analysis = () => {
                     ) : (
                       <Doughnut data={data1} width={400} height={400} />
                     )}
+                  </div>
+                </div>
+              </ContentsDiv>
+              <DivisionLine />
+
+              {/* 일 별 통계 - 꺾은선 그래프 */}
+              <ContentsDiv>
+                <div className="charts">
+                  <div className="circle">
+                    <h2>일 별 지출 통계</h2>
+                    <Line
+                      options={options}
+                      data={data2}
+                      width={400}
+                      height={400}
+                    />
+                    {/* {categoryValue.length === 0 ? (
+                      <NotFoundTransaction />
+                    ) : (
+                      <Doughnut data={data1} width={400} height={400} />
+                    )} */}
                   </div>
                 </div>
               </ContentsDiv>
