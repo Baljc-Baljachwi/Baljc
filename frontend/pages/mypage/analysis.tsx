@@ -6,6 +6,8 @@ import Header from "../../components/common/Header";
 import ProfileCard from "../../components/mypage/ProfileCard";
 import NotFoundTransaction from "components/common/not-found-transaction/NotFoundTransaction";
 import ProgressStaticBar from "components/common/ProgressStaticBar";
+import { IconName } from "@fortawesome/free-solid-svg-icons";
+import Icon from "components/common/Icon";
 
 import {
   getBudget,
@@ -37,6 +39,10 @@ Chart.register(
   Tooltip,
   Legend
 );
+interface IconProps {
+  icon?: IconName;
+  onClickMoveToButton?: () => void;
+}
 
 const Analysis = () => {
   const router = useRouter();
@@ -69,6 +75,16 @@ const Analysis = () => {
   useEffect(() => {
     console.log(year);
     console.log(month);
+    getFixedExpenditure(year, month)
+      .then((res) => {
+        console.log(res.data.data);
+        setFixedExpenditure(res.data.data.fixedExpenditure);
+        setTotalExpenditure(res.data.data.totalExpenditure);
+      })
+      .catch((err) => {
+        console.log(err.response);
+        console.log("😥🙀 고정 지출 조회 실패");
+      });
     getPieChartValue(year, month)
       .then((res) => {
         setCategories(res.data.data);
@@ -257,7 +273,30 @@ const Analysis = () => {
                 <div className="charts">
                   <div className="circle">
                     <h2>4월</h2>
-                    <span>이번 달 고정 지출</span>
+                    <div className="fixedEContents">
+                      <div className="fixedEContents-manage">
+                        <span className="primaryText">이번 달 고정 지출</span>
+                        <span>
+                          <span className="highlightedText-primary">
+                            {fixedExpenditure.toLocaleString()}
+                          </span>{" "}
+                          원
+                          <MoveToButton>
+                            <Icon
+                              mode="fas"
+                              icon="chevron-right"
+                              color="#AAAAAA"
+                              size="16px"
+                              onClick={() => router.push("/mypage/fixed")}
+                            />
+                          </MoveToButton>
+                        </span>
+                      </div>
+                      <div className="fixedEContents-totalE">
+                        <span>총 지출</span>
+                        <span>{totalExpenditure.toLocaleString()} 원</span>
+                      </div>
+                    </div>
                     {/* {categoryValue.length === 0 ? (
                       <NotFoundTransaction />
                     ) : (
@@ -462,8 +501,31 @@ const ContentsDiv = styled.div`
         font-size: 22px;
         margin-bottom: 20px;
       }
+      .fixedEContents {
+        display: flex;
+        flex-direction: column;
+        .fixedEContents-manage {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          .primaryText {
+            font-weight: 700;
+            font-size: 2rem;
+          }
+        }
+        .fixedEContents-totalE {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+      }
     }
   }
+`;
+
+const MoveToButton = styled.span`
+  padding-left: 1rem;
+  cursor: pointer;
 `;
 
 Analysis.requireAuth = true;
