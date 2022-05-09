@@ -54,5 +54,8 @@ public class MemberDto {
         private Integer salary;
         private Integer workingHours;
         private Integer budget;
+        private Double latitude;
+        private Double longitude;
+        private String dong;
     }
 }
