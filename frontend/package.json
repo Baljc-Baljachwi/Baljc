@@ -28,7 +28,8 @@
     "react-toastify": "^9.0.1",
     "recoil": "^0.7.2",
     "styled-components": "^5.3.5",
-    "styled-normalize": "^8.0.7"
+    "styled-normalize": "^8.0.7",
+    "swiper": "^8.1.4"
   },
   "devDependencies": {
     "@types/chart.js": "^2.9.37",
