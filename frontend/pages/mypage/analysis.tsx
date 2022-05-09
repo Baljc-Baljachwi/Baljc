@@ -39,11 +39,7 @@ Chart.register(
   Legend
 );
 
-interface IFixed {
-  totalFixedE: number;
-}
-
-const Analysis = ({ totalFixedE }: IFixed) => {
+const Analysis = () => {
   const router = useRouter();
   const [date, setDate] = useState(new Date());
   const [remainingBudget, setRemainingBudget] = useState(0);
