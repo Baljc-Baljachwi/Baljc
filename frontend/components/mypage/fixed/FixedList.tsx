@@ -107,5 +107,6 @@ const PageContainer = styled.main`
 const Day = styled.div`
   font-size: 1.6rem;
   padding-top: 1.5rem;
+  padding-left: 1rem;
   color: #33487f;
 `;

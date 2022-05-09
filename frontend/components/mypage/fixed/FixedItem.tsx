@@ -9,17 +9,6 @@ import { getCategories } from "api/accountbook";
 import { getFixedEList } from "api/mypage";
 import { ICategory } from "types";
 
-interface FinanceCardProps {
-  accountbookId: string;
-  isFixed: boolean;
-  type: string;
-  title: string;
-  price: number;
-  method: string;
-  categoryName: string;
-  date?: string;
-}
-
 interface FixedItemProps {
   accountbookId: string;
   monthlyPeriod: string;
@@ -48,21 +37,31 @@ export default function FixedItem({
   const dateForm = dayjs(date).format("YYYY-MM-DD");
   const [exCategories, setExCategories] = useState<ICategory[]>([]);
   const [categoryImg, setCategoryImg] = useState("");
-  //   useEffect(() => {
-  //     getCategories("E").then((res) => {
-  //       console.log(res.data);
-  //       setExCategories(res.data.data);
-  //     });
-  //   }, []);
-  //   useEffect(() => {
-  //     exCategories?.map((category, idx) =>
-  //       category.name === categoryName ? setCategoryImg(category.imgUrl) : null
-  //     );
-  //   }, [exCategories, categoryName]);
+  useEffect(() => {
+    getCategories("E").then((res) => {
+      console.log(res.data);
+      setExCategories(res.data.data);
+    });
+  }, []);
+  useEffect(() => {
+    exCategories?.map((category, idx) =>
+      category.name === categoryName ? setCategoryImg(category.imgUrl) : null
+    );
+  }, [exCategories, categoryName]);
   return (
     <>
       <FixedCardItem backgroundColor={"#F4F4F4"}>
-        <div className="ImgContainer">이미지 자리</div>
+        <div className="ImgContainer">
+          {categoryImg ? (
+            <Image
+              src={categoryImg}
+              alt={categoryName}
+              layout="fixed"
+              width="50px"
+              height="50px"
+            />
+          ) : null}
+        </div>
         <div className="TextContainer">
           <div className="major">
             <span>{title}</span>
@@ -109,6 +108,7 @@ const FixedCardItem = styled.div<{ backgroundColor: string }>`
   cursor: pointer;
   .ImgContainer {
     display: flex;
+    padding-right: 1rem;
   }
   .TextContainer {
     display: flex;
@@ -131,46 +131,9 @@ const FixedCardItem = styled.div<{ backgroundColor: string }>`
   }
 `;
 
-const GridContainer = styled.div`
-  display: grid;
-  grid-template-columns: 2fr 6fr;
-`;
-
-const FlexColumnContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const FinanceCardContent = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-`;
-
-const FinanceCardTitle = styled.span`
-  color: #3d3d3d;
-  font-weight: 400;
-`;
-
 const FinanceCardPrice = styled.span<{ color?: string }>`
   color: ${(props) => props.color};
   font-weight: 500;
   font-style: medium;
   padding-bottom: 1rem;
 `;
-
-const FinanceCardDetail = styled.span`
-  color: #696969;
-  font-size: 1.2rem;
-  font-weight: 400;
-`;
-
-const titleColor = {
-  light: colors.gray900,
-  dark: colors.gray25,
-};
-
-const subtitleColor = {
-  light: colors.gray400,
-  dark: colors.gray500,
-};
