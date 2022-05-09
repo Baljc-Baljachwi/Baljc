@@ -185,7 +185,7 @@ const Analysis = () => {
     labels: xdaysName,
     datasets: [
       {
-        label: "일 별 지출 추이",
+        label: "일 별 지출 추이 (단위: 만 원)",
         // data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
         // data: [65, 59, 80, 81, 56, 55, 40],
         data: xdaysValue,
