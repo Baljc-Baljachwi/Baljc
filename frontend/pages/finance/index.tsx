@@ -9,8 +9,6 @@ import FinanceList from "../../components/finance/list/FinanceList";
 import Icon from "../../components/common/Icon";
 
 const Container = styled.div`
-  /* height: 100vh; */
-  /* background-color: #ebeced; */
   padding-bottom: 2rem;
   background-color: #ffffff;
   position: relative;
@@ -127,7 +125,6 @@ export default function Finance(): JSX.Element {
       setMonthlyLog(res.data.data.accountbookMonth);
     });
   }, [month, year]);
-  // console.log(monthlyLog); // {1: Array(2), 2: Array(1)} { 1: [{...}, {...}], 2: [{...}, {...}]}
 
   console.log(amount);
   const [ready, setReady] = useState(false);
