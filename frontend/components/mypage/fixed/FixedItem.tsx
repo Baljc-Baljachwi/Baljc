@@ -108,7 +108,8 @@ const FixedCardItem = styled.div<{ backgroundColor: string }>`
   cursor: pointer;
   .ImgContainer {
     display: flex;
-    padding-right: 1rem;
+    padding-right: 1.4rem;
+    filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
   }
   .TextContainer {
     display: flex;
@@ -118,10 +119,10 @@ const FixedCardItem = styled.div<{ backgroundColor: string }>`
       display: flex;
       font-size: 1.6rem;
       justify-content: space-between;
+      padding-bottom: 0.6rem;
       .priceTag {
         font-weight: 500;
         font-style: medium;
-        padding-bottom: 1rem;
       }
     }
     .second {
