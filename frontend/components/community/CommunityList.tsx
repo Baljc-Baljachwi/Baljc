@@ -29,6 +29,20 @@ const BodyContainer = styled.div`
   padding: 0 0 1rem 0;
 `;
 
+const ChatButtonDiv = styled.div`
+  width: 100%;
+  position: fixed;
+  bottom: 14rem;
+  z-index: 1000;
+`;
+
+const ChatButton = styled.img`
+  width: 7rem;
+  position: absolute;
+  top: 0;
+  right: 2rem;
+`;
+
 export default function CommunityList() {
   return (
     <Container>
@@ -51,6 +65,9 @@ export default function CommunityList() {
         <CommunityCard />
         <CommunityCard />
       </BodyContainer>
+      <ChatButtonDiv>
+        <ChatButton src="/assets/img/community/chat_icon.png"></ChatButton>
+      </ChatButtonDiv>
     </Container>
   );
 }
