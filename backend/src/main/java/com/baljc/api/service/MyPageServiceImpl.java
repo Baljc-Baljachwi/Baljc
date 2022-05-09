@@ -2,12 +2,14 @@ package com.baljc.api.service;
 
 import com.baljc.api.dto.MyPageDto;
 import com.baljc.db.entity.AccountBook;
+import com.baljc.db.entity.Routine;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -69,6 +71,7 @@ public class MyPageServiceImpl implements MyPageService {
                     }
                     return false;
                 })
+                .sorted(Comparator.comparing(AccountBook::getMonthlyPeriod))
                 .map(accountBook -> new MyPageDto.FixedExpContentResponse(
                         accountBook.getAccountBookId(),
                         accountBook.getMonthlyPeriod(),
