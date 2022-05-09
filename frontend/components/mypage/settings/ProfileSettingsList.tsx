@@ -4,7 +4,7 @@ import ProfileContentCard from "../ProfileContentCard";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { accessTokenState } from "atoms/atoms";
-import { deleteMembers } from "../../../api/member";
+import { deleteMembers, logout } from "../../../api/member";
 import { getAlarms } from "../../../api/alarm";
 
 const PageContainer = styled.main`
@@ -41,9 +41,17 @@ const ProfileSettingsList = () => {
     // });
   };
 
-  function logout() {
-    setAccessToken("");
-    router.push("/");
+  function onClickLogout() {
+    logout()
+      .then((res) => {
+        if (res.data.code === 1004) {
+          setAccessToken("");
+          router.push("/");
+        } else {
+          console.log(res.data.message);
+        }
+      })
+      .catch((err) => console.error(err));
   }
   return (
     <>
@@ -56,7 +64,7 @@ const ProfileSettingsList = () => {
         <ProfileContentCard
           title="로그아웃"
           description="로그아웃"
-          onClick={logout}
+          onClick={onClickLogout}
         />
         <ProfileContentCard
           onClick={handleDeleteMember}

@@ -30,7 +30,7 @@ const AddorModifyButton = styled.span`
 `;
 
 interface HeaderProps {
-  label: string;
+  label: string | string[];
   icon?: IconName;
   onClickRightButton?: () => void;
   onClickBackButton?: () => void;
