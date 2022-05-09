@@ -15,11 +15,12 @@ const CardContent = styled.div`
 `;
 
 const Tag = styled.div`
-  display: inline-flex;
+  display: inline;
+  font-size: 1rem;
   background-color: #f0f0f0;
   color: #646464;
+  padding: 0.1rem 1rem;
   border-radius: 3px;
-  padding: 0 1rem;
 `;
 
 const Content = styled.div`
@@ -29,11 +30,8 @@ const Content = styled.div`
 const Typography = styled.div<{
   fs?: string;
   fw?: string;
-  color?: string;
   p?: string;
-  cursor?: string;
 }>`
-  color: ${(props) => (props.color ? props.color : "")};
   font-size: ${(props) => (props.fs ? props.fs : "1rem")};
   font-weight: ${(props) => (props.fw ? props.fw : "")};
   padding: ${(props) => (props.p ? props.p : "0")};
