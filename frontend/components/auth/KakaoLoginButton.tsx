@@ -106,8 +106,9 @@ export default function KakaoLoginButton() {
           <AnchorText onClick={() => router.push("/auth/privacypolicy")}>
             개인정보 처리방침
           </AnchorText>{" "}
+          에{" "}
         </TermsContainer>
-        <TermsContainer>에 동의하게 됩니다.</TermsContainer>
+        <TermsContainer>동의하게 됩니다.</TermsContainer>
       </BottomContainer>
     </>
   );
