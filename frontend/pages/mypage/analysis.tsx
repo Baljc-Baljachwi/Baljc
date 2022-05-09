@@ -352,7 +352,6 @@ const Analysis = () => {
 export default Analysis;
 
 const Container = styled.div`
-  /* height: 100vh; */
   height: 100%;
 `;
 
@@ -385,14 +384,11 @@ const PageTitle = styled.span`
 
 const ProfileContentListContainer = styled.div`
   margin-top: 2rem;
-  /* filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25)); */
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* background-color: #f4f4f4; */
   background-color: #ffffff;
   border: none;
-  /* border-radius: 1rem; */
   width: 100%;
   height: 100%;
 
@@ -402,20 +398,12 @@ const ProfileContentListContainer = styled.div`
 `;
 
 const ProfileMenuCardItem = styled.div`
-  /* width: 32rem; */
-  /* margin-left: 2rem; */
-  /* filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25)); */
   display: flex;
   flex-direction: column;
   justify-content: center;
   background-color: #ffffff;
 
   width: 100%;
-  /* width: 32rem; */
-  /* height: 9rem; */
-  /* width: 320px; */
-  /* height: 90px; */
-
   font-size: 1.6rem;
   padding: 1.6rem;
   gap: 2rem;
@@ -434,8 +422,6 @@ const ProfileMenuCardItem = styled.div`
 const ProfileMenuCardContent = styled.div`
   display: flex;
   flex-direction: column;
-  /* justify-content: space-between; */
-  /* padding: 2rem 0; */
   height: 100%;
   .title {
     color: #33487f;
@@ -464,8 +450,6 @@ const ProfileMenuCardContent = styled.div`
 const DivisionLine = styled.hr`
   border-top: 2px solid;
   border-color: #c8c8c8;
-  /* border-top: 2px solid lightslategray; */
-  /* border-color: #f6f6f6; */
 `;
 
 const ContentsDiv = styled.div`
@@ -487,15 +471,12 @@ const ContentsDiv = styled.div`
     padding: 20px;
     gap: 40px;
     .bar {
-      /* margin-left: 20px; */
       h2 {
         text-align: center;
         margin-bottom: 20px;
       }
     }
     .circle {
-      /* width: 30rem;
-    height: 30rem; */
       h2 {
         text-align: center;
         font-size: 22px;
