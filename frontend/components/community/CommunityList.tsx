@@ -72,7 +72,9 @@ export default function CommunityList() {
       <ChatButtonDiv>
         <ChatButton
           src="/assets/img/community/chat_icon.png"
-          onClick={() => router.push(`/community/chat`)}
+          onClick={() =>
+            router.push(`/community/chat/`).then(() => window.scrollTo(0, 0))
+          }
         ></ChatButton>
       </ChatButtonDiv>
     </Container>

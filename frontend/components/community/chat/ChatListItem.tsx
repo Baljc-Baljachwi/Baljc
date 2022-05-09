@@ -1,8 +1,10 @@
+import { useRouter } from "next/router";
 import styled from "styled-components";
 
 const ChatContainer = styled.div`
   width: 100%;
   border-bottom: 1px solid #cccccc;
+  cursor: pointer;
 `;
 
 const ChatItemDiv = styled.div`
@@ -53,8 +55,20 @@ interface ChatProps {
 }
 
 export default function ChatListItem({ roomId, nickname, content }: ChatProps) {
+  const router = useRouter();
+
   return (
-    <ChatContainer>
+    <ChatContainer
+      onClick={() =>
+        router.push(
+          {
+            pathname: `/community/chat/${roomId}`,
+            query: { nickname: nickname },
+          },
+          `/community/chat/${roomId}`
+        )
+      }
+    >
       <ChatItemDiv>
         <ProfileImage src="/assets/img/mypage/avatar/default_profile.png"></ProfileImage>
         <ChatDetailDiv>
