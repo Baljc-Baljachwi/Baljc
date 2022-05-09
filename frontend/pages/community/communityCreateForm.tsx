@@ -2,10 +2,14 @@ import React, { useState, useEffect, Fragment } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 import Header from "../../components/common/Header";
+import Avatar from "../../public/assets/img/mypage/avatar/avartar_h.jpg";
+import Icon from "../../components/common/Icon";
 import ButtonBottom from "components/common/ButtonBottom";
 import ButtonTrashCan from "components/common/ButtonTrashCan";
+import ButtonImage from "components/common/ButtonImage";
 
 const FormContainer = styled.form`
   display: flex;
@@ -54,6 +58,26 @@ const DisplayNoneInput = styled.input`
   display: none;
 `;
 
+const ImageContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding-bottom: 2rem;
+`;
+
+const ImageWrapper = styled.div`
+  position: relative;
+`;
+
+const IconContainer = styled.div`
+  background-color: #ffffff;
+  border-radius: 50%;
+  position: absolute;
+  top: -10px;
+  left: 80px;
+  z-index: 100000;
+`;
+
 const InputContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -73,6 +97,7 @@ const InputDiv = styled.div<{ isError?: boolean }>`
 `;
 
 const StyledTextarea = styled.textarea`
+  width: 100%;
   font-size: 2rem;
   border: none;
   outline: none;
@@ -108,7 +133,7 @@ const ButtonContainer = styled.div`
 export default function CommunityCreateForm() {
   const router = useRouter();
 
-  const initForm = false;
+  const initForm = true;
   const type = "E";
 
   const {
@@ -132,6 +157,11 @@ export default function CommunityCreateForm() {
     // }
 
     // 게시글 삭제 API 추가하기
+  };
+
+  const onClickImageUpload = () => {
+    console.log("image upload");
+    // 파일 업로드 API 추가하기
   };
 
   useEffect(() => {
@@ -180,28 +210,49 @@ export default function CommunityCreateForm() {
               ))}
             </CategoryLabelContainer>
           </FlexContainer>
-
-          <div>
-            <InputContainer>
-              <InputDiv isError={!!errors.content}>
-                <StyledTextarea
-                  {...register("content", {
-                    maxLength: {
-                      value: 10000,
-                      message: "10,000자를 넘을 수 없습니다",
-                    },
-                  })}
-                  placeholder="내용을 입력해주세요."
+          <ImageContainer>
+            <ImageWrapper>
+              <Image
+                src={Avatar}
+                alt=""
+                width={90}
+                height={90}
+                style={{ borderRadius: "5px" }}
+              />
+              <IconContainer>
+                <Icon
+                  mode="fas"
+                  icon="circle-xmark"
+                  color="#000000"
+                  size="20px"
                 />
-              </InputDiv>
-            </InputContainer>
-            <ErrorMessage>{errors.content?.message}</ErrorMessage>
-          </div>
+              </IconContainer>
+            </ImageWrapper>
+          </ImageContainer>
+
+          <InputContainer>
+            <InputDiv isError={!!errors.content}>
+              <StyledTextarea
+                {...register("content", {
+                  maxLength: {
+                    value: 10000,
+                    message: "10,000자를 넘을 수 없습니다",
+                  },
+                })}
+                placeholder="내용을 입력해주세요."
+              />
+            </InputDiv>
+          </InputContainer>
+          <ErrorMessage>{errors.content?.message}</ErrorMessage>
         </div>
         {!initForm ? (
-          <ButtonBottom label="확인" type="submit"></ButtonBottom>
+          <ButtonContainer>
+            <ButtonImage onClick={onClickImageUpload} />
+            <ButtonBottom label="확인" type="submit"></ButtonBottom>
+          </ButtonContainer>
         ) : (
           <ButtonContainer>
+            <ButtonImage onClick={onClickImageUpload} />
             <ButtonTrashCan onClick={onClickDeleteButton} />
             <ButtonBottom label="완료" type="submit" />
           </ButtonContainer>

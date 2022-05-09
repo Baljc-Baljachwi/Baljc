@@ -1,7 +1,7 @@
 import { api, fileApi } from ".";
 
-export const kakaoLogin = async (code: string) => {
-  return await api.get(`/api/members/login/kakao?code=${code}`);
+export const kakaoLogin = async (code: string, token: string) => {
+  return await api.get(`/api/members/login/kakao?code=${code}&token=${token}`);
 };
 
 export const putMembers = async (data: FormData) => {
@@ -14,4 +14,8 @@ export const deleteMembers = async () => {
 
 export const getMemberInfo = async () => {
   return await api.get(`/api/members`);
+};
+
+export const logout = async () => {
+  return await api.get(`/api/members/logout`);
 };

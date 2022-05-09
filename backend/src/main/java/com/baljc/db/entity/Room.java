@@ -24,6 +24,8 @@ public class Room {
     private UUID roomId;
     @CreatedDate
     private LocalDateTime createdAt;
+    @CreatedDate
+    private LocalDateTime updatedAt;
 
     @ManyToOne(targetEntity = Member.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id1")

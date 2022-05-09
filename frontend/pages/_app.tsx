@@ -15,6 +15,25 @@ config.autoAddCss = false;
 import Layout from "../components/Layout";
 import { AuthGuard } from "components/auth/AuthGuard";
 
+import firebase from "firebase/app";
+import "firebase/messaging";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAeqGoiBaRdhGeL7GstkELh1ntZBk_4ibo",
+  authDomain: "baljc-145fa.firebaseapp.com",
+  projectId: "baljc-145fa",
+  storageBucket: "baljc-145fa.appspot.com",
+  messagingSenderId: "258061494591",
+  appId: "1:258061494591:web:f55a50774769fcc2db0b8a",
+  measurementId: "G-25L7RC561S",
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+} else {
+  firebase.app();
+}
+
 export type NextApplicationPage<P = any, IP = P> = NextPage<P, IP> & {
   requireAuth?: boolean;
 };
