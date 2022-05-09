@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useRouter } from "next/router";
 import styled from "styled-components";
 
 import help from "../../public/assets/img/community/help.png";
@@ -29,7 +30,24 @@ const BodyContainer = styled.div`
   padding: 0 0 1rem 0;
 `;
 
+const ChatButtonDiv = styled.div`
+  width: 100%;
+  position: fixed;
+  bottom: 14rem;
+  z-index: 1000;
+`;
+
+const ChatButton = styled.img`
+  width: 7rem;
+  position: absolute;
+  top: 0;
+  right: 2rem;
+  cursor: pointer;
+`;
+
 export default function CommunityList() {
+  const router = useRouter();
+
   return (
     <Container>
       <Header>
@@ -51,6 +69,14 @@ export default function CommunityList() {
         <CommunityCard />
         <CommunityCard />
       </BodyContainer>
+      <ChatButtonDiv>
+        <ChatButton
+          src="/assets/img/community/chat_icon.png"
+          onClick={() =>
+            router.push(`/community/chat/`).then(() => window.scrollTo(0, 0))
+          }
+        ></ChatButton>
+      </ChatButtonDiv>
     </Container>
   );
 }
