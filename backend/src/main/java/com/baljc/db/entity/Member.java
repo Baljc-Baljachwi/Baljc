@@ -92,6 +92,9 @@ public class Member {
         this.workingHours = null;
         this.budget = null;
         this.surveyedYn = null;
+        this.latitude = null;
+        this.longitude = null;
+        this.dong = null;
         this.createdAt = null;
         this.deletedAt = LocalDateTime.now();
     }
