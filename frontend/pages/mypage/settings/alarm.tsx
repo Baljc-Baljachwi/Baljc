@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 // import { useRecoilState } from "recoil";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import Header from "components/common/Header";
 import ToggleButton from "components/mypage/settings/ToggleButton";
@@ -94,6 +96,44 @@ const TimePicker = styled.input`
   }
 `;
 
+const StyledToastContainer = styled(ToastContainer).attrs({
+  className: "toast-container",
+  toastClassName: "toast",
+  bodyClassName: "body",
+  progressClassName: "progress",
+})`
+  .Toastify__toast {
+    /* width: 20rem; */
+    background-color: rgba(75, 192, 192, 0.4);
+    font-size: 1.4rem;
+    font-weight: 600;
+    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25));
+  }
+  .Toastify__toast-container {
+    /* width: 320px; */
+    width: 20rem;
+  }
+  .Toastify__toast--default {
+    background: #fff;
+    color: #aaa;
+  }
+  .Toastify__toast--info {
+    background: #3498db;
+  }
+  .Toastify__toast--success {
+    /* background: #07bc0c; */
+    background: rgba(75, 192, 192, 0.4);
+  }
+  .Toastify__toast--warning {
+    /* background: #f1c40f; */
+    background: #ffd469;
+    color: #aaa;
+  }
+  .Toastify__toast--error {
+    background: #e74c3c;
+  }
+`;
+
 const Alarm = () => {
   const router = useRouter();
   // const [alarms, setAlarms] = useState<IAlarm>();
@@ -102,13 +142,34 @@ const Alarm = () => {
   const [todoAlarmYN, settodoAlarmYN] = useState<YNType>("Y");
   const [todoAlarmTime, setTodoAlarmTime] = useState("09:00:00");
   //   const UserInfo = useRecoilValue(userInfoState);
+  const notify = () =>
+    toast.success("🤸‍♀️ㅤ알림 설정 저장 성공!", {
+      // type: "success",
+      theme: "colored",
+      position: toast.POSITION.BOTTOM_CENTER,
+      hideProgressBar: false,
+      autoClose: 2000,
+      // className: toast-container({
+      //   background: "#00FF00 !important",
+      //   color: "white !important",
+      //   fontWeight: "bold"
+      // }),
+    });
+  const notifyFail = () =>
+    toast.error("🤔ㅤ알림 설정을 저장하지 못했습니다.", {
+      // type: "default",
+      theme: "colored",
+      position: toast.POSITION.BOTTOM_CENTER,
+      hideProgressBar: false,
+      autoClose: 2000,
+    });
 
   // setAlarms 각 항목 settting
   useEffect(() => {
     getAlarms()
       .then((res) => {
-        console.log(res.data);
-        console.log("알림 조회 성공! 🤸‍♀️🔥");
+        // console.log(res.data);
+        // console.log("알림 조회 성공! 🤸‍♀️🔥");
         setaccountAlarmYN(res.data.data.accountAlarmYn);
         setAccountAlarmTime(res.data.data.accountAlarmTime);
         settodoAlarmYN(res.data.data.todoAlarmYn);
@@ -116,7 +177,7 @@ const Alarm = () => {
       })
       .catch((err) => {
         console.log(err.response);
-        console.log("😥🙀 알림 조회 실팩ㄱ");
+        console.log("😥🙀 알림 조회 실패");
       });
   }, []);
 
@@ -146,10 +207,12 @@ const Alarm = () => {
 
     putAlarms(alarmInfo)
       .then((res) => {
+        notify();
         console.log(res.data);
         console.log("알림 변경사항 저장 성공! 🤸‍♀️🔥");
       })
       .catch((err) => {
+        notifyFail();
         console.log(err.response);
         console.log("😥🙀 알림 변경사항 저장 실패!");
       });
@@ -170,6 +233,14 @@ const Alarm = () => {
           onClickBackButton={() => router.push("/mypage/settings")}
         />
         <PageContainer>
+          {/* <ToastContainer
+            pauseOnFocusLoss={false}
+            style={{ bottom: "10rem" }}
+          /> */}
+          <StyledToastContainer
+            pauseOnFocusLoss={false}
+            style={{ bottom: "10rem" }}
+          />
           <ProfileContentListContainer>
             <ProfileMenuCardContent>
               <ProfileMenuCardTitle>푸쉬 알림 설정</ProfileMenuCardTitle>
