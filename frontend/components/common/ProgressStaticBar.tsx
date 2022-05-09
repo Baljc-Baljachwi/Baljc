@@ -76,12 +76,10 @@ const ProgressStaticBar = ({ done }: IPStaticBar) => {
   return (
     <ProgressDiv>
       <div className="progress">
-        {/* <div className="doneNnum"> */}
         <div className="progress-done" style={style}></div>
         <span className="progress-value" style={style}>
           {done}%
         </span>
-        {/* </div> */}
       </div>
     </ProgressDiv>
   );
