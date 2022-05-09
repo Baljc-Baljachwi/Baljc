@@ -3,6 +3,8 @@ package com.baljc.api.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.UUID;
+
 public class MyPageDto {
     @Getter
     @AllArgsConstructor
@@ -20,6 +22,19 @@ public class MyPageDto {
     public static class FixedExpResponse {
         private Integer fixedExpenditure;
         private Integer totalExpenditure;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class FixedExpContentResponse {
+        private UUID accountbookId;
+        private Integer monthlyPeriod;
+        private String dayOfWeek;
+        private String title;
+        private Integer price;
+        private String categoryName;
+        private String categoryImgUrl;
+        private Character paymentMethod;
     }
 
 //    @Getter
