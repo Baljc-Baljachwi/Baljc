@@ -9,6 +9,7 @@ import java.util.Map;
 public interface MyPageService {
     MyPageDto.NowExpResponse getNowExpenditure(LocalDate date);
     MyPageDto.FixedExpResponse getFixedExpenditure(Integer year, Integer month);
+    List<MyPageDto.FixedExpContentResponse> getFixedExpenditureList(Integer year, Integer month);
     Map<String, Integer> getExpenditureByCategory(Integer year, Integer month);
     List<Integer> getDailyExpenditure(Integer year, Integer month);
 }

@@ -32,7 +32,7 @@ public class MyPageController {
             @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 
         return ResponseEntity.status(HttpStatus.OK).body(
-                new BaseDataResponse<>(1000, "이번 달의 남은 예산/하루 예산/예상 지출 조회에 성공했습니다.",
+                new BaseDataResponse<>(1100, "이번 달의 남은 예산/하루 예산/예상 지출 조회에 성공했습니다.",
                         myPageService.getNowExpenditure(date)));
     }
 
@@ -41,8 +41,17 @@ public class MyPageController {
             @RequestParam(value = "year") Integer year, @RequestParam(value = "month") Integer month) {
 
         return ResponseEntity.status(HttpStatus.OK).body(
-                new BaseDataResponse<>(1001, "해당 월의 고정 지출/총 지출 조회 조회에 성공했습니다.",
+                new BaseDataResponse<>(1101, "해당 월의 고정 지출/총 지출 조회 조회에 성공했습니다.",
                         myPageService.getFixedExpenditure(year, month)));
+    }
+
+    @GetMapping("/fixed-exp/list")
+    public ResponseEntity<BaseDataResponse<List<MyPageDto.FixedExpContentResponse>>> getFixedExpenditureList(
+            @RequestParam(value = "year") Integer year, @RequestParam(value = "month") Integer month) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new BaseDataResponse<>(1104, "해당 월의 고정 지출 내역 조회에 성공했습니다.",
+                        myPageService.getFixedExpenditureList(year, month)));
     }
 
     @GetMapping("/exp-analysis/category")
@@ -50,7 +59,7 @@ public class MyPageController {
             @RequestParam(value = "year") Integer year, @RequestParam(value = "month") Integer month) {
 
         return ResponseEntity.status(HttpStatus.OK).body(
-                new BaseDataResponse<>(1002, "카테고리별 지출 조회에 성공했습니다.",
+                new BaseDataResponse<>(1102, "카테고리별 지출 조회에 성공했습니다.",
                         myPageService.getExpenditureByCategory(year, month)));
     }
 
@@ -59,7 +68,7 @@ public class MyPageController {
             @RequestParam(value = "year") Integer year, @RequestParam(value = "month") Integer month) {
 
         return ResponseEntity.status(HttpStatus.OK).body(
-                new BaseDataResponse<>(1003, "일별 지출 조회에 성공했습니다.",
+                new BaseDataResponse<>(1103, "일별 지출 조회에 성공했습니다.",
                         myPageService.getDailyExpenditure(year, month)));
     }
 }

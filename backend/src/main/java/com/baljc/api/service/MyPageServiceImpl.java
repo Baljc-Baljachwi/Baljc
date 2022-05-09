@@ -54,6 +54,36 @@ public class MyPageServiceImpl implements MyPageService {
     }
 
     @Override
+    public List<MyPageDto.FixedExpContentResponse> getFixedExpenditureList(Integer year, Integer month) {
+        LocalDate start = LocalDate.of(year, month, 1).withDayOfMonth(1);
+        LocalDate mid = start.withDayOfMonth(15);
+        String[] dayOfWeeks = {"월", "화", "수", "목", "금", "토", "일"};
+        return memberService.getMemberByAuthentication()
+                .getAccountBookList()
+                .stream()
+                .filter(accountBook -> {
+                    if (accountBook.getDeletedYn() != 'N' || accountBook.getType() != 'E') return false;
+                    if (accountBook.getFixedExpenditureYn() == 'Y') {
+                        return mid.compareTo(accountBook.getStartDate()) >= 0
+                                && mid.compareTo(accountBook.getEndDate()) <= 0;
+                    }
+                    return false;
+                })
+                .map(accountBook -> new MyPageDto.FixedExpContentResponse(
+                        accountBook.getAccountBookId(),
+                        accountBook.getMonthlyPeriod(),
+                        dayOfWeeks[LocalDate.of(year, month, accountBook.getMonthlyPeriod())
+                                .getDayOfWeek().getValue() - 1],
+                        accountBook.getTitle(),
+                        accountBook.getPrice(),
+                        accountBook.getCategory().getName(),
+                        accountBook.getCategory().getImgUrl(),
+                        accountBook.getPaymentMethod()
+                        ))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Map<String, Integer> getExpenditureByCategory(Integer year, Integer month) {
         return getMonthlySteam(year, month)
                 .collect(Collectors.groupingByConcurrent(accountBook -> accountBook.getCategory().getName(),
