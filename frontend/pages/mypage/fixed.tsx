@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { getFixedEList } from "api/mypage";
+import { getFixedEList, getFixedExpenditure } from "api/mypage";
 
 import styled from "styled-components";
 import dayjs from "dayjs";
@@ -24,6 +24,7 @@ const Fixed = () => {
   const [date, setDate] = useState(new Date());
   const [month, setMonth] = useState(Number(dayjs(date).format("M")));
   const [year, setYear] = useState(Number(dayjs(date).format("YYYY")));
+  const [fixedExpenditure, setFixedExpenditure] = useState(0);
   const [exFixed, setExFixed] = useState<IExFixed[]>([]);
   const [accountbookId, setAccountbookId] = useState("");
   const [monthlyPeriod, setMonthlyPeriod] = useState("");
@@ -37,6 +38,15 @@ const Fixed = () => {
   // console.log(exFixed);
   // console.log(fixedEList);
   useEffect(() => {
+    getFixedExpenditure(year, month)
+      .then((res) => {
+        // console.log(res.data.data);
+        setFixedExpenditure(res.data.data.fixedExpenditure);
+      })
+      .catch((err) => {
+        console.log("😥🙀 고정 지출 조회 실패");
+        console.log(err.response);
+      });
     getFixedEList(year, month)
       .then((res) => {
         console.log(res);
@@ -65,7 +75,9 @@ const Fixed = () => {
       <HeaderCard>
         <span>이번 달 고정 지출</span>
         <span>
-          <span>총 </span>금액<span>원</span>
+          <span>총 </span>
+          {fixedExpenditure.toLocaleString()}
+          <span>원</span>
         </span>
       </HeaderCard>
       <ContentsContainer>
