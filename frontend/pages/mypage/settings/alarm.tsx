@@ -144,20 +144,13 @@ const Alarm = () => {
   //   const UserInfo = useRecoilValue(userInfoState);
   const notify = () =>
     toast.success("🤸‍♀️ㅤ알림 설정 저장 성공!", {
-      // type: "success",
       theme: "colored",
       position: toast.POSITION.BOTTOM_CENTER,
       hideProgressBar: false,
       autoClose: 2000,
-      // className: toast-container({
-      //   background: "#00FF00 !important",
-      //   color: "white !important",
-      //   fontWeight: "bold"
-      // }),
     });
   const notifyFail = () =>
     toast.error("🤔ㅤ알림 설정을 저장하지 못했습니다.", {
-      // type: "default",
       theme: "colored",
       position: toast.POSITION.BOTTOM_CENTER,
       hideProgressBar: false,
