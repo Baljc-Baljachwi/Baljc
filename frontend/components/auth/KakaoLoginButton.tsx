@@ -3,8 +3,6 @@ import Link from "next/link";
 
 import styled from "styled-components";
 import kakaoLoginButtonImage from "../../public/assets/img/login/kakao_login_medium_narrow.png";
-// const KAKAO_CLIENT_ID = "a450daddb77a31dbba0ce5e4f3adf23f";
-// const KAKAO_REDIRECT_URI = "http://localhost:3000/auth/kakao/callback";
 
 const kakaoGetAuthCodeURL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&response_type=code`;
 
