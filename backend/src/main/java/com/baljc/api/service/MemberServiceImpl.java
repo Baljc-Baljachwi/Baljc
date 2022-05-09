@@ -115,7 +115,6 @@ public class MemberServiceImpl implements MemberService {
             member = Member.builder()
                     .kakaoId(kakaoUser.get("socialId"))
                     .email(kakaoUser.get("email"))
-                    .fcmToken(fcmToken)
                     .surveyedYn('N')
                     .build();
             memberRepository.save(member);
@@ -127,6 +126,7 @@ public class MemberServiceImpl implements MemberService {
                     .todoAlarmTime(LocalTime.parse("09:00:00"))
                     .build());
         }
+        member.updateFcmToken(fcmToken);
         return member;
     }
 
