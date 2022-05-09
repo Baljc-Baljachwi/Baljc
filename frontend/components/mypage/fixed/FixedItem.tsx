@@ -108,7 +108,7 @@ const FixedCardItem = styled.div<{ backgroundColor: string }>`
   cursor: pointer;
   .ImgContainer {
     display: flex;
-    padding-right: 1.4rem;
+    padding-right: 2rem;
     filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
   }
   .TextContainer {
