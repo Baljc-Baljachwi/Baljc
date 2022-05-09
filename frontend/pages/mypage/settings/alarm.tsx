@@ -103,7 +103,6 @@ const StyledToastContainer = styled(ToastContainer).attrs({
   progressClassName: "progress",
 })`
   .Toastify__toast {
-    /* width: 20rem; */
     background-color: rgba(75, 192, 192, 0.4);
     font-size: 1.4rem;
     font-weight: 600;
@@ -190,7 +189,6 @@ const Alarm = () => {
   };
 
   const onClickSaveButton = () => {
-    console.log("저장 버튼 click!");
     const alarmInfo = {
       accountAlarmYn: accountAlarmYN,
       accountAlarmTime: accountAlarmTime,
