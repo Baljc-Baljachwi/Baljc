@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useRouter } from "next/router";
 import styled from "styled-components";
 
 import help from "../../public/assets/img/community/help.png";
@@ -41,9 +42,12 @@ const ChatButton = styled.img`
   position: absolute;
   top: 0;
   right: 2rem;
+  cursor: pointer;
 `;
 
 export default function CommunityList() {
+  const router = useRouter();
+
   return (
     <Container>
       <Header>
@@ -66,7 +70,10 @@ export default function CommunityList() {
         <CommunityCard />
       </BodyContainer>
       <ChatButtonDiv>
-        <ChatButton src="/assets/img/community/chat_icon.png"></ChatButton>
+        <ChatButton
+          src="/assets/img/community/chat_icon.png"
+          onClick={() => router.push(`/community/chat`)}
+        ></ChatButton>
       </ChatButtonDiv>
     </Container>
   );
