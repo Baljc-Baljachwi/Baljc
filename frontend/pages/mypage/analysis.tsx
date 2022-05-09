@@ -69,8 +69,16 @@ const Analysis = () => {
   console.log(categoryContents);
   console.log(categoryName);
   console.log(categoryValue);
-  const xdaysName = Object.keys(xdays);
-  const xdaysValue = Object.values(xdays);
+  const xdaysName = Object.keys(xdays).map((x, idx) => {
+    return Number(x) + 1;
+  });
+  console.log("xdaysName");
+  console.log(xdaysName);
+  const xdaysValue = Object.values(xdays).map((value, idx) => {
+    return Number(value) / 10000;
+  });
+  console.log("xdaysValue");
+  console.log(xdaysValue);
 
   useEffect(() => {
     console.log(year);
