@@ -1,10 +1,12 @@
 import Image from "next/image";
 import styled from "styled-components";
+import { useState } from "react";
 import { useRouter } from "next/router";
 
 import Header from "../../../components/common/Header";
 import Icon from "../../../components/common/Icon";
 import Avatar from "../../../public/assets/img/mypage/avatar/avartar_h.jpg";
+import ImageModal from "../../../components/community/CommunityImageModal";
 
 const Container = styled.div`
   display: flex;
@@ -74,6 +76,16 @@ const ButtonContainer = styled.div`
 
 export default function CommunityDetail() {
   const router = useRouter();
+  const [open, setOpen] = useState(true);
+  const imageList = [
+    "/assets/img/mypage/avatar/avartar_h.jpg",
+    "/assets/img/mypage/avatar/avatar_member4.png",
+    "/assets/img/mypage/avatar/avatar_member6.png",
+    "/assets/img/mypage/avatar/avatar_member4.png",
+  ];
+  const onClickImage = () => {
+    setOpen((prev) => !prev);
+  };
 
   return (
     <>
@@ -109,7 +121,13 @@ export default function CommunityDetail() {
             소원이에요 ㅠㅠ{" "}
           </Typography>
           {/* image 있으면 */}
-          <Image src={Avatar} width={150} height={150} alt="" />
+          <Image
+            src={Avatar}
+            width={150}
+            height={150}
+            alt=""
+            onClick={onClickImage}
+          />
         </Content>
         <FlexContainer>
           <ButtonContainer>
@@ -137,6 +155,11 @@ export default function CommunityDetail() {
           </FlexContainer>
         </FlexContainer>
       </Container>
+      {open ? (
+        <ImageModal open={open} setOpen={setOpen} imageList={imageList} />
+      ) : (
+        ""
+      )}
     </>
   );
 }
