@@ -6,7 +6,6 @@ import Header from "../../components/common/Header";
 import ProfileCard from "../../components/mypage/ProfileCard";
 import NotFoundTransaction from "components/common/not-found-transaction/NotFoundTransaction";
 import ProgressStaticBar from "components/common/ProgressStaticBar";
-import { IconName } from "@fortawesome/free-solid-svg-icons";
 import Icon from "components/common/Icon";
 
 import {
@@ -39,10 +38,6 @@ Chart.register(
   Tooltip,
   Legend
 );
-interface IconProps {
-  icon?: IconName;
-  onClickMoveToButton?: () => void;
-}
 
 const Analysis = () => {
   const router = useRouter();
@@ -66,63 +61,55 @@ const Analysis = () => {
   const categoryContents = Object.entries(categories).map((entrie, idx) => {
     return console.log(entrie, idx);
   });
-  console.log(categoryContents);
-  console.log(categoryName);
-  console.log(categoryValue);
-  const xdaysName = Object.keys(xdays).map((x, idx) => {
+  const xdaysLabel = Object.keys(xdays).map((x, idx) => {
     return Number(x) + 1;
   });
-  console.log("xdaysName");
-  console.log(xdaysName);
   const xdaysValue = Object.values(xdays).map((value, idx) => {
     return Number(value) / 10000;
   });
-  console.log("xdaysValue");
-  console.log(xdaysValue);
 
   useEffect(() => {
     console.log(year);
     console.log(month);
     getFixedExpenditure(year, month)
       .then((res) => {
-        console.log(res.data.data);
+        // console.log(res.data.data);
         setFixedExpenditure(res.data.data.fixedExpenditure);
         setTotalExpenditure(res.data.data.totalExpenditure);
       })
       .catch((err) => {
-        console.log(err.response);
         console.log("😥🙀 고정 지출 조회 실패");
+        console.log(err.response);
       });
     getPieChartValue(year, month)
       .then((res) => {
         setCategories(res.data.data);
       })
       .catch((err) => {
-        console.log(err.response);
         console.log("😥🙀 도넛 차트 조회 실패");
+        console.log(err.response);
       });
     getLineGraphValue(year, month)
       .then((res) => {
-        console.log(res.data.data);
+        // console.log(res.data.data);
         setXdays(res.data.data);
-        console.log("하이");
-        console.log(xdays);
+        // console.log(xdays);
       })
       .catch((err) => {
+        console.log("😥🙀 라인 차트 조회 실패");
         console.log(err.response);
-        console.log("😥🙀 도넛 차트 조회 실패");
       });
-    console.log("xdaysName");
-    console.log(xdaysName);
-    console.log("xdaysValue");
-    console.log(xdaysValue);
+    // console.log("xdaysLabel");
+    // console.log(xdaysLabel);
+    // console.log("xdaysValue");
+    // console.log(xdaysValue);
     getBudget(dateForm)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         console.log("예산 조회 성공! 🤸‍♀️🔥");
-        console.log(expenditurePercent);
-        console.log("퍼센트 toString");
-        console.log(expenditurePercent.toString());
+        // console.log(expenditurePercent);
+        // console.log("퍼센트 toString");
+        // console.log(expenditurePercent.toString());
         setRemainingBudget(res.data.data.remainingBudget);
         setDailyExpenditure(res.data.data.dailyExpenditure);
         setEstimatedExpenditure(res.data.data.estimatedExpenditure);
@@ -131,8 +118,8 @@ const Analysis = () => {
         setRemainingBudgetPercent(res.data.data.remainingBudgetPercent);
       })
       .catch((err) => {
+        console.log("😥🙀 예산 조회 실패");
         console.log(err.response);
-        console.log("😥🙀 예산 조회 실팩ㄱ");
       });
   }, [month, year]);
 
@@ -177,12 +164,12 @@ const Analysis = () => {
       },
       title: {
         display: false,
-        text: "Chart.js Line Chart",
+        text: "일 별 지출 추이",
       },
     },
   };
   const data2 = {
-    labels: xdaysName,
+    labels: xdaysLabel,
     datasets: [
       {
         label: "일 별 지출 추이 (단위: 만 원)",
@@ -190,7 +177,6 @@ const Analysis = () => {
         // data: [65, 59, 80, 81, 56, 55, 40],
         data: xdaysValue,
         // data: xdays,
-        // data: xdaysValue.map(() => xdaysValue),
         fill: true,
         lineTension: 0.3,
         backgroundColor: "rgba(75,192,192,0.4)",
@@ -442,18 +428,6 @@ const ProfileMenuCardContent = styled.div`
     font-weight: 400;
   }
 `;
-
-// const ProfileMenuCardTitle = styled.span`
-//   color: #33487f;
-//   font-weight: 700;
-//   font-size: 1.6rem;
-// `;
-
-// const ProfileMenuCardDetail = styled.span`
-//   color: #696969;
-//   font-size: 1rem;
-//   font-weight: 400;
-// `;
 
 const DivisionLine = styled.hr`
   border-top: 2px solid;
