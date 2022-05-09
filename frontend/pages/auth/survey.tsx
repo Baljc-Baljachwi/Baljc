@@ -164,9 +164,8 @@ const LocationButton = styled.button`
   border: none;
   border-radius: 0.5rem;
   color: #ffffff;
-  font-size: 1.6rem;
+  font-size: 1.2rem;
   padding: 0.4rem 1rem;
-  font-weight: 500;
   font-family: "Noto Sans KR", sans-serif;
   margin-left: 1rem;
   :disabled {
