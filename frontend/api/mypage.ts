@@ -34,3 +34,12 @@ export const getLineGraphValue = async (
     `/api/mypages/exp-analysis/daily?year=${year}&month=${month}`
   );
 };
+
+export const getFixedEList = async (
+  year: string | number,
+  month: string | number
+) => {
+  return await api.get(
+    `/api/mypages/fixed-exp/list?year=${year}&month=${month}`
+  );
+};
