@@ -25,6 +25,6 @@ export async function getToken() {
     }
   } catch (error) {
     console.error(error);
-    return "";
+    return null;
   }
 }

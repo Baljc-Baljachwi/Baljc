@@ -1,10 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import styled from "styled-components";
 import kakaoLoginButtonImage from "../../public/assets/img/login/kakao_login_medium_narrow.png";
-// const KAKAO_CLIENT_ID = "a450daddb77a31dbba0ce5e4f3adf23f";
-// const KAKAO_REDIRECT_URI = "http://localhost:3000/auth/kakao/callback";
 
 const kakaoGetAuthCodeURL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&response_type=code`;
 
@@ -14,6 +13,7 @@ const ButtonContainer = styled.div`
   height: 45px;
   width: 183px;
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
+  margin-bottom: 2rem;
 `;
 
 const MainContainer = styled.main`
@@ -21,11 +21,22 @@ const MainContainer = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  // padding: 10rem 0;
-  height: 100vh;
+  justify-content: end;
   gap: 1.5rem;
   background-color: #2e437a;
+  height: 76vh;
+  padding-bottom: 8vh;
+`;
+
+const BottomContainer = styled.section`
+  width: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  gap: 0.6rem;
+  height: 20vh;
 `;
 
 const LoginTitle = styled.article`
@@ -44,7 +55,21 @@ const LoginContent = styled.div`
   margin-bottom: 1rem;
 `;
 
+const TermsContainer = styled.p`
+  text-align: center;
+  width: 30rem;
+  color: #ffffff;
+  font-size: 1.2rem;
+`;
+
+const AnchorText = styled.span`
+  color: #ffd469;
+  border-bottom: 1px solid #ffd469;
+  font-weight: 600;
+`;
+
 export default function KakaoLoginButton() {
+  const router = useRouter();
   return (
     <>
       <MainContainer>
@@ -71,6 +96,20 @@ export default function KakaoLoginButton() {
           </Link>
         </ButtonContainer>
       </MainContainer>
+      <BottomContainer>
+        <TermsContainer>로그인 버튼을 클릭하면</TermsContainer>
+        <TermsContainer>
+          <AnchorText onClick={() => router.push("/auth/terms")}>
+            이용약관
+          </AnchorText>{" "}
+          및{" "}
+          <AnchorText onClick={() => router.push("/auth/privacypolicy")}>
+            개인정보 처리방침
+          </AnchorText>{" "}
+          에{" "}
+        </TermsContainer>
+        <TermsContainer>동의하게 됩니다.</TermsContainer>
+      </BottomContainer>
     </>
   );
 }

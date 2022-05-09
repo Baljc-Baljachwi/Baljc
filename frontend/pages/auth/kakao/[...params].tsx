@@ -17,7 +17,7 @@ export default function KakaoAuth() {
       return token;
     } catch (error) {
       console.error(error);
-      return "";
+      return null;
     }
   };
 
@@ -26,13 +26,8 @@ export default function KakaoAuth() {
 
     firebaseMessageToken()
       .then((currentToken) => {
-        if (currentToken) {
-          console.log("FCM token: ", currentToken);
-          return currentToken;
-        } else {
-          console.log("No FCM Token");
-          return "";
-        }
+        console.log("FCM token: ", currentToken);
+        return currentToken;
       })
       .then((currentToken) => {
         kakaoLogin(code as string, currentToken).then((res) => {

@@ -12,26 +12,17 @@ const PageContent = styled.div<{ isLogin: boolean; isNoNav?: boolean }>`
 export default function Layout({ children }: React.PropsWithChildren<unknown>) {
   const router = useRouter();
 
+  function isLogin(pathname: string): boolean {
+    if (pathname === "/" || pathname.split("/")[1] === "auth") {
+      return true;
+    }
+    return false;
+  }
+
   return (
     <>
-      <PageContent
-        isLogin={
-          router.pathname === "/" ||
-          router.pathname === "/auth/kakao/[...params]" ||
-          router.pathname === "/mypage/survey"
-        }
-        isNoNav={router.pathname === "/community/chat/[...params]"}
-      >
-        {children}
-      </PageContent>
-      {router.pathname === "/" ||
-      router.pathname === "/auth/kakao/[...params]" ||
-      router.pathname === "/mypage/survey" ||
-      router.pathname === "/community/chat/[...params]" ? (
-        <></>
-      ) : (
-        <Navbar />
-      )}
+      <PageContent isLogin={isLogin(router.pathname)}>{children}</PageContent>
+      {isLogin(router.pathname) ? <></> : <Navbar />}
     </>
   );
 }

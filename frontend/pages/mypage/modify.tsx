@@ -6,8 +6,9 @@ import Image from "next/image";
 
 import Header from "../../components/common/Header";
 import ButtonBottom from "../../components/common/ButtonBottom";
-import { getMemberInfo, putMembers } from "api/member";
+import { getMemberInfo, putMembers, kakaoCoord2Region } from "api/member";
 import defaultProfileImage from "public/assets/img/mypage/avatar/default_profile.png";
+// import axios from "axios";
 
 const PageContainer = styled.main`
   padding: 0 2rem 2rem 2rem;
@@ -128,6 +129,33 @@ const SalaryTypeLabel = styled.label<{ isSelected: boolean }>`
   cursor: pointer;
 `;
 
+const LocationDiv = styled.div`
+  font-size: 1.8rem;
+  text-align: end;
+  border-bottom: 1px solid #cccccc;
+  line-height: 2.4rem;
+`;
+
+const LocationButton = styled.button`
+  background-color: #2e437a;
+  border: none;
+  border-radius: 0.5rem;
+  color: #ffffff;
+  font-size: 1.2rem;
+  padding: 0.4rem 1rem;
+  font-family: "Noto Sans KR", sans-serif;
+  margin-left: 1rem;
+  :disabled {
+    background: #ccc;
+  }
+`;
+
+const MutedMessage = styled.p`
+  font-size: 1.4rem;
+  text-align: end;
+  color: #cccccc;
+`;
+
 const ErrorMessage = styled.p`
   color: #ff0000;
   font-size: 1.4rem;
@@ -135,6 +163,14 @@ const ErrorMessage = styled.p`
   line-height: 1.6rem;
   height: 1.6rem;
 `;
+
+interface ILocation {
+  isUpdated: boolean;
+  latitude: number | null;
+  longitude: number | null;
+  addressName: string | null;
+  regionName: string | null;
+}
 
 export default function ProfileModify() {
   const router = useRouter();
@@ -163,12 +199,20 @@ export default function ProfileModify() {
   const [profileImageFile, setProfileImageFile] = useState<Blob>();
   const [imagePreview, setImagePreview] = useState<string>("");
   const [imageError, setImageError] = useState<boolean>(false);
+  const [location, setLocation] = useState<ILocation>({
+    isUpdated: false,
+    latitude: null,
+    longitude: null,
+    addressName: null, // 렌더링할 주소
+    regionName: null, // API 요청보낼 주소
+  });
 
   const resetSurveyForm = useCallback(async () => {
     const result = await (await getMemberInfo()).data;
     if (result.code === 1001) {
       reset({ ...result.data, profileUpdated: false });
       setImagePreview(result.data.profileUrl);
+      setLocation((prev) => ({ ...prev, dong: result.data.dong }));
     }
   }, [reset]);
 
@@ -240,6 +284,9 @@ export default function ProfileModify() {
       salary: salaryType === "N" ? 0 : +data.salary,
       workingHours: salaryType === "N" ? 0 : +data.workingHours,
       budget: +data.budget,
+      latitude: location.latitude,
+      longitude: location.longitude,
+      dong: location.regionName,
     };
 
     const formData = new FormData();
@@ -248,8 +295,6 @@ export default function ProfileModify() {
       "memberInfo",
       new Blob([JSON.stringify(memberInfo)], { type: "application/json" })
     );
-
-    console.log(memberInfo);
 
     putMembers(formData).then((res) => {
       console.log(res.data);
@@ -260,6 +305,42 @@ export default function ProfileModify() {
       }
     });
   }
+
+  function onClickGeoButton() {
+    console.log(navigator);
+    if ("geolocation" in navigator) {
+      // 현재 위도, 경도
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setLocation((prev) => ({
+            ...prev,
+            latitude: pos.coords.latitude,
+            longitude: pos.coords.longitude,
+          }));
+
+          // 카카오 로컬 API coord => region
+          kakaoCoord2Region(pos.coords.longitude, pos.coords.latitude)
+            .then((res) => {
+              console.log(res.data.documents);
+              setLocation((prev) => ({
+                ...prev,
+                addressName: res.data.documents[0].address_name,
+                regionName: res.data.documents[0].region_3depth_name,
+                isUpdated: true,
+              }));
+            })
+            .catch((err) => console.error(err));
+        },
+        (err: GeolocationPositionError) => {
+          console.log(err.message);
+          if (err.code === 1) {
+            confirm("위치 액세스를 허용해주세요");
+          }
+        }
+      );
+    }
+  }
+  console.log(watch());
 
   return (
     <>
@@ -432,6 +513,24 @@ export default function ProfileModify() {
               <InputUnit>원</InputUnit>
             </InputDiv>
             <ErrorMessage>{errors.budget?.message}</ErrorMessage>
+          </div>
+
+          <div>
+            <StyledLabel>내 위치</StyledLabel>
+
+            <LocationDiv>
+              {location.addressName}
+              <LocationButton
+                type="button"
+                onClick={onClickGeoButton}
+                disabled={location.isUpdated}
+              >
+                가져오기
+              </LocationButton>
+            </LocationDiv>
+            <MutedMessage>
+              (선택) 커뮤니티 이용을 위해 위치 정보가 필요합니다
+            </MutedMessage>
           </div>
           <ButtonBottom label="수정" type="submit" />
         </FormContainer>
