@@ -44,7 +44,8 @@ public class PushAlarmScheduler {
         // 가계부 푸시 알람
         List<String> accountFcmTokenList = pushAlarmList
                 .stream()
-                .filter(pushAlarm -> pushAlarm.getAccountAlarmTime().getHour() == now.getHour()
+                .filter(pushAlarm -> pushAlarm.getAccountAlarmYn() == 'Y'
+                        && pushAlarm.getAccountAlarmTime().getHour() == now.getHour()
                         && pushAlarm.getAccountAlarmTime().getMinute() == now.getMinute())
                 .map(pushAlarm -> pushAlarm.getMember().getFcmToken())
                 .collect(Collectors.toList());
@@ -57,7 +58,8 @@ public class PushAlarmScheduler {
         // 할 일 푸시 알람
         List<String> todoFcmTokenList = pushAlarmList
                 .stream()
-                .filter(pushAlarm -> pushAlarm.getTodoAlarmTime().getHour() == now.getHour()
+                .filter(pushAlarm -> pushAlarm.getTodoAlarmYn() == 'Y'
+                        && pushAlarm.getTodoAlarmTime().getHour() == now.getHour()
                         && pushAlarm.getTodoAlarmTime().getMinute() == now.getMinute())
                 .map(pushAlarm -> pushAlarm.getMember().getFcmToken())
                 .collect(Collectors.toList());
