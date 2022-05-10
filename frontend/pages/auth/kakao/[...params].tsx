@@ -39,7 +39,7 @@ export default function KakaoAuth() {
             console.log(res.data.data);
 
             router.push(
-              res.data.data.surveyedYn ? "/calendar" : "/mypage/survey"
+              res.data.data.surveyedYn ? "/calendar" : "/auth/survey"
             );
           }
         });
