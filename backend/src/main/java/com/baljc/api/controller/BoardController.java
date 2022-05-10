@@ -38,6 +38,12 @@ public class BoardController {
         return ResponseEntity.status(200).body(new BaseResponse(1701, "게시글 추가 성공"));
     }
 
+    @GetMapping
+    public ResponseEntity<BaseDataResponse> getBoardList(@RequestParam(value = "category") UUID categoryId, @RequestParam(value = "index") long index) {
+        List<BoardDto.BoardListResponse> response = boardService.getBoardList(categoryId, index);
+        return ResponseEntity.status(200).body(new BaseDataResponse(1702, "게시글 목록 조회 성공", response));
+    }
+
     @PostMapping("/{boardId}/comments")
     public ResponseEntity<BaseResponse> insertComment(@PathVariable("boardId") UUID boardId, @Valid @RequestBody BoardDto.CommentRequest commentRequest) {
         boardService.insertComment(boardId, commentRequest);
