@@ -8,7 +8,7 @@ import Header from "../../components/common/Header";
 import ButtonBottom from "../../components/common/ButtonBottom";
 import { getMemberInfo, putMembers, kakaoCoord2Region } from "api/member";
 import defaultProfileImage from "public/assets/img/mypage/avatar/default_profile.png";
-// import axios from "axios";
+import Icon from "components/common/Icon";
 
 const PageContainer = styled.main`
   padding: 0 2rem 2rem 2rem;
@@ -91,12 +91,21 @@ const DisplayNoneInput = styled.input`
   display: none;
 `;
 
-const StyledLabel = styled.label`
+const StyledLabel = styled.label<{ isRequired: boolean }>`
   font-size: 2rem;
   color: #3d3d3d;
   /* font-weight: 500; */
   display: inline-block;
-  margin-top: 1.6rem;
+  margin: 1.6rem 0 0.4rem 0;
+  ::after {
+    display: ${(props) => (props.isRequired ? "inline" : "none")};
+    position: relative;
+    top: -0.4rem;
+    right: -0.2rem;
+    font-size: 1.4rem;
+    content: "*";
+    color: red;
+  }
 `;
 
 const SalaryTypeContainer = styled.div`
@@ -130,10 +139,13 @@ const SalaryTypeLabel = styled.label<{ isSelected: boolean }>`
 `;
 
 const LocationDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-size: 1.8rem;
-  text-align: end;
+  text-align: center;
   border-bottom: 1px solid #cccccc;
-  line-height: 2.4rem;
+  line-height: 1.8rem;
 `;
 
 const LocationButton = styled.button`
@@ -144,10 +156,16 @@ const LocationButton = styled.button`
   font-size: 1.2rem;
   padding: 0.4rem 1rem;
   font-family: "Noto Sans KR", sans-serif;
-  margin-left: 1rem;
   :disabled {
     background: #ccc;
   }
+`;
+
+const LocationDeleteButton = styled.span<{ isVisible: boolean }>`
+  display: ${(props) => (props.isVisible ? "inline" : "none")};
+  font-size: 1.2rem;
+  line-height: 2rem;
+  margin-left: 1rem;
 `;
 
 const MutedMessage = styled.p`
@@ -169,7 +187,9 @@ interface ILocation {
   latitude: number | null;
   longitude: number | null;
   addressName: string | null;
-  regionName: string | null;
+  depth1: string | null;
+  depth2: string | null;
+  depth3: string | null;
 }
 
 export default function ProfileModify() {
@@ -204,15 +224,28 @@ export default function ProfileModify() {
     latitude: null,
     longitude: null,
     addressName: null, // 렌더링할 주소
-    regionName: null, // API 요청보낼 주소
+    depth1: null, // API 요청보낼 주소
+    depth2: null, // API 요청보낼 주소
+    depth3: null, // API 요청보낼 주소
   });
 
   const resetSurveyForm = useCallback(async () => {
     const result = await (await getMemberInfo()).data;
+    console.log(result);
     if (result.code === 1001) {
-      reset({ ...result.data, profileUpdated: false });
-      setImagePreview(result.data.profileUrl);
-      setLocation((prev) => ({ ...prev, dong: result.data.dong }));
+      const { data } = result;
+      reset({ ...data, profileUpdated: false });
+      setImagePreview(data.profileUrl);
+      const { depth1, depth2, depth3, longitude, latitude } = data;
+      setLocation((prev) => ({
+        ...prev,
+        depth1,
+        depth2,
+        depth3,
+        longitude,
+        latitude,
+        addressName: depth1 ? `${depth1} ${depth2} ${depth3}` : null,
+      }));
     }
   }, [reset]);
 
@@ -284,9 +317,7 @@ export default function ProfileModify() {
       salary: salaryType === "N" ? 0 : +data.salary,
       workingHours: salaryType === "N" ? 0 : +data.workingHours,
       budget: +data.budget,
-      latitude: location.latitude,
-      longitude: location.longitude,
-      dong: location.regionName,
+      ...location,
     };
 
     const formData = new FormData();
@@ -295,6 +326,7 @@ export default function ProfileModify() {
       "memberInfo",
       new Blob([JSON.stringify(memberInfo)], { type: "application/json" })
     );
+    console.log(memberInfo);
 
     putMembers(formData).then((res) => {
       console.log(res.data);
@@ -325,7 +357,9 @@ export default function ProfileModify() {
               setLocation((prev) => ({
                 ...prev,
                 addressName: res.data.documents[0].address_name,
-                regionName: res.data.documents[0].region_3depth_name,
+                depth1: res.data.documents[0].region_1depth_name,
+                depth2: res.data.documents[0].region_2depth_name,
+                depth3: res.data.documents[0].region_3depth_name,
                 isUpdated: true,
               }));
             })
@@ -340,7 +374,18 @@ export default function ProfileModify() {
       );
     }
   }
-  console.log(watch());
+
+  function onClickLocationDeleteButton() {
+    setLocation({
+      isUpdated: false,
+      latitude: null,
+      longitude: null,
+      addressName: null,
+      depth1: null,
+      depth2: null,
+      depth3: null,
+    });
+  }
 
   return (
     <>
@@ -376,15 +421,17 @@ export default function ProfileModify() {
       <PageContainer>
         <FormContainer onSubmit={handleSubmit(onSubmit)}>
           <div>
-            <StyledLabel htmlFor="nickname">닉네임</StyledLabel>
+            <StyledLabel htmlFor="nickname" isRequired={true}>
+              닉네임
+            </StyledLabel>
             <InputDiv isError={!!errors.nickname}>
               <StyledInput
                 type="text"
                 placeholder="닉네임을 입력해주세요"
                 {...register("nickname", {
                   required: { value: true, message: "닉네임을 입력해주세요" },
-                  maxLength: { value: 18, message: "2 ~ 18자로 입력해주세요" },
-                  minLength: { value: 2, message: "2 ~ 18자로 입력해주세요" },
+                  maxLength: { value: 12, message: "2 ~ 12자로 입력해주세요" },
+                  minLength: { value: 2, message: "2 ~ 12자로 입력해주세요" },
                   pattern: {
                     value: /^[0-9a-zA-Zㄱ-힣]*$/,
                     message: "공백 및 특수문자를 포함할 수 없습니다",
@@ -396,7 +443,9 @@ export default function ProfileModify() {
           </div>
 
           <div>
-            <StyledLabel htmlFor="salary">급여</StyledLabel>
+            <StyledLabel htmlFor="salary" isRequired={true}>
+              급여
+            </StyledLabel>
             <SalaryTypeContainer>
               {[
                 { name: "월급", value: "M" },
@@ -455,7 +504,7 @@ export default function ProfileModify() {
               </div>
 
               <div>
-                <StyledLabel htmlFor="workingHours">
+                <StyledLabel htmlFor="workingHours" isRequired={true}>
                   한 주에 몇 시간 일하시나요?
                 </StyledLabel>
                 <InputDiv isError={!!errors.workingHours}>
@@ -489,7 +538,9 @@ export default function ProfileModify() {
           )}
 
           <div>
-            <StyledLabel htmlFor="budget">한 달 예산</StyledLabel>
+            <StyledLabel htmlFor="budget" isRequired={true}>
+              한 달 예산
+            </StyledLabel>
             <InputDiv isError={!!errors.budget}>
               <StyledInput
                 type="number"
@@ -516,10 +567,9 @@ export default function ProfileModify() {
           </div>
 
           <div>
-            <StyledLabel>내 위치</StyledLabel>
+            <StyledLabel isRequired={false}>내 위치</StyledLabel>
 
             <LocationDiv>
-              {location.addressName}
               <LocationButton
                 type="button"
                 onClick={onClickGeoButton}
@@ -527,6 +577,22 @@ export default function ProfileModify() {
               >
                 가져오기
               </LocationButton>
+
+              <div>
+                <span>{location.addressName}</span>
+
+                <LocationDeleteButton
+                  isVisible={!!location.addressName}
+                  onClick={onClickLocationDeleteButton}
+                >
+                  <Icon
+                    mode="fas"
+                    icon="xmark-circle"
+                    size="1.6rem"
+                    color="#a7a7a7"
+                  ></Icon>
+                </LocationDeleteButton>
+              </div>
             </LocationDiv>
             <MutedMessage>
               (선택) 커뮤니티 이용을 위해 위치 정보가 필요합니다
