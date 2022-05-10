@@ -1,14 +1,11 @@
 import styled from "styled-components";
 import Image from "next/image";
-import { Fragment } from "react";
 
 // Swiper
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper";
-
-import Icon from "../../components/common/Icon";
 
 const ModalOverlay = styled.div<{ visible: boolean }>`
   box-sizing: border-box;

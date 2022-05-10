@@ -6,12 +6,12 @@ import { useRouter } from "next/router";
 import Header from "../../../components/common/Header";
 import Icon from "../../../components/common/Icon";
 import Avatar from "../../../public/assets/img/mypage/avatar/avartar_h.jpg";
-import ImageModal from "../../../components/community/CommunityImageModal";
+import ImageModal from "../../../components/community/detail/CommunityImageModal";
+import CommentCard from "components/community/detail/CommentCard";
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: #ffffff;
   padding: 2rem;
   border-bottom: 1px solid #e8e8e8;
 `;
@@ -74,14 +74,19 @@ const ButtonContainer = styled.div`
   gap: 1rem;
 `;
 
+const CommentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+`;
+
 export default function CommunityDetail() {
   const router = useRouter();
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const imageList = [
     "/assets/img/mypage/avatar/avartar_h.jpg",
     "/assets/img/mypage/avatar/avatar_member4.png",
     "/assets/img/mypage/avatar/avatar_member6.png",
-    "/assets/img/mypage/avatar/avatar_member4.png",
   ];
   const onClickImage = () => {
     setOpen((prev) => !prev);
@@ -89,11 +94,7 @@ export default function CommunityDetail() {
 
   return (
     <>
-      <Header
-        label="커뮤니티"
-        icon="plus"
-        onClickRightButton={() => router.push("/community/communityCreateForm")}
-      />
+      <Header label="" onClickBackButton={() => router.push("/community")} />
       <Container>
         <div>
           <Tag>부탁해요</Tag>
@@ -116,7 +117,7 @@ export default function CommunityDetail() {
           </InfoWrapper>
         </Profile>
         <Content>
-          <Typography fs="1.6rem" p="0 0 1rem 0">
+          <Typography fs="1.8rem" p="0 0 1rem 0">
             주말에 멍멍이 산책 도와주실 분 있나요? 하루라도 편하게 늦잠 자는 게
             소원이에요 ㅠㅠ{" "}
           </Typography>
@@ -148,10 +149,14 @@ export default function CommunityDetail() {
           </ButtonContainer>
 
           <FlexContainer>
-            <Icon mode="fas" icon="comment" size="10px" />
-            <Typography p="0 0.5rem">1</Typography>
-            <Icon mode="fas" icon="heart" size="10px" />
-            <Typography p="0 0.5rem">1</Typography>
+            <Icon mode="fas" icon="comment" size="14px" />
+            <Typography fs="1.4rem" p="0 0.5rem">
+              1
+            </Typography>
+            <Icon mode="fas" icon="heart" size="14px" />
+            <Typography fs="1.4rem" p="0 0.5rem">
+              1
+            </Typography>
           </FlexContainer>
         </FlexContainer>
       </Container>
@@ -160,6 +165,12 @@ export default function CommunityDetail() {
       ) : (
         ""
       )}
+      <CommentContainer>
+        <Typography fs="1.4rem" p="0 0 2rem 0">
+          댓글
+        </Typography>
+        <CommentCard />
+      </CommentContainer>
     </>
   );
 }

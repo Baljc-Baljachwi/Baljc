@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 
+import all from "../../public/assets/img/community/all.png";
 import help from "../../public/assets/img/community/help.png";
 import together from "../../public/assets/img/community/together.png";
 import town from "../../public/assets/img/community/town.png";
@@ -16,7 +17,7 @@ const Header = styled.div`
   margin: 0 0 0 0;
   background-color: #ffffff;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
 `;
 
 const FlexColumn = styled.div`
@@ -51,6 +52,10 @@ export default function CommunityList() {
   return (
     <Container>
       <Header>
+        <FlexColumn>
+          <Image src={all} alt="전체보기" width="70%" height="70%" />
+          <div>전체 보기</div>
+        </FlexColumn>
         <FlexColumn>
           <Image src={help} alt="부탁해요" width="70%" height="70%" />
           <div>부탁해요</div>
