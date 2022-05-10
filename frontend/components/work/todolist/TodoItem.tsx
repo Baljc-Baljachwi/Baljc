@@ -113,17 +113,6 @@ export default function TodoItem({
     }
   };
 
-  function todoItemClick(e: any) {
-    if (todoRef && !todoRef.current.contains(e.target)) {
-      setTodoClicked(false);
-      setClicked(true);
-    } else {
-      setTodoClicked(true);
-      setClicked(false);
-    }
-  }
-
-  // React.KeyboardEvent
   const onEnter = (e: any) => {
     if (e.key === "Enter") {
       if (contentForm.content.length !== 0) {
@@ -161,7 +150,10 @@ export default function TodoItem({
       .catch((err) => console.log(err));
   };
 
-  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {};
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    setTodoClicked(true);
+    setClicked(false);
+  };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     if (contentForm.content.length !== 0) {
@@ -180,16 +172,14 @@ export default function TodoItem({
         })
         .catch((err) => console.log(err));
     }
+    setTodoClicked(false);
+    setClicked(true);
   };
 
   useEffect(() => {
+    setIsError(false);
     setContentForm({ content: content });
-
-    window.addEventListener("mousedown", todoItemClick);
-    return () => {
-      window.removeEventListener("mousedown", todoItemClick);
-    };
-  }, []);
+  }, [content]);
 
   return (
     <>
