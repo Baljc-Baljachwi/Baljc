@@ -13,7 +13,7 @@ const Container = styled.nav`
   left: 0;
   bottom: 0;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   z-index: 10000;
   height: 5.6rem;
 `;
@@ -34,6 +34,7 @@ const Item = styled.div`
 export default function NavBar() {
   const router = useRouter();
   const [rootPathname, setRootPathname] = useState<string>("/");
+
   useEffect(() => {
     const root = router.pathname.split("/")[1];
     setRootPathname(root);
@@ -41,7 +42,7 @@ export default function NavBar() {
 
   return (
     <Container>
-      <Item onClick={() => router.push("/community")}>
+      {/* <Item onClick={() => router.push("/community")}>
         <Icon
           mode="fas"
           icon="comments"
@@ -51,16 +52,7 @@ export default function NavBar() {
         <div className={rootPathname === "community" ? "" : "active"}>
           커뮤니티
         </div>
-      </Item>
-      <Item onClick={() => router.push("/finance")}>
-        <Icon
-          mode="fas"
-          icon="sack-dollar"
-          size="2rem"
-          color={rootPathname === "finance" ? undefined : "#cdcdcd"}
-        />
-        <div className={rootPathname === "finance" ? "" : "active"}>가계부</div>
-      </Item>
+      </Item> */}
       <Item onClick={() => router.push("calendar")}>
         <Icon
           mode="fas"
@@ -71,6 +63,15 @@ export default function NavBar() {
         <div className={rootPathname === "calendar" ? "" : "active"}>
           캘린더
         </div>
+      </Item>
+      <Item onClick={() => router.push("/finance")}>
+        <Icon
+          mode="fas"
+          icon="sack-dollar"
+          size="2rem"
+          color={rootPathname === "finance" ? undefined : "#cdcdcd"}
+        />
+        <div className={rootPathname === "finance" ? "" : "active"}>가계부</div>
       </Item>
       <Item onClick={() => router.push("/work")}>
         <Icon
