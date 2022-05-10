@@ -78,7 +78,7 @@ public class BoardRepositorySupport {
 
     public BoardDto.BoardDetailDto getBoardDetail(UUID boardId, Member member) {
         BoardDto.BoardDetailDto response = jpaQueryFactory.select(
-                        new QBoardDto_BoardDetailDto(qBoard.boardId, qMember.profileUrl, qMember.nickname,
+                        new QBoardDto_BoardDetailDto(qBoard.boardId, qMember.memberId, qMember.profileUrl, qMember.nickname,
                                 qBoardCategory.name, qBoard.content, qBoard.createdAt, qHeart.count(), qComment.count(),
                                 ExpressionUtils.as(
                                         JPAExpressions.select(count(qHeart.heartId))
@@ -106,12 +106,12 @@ public class BoardRepositorySupport {
     public List<BoardDto.CommentListDto> getCommentList(UUID boardId) {
         List<BoardDto.CommentListDto> response = jpaQueryFactory.select(
                         new QBoardDto_CommentListDto(
-                                qComment.commentId, qMember.profileUrl, qMember.nickname,
-                                qComment.content, qComment.createdAt, qComment.comment.commentId
+                                qComment.commentId, qMember.memberId, qMember.profileUrl, qMember.nickname,
+                                qComment.content, qComment.createdAt, qComment.comment.commentId, qComment.deletedYn
                         ))
                 .from(qComment)
                 .leftJoin(qMember).on(qComment.member.eq(qMember))
-                .where(qComment.board.boardId.eq(boardId).and(qComment.deletedYn.eq('N')))
+                .where(qComment.board.boardId.eq(boardId))
                 .fetch();
 
         return response;
