@@ -29,6 +29,15 @@ public class MemberDto {
         @PositiveOrZero(message = "올바른 예산의 범위(0이상 2147483647이하)가 아닙니다.")
         @Max(value = Integer.MAX_VALUE, message = "올바른 예산의 범위(0이상 2147483647이하)가 아닙니다.")
         private Integer budget;
+        @Min(value = -90, message = "올바른 위도의 범위(-90이상 90이하)가 아닙니다.")
+        @Max(value = 90, message = "올바른 위도의 범위(-90이상 90이하)가 아닙니다.")
+        private Double latitude;
+        @Min(value = -180, message = "올바른 예산의 범위(-180이상 180이하)가 아닙니다.")
+        @Max(value = 180, message = "올바른 예산의 범위(-180이상 180이하)가 아닙니다.")
+        private Double longitude;
+        private String depth1;
+        private String depth2;
+        private String depth3;
     }
 
     @Getter
@@ -47,5 +56,10 @@ public class MemberDto {
         private Integer salary;
         private Integer workingHours;
         private Integer budget;
+        private Double latitude;
+        private Double longitude;
+        private String depth1;
+        private String depth2;
+        private String depth3;
     }
 }

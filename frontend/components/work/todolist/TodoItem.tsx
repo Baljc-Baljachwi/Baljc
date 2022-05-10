@@ -12,7 +12,6 @@ const TodoListItem = styled.div`
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  margin: 1rem 0;
 `;
 
 const TodoItemDiv = styled.div`
@@ -22,20 +21,28 @@ const TodoItemDiv = styled.div`
   justify-content: space-between;
 `;
 
-const TodoText = styled.span<{ isCompleted: string; viewOnly: boolean }>`
+const TodoImage = styled.img`
+  width: 3.5rem;
+  margin-bottom: 1.2rem;
+`;
+
+const TodoText = styled.span<{ viewOnly: boolean }>`
   width: 100%;
   font-size: 1.8rem;
-  text-decoration: ${(props) =>
-    props.isCompleted === "Y" ? "line-through" : ""};
+
   color: ${(props) => (props.viewOnly ? "#ffffff" : "")};
   display: flex;
   justify-content: space-between;
 `;
 
+const TodoNErrorDiv = styled.div``;
+
 const TodoInput = styled.input<{
   isClicked: boolean;
   isEdit: boolean;
   viewOnly: boolean;
+  isError: boolean;
+  isCompleted: string;
 }>`
   width: 90%;
   font-family: "Noto Sans KR";
@@ -43,8 +50,22 @@ const TodoInput = styled.input<{
   color: ${(props) => (props.viewOnly ? "#ffffff" : "#000000")};
   background-color: ${(props) => (props.viewOnly ? "#4d5f8f" : "")};
   border: none;
-  border-bottom: ${(props) => (props.isEdit ? "" : " 1px solid #cccccc")};
+  border-bottom: ${(props) =>
+    props.isEdit
+      ? "none"
+      : props.isError
+      ? "1px solid #ff0000"
+      : "1px solid #cccccc"};
   outline: none;
+  text-decoration: ${(props) =>
+    props.isCompleted === "Y" ? "line-through" : ""};
+`;
+
+const ErrorMessage = styled.p<{ isError: boolean }>`
+  height: 1.3rem;
+  visibility: ${(props) => (props.isError ? "visible" : "hidden")};
+  color: #ff0000;
+  font-size: 1.2rem;
 `;
 
 const IconDiv = styled.div<{ isClicked: boolean }>`
@@ -79,6 +100,7 @@ export default function TodoItem({
   const [todoClicked, setTodoClicked] = useState(false); // 수정 삭제 아이콘을 위한
   const [isClicked, setClicked] = useState(true); // todo 클릭 시, readOnly 변경 위한
   const [contentForm, setContentForm] = useState<contentState>({ content: "" });
+  const [isError, setIsError] = useState(false);
 
   const todoRef = useRef() as React.MutableRefObject<HTMLSpanElement>;
 
@@ -113,20 +135,9 @@ export default function TodoItem({
     }
   };
 
-  function todoItemClick(e: any) {
-    if (todoRef && !todoRef.current.contains(e.target)) {
-      setTodoClicked(false);
-      setClicked(true);
-    } else {
-      setTodoClicked(true);
-      setClicked(false);
-    }
-  }
-
-  // React.KeyboardEvent
   const onEnter = (e: any) => {
     if (e.key === "Enter") {
-      if (contentForm.content.length !== 0) {
+      if (!isError) {
         editTodos(e.target.id, contentForm)
           .then((res) => {
             console.log(res);
@@ -146,10 +157,20 @@ export default function TodoItem({
   };
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setContentForm((prev) => ({
-      ...prev,
-      content: e.target.value,
-    }));
+    if (e.target.value.length > 0) {
+      setIsError(false);
+      setContentForm((prev) => ({
+        ...prev,
+        content: e.target.value,
+      }));
+    } else {
+      setIsError(true);
+      setContentForm((prev) => ({
+        ...prev,
+        content: e.target.value,
+      }));
+    }
+    console.log(isError);
   };
 
   const deleteTodo = () => {
@@ -161,10 +182,13 @@ export default function TodoItem({
       .catch((err) => console.log(err));
   };
 
-  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {};
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    setTodoClicked(true);
+    setClicked(false);
+  };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    if (contentForm.content.length !== 0) {
+    if (!isError) {
       editTodos(e.target.id, contentForm)
         .then((res) => {
           console.log(res);
@@ -179,52 +203,52 @@ export default function TodoItem({
           setClicked(true);
         })
         .catch((err) => console.log(err));
+    } else {
+      document.getElementById(todoId)?.focus();
     }
   };
 
   useEffect(() => {
+    setIsError(false);
     setContentForm({ content: content });
-
-    window.addEventListener("mousedown", todoItemClick);
-    return () => {
-      window.removeEventListener("mousedown", todoItemClick);
-    };
-  }, []);
+  }, [content]);
 
   return (
     <>
       <TodoListItem>
         {completedYn === "Y" ? (
-          <Image
+          <TodoImage
             src="/assets/img/foot_true.png"
             alt=""
-            width={30}
-            height={30}
             onClick={todoComplete}
           />
         ) : (
-          <Image
+          <TodoImage
             src="/assets/img/foot_false.png"
             alt=""
-            width={30}
-            height={30}
             onClick={todoComplete}
           />
         )}
         <TodoItemDiv>
-          <TodoText isCompleted={completedYn} viewOnly={viewOnly} ref={todoRef}>
-            <TodoInput
-              id={todoId}
-              value={contentForm.content}
-              onChange={onInputChange}
-              isClicked={todoClicked}
-              isEdit={isClicked} // false일 때, input 밑줄 생기게
-              onKeyPress={onEnter}
-              // readOnly={isClicked} // false일 때, 수정 가능
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-              viewOnly={viewOnly}
-            />
+          <TodoText viewOnly={viewOnly} ref={todoRef}>
+            <TodoNErrorDiv>
+              <TodoInput
+                id={todoId}
+                value={contentForm.content}
+                onChange={onInputChange}
+                isCompleted={completedYn}
+                isClicked={todoClicked}
+                isEdit={isClicked} // false일 때, input 밑줄 생기게
+                isError={isError}
+                onKeyPress={onEnter}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+                viewOnly={viewOnly}
+              />
+              <ErrorMessage isError={isError}>
+                1자 이상 입력해주세요 !
+              </ErrorMessage>
+            </TodoNErrorDiv>
             <IconDiv isClicked={todoClicked}>
               {/* <Icon
                 mode="fas"

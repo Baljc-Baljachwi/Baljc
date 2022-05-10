@@ -2,10 +2,7 @@ package com.baljc.api.service;
 
 import com.baljc.api.dto.BoardDto;
 import com.baljc.db.entity.*;
-import com.baljc.db.repository.BoardCategoryRepository;
-import com.baljc.db.repository.BoardImgRepository;
-import com.baljc.db.repository.BoardRepository;
-import com.baljc.db.repository.CommentRepository;
+import com.baljc.db.repository.*;
 import com.baljc.exception.NotExistedAccountBookException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +11,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.UUID;
+import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -29,6 +31,9 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
     private final BoardImgRepository boardImgRepository;
     private final CommentRepository commentRepository;
+    private final HeartRepository heartRepository;
+    private final ScrapRepository scrapRepository;
+    private final BoardRepositorySupport boardRepositorySupport;
     private final String boardImagePath;
 
     public BoardServiceImpl(MemberService memberService,
@@ -37,6 +42,9 @@ public class BoardServiceImpl implements BoardService {
                             BoardRepository boardRepository,
                             BoardImgRepository boardImgRepository,
                             CommentRepository commentRepository,
+                            HeartRepository heartRepository,
+                            ScrapRepository scrapRepository,
+                            BoardRepositorySupport boardRepositorySupport,
                             @Value("${cloud.aws.s3.folder.boardImage}") String boardImagePath
     ) {
         this.memberService = memberService;
@@ -45,6 +53,9 @@ public class BoardServiceImpl implements BoardService {
         this.boardRepository = boardRepository;
         this.boardImgRepository = boardImgRepository;
         this.commentRepository = commentRepository;
+        this.heartRepository = heartRepository;
+        this.scrapRepository = scrapRepository;
+        this.boardRepositorySupport = boardRepositorySupport;
         this.boardImagePath = boardImagePath;
     }
 
@@ -71,7 +82,7 @@ public class BoardServiceImpl implements BoardService {
                     .boardCategory(category)
                     .latitude(member.getLatitude())
                     .longitude(member.getLongitude())
-                    .dong(member.getDong())
+                    .dong(member.getDepth3())
                     .deletedYn('N')
                     .build();
         boardRepository.save(board);
@@ -103,13 +114,202 @@ public class BoardServiceImpl implements BoardService {
                 .board(board)
                 .member(member)
                 .comment(comment)
+                .content(commentRequest.getContent())
                 .deletedYn('N')
                 .build());
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteComment(UUID commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new NullPointerException("해당 댓글이 존재하지 않습니다."));
         comment.deleteComment();
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateHeart(UUID boardId, BoardDto.HeartRequest heartRequest) {
+        Member member = memberService.getMemberByAuthentication();
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new NullPointerException("해당 게시글이 존재하지 않습니다."));
+
+        if (heartRequest.getHeartYn().charAt(0) == 'Y') {
+            heartRepository.save(Heart.builder()
+                    .member(member)
+                    .board(board)
+                    .build());
+        } else {
+            Heart heart = heartRepository.findByMemberAndBoard(member, board).orElseThrow(() -> new NullPointerException("해당 좋아요가 존재하지 않습니다."));
+            heartRepository.deleteById(heart.getHeartId());
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateScrap(UUID boardId, BoardDto.ScrapRequest scrapRequest) {
+        Member member = memberService.getMemberByAuthentication();
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new NullPointerException("해당 게시글이 존재하지 않습니다."));
+
+        if (scrapRequest.getScrapYn().charAt(0) == 'Y') {
+            scrapRepository.save(Scrap.builder()
+                    .member(member)
+                    .board(board)
+                    .build());
+        } else {
+            Scrap scrap = scrapRepository.findByMemberAndBoard(member, board).orElseThrow(() -> new NullPointerException("해당 스크랩이 존재하지 않습니다."));
+            scrapRepository.deleteById(scrap.getScrapId());
+        }
+    }
+
+    @Override
+    public List<BoardDto.BoardListResponse> getBoardList(UUID categoryId, Long index) {
+        Member member = memberService.getMemberByAuthentication();
+
+        List<BoardDto.BoardListInterface> list = null;
+        if (categoryId.toString().equals("271105c2-f94c-47bc-8af4-dc156dcad3eb")) {
+            list = boardRepository.getBoardListAll(member.getLatitude(), member.getLongitude(), index);
+        } else {
+            ByteBuffer bb = ByteBuffer.wrap(new byte[16]);
+            bb.putLong(categoryId.getMostSignificantBits());
+            bb.putLong(categoryId.getLeastSignificantBits());
+            list = boardRepository.getBoardListByCategory(member.getLatitude(), member.getLongitude(), index, bb.array());
+        }
+
+        List<BoardDto.BoardListResponse> response = list.stream()
+                .map(board -> {
+                    String date = "";
+
+                    Long minutes = ChronoUnit.MINUTES.between(board.getCreatedAt(), LocalDateTime.now());
+                    Long hours = ChronoUnit.HOURS.between(board.getCreatedAt(), LocalDateTime.now());
+                    Long days = ChronoUnit.DAYS.between(board.getCreatedAt(), LocalDateTime.now());
+
+                    String dayFormat = board.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+                    if (minutes < 60) {
+                        date = minutes + "분전";
+                    } else if (hours < 24) {
+                        date = hours + "시간전";
+                    } else if (days < 7) {
+                        date = days + "일전";
+                    } else {
+                        date = dayFormat;
+                    }
+
+                    ByteBuffer byteBuffer = ByteBuffer.wrap(board.getBoardId());
+                    long high = byteBuffer.getLong();
+                    long low = byteBuffer.getLong();
+
+                    List<String> imgList = boardRepositorySupport.getImgURLList(new UUID(high, low));
+
+                    return new BoardDto.BoardListResponse(
+                            new UUID(high, low),
+                            board.getCategoryName(),
+                            board.getContent(),
+                            date,
+                            board.getCreator(),
+                            board.getDong(),
+                            imgList,
+                            board.getHeartCnt(),
+                            board.getCommentCnt());
+                }).collect(Collectors.toList());
+
+        return response;
+    }
+
+    @Override
+    public BoardDto.BoardDetailResponse getBoardDetail(UUID boardId) {
+        Member member = memberService.getMemberByAuthentication();
+        BoardDto.BoardDetailDto boardDetail = boardRepositorySupport.getBoardDetail(boardId, member);
+
+        List<BoardDto.CommentListDto> commentList = boardRepositorySupport.getCommentList(boardId);
+        List<BoardDto.BoardDetailCommentResponse> commentResponse = new ArrayList<>();
+        for (BoardDto.CommentListDto commentListDto : commentList) {
+            String date = "";
+
+            Long minutes = ChronoUnit.MINUTES.between(commentListDto.getCreatedAt(), LocalDateTime.now());
+            Long hours = ChronoUnit.HOURS.between(commentListDto.getCreatedAt(), LocalDateTime.now());
+            Long days = ChronoUnit.DAYS.between(commentListDto.getCreatedAt(), LocalDateTime.now());
+
+            String dayFormat = commentListDto.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+            if (minutes < 60) {
+                date = minutes + "분전";
+            } else if (hours < 24) {
+                date = hours + "시간전";
+            } else if (days < 7) {
+                date = days + "일전";
+            } else {
+                date = dayFormat;
+            }
+
+            if (commentListDto.getParentId() == null) {
+                commentResponse.add(new BoardDto.BoardDetailCommentResponse(
+                        commentListDto.getCommentId(),
+                        commentListDto.getMemberId(),
+                        commentListDto.getProfileUrl(),
+                        commentListDto.getNickname(),
+                        commentListDto.getContent(),
+                        date,
+                        commentListDto.getDeletedYn(),
+                        new ArrayList<>()
+                ));
+            } else {
+                for (int i = 0; i < commentResponse.size(); i++) {
+                    BoardDto.BoardDetailCommentResponse comment = commentResponse.get(i);
+                    if (comment.getCommentId().equals(commentListDto.getParentId())) {
+                        comment.getList().add(
+                                new BoardDto.BoardDetailCommentResponse(
+                                        commentListDto.getCommentId(),
+                                        commentListDto.getMemberId(),
+                                        commentListDto.getProfileUrl(),
+                                        commentListDto.getNickname(),
+                                        commentListDto.getContent(),
+                                        date,
+                                        commentListDto.getDeletedYn(),
+                                        null
+                        ));
+                        break;
+                    }
+                }
+            }
+        }
+
+        String date = "";
+
+        Long minutes = ChronoUnit.MINUTES.between(boardDetail.getCreatedAt(), LocalDateTime.now());
+        Long hours = ChronoUnit.HOURS.between(boardDetail.getCreatedAt(), LocalDateTime.now());
+        Long days = ChronoUnit.DAYS.between(boardDetail.getCreatedAt(), LocalDateTime.now());
+
+        String dayFormat = boardDetail.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+        if (minutes < 60) {
+            date = minutes + "분전";
+        } else if (hours < 24) {
+            date = hours + "시간전";
+        } else if (days < 7) {
+            date = days + "일전";
+        } else {
+            date = dayFormat;
+        }
+
+        List<String> imgList = boardRepositorySupport.getImgURLList(boardId);
+
+        BoardDto.BoardDetailResponse response = new BoardDto.BoardDetailResponse(
+                    boardDetail.getBoardId(),
+                    boardDetail.getMemberId(),
+                    boardDetail.getProfileUrl(),
+                    boardDetail.getNickname(),
+                    boardDetail.getCategoryName(),
+                    boardDetail.getContent(),
+                    date,
+                    boardDetail.getHeartCnt(),
+                    boardDetail.getCommentCnt(),
+                    boardDetail.getIsHeart(),
+                    boardDetail.getIsScrap(),
+                    imgList,
+                    commentResponse
+                );
+
+        return response;
+    }
+
 }

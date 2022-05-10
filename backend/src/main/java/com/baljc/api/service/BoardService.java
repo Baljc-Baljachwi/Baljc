@@ -1,6 +1,8 @@
 package com.baljc.api.service;
 
 import com.baljc.api.dto.BoardDto;
+import com.baljc.db.entity.Board;
+import com.baljc.db.entity.Comment;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -12,4 +14,8 @@ public interface BoardService {
     void insertBoard(BoardDto.BoardRequest boardRequest, List<MultipartFile> files);
     void insertComment(UUID boardId, BoardDto.CommentRequest commentRequest);
     void deleteComment(UUID commentId);
+    void updateHeart(UUID boardId, BoardDto.HeartRequest heartRequest);
+    void updateScrap(UUID boardId, BoardDto.ScrapRequest scrapRequest);
+    List<BoardDto.BoardListResponse> getBoardList(UUID categoryId, Long index);
+    BoardDto.BoardDetailResponse getBoardDetail(UUID boardId);
 }
