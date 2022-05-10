@@ -82,12 +82,11 @@ const CommentContainer = styled.div`
 
 export default function CommunityDetail() {
   const router = useRouter();
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const imageList = [
     "/assets/img/mypage/avatar/avartar_h.jpg",
     "/assets/img/mypage/avatar/avatar_member4.png",
     "/assets/img/mypage/avatar/avatar_member6.png",
-    "/assets/img/mypage/avatar/avatar_member4.png",
   ];
   const onClickImage = () => {
     setOpen((prev) => !prev);
@@ -95,11 +94,7 @@ export default function CommunityDetail() {
 
   return (
     <>
-      <Header
-        label="커뮤니티"
-        icon="plus"
-        onClickRightButton={() => router.push("/community/communityCreateForm")}
-      />
+      <Header label="" onClickBackButton={() => router.push("/community")} />
       <Container>
         <div>
           <Tag>부탁해요</Tag>

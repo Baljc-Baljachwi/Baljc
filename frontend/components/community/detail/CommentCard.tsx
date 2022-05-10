@@ -3,17 +3,18 @@ import Image from "next/image";
 
 import Avatar from "../../../public/assets/img/mypage/avatar/avartar_h.jpg";
 import ReplyCard from "./ReplyCard";
+import { useRouter } from "next/router";
 
 const Container = styled.div`
   display: grid;
-  grid-template-columns: 1fr 5fr;
+  grid-template-columns: 1fr 6fr;
 `;
 
 const ImageWrapper = styled.div`
   display: flex;
   border-radius: 50%;
-  height: 45px;
-  width: 45px;
+  height: 36px;
+  width: 36px;
   overflow: hidden;
 `;
 

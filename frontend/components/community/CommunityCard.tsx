@@ -1,5 +1,5 @@
 import styled from "styled-components";
-
+import { useRouter } from "next/router";
 import Icon from "../common/Icon";
 
 const CardContainer = styled.div`
@@ -42,8 +42,20 @@ const FlexContainer = styled.div`
   justify-content: space-between;
 `;
 export default function CommunityCard() {
+  const router = useRouter();
+
+  // 임시
+  const articleId = 1;
+
+  const handleClick = () => {
+    router.push({
+      pathname: "/community/detail",
+      // query: { articleId },
+    });
+    console.log("clicked");
+  };
   return (
-    <CardContainer>
+    <CardContainer onClick={handleClick}>
       <CardContent>
         <div>
           <Tag>부탁해요</Tag>

@@ -5,7 +5,7 @@ import Avatar from "../../../public/assets/img/mypage/avatar/avartar_h.jpg";
 
 const Container = styled.div`
   display: grid;
-  grid-template-columns: 1fr 4fr;
+  grid-template-columns: 1fr 5fr;
   padding-top: 1rem;
   border-top: 1px solid #e8e8e8;
 `;
@@ -13,8 +13,8 @@ const Container = styled.div`
 const ImageWrapper = styled.div`
   display: flex;
   border-radius: 50%;
-  height: 45px;
-  width: 45px;
+  height: 36px;
+  width: 36px;
   overflow: hidden;
 `;
 
@@ -49,7 +49,7 @@ export default function ReplyCard() {
       <TextContainer>
         <FlexContainer>
           <Typography fs="1.6rem" fw="600">
-            줌줌따리줌줌따리줌줌따리
+            발챙쓰
           </Typography>
           {/* 작성자인 경우만 */}
           <Typography
