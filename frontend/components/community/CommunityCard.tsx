@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import Image from "next/image";
+
 import Icon from "../common/Icon";
+import { IPost } from "types";
 
 const CardContainer = styled.div`
   background-color: #f4f4f4;
@@ -37,41 +40,73 @@ const Typography = styled.div<{
   padding: ${(props) => (props.p ? props.p : "0")};
 `;
 
+const ImageContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  .item {
+    height: 10rem;
+    position: relative;
+  }
+  .item:nth-child(1) {
+    height: 21rem;
+    grid-row: 1/3;
+    grid-column: 1/2;
+  }
+`;
+
 const FlexContainer = styled.div`
   display: flex;
   justify-content: space-between;
 `;
-export default function CommunityCard() {
-  const router = useRouter();
 
-  // 임시
-  const articleId = 1;
+export default function CommunityCard({
+  boardId,
+  categoryName,
+  content,
+  createdAt,
+  creator,
+  dong,
+  imgUrlList,
+  heartCnt,
+  commentCnt,
+}: IPost) {
+  const router = useRouter();
 
   const handleClick = () => {
     router.push({
       pathname: "/community/detail",
-      // query: { articleId },
+      // query: { boardId },
     });
-    console.log("clicked");
   };
+
   return (
     <CardContainer onClick={handleClick}>
       <CardContent>
         <div>
-          <Tag>부탁해요</Tag>
+          <Tag>{categoryName}</Tag>
         </div>
         <Content>
           <Typography fs="1.6rem" p="1rem 0">
-            주말에 멍멍이 산책 도와주실 분 있나요? 하루라도 편하게 늦잠 자는 게
-            소원이에요 ㅠㅠ{" "}
+            {content}
           </Typography>
+          <ImageContainer>
+            {imgUrlList?.map((item: string, idx: number) => (
+              <div className="item" key={idx}>
+                <Image src={item} alt="" layout="fill" />
+              </div>
+            ))}
+          </ImageContainer>
           <FlexContainer>
-            <Typography>1분전 | 발챙쓰 | 천연동</Typography>
+            <Typography>
+              {createdAt} | {creator} | {dong}
+            </Typography>
             <FlexContainer>
               <Icon mode="fas" icon="comment" size="10px" />
-              <Typography p="0 0.5rem">1</Typography>
+              <Typography p="0 0.5rem">{commentCnt}</Typography>
               <Icon mode="fas" icon="heart" size="10px" />
-              <Typography p="0 0.5rem">1</Typography>
+              <Typography p="0 0.5rem">{heartCnt}</Typography>
             </FlexContainer>
           </FlexContainer>
         </Content>

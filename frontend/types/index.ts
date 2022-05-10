@@ -67,3 +67,14 @@ export interface ICalendar {
 export interface IDaily extends ICalendar {
   day: number | string;
 }
+export interface IPost {
+  boardId: string;
+  categoryName: string;
+  content: string;
+  createdAt: string;
+  creator: null;
+  dong: string;
+  imgUrlList?: Array<string>;
+  heartCnt: number;
+  commentCnt: number;
+}

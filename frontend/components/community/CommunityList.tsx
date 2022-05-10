@@ -1,4 +1,3 @@
-import { getBoardsCategories } from "api/community";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState, Fragment } from "react";
@@ -6,6 +5,8 @@ import styled from "styled-components";
 
 import all from "../../public/assets/img/community/all.png";
 import CommunityCard from "./CommunityCard";
+import { getBoardsCategories, getBoardsList } from "api/community";
+import { IPost } from "types";
 
 const Container = styled.div`
   background-color: #f4f4f4;
@@ -36,7 +37,7 @@ const Typography = styled.div<{
   justify-content: center;
   align-items: center;
   font-size: ${(props) => (props.fs ? props.fs : "1rem")};
-  font-weight: ${(props) => (props.isSelected ? "600" : "400")};
+  font-weight: "400";
   background-color: ${(props) => (props.isSelected ? "#F0F0F0" : "0")};
   margin: ${(props) => (props.m ? props.m : "0")};
   padding: ${(props) => (props.isSelected ? "0.2rem 1rem" : "0.2rem 1rem")};
@@ -71,11 +72,17 @@ interface IBoardCategory {
 export default function CommunityList() {
   const router = useRouter();
   const [boardCategories, setBoardCategories] = useState<IBoardCategory[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>(
+    // "271105c2-f94c-47bc-8af4-dc156dcad3eb"
+    "b0756160-eb30-4ac7-90c5-1b2e2d73c645"
+  );
+  const [idx, setIdx] = useState<number>(0);
+  const [posts, setPosts] = useState<IPost[]>();
 
   useEffect(() => {
     getBoardsCategories().then((res) => {
       if (res.data.code === 1700) {
+        console.log(res.data.data);
         setBoardCategories(res.data.data);
       } else {
         console.log(res.data.message);
@@ -83,6 +90,18 @@ export default function CommunityList() {
     });
   }, []);
 
+  useEffect(() => {
+    getBoardsList(idx, selectedCategory).then((res) => {
+      if (res.data.code === 1702) {
+        console.log(res.data.data);
+        setPosts(res.data.data);
+      } else {
+        console.log(res.data.message);
+      }
+    });
+  }, [idx, selectedCategory]);
+
+  console.log(111, posts);
   return (
     <Container>
       <Header>
@@ -104,9 +123,20 @@ export default function CommunityList() {
         ))}
       </Header>
       <BodyContainer>
-        <CommunityCard />
-        <CommunityCard />
-        <CommunityCard />
+        {posts?.map((post: any) => (
+          <CommunityCard
+            key={post.boardId}
+            boardId={post.boardId}
+            categoryName={post.categoryName}
+            content={post.content}
+            createdAt={post.createdAt}
+            creator={post.creator}
+            dong={post.dong}
+            imgUrlList={post.imgUrlList}
+            heartCnt={post.heartCnt}
+            commentCnt={post.commentCnt}
+          />
+        ))}
       </BodyContainer>
       <ChatButtonDiv>
         <ChatButton
