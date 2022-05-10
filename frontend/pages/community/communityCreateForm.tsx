@@ -5,11 +5,9 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 
 import Header from "../../components/common/Header";
-import Avatar from "../../public/assets/img/mypage/avatar/avartar_h.jpg";
 import Icon from "../../components/common/Icon";
 import ButtonBottom from "components/common/ButtonBottom";
 import ButtonTrashCan from "components/common/ButtonTrashCan";
-import ButtonImage from "components/common/ButtonImage";
 import { getBoardsCategories } from "api/community";
 
 const FormContainer = styled.form`
@@ -73,7 +71,6 @@ const ImageWrapper = styled.div`
   height: 9rem;
   width: 9rem;
   .image {
-    border-radius: 0.5rem;
     object-fit: contain;
   }
 `;
@@ -297,32 +294,6 @@ export default function CommunityCreateForm() {
                 />
               </Fragment>
             ))}
-            {/* {[
-              { name: "부탁해요", value: "C" },
-              { name: "같이해요", value: "M" },
-              { name: "동네정보", value: "E" },
-            ].map((item) => (
-              <Fragment key={item.value}>
-                <CategoryLabel
-                  isSelected={category === item.value}
-                  // isSelected={false}
-                  htmlFor={item.value}
-                >
-                  {item.name}
-                </CategoryLabel>
-                <DisplayNoneInput
-                  {...register("category", {
-                    required: {
-                      value: true,
-                      message: "카테고리를 설정해주세요",
-                    },
-                  })}
-                  type="radio"
-                  value={item.value}
-                  id={item.value}
-                />
-              </Fragment>
-            ))} */}
           </CategoryLabelContainer>
         </FlexContainer>
 
