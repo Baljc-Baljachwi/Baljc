@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +34,7 @@ public class PushAlarmScheduler {
     @Scheduled(cron = "0 * * * * *")
     @Transactional(readOnly = true)
     public void scheduleByMinute() throws FirebaseMessagingException {
-        LocalTime now = LocalTime.now();
+        LocalTime now = LocalTime.now(ZoneId.of("Asia/Seoul"));
         log.debug("scheduleByMinute - now: {}", now);
         List<PushAlarm> pushAlarmList = pushAlarmRepository.findAll()
                 .stream()
