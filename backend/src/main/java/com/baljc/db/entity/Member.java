@@ -105,6 +105,9 @@ public class Member {
         this.salary = registerRequest.getSalary();
         this.workingHours = registerRequest.getWorkingHours();
         this.budget = registerRequest.getBudget();
+        this.latitude = registerRequest.getLatitude();
+        this.longitude = registerRequest.getLongitude();
+        this.dong = registerRequest.getDong();
         if (this.surveyedYn == 'N') this.surveyedYn = 'Y';
     }
 
