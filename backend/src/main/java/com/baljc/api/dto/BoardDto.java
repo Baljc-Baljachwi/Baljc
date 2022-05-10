@@ -95,6 +95,85 @@ public class BoardDto {
     }
 
     @Getter
+    @Setter
+    public static class BoardDetailDto {
+        private UUID boardId;
+        private String profileUrl;
+        private String nickname;
+        private String categoryName;
+        private String content;
+        private LocalDateTime createdAt;
+        private Long heartCnt;
+        private Long commentCnt;
+        private Long isHeart;
+        private Long isScrap;
+
+        @QueryProjection
+        public BoardDetailDto(UUID boardId, String profileUrl, String nickname, String categoryName, String content, LocalDateTime createdAt, Long heartCnt, Long commentCnt, Long isHeart, Long isScrap) {
+            this.boardId = boardId;
+            this.profileUrl = profileUrl;
+            this.nickname = nickname;
+            this.categoryName = categoryName;
+            this.content = content;
+            this.createdAt = createdAt;
+            this.heartCnt = heartCnt;
+            this.commentCnt = commentCnt;
+            this.isHeart = isHeart;
+            this.isScrap = isScrap;
+        }
+    }
+
+    @Getter
+    @Setter
+    public static class CommentListDto {
+        private UUID commentId;
+        private String profileUrl;
+        private String nickname;
+        private String content;
+        private LocalDateTime createdAt;
+        private UUID parentId;
+
+        @QueryProjection
+        public CommentListDto(UUID commentId, String profileUrl, String nickname, String content, LocalDateTime createdAt, UUID parentId) {
+            this.commentId = commentId;
+            this.profileUrl = profileUrl;
+            this.nickname = nickname;
+            this.content = content;
+            this.createdAt = createdAt;
+            this.parentId = parentId;
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class BoardDetailResponse {
+        private UUID boardId;
+        private String profileUrl;
+        private String nickname;
+        private String categoryName;
+        private String content;
+        private String createdAt;
+        private Long heartCnt;
+        private Long commentCnt;
+        private Long isHeart;
+        private Long isScrap;
+        private List<BoardDetailCommentResponse> commentList;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class BoardDetailCommentResponse {
+        private UUID commentId;
+        private String profileUrl;
+        private String nickname;
+        private String content;
+        private String createdAt;
+        private List<BoardDetailCommentResponse> list;
+    }
+
+    @Getter
     @NoArgsConstructor
     public static class CommentRequest {
         private UUID parentId;

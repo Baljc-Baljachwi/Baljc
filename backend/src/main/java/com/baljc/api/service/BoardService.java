@@ -17,4 +17,5 @@ public interface BoardService {
     void updateHeart(UUID boardId, BoardDto.HeartRequest heartRequest);
     void updateScrap(UUID boardId, BoardDto.ScrapRequest scrapRequest);
     List<BoardDto.BoardListResponse> getBoardList(UUID categoryId, Long index);
+    BoardDto.BoardDetailResponse getBoardDetail(UUID boardId);
 }

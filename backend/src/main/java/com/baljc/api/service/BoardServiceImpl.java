@@ -17,10 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -214,6 +211,95 @@ public class BoardServiceImpl implements BoardService {
                             board.getHeartCnt(),
                             board.getCommentCnt());
                 }).collect(Collectors.toList());
+
+        return response;
+    }
+
+    @Override
+    public BoardDto.BoardDetailResponse getBoardDetail(UUID boardId) {
+        Member member = memberService.getMemberByAuthentication();
+        BoardDto.BoardDetailDto boardDetail = boardRepositorySupport.getBoardDetail(boardId, member);
+
+        List<BoardDto.CommentListDto> commentList = boardRepositorySupport.getCommentList(boardId);
+        List<BoardDto.BoardDetailCommentResponse> commentResponse = new ArrayList<>();
+        for (BoardDto.CommentListDto commentListDto : commentList) {
+            String date = "";
+
+            Long minutes = ChronoUnit.MINUTES.between(commentListDto.getCreatedAt(), LocalDateTime.now());
+            Long hours = ChronoUnit.HOURS.between(commentListDto.getCreatedAt(), LocalDateTime.now());
+            Long days = ChronoUnit.DAYS.between(commentListDto.getCreatedAt(), LocalDateTime.now());
+
+            String dayFormat = commentListDto.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+            if (minutes < 60) {
+                date = minutes + "분전";
+            } else if (hours < 24) {
+                date = hours + "시간전";
+            } else if (days < 7) {
+                date = days + "일전";
+            } else {
+                date = dayFormat;
+            }
+
+            if (commentListDto.getParentId() == null) {
+                commentResponse.add(new BoardDto.BoardDetailCommentResponse(
+                        commentListDto.getCommentId(),
+                        commentListDto.getProfileUrl(),
+                        commentListDto.getNickname(),
+                        commentListDto.getContent(),
+                        date,
+                        new ArrayList<>()
+                ));
+            } else {
+                for (int i = 0; i < commentResponse.size(); i++) {
+                    BoardDto.BoardDetailCommentResponse comment = commentResponse.get(i);
+                    if (comment.getCommentId().equals(commentListDto.getParentId())) {
+                        comment.getList().add(
+                                new BoardDto.BoardDetailCommentResponse(
+                                        commentListDto.getCommentId(),
+                                        commentListDto.getProfileUrl(),
+                                        commentListDto.getNickname(),
+                                        commentListDto.getContent(),
+                                        date,
+                                        null
+                        ));
+                        break;
+                    }
+                }
+            }
+        }
+
+        String date = "";
+
+        Long minutes = ChronoUnit.MINUTES.between(boardDetail.getCreatedAt(), LocalDateTime.now());
+        Long hours = ChronoUnit.HOURS.between(boardDetail.getCreatedAt(), LocalDateTime.now());
+        Long days = ChronoUnit.DAYS.between(boardDetail.getCreatedAt(), LocalDateTime.now());
+
+        String dayFormat = boardDetail.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+        if (minutes < 60) {
+            date = minutes + "분전";
+        } else if (hours < 24) {
+            date = hours + "시간전";
+        } else if (days < 7) {
+            date = days + "일전";
+        } else {
+            date = dayFormat;
+        }
+
+        BoardDto.BoardDetailResponse response = new BoardDto.BoardDetailResponse(
+                    boardDetail.getBoardId(),
+                    boardDetail.getProfileUrl(),
+                    boardDetail.getNickname(),
+                    boardDetail.getCategoryName(),
+                    boardDetail.getContent(),
+                    date,
+                    boardDetail.getHeartCnt(),
+                    boardDetail.getCommentCnt(),
+                    boardDetail.getIsHeart(),
+                    boardDetail.getIsScrap(),
+                    commentResponse
+                );
 
         return response;
     }
