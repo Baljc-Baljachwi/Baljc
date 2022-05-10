@@ -38,13 +38,17 @@ public class Member {
     private LocalDateTime deletedAt;
     private Double latitude;
     private Double longitude;
-    private String dong;
+    private String depth1;
+    private String depth2;
+    private String depth3;
     @CreatedDate
     private LocalDateTime createdAt;
 
     @Builder
-    public Member(String kakaoId, String fcmToken, String email, String nickname, String profileUrl, Character salaryType,
-                  Integer salary, Integer workingHours, Integer budget, Character surveyedYn, Double latitude, Double longitude, String dong) {
+    public Member(String kakaoId, String fcmToken, String email, String nickname, String profileUrl,
+                  Character salaryType, Integer salary, Integer workingHours, Integer budget,
+                  Character surveyedYn, LocalDateTime deletedAt, Double latitude, Double longitude,
+                  String depth1, String depth2, String depth3) {
         this.kakaoId = kakaoId;
         this.fcmToken = fcmToken;
         this.email = email;
@@ -55,9 +59,12 @@ public class Member {
         this.workingHours = workingHours;
         this.budget = budget;
         this.surveyedYn = surveyedYn;
+        this.deletedAt = deletedAt;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.dong = dong;
+        this.depth1 = depth1;
+        this.depth2 = depth2;
+        this.depth3 = depth3;
     }
 
     @OneToMany(mappedBy = "member")
@@ -94,7 +101,9 @@ public class Member {
         this.surveyedYn = null;
         this.latitude = null;
         this.longitude = null;
-        this.dong = null;
+        this.depth1 = null;
+        this.depth2 = null;
+        this.depth3 = null;
         this.createdAt = null;
         this.deletedAt = LocalDateTime.now();
     }
@@ -107,7 +116,9 @@ public class Member {
         this.budget = registerRequest.getBudget();
         this.latitude = registerRequest.getLatitude();
         this.longitude = registerRequest.getLongitude();
-        this.dong = registerRequest.getDong();
+        this.depth1 = registerRequest.getDepth1();
+        this.depth2 = registerRequest.getDepth2();
+        this.depth3 = registerRequest.getDepth3();
         if (this.surveyedYn == 'N') this.surveyedYn = 'Y';
     }
 

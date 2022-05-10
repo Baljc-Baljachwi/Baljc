@@ -35,7 +35,9 @@ public class MemberDto {
         @Min(value = -180, message = "올바른 예산의 범위(-180이상 180이하)가 아닙니다.")
         @Max(value = 180, message = "올바른 예산의 범위(-180이상 180이하)가 아닙니다.")
         private Double longitude;
-        private String dong;
+        private String depth1;
+        private String depth2;
+        private String depth3;
     }
 
     @Getter
@@ -56,6 +58,8 @@ public class MemberDto {
         private Integer budget;
         private Double latitude;
         private Double longitude;
-        private String dong;
+        private String depth1;
+        private String depth2;
+        private String depth3;
     }
 }

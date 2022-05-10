@@ -208,10 +208,9 @@ public class MemberServiceImpl implements MemberService {
     public MemberDto.Response getMemberInfoByAuthentication() {
         Member member = getMemberByAuthentication();
         return new MemberDto.Response(member.getNickname(), member.getProfileUrl(),
-                member.getSalaryType(), member.getSalary(),
-                member.getWorkingHours(), member.getBudget(),
-                member.getLatitude(), member.getLongitude(),
-                member.getDong());
+                member.getSalaryType(), member.getSalary(), member.getWorkingHours(),
+                member.getBudget(), member.getLatitude(), member.getLongitude(),
+                member.getDepth1(), member.getDepth2(), member.getDepth3());
     }
 
     @Override
