@@ -24,6 +24,7 @@ public class Comment {
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(columnDefinition = "BINARY(16)")
     private UUID commentId;
+    private String content;
     private Character deletedYn;
     @CreatedDate
     private LocalDateTime createdAt;
@@ -39,7 +40,8 @@ public class Comment {
     private Comment comment;
 
     @Builder
-    public Comment(Character deletedYn, Member member, Board board, Comment comment) {
+    public Comment(String content, Character deletedYn, Member member, Board board, Comment comment) {
+        this.content = content;
         this.deletedYn = deletedYn;
         this.member = member;
         this.board = board;
