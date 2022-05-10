@@ -433,8 +433,8 @@ export default function ProfileModify() {
                   maxLength: { value: 12, message: "2 ~ 12자로 입력해주세요" },
                   minLength: { value: 2, message: "2 ~ 12자로 입력해주세요" },
                   pattern: {
-                    value: /^[0-9a-zA-Zㄱ-힣]*$/,
-                    message: "공백 및 특수문자를 포함할 수 없습니다",
+                    value: /^[0-9a-zA-Zㄱ-ㅎ가-힣]*$/,
+                    message: "올바른 닉네임 형식(한글/영문/숫자)이 아닙니다.",
                   },
                 })}
               />
