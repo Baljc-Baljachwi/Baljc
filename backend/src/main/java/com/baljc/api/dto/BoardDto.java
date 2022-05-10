@@ -98,6 +98,7 @@ public class BoardDto {
     @Setter
     public static class BoardDetailDto {
         private UUID boardId;
+        private UUID memberId;
         private String profileUrl;
         private String nickname;
         private String categoryName;
@@ -109,8 +110,9 @@ public class BoardDto {
         private Long isScrap;
 
         @QueryProjection
-        public BoardDetailDto(UUID boardId, String profileUrl, String nickname, String categoryName, String content, LocalDateTime createdAt, Long heartCnt, Long commentCnt, Long isHeart, Long isScrap) {
+        public BoardDetailDto(UUID boardId, UUID memberId, String profileUrl, String nickname, String categoryName, String content, LocalDateTime createdAt, Long heartCnt, Long commentCnt, Long isHeart, Long isScrap) {
             this.boardId = boardId;
+            this.memberId = memberId;
             this.profileUrl = profileUrl;
             this.nickname = nickname;
             this.categoryName = categoryName;
@@ -127,20 +129,24 @@ public class BoardDto {
     @Setter
     public static class CommentListDto {
         private UUID commentId;
+        private UUID memberId;
         private String profileUrl;
         private String nickname;
         private String content;
         private LocalDateTime createdAt;
         private UUID parentId;
+        private Character deletedYn;
 
         @QueryProjection
-        public CommentListDto(UUID commentId, String profileUrl, String nickname, String content, LocalDateTime createdAt, UUID parentId) {
+        public CommentListDto(UUID commentId, UUID memberId, String profileUrl, String nickname, String content, LocalDateTime createdAt, UUID parentId, Character deletedYn) {
             this.commentId = commentId;
+            this.memberId = memberId;
             this.profileUrl = profileUrl;
             this.nickname = nickname;
             this.content = content;
             this.createdAt = createdAt;
             this.parentId = parentId;
+            this.deletedYn = deletedYn;
         }
     }
 
@@ -148,6 +154,7 @@ public class BoardDto {
     @AllArgsConstructor
     public static class BoardDetailResponse {
         private UUID boardId;
+        private UUID memberId;
         private String profileUrl;
         private String nickname;
         private String categoryName;
@@ -157,6 +164,7 @@ public class BoardDto {
         private Long commentCnt;
         private Long isHeart;
         private Long isScrap;
+        private List<String> imgUrlList;
         private List<BoardDetailCommentResponse> commentList;
     }
 
@@ -166,10 +174,12 @@ public class BoardDto {
     @AllArgsConstructor
     public static class BoardDetailCommentResponse {
         private UUID commentId;
+        private UUID memberId;
         private String profileUrl;
         private String nickname;
         private String content;
         private String createdAt;
+        private Character deletedYn;
         private List<BoardDetailCommentResponse> list;
     }
 
