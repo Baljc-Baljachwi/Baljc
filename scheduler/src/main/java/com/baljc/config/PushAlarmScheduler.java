@@ -34,7 +34,7 @@ public class PushAlarmScheduler {
     @Scheduled(cron = "0 * * * * *")
     @Transactional(readOnly = true)
     public void scheduleByMinute() throws FirebaseMessagingException {
-        LocalTime now = LocalTime.now(ZoneId.of("Asia/Seoul"));
+        LocalTime now = LocalTime.now();
         log.debug("scheduleByMinute - now: {}", now);
         List<PushAlarm> pushAlarmList = pushAlarmRepository.findAll()
                 .stream()
