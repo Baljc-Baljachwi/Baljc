@@ -8,7 +8,7 @@ import Header from "../../components/common/Header";
 import Icon from "../../components/common/Icon";
 import ButtonBottom from "components/common/ButtonBottom";
 import ButtonTrashCan from "components/common/ButtonTrashCan";
-import { getBoardsCategories } from "api/community";
+import { getBoardsCategories, postBoards } from "api/community";
 
 const FormContainer = styled.form`
   display: flex;
@@ -23,7 +23,6 @@ const FlexContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   line-height: 1.8rem;
-  padding: 0 0 2rem 0;
 `;
 
 const Typography = styled.div<{
@@ -63,13 +62,13 @@ const ImageContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 2rem;
-  padding-bottom: 2rem;
 `;
 
 const ImageWrapper = styled.div`
   position: relative;
   height: 9rem;
   width: 9rem;
+  margin-top: 3rem;
   .image {
     object-fit: contain;
   }
@@ -138,8 +137,11 @@ const ImageButtonLabel = styled.label`
   align-items: center;
   justify-content: center;
 `;
-
-// export type CategoryType = "E" | "C" | "N";
+const MutedText = styled.p`
+  font-size: 1.4rem;
+  color: #a7a7a7;
+  padding: 1rem 0;
+`;
 
 interface IBoardCategory {
   boardCategoryId: string;
@@ -147,19 +149,12 @@ interface IBoardCategory {
   name: string;
 }
 
-// interface CommunityProps {
-//   category: CategoryType;
-//   content: string | null;
-//   image?: string | null;
-// }
-
 export default function CommunityCreateForm() {
   const router = useRouter();
 
   // 새로고침 hydration error 해결
   const [ready, setReady] = useState(false);
-  const initForm = true;
-  const type = "E";
+  const initForm = false;
 
   const {
     register,
@@ -170,10 +165,11 @@ export default function CommunityCreateForm() {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      category: type === "E" ? "C" : "N",
+      category: "",
       content: "",
     },
   });
+
   const category = watch("category");
   const [imagePreviewList, setImagePreviewList] = useState<string[]>([]);
   const [imageFileList, setImageFileList] = useState<Blob[]>([]);
@@ -184,27 +180,38 @@ export default function CommunityCreateForm() {
     // if (!initForm || !initForm.accountbookId) {
     //   return;
     // }
-    console.log(imageFileList);
-
     // 게시글 삭제 API 추가하기
   };
+
+  function validFile(file: any) {
+    if (file.size > 2097152) {
+      return false;
+    }
+    const extensions = ["png", "jpeg", "jpg", "bmp"];
+    const fileExt = file.name.split(".").at(-1);
+    return extensions.includes(fileExt);
+  }
 
   function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
     console.log("image upload");
     console.log(event.target.files);
     const files = event.target.files;
     if (files && files.length > 0) {
+      const file = files[0];
+      if (!validFile(file)) {
+        confirm("2MB 이하의 이미지만 업로드 가능합니다.");
+        return;
+      }
       if (imageFileList.length < 3) {
-        setImageFileList((prev) => [...prev, files[0]]);
-        setImagePreviewList((prev) => [...prev, URL.createObjectURL(files[0])]);
+        setImageFileList((prev) => [...prev, file]);
+        setImagePreviewList((prev) => [...prev, URL.createObjectURL(file)]);
       } else {
-        console.log("파일은 3개까지만 가능하지롱");
+        confirm("사진은 3개까지만 업로드 가능합니다.");
       }
     }
   }
 
   function onClickImageDeleteButton(index: number) {
-    console.log(index, imagePreviewList[index]);
     setImagePreviewList((prev) => [
       ...prev.slice(0, index),
       ...prev.slice(index + 1, prev.length),
@@ -216,14 +223,13 @@ export default function CommunityCreateForm() {
   }
 
   function onClickSubmitButton(data: any) {
-    console.log(data);
-    // 게시글 작성 API 추가하기
-
     const boardInfo = {
       categoryId: category,
       content: data.content,
-      place: "",
     };
+
+    console.log("data: ", data);
+    console.log("boardInfo: ", boardInfo);
 
     const formData = new FormData();
     imageFileList.forEach((file) => {
@@ -233,30 +239,38 @@ export default function CommunityCreateForm() {
       "boardInfo",
       new Blob([JSON.stringify(boardInfo)], { type: "application/json" })
     );
-    console.log(formData);
+
+    postBoards(formData)
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.code === 1701) {
+          console.log(res.data.message);
+          router.push("/community");
+        } else {
+          console.log(res.data.message);
+        }
+      })
+      .catch((err) => console.error(err));
   }
 
   useEffect(() => {
-    // 생성 페이지일 때만
-    if (!initForm) {
-      setValue("category", type === "E" ? "C" : "N");
-    }
-  }, [type, initForm, setValue]);
-
-  useEffect(() => {});
-
-  useEffect(() => {
     setReady(true);
+    // 카테고리 가져오기
     getBoardsCategories().then((res) => {
       console.log(res.data);
       if (res.data.code === 1700) {
-        console.log(res.data.data);
-        setBoardCategories(res.data.data);
+        const { data } = res.data;
+        const withOutAll = data.filter(
+          (category: IBoardCategory) => category.name !== "전체보기"
+        );
+        setBoardCategories(withOutAll);
+        setValue("category", withOutAll[0].boardCategoryId);
       } else {
         console.log(res.data.message);
       }
     });
-  }, []);
+  }, [setValue]);
+
   if (!ready) {
     return null;
   }
@@ -311,13 +325,18 @@ export default function CommunityCreateForm() {
                 <Icon
                   mode="fas"
                   icon="circle-xmark"
-                  color="#000000"
+                  color="#ff0000"
                   size="20px"
                 />
               </IconContainer>
             </ImageWrapper>
           ))}
         </ImageContainer>
+        <MutedText>
+          2MB 이하의 사진 최대 3개까지 업로드 가능합니다. (
+          {imageFileList.length}
+          /3)
+        </MutedText>
 
         <InputDiv isError={!!errors.content}>
           <StyledTextarea
@@ -338,12 +357,13 @@ export default function CommunityCreateForm() {
               <Icon mode="fas" icon="image" size="3rem" color="#8E8E8E" />
             </ImageButtonLabel>
             <DisplayNoneInput
+              onChange={handleImageUpload}
               type="file"
               id="image"
               accept="image/png, image/jpeg, image/bmp"
               name="image"
             />
-            <ButtonBottom label="확인" type="submit"></ButtonBottom>
+            <ButtonBottom label="완료" type="submit" />
           </ButtonContainer>
         ) : (
           <ButtonContainer>
