@@ -1,17 +1,20 @@
 package com.baljc.service;
 
+import com.baljc.dto.FirebaseCredential;
 import com.baljc.dto.Notification;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,27 +23,38 @@ import java.util.List;
 @Service
 public class NotificationServiceImpl implements NotificationService {
 
-    @Value("${firebase.key.path}")
-    private String FIREBASE_KEY_PATH;
-
-    @Value("${firebase.key.scope}")
-    private String FIREBASE_KEY_SCOPE;
-
+    private final FirebaseCredential firebaseCredential;
+    private final String scope;
     private final int MAX_REGISTRATION_TOKENS = 500;
 
+    public NotificationServiceImpl(
+            @Value("${firebase.credential.type}") String type,
+            @Value("${firebase.credential.project_id}") String project_id,
+            @Value("${firebase.credential.private_key_id}") String private_key_id,
+            @Value("${firebase.credential.private_key}") String private_key,
+            @Value("${firebase.credential.client_email}") String client_email,
+            @Value("${firebase.credential.client_id}") String client_id,
+            @Value("${firebase.credential.auth_uri}") String auth_uri,
+            @Value("${firebase.credential.token_uri}") String token_uri,
+            @Value("${firebase.credential.auth_provider_x509_cert_url}") String auth_provider_x509_cert_url,
+            @Value("${firebase.credential.client_x509_cert_url}") String client_x509_cert_url,
+            @Value("${firebase.scope}") String scope
+    ) {
+        this.firebaseCredential = new FirebaseCredential(type, project_id, private_key_id, private_key, client_email,
+                client_id, auth_uri, token_uri, auth_provider_x509_cert_url, client_x509_cert_url);
+        this.scope = scope;
+    }
+
     @PostConstruct
-    public void init() {
-        try {
-            FirebaseOptions options = FirebaseOptions.builder()
-                    .setCredentials(GoogleCredentials
-                            .fromStream(new FileInputStream(FIREBASE_KEY_PATH))
-                            .createScoped(FIREBASE_KEY_SCOPE))
-                    .build();
-            FirebaseApp.initializeApp(options);
-        } catch (IOException e) {
-            log.debug("Firebase private key가 존재하지 않거나 유효하지 않습니다.");
-            throw new RuntimeException(e.getMessage());
-        }
+    public void init() throws IOException {
+        String jsonString = new ObjectMapper().writeValueAsString(firebaseCredential)
+                .replaceAll("\\\\n", "\n");
+        FirebaseOptions options = FirebaseOptions.builder()
+                .setCredentials(GoogleCredentials
+                        .fromStream(IOUtils.toInputStream(jsonString, StandardCharsets.UTF_8))
+                        .createScoped(scope))
+                .build();
+        FirebaseApp.initializeApp(options);
     }
 
     @Override
