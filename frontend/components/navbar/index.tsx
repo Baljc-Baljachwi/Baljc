@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Icon from "../common/Icon";
 
@@ -32,6 +33,12 @@ const Item = styled.div`
 
 export default function NavBar() {
   const router = useRouter();
+  const [rootPathname, setRootPathname] = useState<string>("/");
+  useEffect(() => {
+    const root = router.pathname.split("/")[1];
+    setRootPathname(root);
+  }, [router]);
+
   return (
     <Container>
       <Item onClick={() => router.push("/community")}>
@@ -39,9 +46,9 @@ export default function NavBar() {
           mode="fas"
           icon="comments"
           size="2rem"
-          color={router.pathname === "/community" ? undefined : "#cbcbcb"}
+          color={rootPathname === "community" ? undefined : "#cbcbcb"}
         />
-        <div className={router.pathname === "/community" ? "" : "active"}>
+        <div className={rootPathname === "community" ? "" : "active"}>
           커뮤니티
         </div>
       </Item>
@@ -50,20 +57,18 @@ export default function NavBar() {
           mode="fas"
           icon="sack-dollar"
           size="2rem"
-          color={router.pathname === "/finance" ? undefined : "#cdcdcd"}
+          color={rootPathname === "finance" ? undefined : "#cdcdcd"}
         />
-        <div className={router.pathname === "/finance" ? "" : "active"}>
-          가계부
-        </div>
+        <div className={rootPathname === "finance" ? "" : "active"}>가계부</div>
       </Item>
-      <Item onClick={() => router.push("/calendar")}>
+      <Item onClick={() => router.push("calendar")}>
         <Icon
           mode="fas"
           icon="calendar-days"
           size="2rem"
-          color={router.pathname === "/calendar" ? undefined : "#cdcdcd"}
+          color={rootPathname === "calendar" ? undefined : "#cdcdcd"}
         />
-        <div className={router.pathname === "/calendar" ? "" : "active"}>
+        <div className={rootPathname === "calendar" ? "" : "active"}>
           캘린더
         </div>
       </Item>
@@ -72,18 +77,18 @@ export default function NavBar() {
           mode="fas"
           icon="clipboard-check"
           size="2rem"
-          color={router.pathname === "/work" ? undefined : "#cdcdcd"}
+          color={rootPathname === "work" ? undefined : "#cdcdcd"}
         />
-        <div className={router.pathname === "/work" ? "" : "active"}>할 일</div>{" "}
+        <div className={rootPathname === "work" ? "" : "active"}>할 일</div>{" "}
       </Item>
       <Item onClick={() => router.push("/mypage")}>
         <Icon
           mode="fas"
           icon="user"
           size="2rem"
-          color={router.pathname === "/mypage" ? undefined : "#cdcdcd"}
+          color={rootPathname === "mypage" ? undefined : "#cdcdcd"}
         />
-        <div className={router.pathname === "/mypage" ? "" : "active"}>
+        <div className={rootPathname === "mypage" ? "" : "active"}>
           마이페이지
         </div>
       </Item>
