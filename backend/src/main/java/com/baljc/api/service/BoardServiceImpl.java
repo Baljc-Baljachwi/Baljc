@@ -74,7 +74,7 @@ public class BoardServiceImpl implements BoardService {
                     .boardCategory(category)
                     .latitude(member.getLatitude())
                     .longitude(member.getLongitude())
-                    .dong(member.getDong())
+                    .dong(member.getDepth3())
                     .deletedYn('N')
                     .build();
         boardRepository.save(board);
