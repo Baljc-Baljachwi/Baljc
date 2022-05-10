@@ -8,7 +8,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper";
 
-import Icon from "../../components/common/Icon";
+import Icon from "../../common/Icon";
 
 const ModalOverlay = styled.div<{ visible: boolean }>`
   box-sizing: border-box;
