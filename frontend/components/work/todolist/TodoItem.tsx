@@ -104,8 +104,6 @@ export default function TodoItem({
 
   const todoRef = useRef() as React.MutableRefObject<HTMLSpanElement>;
 
-  const validationFunc = () => {};
-
   const todoComplete = (e: any) => {
     if (completedYn === "N") {
       completedTodos(todoId, { completedYn: "Y" })
@@ -243,7 +241,6 @@ export default function TodoItem({
                 isEdit={isClicked} // false일 때, input 밑줄 생기게
                 isError={isError}
                 onKeyPress={onEnter}
-                // readOnly={isClicked} // false일 때, 수정 가능
                 onFocus={handleFocus}
                 onBlur={handleBlur}
                 viewOnly={viewOnly}
