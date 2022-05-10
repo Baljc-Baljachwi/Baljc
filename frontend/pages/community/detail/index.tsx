@@ -80,6 +80,41 @@ const CommentContainer = styled.div`
   padding: 2rem;
 `;
 
+const InputContainer = styled.div`
+  padding: 1rem 2rem;
+  background-color: #ffffff;
+  box-shadow: 0 -1px 1px #00000014;
+  border: none;
+  position: fixed;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: 8fr 1fr;
+  z-index: 10000;
+  height: 5.6rem;
+`;
+
+const IconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: end;
+`;
+
+const Input = styled.input`
+  display: flex;
+  background-color: #f2f3f6;
+  border-radius: 30px;
+  border: none;
+  outline: none;
+  padding: 0 2rem;
+  font-size: 1.6rem;
+  ::placeholder {
+    /* outline: none; */
+    color: #aeb1b9;
+  }
+`;
+
 export default function CommunityDetail() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -88,8 +123,14 @@ export default function CommunityDetail() {
     "/assets/img/mypage/avatar/avatar_member4.png",
     "/assets/img/mypage/avatar/avatar_member6.png",
   ];
+  const [isFocused, setIsFocused] = useState(false);
+
   const onClickImage = () => {
     setOpen((prev) => !prev);
+  };
+
+  const HandleFocus = () => {
+    setIsFocused(true);
   };
 
   return (
@@ -170,6 +211,18 @@ export default function CommunityDetail() {
           댓글
         </Typography>
         <CommentCard />
+        <InputContainer>
+          <Input placeholder="댓글을 입력해주세요." onFocus={HandleFocus} />
+          <IconWrapper>
+            {isFocused ? (
+              <Typography fs="1.6rem" style={{ lineHeight: "16px" }}>
+                등록
+              </Typography>
+            ) : (
+              <Icon mode="fas" icon="keyboard" size="25px" color="3d3d3d" />
+            )}
+          </IconWrapper>
+        </InputContainer>
       </CommentContainer>
     </>
   );
