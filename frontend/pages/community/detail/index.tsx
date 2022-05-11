@@ -2,6 +2,7 @@ import Image from "next/image";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { useRecoilValue } from "recoil";
 
 import Header from "../../../components/common/Header";
 import Icon from "../../../components/common/Icon";
@@ -12,6 +13,7 @@ import { getBoardsDetail } from "api/community";
 import defaultProfileImage from "public/assets/img/mypage/avatar/default_profile.png";
 import { IPost, IComment } from "types";
 import axios from "axios";
+import { memberIdState } from "atoms/atoms";
 
 const Container = styled.div`
   display: flex;
@@ -121,22 +123,21 @@ const Input = styled.input`
   }
 `;
 
+type imgInfo = { boardImgId: string; imgUrl: string };
+
 interface IPostDetail extends IPost {
   memberId: string;
   nickname: string;
   profileUrl: string | null;
   isHeart: 0 | 1;
   isScrap: 0 | 1;
+  imgInfoList: imgInfo[];
 }
 
 export default function CommunityDetail() {
   const router = useRouter();
+  const memberId = useRecoilValue(memberIdState);
   const [open, setOpen] = useState(false); // 이미지 확대 모달
-  const imageList = [
-    "/assets/img/mypage/avatar/avartar_h.jpg",
-    "/assets/img/mypage/avatar/avatar_member4.png",
-    "/assets/img/mypage/avatar/avatar_member6.png",
-  ];
   const [isFocused, setIsFocused] = useState(false); // 댓글 입력창
   const [boardDetail, setBoardDetail] = useState<IPostDetail>(
     {} as IPostDetail
@@ -169,7 +170,19 @@ export default function CommunityDetail() {
 
   return (
     <>
-      <Header label="" onClickBackButton={() => router.push("/community")} />
+      <Header
+        label=""
+        icon={memberId === boardDetail.memberId ? "pencil" : undefined}
+        onClickBackButton={() => router.push("/community")}
+        onClickRightButton={
+          memberId === boardDetail.memberId
+            ? () =>
+                router.push("/community/communityEditform", {
+                  query: boardDetail.boardId,
+                })
+            : () => {}
+        }
+      />
       <Container>
         <div>
           <Tag>{boardDetail.categoryName}</Tag>
@@ -188,7 +201,7 @@ export default function CommunityDetail() {
           />
           <InfoWrapper>
             <Typography fs="1.6rem" fw="600">
-              {boardDetail.creator}
+              {boardDetail.nickname}
             </Typography>
             <Typography fs="1.4rem" color="#3D3D3D">
               {boardDetail.createdAt}
