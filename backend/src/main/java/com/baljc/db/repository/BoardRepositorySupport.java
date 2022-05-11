@@ -70,7 +70,7 @@ public class BoardRepositorySupport {
         List<String> response = jpaQueryFactory.select(qBoardImg.imgUrl)
                 .from(qBoardImg)
                 .leftJoin(qBoard).on(qBoardImg.board.eq(qBoard))
-                .where(qBoard.boardId.eq(boardId))
+                .where(qBoard.boardId.eq(boardId).and(qBoardImg.deletedYn.eq('N')))
                 .fetch();
 
         return response;
