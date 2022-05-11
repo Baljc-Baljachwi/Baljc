@@ -44,9 +44,9 @@ export default function NavBar() {
     <Container>
       <Item onClick={() => router.push("/community")}>
         <Icon
-          mode='fas'
-          icon='comments'
-          size='2rem'
+          mode="fas"
+          icon="comments"
+          size="2rem"
           color={rootPathname === "community" ? undefined : "#cbcbcb"}
         />
         <div className={rootPathname === "community" ? "" : "active"}>
@@ -55,9 +55,9 @@ export default function NavBar() {
       </Item>
       <Item onClick={() => router.push("/calendar")}>
         <Icon
-          mode='fas'
-          icon='calendar-days'
-          size='2rem'
+          mode="fas"
+          icon="calendar-days"
+          size="2rem"
           color={rootPathname === "calendar" ? undefined : "#cdcdcd"}
         />
         <div className={rootPathname === "calendar" ? "" : "active"}>
@@ -66,27 +66,27 @@ export default function NavBar() {
       </Item>
       <Item onClick={() => router.push("/finance")}>
         <Icon
-          mode='fas'
-          icon='sack-dollar'
-          size='2rem'
+          mode="fas"
+          icon="sack-dollar"
+          size="2rem"
           color={rootPathname === "finance" ? undefined : "#cdcdcd"}
         />
         <div className={rootPathname === "finance" ? "" : "active"}>가계부</div>
       </Item>
       <Item onClick={() => router.push("/work")}>
         <Icon
-          mode='fas'
-          icon='clipboard-check'
-          size='2rem'
+          mode="fas"
+          icon="clipboard-check"
+          size="2rem"
           color={rootPathname === "work" ? undefined : "#cdcdcd"}
         />
         <div className={rootPathname === "work" ? "" : "active"}>할 일</div>{" "}
       </Item>
       <Item onClick={() => router.push("/mypage")}>
         <Icon
-          mode='fas'
-          icon='user'
-          size='2rem'
+          mode="fas"
+          icon="user"
+          size="2rem"
           color={rootPathname === "mypage" ? undefined : "#cdcdcd"}
         />
         <div className={rootPathname === "mypage" ? "" : "active"}>

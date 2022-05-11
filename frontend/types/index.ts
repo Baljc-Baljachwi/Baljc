@@ -91,3 +91,15 @@ export interface IComment {
   deletedYn: YNType;
   list: IComment[] | null;
 }
+
+export interface IMyBoard {
+  boardId: string;
+  categoryName: string;
+  content: string;
+  createdAt: string;
+  creator: string;
+  dong?: string;
+  imgUrlList: Array<string>;
+  heartCnt: number;
+  commentCnt: number;
+}
