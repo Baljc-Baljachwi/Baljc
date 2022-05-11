@@ -174,19 +174,52 @@ export default function CommunityDetail() {
     if (boardId) {
       getBoardsDetail(boardId as string)
         .then((res) => {
-          // console.log(res.data);
+          console.log(res.data);
           if (res.data.code === 1703) {
             // console.log(res.data.data);
-            setBoardDetail(res.data.data);
+            const { data } = res.data;
+            const {
+              boardId,
+              categoryName,
+              commentCnt,
+              content,
+              createdAt,
+              heartCnt,
+              imgUrlList,
+              isHeart,
+              isScrap,
+              memberId,
+              nickname,
+              profileUrl,
+            } = data;
+
+            setBoardDetail({
+              boardId,
+              categoryName,
+              commentCnt,
+              content,
+              createdAt,
+              heartCnt,
+              imgUrlList: imgUrlList.map((obj: any) => obj.imgUrl),
+              isHeart,
+              isScrap,
+              memberId,
+              nickname,
+              profileUrl,
+              imgInfoList: imgUrlList,
+            });
             setCommentList(res.data.data.commentList);
           }
         })
         .catch((err) => console.error(err));
     }
   }, [router.query.boardId]);
+  console.log("boardDetail: ", boardDetail);
+  console.log(memberId);
 
   return (
     <>
+      {/* 사용자가 게시글 작성자인 경우 구분 */}
       <Header
         label=""
         icon={memberId === boardDetail.memberId ? "pencil" : undefined}
@@ -194,8 +227,9 @@ export default function CommunityDetail() {
         onClickRightButton={
           memberId === boardDetail.memberId
             ? () =>
-                router.push("/community/communityEditform", {
-                  query: boardDetail.boardId,
+                router.push({
+                  pathname: "/community/communityEditForm",
+                  query: { boardId: boardDetail.boardId },
                 })
             : () => {}
         }

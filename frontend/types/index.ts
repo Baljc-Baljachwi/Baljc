@@ -74,7 +74,7 @@ export interface IPost {
   categoryName: string;
   content: string;
   createdAt: string;
-  creator: string;
+  creator?: string;
   dong?: string;
   imgUrlList: Array<string>;
   heartCnt: number;

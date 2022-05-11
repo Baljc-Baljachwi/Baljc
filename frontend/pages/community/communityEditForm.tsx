@@ -8,9 +8,11 @@ import { getBoardsDetail } from "api/community";
 import { IPost, IComment } from "types";
 import { memberIdState } from "atoms/atoms";
 
+type ImageInfo = { imgUrl: string; boardImgId: string };
+
 interface IBoardContent {
   content: string;
-  imgInfoList: string[];
+  imgInfoList: ImageInfo[];
 }
 
 export default function CommunityEditForm() {
@@ -32,10 +34,17 @@ export default function CommunityEditForm() {
         if (data.code === 1703) {
           // 창작자 아니면 인가 거부
           if (data.data.memberId !== memberId) {
-            router.push({ pathname: "/community/detail", query: { boardId } });
+            console.log("저리가", memberId, data.data);
+            router.push({
+              pathname: "/community/detail",
+              query: { boardId },
+            });
             return;
           } else {
-            setBoardDetail(data.data);
+            setBoardDetail({
+              content: data.data.content,
+              imgInfoList: data.data.imgUrlList,
+            });
           }
         }
       } catch (err) {

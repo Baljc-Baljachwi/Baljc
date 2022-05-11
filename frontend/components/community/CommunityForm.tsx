@@ -7,7 +7,7 @@ import Image from "next/image";
 import Icon from "../../components/common/Icon";
 import ButtonBottom from "components/common/ButtonBottom";
 import ButtonTrashCan from "components/common/ButtonTrashCan";
-import { getBoardsCategories, postBoards } from "api/community";
+import { getBoardsCategories, postBoards, putBoard } from "api/community";
 
 const FormContainer = styled.form`
   display: flex;
@@ -136,6 +136,8 @@ const MutedText = styled.p`
   padding: 1rem 0;
 `;
 
+type ImageInfo = { imgUrl: string; boardImgId: string };
+
 interface IBoardCategory {
   boardCategoryId: string;
   imgUrl: string;
@@ -144,7 +146,7 @@ interface IBoardCategory {
 
 interface IBoardContent {
   content: string;
-  imgInfoList: string[];
+  imgInfoList: ImageInfo[];
 }
 
 interface CommunityFormProps {
@@ -156,8 +158,6 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
 
   // 새로고침 hydration error 해결
   const [ready, setReady] = useState(false);
-  const initForm = false;
-
   const {
     register,
     handleSubmit,
@@ -173,8 +173,9 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
   });
 
   const category = watch("category");
-  const [imagePreviewList, setImagePreviewList] = useState<string[]>([]);
+  const [imagePreviewList, setImagePreviewList] = useState<ImageInfo[]>([]);
   const [imageFileList, setImageFileList] = useState<Blob[]>([]);
+  const [deletedImageIdList, setDeletedImageIdList] = useState<string[]>([]);
   const [boardCategories, setBoardCategories] = useState<IBoardCategory[]>([]);
 
   const onClickDeleteButton = () => {
@@ -204,9 +205,12 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
         confirm("2MB 이하의 이미지만 업로드 가능합니다.");
         return;
       }
-      if (imageFileList.length < 3) {
+      if (imagePreviewList.length < 3) {
         setImageFileList((prev) => [...prev, file]);
-        setImagePreviewList((prev) => [...prev, URL.createObjectURL(file)]);
+        setImagePreviewList((prev) => [
+          ...prev,
+          { boardImgId: "", imgUrl: URL.createObjectURL(file) },
+        ]);
       } else {
         confirm("사진은 3개까지만 업로드 가능합니다.");
       }
@@ -214,6 +218,12 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
   }
 
   function onClickImageDeleteButton(index: number) {
+    if (imagePreviewList[index].boardImgId) {
+      setDeletedImageIdList((prev) => [
+        ...prev,
+        imagePreviewList[index].boardImgId,
+      ]);
+    }
     setImagePreviewList((prev) => [
       ...prev.slice(0, index),
       ...prev.slice(index + 1, prev.length),
@@ -228,6 +238,7 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
     const boardInfo = {
       categoryId: category,
       content: data.content,
+      deleteBoardImgIdList: deletedImageIdList,
     };
 
     console.log("data: ", data);
@@ -242,17 +253,34 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
       new Blob([JSON.stringify(boardInfo)], { type: "application/json" })
     );
 
-    postBoards(formData)
-      .then((res) => {
-        console.log(res.data);
-        if (res.data.code === 1701) {
-          console.log(res.data.message);
-          router.push("/community");
-        } else {
-          console.log(res.data.message);
-        }
-      })
-      .catch((err) => console.error(err));
+    if (boardContent) {
+      putBoard(router.query.boardId as string, formData)
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.code === 1704) {
+            console.log(res.data.message);
+            router.push({
+              pathname: "/community/detail",
+              query: { boardId: router.query.boardId },
+            });
+          } else {
+            console.log(res.data.message);
+          }
+        })
+        .catch((err) => console.error(err));
+    } else {
+      postBoards(formData)
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.code === 1701) {
+            console.log(res.data.message);
+            router.push("/community");
+          } else {
+            console.log(res.data.message);
+          }
+        })
+        .catch((err) => console.error(err));
+    }
   }
 
   useEffect(() => {
@@ -271,7 +299,11 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
         console.log(res.data.message);
       }
     });
-  }, [setValue]);
+    if (boardContent) {
+      setValue("content", boardContent.content);
+      setImagePreviewList(boardContent.imgInfoList);
+    }
+  }, [setValue, boardContent]);
 
   if (!ready) {
     return null;
@@ -308,11 +340,11 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
       </FlexContainer>
 
       <ImageContainer>
-        {imagePreviewList.map((imageUrl, index) => (
+        {imagePreviewList.map((imageInfo, index) => (
           <ImageWrapper key={index}>
             <Image
               className="image"
-              src={imageUrl}
+              src={imageInfo.imgUrl}
               alt=""
               layout="fill"
               style={{ borderRadius: "5px" }}
@@ -329,7 +361,8 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
         ))}
       </ImageContainer>
       <MutedText>
-        2MB 이하의 사진 최대 3개까지 업로드 가능합니다. ({imageFileList.length}
+        2MB 이하의 사진 최대 3개까지 업로드 가능합니다. (
+        {imagePreviewList.length}
         /3)
       </MutedText>
 
