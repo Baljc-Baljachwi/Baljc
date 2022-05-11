@@ -77,6 +77,17 @@ public class BoardRepositorySupport {
         return response;
     }
 
+    public List<BoardDto.BoardImgURLDto> getBoardDetailImgURLList(UUID boardId) {
+        List<BoardDto.BoardImgURLDto> response = jpaQueryFactory.select(new QBoardDto_BoardImgURLDto(qBoardImg.boardImgId, qBoardImg.imgUrl))
+                .from(qBoardImg)
+                .leftJoin(qBoard).on(qBoardImg.board.eq(qBoard))
+                .where(qBoard.boardId.eq(boardId).and(qBoardImg.deletedYn.eq('N')))
+                .orderBy(qBoardImg.createdAt.asc())
+                .fetch();
+
+        return response;
+    }
+
     public BoardDto.BoardDetailDto getBoardDetail(UUID boardId, Member member) {
         BoardDto.BoardDetailDto response = jpaQueryFactory.select(
                         new QBoardDto_BoardDetailDto(qBoard.boardId, qMember.memberId, qMember.profileUrl, qMember.nickname,

@@ -317,7 +317,7 @@ public class BoardServiceImpl implements BoardService {
             date = dayFormat;
         }
 
-        List<String> imgList = boardRepositorySupport.getImgURLList(boardId);
+        List<BoardDto.BoardImgURLDto> imgList = boardRepositorySupport.getBoardDetailImgURLList(boardId);
 
         BoardDto.BoardDetailResponse response = new BoardDto.BoardDetailResponse(
                     boardDetail.getBoardId(),

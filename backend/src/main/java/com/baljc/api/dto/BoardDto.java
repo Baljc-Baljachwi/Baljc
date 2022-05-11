@@ -59,10 +59,12 @@ public class BoardDto {
     @Getter
     @Setter
     public static class BoardImgURLDto {
+        private UUID boardImgId;
         private String imgUrl;
 
         @QueryProjection
-        public BoardImgURLDto(String imgUrl) {
+        public BoardImgURLDto(UUID boardImgId, String imgUrl) {
+            this.boardImgId = boardImgId;
             this.imgUrl = imgUrl;
         }
     }
@@ -163,7 +165,7 @@ public class BoardDto {
         private Long commentCnt;
         private Long isHeart;
         private Long isScrap;
-        private List<String> imgUrlList;
+        private List<BoardImgURLDto> imgUrlList;
         private List<BoardDetailCommentResponse> commentList;
     }
 
