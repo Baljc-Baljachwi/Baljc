@@ -70,7 +70,19 @@ public class BoardRepositorySupport {
         List<String> response = jpaQueryFactory.select(qBoardImg.imgUrl)
                 .from(qBoardImg)
                 .leftJoin(qBoard).on(qBoardImg.board.eq(qBoard))
-                .where(qBoard.boardId.eq(boardId))
+                .where(qBoard.boardId.eq(boardId).and(qBoardImg.deletedYn.eq('N')))
+                .orderBy(qBoardImg.createdAt.asc())
+                .fetch();
+
+        return response;
+    }
+
+    public List<BoardDto.BoardImgURLDto> getBoardDetailImgURLList(UUID boardId) {
+        List<BoardDto.BoardImgURLDto> response = jpaQueryFactory.select(new QBoardDto_BoardImgURLDto(qBoardImg.boardImgId, qBoardImg.imgUrl))
+                .from(qBoardImg)
+                .leftJoin(qBoard).on(qBoardImg.board.eq(qBoard))
+                .where(qBoard.boardId.eq(boardId).and(qBoardImg.deletedYn.eq('N')))
+                .orderBy(qBoardImg.createdAt.asc())
                 .fetch();
 
         return response;
@@ -103,6 +115,17 @@ public class BoardRepositorySupport {
         return response;
     }
 
+    public List<BoardImg> getDeleteImgList(UUID boardId) {
+        List<BoardImg> response = jpaQueryFactory.select(qBoardImg)
+                .from(qBoardImg)
+                .leftJoin(qBoard).on(qBoardImg.board.eq(qBoard))
+                .where(qBoard.boardId.eq(boardId).and(qBoardImg.deletedYn.eq('N')))
+                .orderBy(qBoardImg.createdAt.asc())
+                .fetch();
+
+        return response;
+    }
+
     public List<BoardDto.CommentListDto> getCommentList(UUID boardId) {
         List<BoardDto.CommentListDto> response = jpaQueryFactory.select(
                         new QBoardDto_CommentListDto(
@@ -112,6 +135,7 @@ public class BoardRepositorySupport {
                 .from(qComment)
                 .leftJoin(qMember).on(qComment.member.eq(qMember))
                 .where(qComment.board.boardId.eq(boardId))
+                .orderBy(qComment.createdAt.asc())
                 .fetch();
 
         return response;

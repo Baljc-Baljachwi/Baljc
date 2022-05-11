@@ -78,7 +78,6 @@ public class BoardServiceImpl implements BoardService {
         Board board = Board.builder()
                     .content(boardRequest.getContent())
                     .member(member)
-                    .place(boardRequest.getPlace())
                     .boardCategory(category)
                     .latitude(member.getLatitude())
                     .longitude(member.getLongitude())
@@ -97,6 +96,46 @@ public class BoardServiceImpl implements BoardService {
                         .deletedYn('N')
                         .build());
             }
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateBoard(UUID boardId, BoardDto.BoardUpdateRequest boardUpdateRequest, List<MultipartFile> files) {
+        BoardCategory category = boardCategoryRepository.getById(boardUpdateRequest.getCategoryId());
+
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new NullPointerException("해당 게시글이 존재하지 않습니다."));
+        board.updateBoard(boardUpdateRequest, category);
+
+        for (UUID uuid : boardUpdateRequest.getDeleteBoardImgIdList()) {
+            BoardImg boardImg = boardImgRepository.findById(uuid).orElseThrow(() -> new NullPointerException("해당 이미지가 존재하지 않습니다."));
+            boardImg.deleteBoardImg();
+            fileService.deleteImage(boardImg.getImgUrl());
+        }
+
+        if (files != null) {
+            for (MultipartFile multipartFile : files) {
+                String imgUrl = fileService.uploadImage(multipartFile, boardImagePath);
+
+                boardImgRepository.save(BoardImg.builder()
+                        .board(board)
+                        .imgUrl(imgUrl)
+                        .deletedYn('N')
+                        .build());
+            }
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteBoard(UUID boardId) {
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new NullPointerException("해당 게시글이 존재하지 않습니다."));
+        board.deleteBoard();
+
+        List<BoardImg> boardImgList = boardRepositorySupport.getDeleteImgList(boardId);
+        for (BoardImg bi : boardImgList) {
+            bi.deleteBoardImg();
+            fileService.deleteImage(bi.getImgUrl());
         }
     }
 
@@ -184,7 +223,9 @@ public class BoardServiceImpl implements BoardService {
 
                     String dayFormat = board.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-                    if (minutes < 60) {
+                    if (minutes < 1) {
+                        date = "방금전";
+                    } else if (minutes < 60) {
                         date = minutes + "분전";
                     } else if (hours < 24) {
                         date = hours + "시간전";
@@ -231,7 +272,9 @@ public class BoardServiceImpl implements BoardService {
 
             String dayFormat = commentListDto.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-            if (minutes < 60) {
+            if (minutes < 1) {
+                date = "방금전";
+            } else if (minutes < 60) {
                 date = minutes + "분전";
             } else if (hours < 24) {
                 date = hours + "시간전";
@@ -281,7 +324,9 @@ public class BoardServiceImpl implements BoardService {
 
         String dayFormat = boardDetail.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-        if (minutes < 60) {
+        if (minutes < 1) {
+            date = "방금전";
+        } else if (minutes < 60) {
             date = minutes + "분전";
         } else if (hours < 24) {
             date = hours + "시간전";
@@ -291,7 +336,7 @@ public class BoardServiceImpl implements BoardService {
             date = dayFormat;
         }
 
-        List<String> imgList = boardRepositorySupport.getImgURLList(boardId);
+        List<BoardDto.BoardImgURLDto> imgList = boardRepositorySupport.getBoardDetailImgURLList(boardId);
 
         BoardDto.BoardDetailResponse response = new BoardDto.BoardDetailResponse(
                     boardDetail.getBoardId(),

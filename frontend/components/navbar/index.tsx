@@ -53,7 +53,7 @@ export default function NavBar() {
           커뮤니티
         </div>
       </Item>
-      <Item onClick={() => router.push("calendar")}>
+      <Item onClick={() => router.push("/calendar")}>
         <Icon
           mode="fas"
           icon="calendar-days"

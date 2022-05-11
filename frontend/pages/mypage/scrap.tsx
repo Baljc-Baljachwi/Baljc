@@ -2,11 +2,12 @@ import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
+import { getMyBoardList, getScrapBoardList } from "api/mypage";
 
 import Header from "components/common/Header";
 import CommunityCard from "components/community/CommunityCard";
 
-const Liked = () => {
+const Scrap = () => {
   const router = useRouter();
   const [ready, setReady] = useState(false);
 
@@ -19,7 +20,7 @@ const Liked = () => {
 
   return (
     <>
-      <Header label='좋아요한 글 목록'></Header>
+      <Header label="스크랩한 글 목록"></Header>
       <Container>
         {/* <CommunityCard />
         <CommunityCard />
@@ -30,8 +31,8 @@ const Liked = () => {
   );
 };
 
-export default Liked;
-Liked.requireAuth = true;
+export default Scrap;
+Scrap.requireAuth = true;
 
 const Container = styled.div`
   padding-bottom: 7rem;

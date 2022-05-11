@@ -18,7 +18,9 @@ const CardContent = styled.div`
 `;
 
 const Tag = styled.div`
-  display: inline;
+  display: flex;
+  align-items: center;
+  width: 6rem;
   font-size: 1rem;
   background-color: #f0f0f0;
   color: #646464;
