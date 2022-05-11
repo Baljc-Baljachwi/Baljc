@@ -2,6 +2,7 @@ import Image from "next/image";
 import styled from "styled-components";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { useRecoilValue } from "recoil";
 
 import Header from "../../../components/common/Header";
 import Icon from "../../../components/common/Icon";
@@ -12,6 +13,7 @@ import { getBoardsDetail, postComment } from "api/community";
 import defaultProfileImage from "public/assets/img/mypage/avatar/default_profile.png";
 import { IPost, IComment } from "types";
 import axios from "axios";
+import { memberIdState } from "atoms/atoms";
 
 const Container = styled.div`
   display: flex;
@@ -121,16 +123,20 @@ const Input = styled.input`
   }
 `;
 
+type imgInfo = { boardImgId: string; imgUrl: string };
+
 interface IPostDetail extends IPost {
   memberId: string;
   nickname: string;
   profileUrl: string | null;
   isHeart: 0 | 1;
   isScrap: 0 | 1;
+  imgInfoList: imgInfo[];
 }
 
 export default function CommunityDetail() {
   const router = useRouter();
+  const memberId = useRecoilValue(memberIdState);
   const [open, setOpen] = useState(false); // 이미지 확대 모달
   const [isFocused, setIsFocused] = useState(false); // 댓글 입력창
   const [boardDetail, setBoardDetail] = useState<IPostDetail>(
@@ -168,20 +174,66 @@ export default function CommunityDetail() {
     if (boardId) {
       getBoardsDetail(boardId as string)
         .then((res) => {
-          // console.log(res.data);
+          console.log(res.data);
           if (res.data.code === 1703) {
             // console.log(res.data.data);
-            setBoardDetail(res.data.data);
+            const { data } = res.data;
+            const {
+              boardId,
+              categoryName,
+              commentCnt,
+              content,
+              createdAt,
+              heartCnt,
+              imgUrlList,
+              isHeart,
+              isScrap,
+              memberId,
+              nickname,
+              profileUrl,
+            } = data;
+
+            setBoardDetail({
+              boardId,
+              categoryName,
+              commentCnt,
+              content,
+              createdAt,
+              heartCnt,
+              imgUrlList: imgUrlList.map((obj: any) => obj.imgUrl),
+              isHeart,
+              isScrap,
+              memberId,
+              nickname,
+              profileUrl,
+              imgInfoList: imgUrlList,
+            });
             setCommentList(res.data.data.commentList);
           }
         })
         .catch((err) => console.error(err));
     }
   }, [router.query.boardId]);
+  console.log("boardDetail: ", boardDetail);
+  console.log(memberId);
 
   return (
     <>
-      <Header label="" onClickBackButton={() => router.push("/community")} />
+      {/* 사용자가 게시글 작성자인 경우 구분 */}
+      <Header
+        label=""
+        icon={memberId === boardDetail.memberId ? "pencil" : undefined}
+        onClickBackButton={() => router.push("/community")}
+        onClickRightButton={
+          memberId === boardDetail.memberId
+            ? () =>
+                router.push({
+                  pathname: "/community/communityEditForm",
+                  query: { boardId: boardDetail.boardId },
+                })
+            : () => {}
+        }
+      />
       <Container>
         <div>
           <Tag>{boardDetail.categoryName}</Tag>
