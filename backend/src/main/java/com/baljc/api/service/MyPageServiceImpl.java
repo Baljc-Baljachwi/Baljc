@@ -1,8 +1,8 @@
 package com.baljc.api.service;
 
+import com.baljc.api.dto.BoardDto;
 import com.baljc.api.dto.MyPageDto;
-import com.baljc.db.entity.AccountBook;
-import com.baljc.db.entity.Routine;
+import com.baljc.db.entity.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -107,6 +107,49 @@ public class MyPageServiceImpl implements MyPageService {
                 });
 
         return Arrays.stream(dailyExp).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BoardDto.BoardListResponse> getMyBoardList() {
+        return memberService.getMemberByAuthentication().getBoardList()
+                .stream()
+                .filter(board -> board.getDeletedYn() == 'N')
+                .sorted(Comparator.comparing(Board::getCreatedAt).reversed())
+                .map(board -> new BoardDto.BoardListResponse(board.getBoardId(),
+                        board.getBoardCategory().getName(),
+                        board.getContent(),
+                        board.getCreatedAt().toString(),
+                        board.getMember().getNickname(),
+                        board.getDong(),
+                        board.getBoardImgList()
+                                .stream()
+                                .map(BoardImg::getImgUrl)
+                                .collect(Collectors.toList()),
+                        board.getHeartList().size(),
+                        board.getCommentList().size()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BoardDto.BoardListResponse> getScrapBoardList() {
+        return memberService.getMemberByAuthentication().getScrapList()
+                .stream()
+                .map(Scrap::getBoard)
+                .filter(board -> board.getDeletedYn() == 'N')
+                .sorted(Comparator.comparing(Board::getCreatedAt).reversed())
+                .map(board -> new BoardDto.BoardListResponse(board.getBoardId(),
+                        board.getBoardCategory().getName(),
+                        board.getContent(),
+                        board.getCreatedAt().toString(),
+                        board.getMember().getNickname(),
+                        board.getDong(),
+                        board.getBoardImgList()
+                                .stream()
+                                .map(BoardImg::getImgUrl)
+                                .collect(Collectors.toList()),
+                        board.getHeartList().size(),
+                        board.getCommentList().size()))
+                .collect(Collectors.toList());
     }
 
     public Stream<AccountBook> getMonthlySteam(Integer year, Integer month) {

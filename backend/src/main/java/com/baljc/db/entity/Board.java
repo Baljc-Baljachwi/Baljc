@@ -64,4 +64,8 @@ public class Board {
         this.content = boardUpdateRequest.getContent();
         this.boardCategory = category;
     }
+
+    public void deleteBoard() {
+        this.deletedYn = 'Y';
+    }
 }

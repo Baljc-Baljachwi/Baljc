@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -42,7 +40,7 @@ public class MemberController {
 //    }
 
     @GetMapping("/login/kakao")
-    public ResponseEntity<BaseDataResponse<Map<String, Boolean>>> signinMember(
+    public ResponseEntity<BaseDataResponse<MemberDto.SigninResponse>> signinMember(
             @RequestParam(value = "code") String code, @RequestParam(value = "token", required = false) String fcmToken
     ) {
         log.debug("signinMember - code: {}", code);
@@ -50,11 +48,10 @@ public class MemberController {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + signinInfo.getJwt());
-        Map<String, Boolean> map = new HashMap<>();
-        map.put("surveyedYn", signinInfo.getSurveyedYn());
 
         return ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(new BaseDataResponse<>(1000,
-                "소셜로그인에 성공하였습니다.", map));
+                "소셜로그인에 성공하였습니다.", new MemberDto.SigninResponse(signinInfo.getMemberId(),
+                signinInfo.getSurveyedYn())));
     }
 
     @GetMapping

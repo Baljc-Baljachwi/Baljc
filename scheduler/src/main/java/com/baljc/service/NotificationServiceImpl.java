@@ -67,6 +67,8 @@ public class NotificationServiceImpl implements NotificationService {
             from = MAX_REGISTRATION_TOKENS * i;
             to = Math.min(from + MAX_REGISTRATION_TOKENS, tokenList.size());
             tokenSubList = new ArrayList<>(tokenList.subList(from, to));
+            for (String t:tokenList)
+                log.debug("sendMessageByTokenList - t: {}", t);
 
             // 여러 기기에 메시지 전송
             MulticastMessage message = MulticastMessage.builder()
