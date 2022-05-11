@@ -21,10 +21,10 @@ const Liked = () => {
     <>
       <Header label='좋아요한 글 목록'></Header>
       <Container>
+        {/* <CommunityCard />
         <CommunityCard />
         <CommunityCard />
-        <CommunityCard />
-        <CommunityCard />
+        <CommunityCard /> */}
       </Container>
     </>
   );

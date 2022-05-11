@@ -21,10 +21,10 @@ const Posts = () => {
     <>
       <Header label='내가 쓴 글 목록'></Header>
       <Container>
+        {/* <CommunityCard />
         <CommunityCard />
         <CommunityCard />
-        <CommunityCard />
-        <CommunityCard />
+        <CommunityCard /> */}
       </Container>
     </>
   );
