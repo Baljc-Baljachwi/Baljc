@@ -1,5 +1,6 @@
 package com.baljc.db.entity;
 
+import com.baljc.api.dto.BoardDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,7 +29,6 @@ public class Board {
     private Double latitude;
     private Double longitude;
     private String dong;
-    private String place;
     private Character deletedYn;
     @CreatedDate
     private LocalDateTime createdAt;
@@ -41,12 +41,11 @@ public class Board {
     private BoardCategory boardCategory;
 
     @Builder
-    public Board(String content, Double latitude, Double longitude, String dong, String place, Character deletedYn, Member member, BoardCategory boardCategory) {
+    public Board(String content, Double latitude, Double longitude, String dong, Character deletedYn, Member member, BoardCategory boardCategory) {
         this.content = content;
         this.latitude = latitude;
         this.longitude = longitude;
         this.dong = dong;
-        this.place = place;
         this.deletedYn = deletedYn;
         this.member = member;
         this.boardCategory = boardCategory;
@@ -60,4 +59,9 @@ public class Board {
     List<Scrap> scrapList = new ArrayList<>();
     @OneToMany(mappedBy = "board")
     List<Comment> commentList = new ArrayList<>();
+
+    public void updateBoard(BoardDto.BoardUpdateRequest boardUpdateRequest, BoardCategory category) {
+        this.content = boardUpdateRequest.getContent();
+        this.boardCategory = category;
+    }
 }
