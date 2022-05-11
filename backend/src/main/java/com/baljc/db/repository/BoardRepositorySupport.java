@@ -71,6 +71,7 @@ public class BoardRepositorySupport {
                 .from(qBoardImg)
                 .leftJoin(qBoard).on(qBoardImg.board.eq(qBoard))
                 .where(qBoard.boardId.eq(boardId).and(qBoardImg.deletedYn.eq('N')))
+                .orderBy(qBoardImg.createdAt.asc())
                 .fetch();
 
         return response;
@@ -112,6 +113,7 @@ public class BoardRepositorySupport {
                 .from(qComment)
                 .leftJoin(qMember).on(qComment.member.eq(qMember))
                 .where(qComment.board.boardId.eq(boardId))
+                .orderBy(qComment.createdAt.asc())
                 .fetch();
 
         return response;
