@@ -77,6 +77,8 @@ const Typography = styled.div<{
 `;
 
 interface ConfirmProps {
+  commentList: any;
+  setCommentList: any;
   commentId: string;
   open: boolean;
   setOpen: any;
@@ -85,6 +87,8 @@ interface ConfirmProps {
 }
 
 export default function ConfirmModal({
+  commentList,
+  setCommentList,
   commentId,
   open,
   setOpen,
@@ -108,7 +112,13 @@ export default function ConfirmModal({
     const boardId = router.query.boardId;
     deleteComment(boardId as string, commentId as string)
       .then((res) => {
+        console.log(res);
         if (res.data.code === 1707) {
+          setCommentList(
+            commentList.filter(
+              (comment: any) => comment.commentId !== commentId
+            )
+          );
           onClose();
         }
       })

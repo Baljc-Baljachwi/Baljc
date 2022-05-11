@@ -58,12 +58,20 @@ const Typography = styled.div<{
 `;
 
 interface EditProps {
+  commentList: any;
+  setCommentList: any;
   commentId: string;
   open: boolean;
   setOpen: any;
 }
 
-export default function EditModal({ commentId, open, setOpen }: EditProps) {
+export default function EditModal({
+  commentList,
+  setCommentList,
+  commentId,
+  open,
+  setOpen,
+}: EditProps) {
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const onClose = () => {
@@ -104,6 +112,8 @@ export default function EditModal({ commentId, open, setOpen }: EditProps) {
           </ModalWrapper>
           {/* 모달 */}
           <ConfirmModal
+            commentList={commentList}
+            setCommentList={setCommentList}
             commentId={commentId}
             open={open}
             setOpen={setOpen}
