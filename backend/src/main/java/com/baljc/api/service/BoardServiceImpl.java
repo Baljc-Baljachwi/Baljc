@@ -128,6 +128,19 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    public void deleteBoard(UUID boardId) {
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new NullPointerException("해당 게시글이 존재하지 않습니다."));
+        board.deleteBoard();
+
+        List<BoardImg> boardImgList = boardRepositorySupport.getDeleteImgList(boardId);
+        for (BoardImg bi : boardImgList) {
+            bi.deleteBoardImg();
+            fileService.deleteImage(bi.getImgUrl());
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
     public void insertComment(UUID boardId, BoardDto.CommentRequest commentRequest) {
         Member member = memberService.getMemberByAuthentication();
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new NullPointerException("해당 게시글이 존재하지 않습니다."));
@@ -210,7 +223,9 @@ public class BoardServiceImpl implements BoardService {
 
                     String dayFormat = board.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-                    if (minutes < 60) {
+                    if (minutes < 1) {
+                        date = "방금전";
+                    } else if (minutes < 60) {
                         date = minutes + "분전";
                     } else if (hours < 24) {
                         date = hours + "시간전";
@@ -257,7 +272,9 @@ public class BoardServiceImpl implements BoardService {
 
             String dayFormat = commentListDto.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-            if (minutes < 60) {
+            if (minutes < 1) {
+                date = "방금전";
+            } else if (minutes < 60) {
                 date = minutes + "분전";
             } else if (hours < 24) {
                 date = hours + "시간전";
@@ -307,7 +324,9 @@ public class BoardServiceImpl implements BoardService {
 
         String dayFormat = boardDetail.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-        if (minutes < 60) {
+        if (minutes < 1) {
+            date = "방금전";
+        } else if (minutes < 60) {
             date = minutes + "분전";
         } else if (hours < 24) {
             date = hours + "시간전";

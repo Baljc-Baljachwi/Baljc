@@ -58,6 +58,12 @@ public class BoardController {
         return ResponseEntity.status(200).body(new BaseResponse(1704, "게시글 수정 성공"));
     }
 
+    @DeleteMapping("/{boardId}")
+    public ResponseEntity<BaseResponse> deleteBoard(@PathVariable("boardId") UUID boardId) {
+        boardService.deleteBoard(boardId);
+        return ResponseEntity.status(200).body(new BaseResponse(1705, "게시글 삭제 성공"));
+    }
+
     @PostMapping("/{boardId}/comments")
     public ResponseEntity<BaseResponse> insertComment(@PathVariable("boardId") UUID boardId, @Valid @RequestBody BoardDto.CommentRequest commentRequest) {
         boardService.insertComment(boardId, commentRequest);

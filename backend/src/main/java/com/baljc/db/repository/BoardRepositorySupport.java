@@ -115,6 +115,17 @@ public class BoardRepositorySupport {
         return response;
     }
 
+    public List<BoardImg> getDeleteImgList(UUID boardId) {
+        List<BoardImg> response = jpaQueryFactory.select(qBoardImg)
+                .from(qBoardImg)
+                .leftJoin(qBoard).on(qBoardImg.board.eq(qBoard))
+                .where(qBoard.boardId.eq(boardId).and(qBoardImg.deletedYn.eq('N')))
+                .orderBy(qBoardImg.createdAt.asc())
+                .fetch();
+
+        return response;
+    }
+
     public List<BoardDto.CommentListDto> getCommentList(UUID boardId) {
         List<BoardDto.CommentListDto> response = jpaQueryFactory.select(
                         new QBoardDto_CommentListDto(
