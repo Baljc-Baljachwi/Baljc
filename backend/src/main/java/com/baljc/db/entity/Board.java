@@ -1,5 +1,6 @@
 package com.baljc.db.entity;
 
+import com.baljc.api.dto.BoardDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -60,4 +61,9 @@ public class Board {
     List<Scrap> scrapList = new ArrayList<>();
     @OneToMany(mappedBy = "board")
     List<Comment> commentList = new ArrayList<>();
+
+    public void updateBoard(BoardDto.BoardRequest boardRequest, BoardCategory category) {
+        this.content = boardRequest.getContent();
+        this.boardCategory = category;
+    }
 }
