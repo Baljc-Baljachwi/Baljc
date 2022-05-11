@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -115,18 +118,36 @@ public class MyPageServiceImpl implements MyPageService {
                 .stream()
                 .filter(board -> board.getDeletedYn() == 'N')
                 .sorted(Comparator.comparing(Board::getCreatedAt).reversed())
-                .map(board -> new BoardDto.BoardListResponse(board.getBoardId(),
-                        board.getBoardCategory().getName(),
-                        board.getContent(),
-                        board.getCreatedAt().toString(),
-                        board.getMember().getNickname(),
-                        board.getDong(),
-                        board.getBoardImgList()
-                                .stream()
-                                .map(BoardImg::getImgUrl)
-                                .collect(Collectors.toList()),
-                        board.getHeartList().size(),
-                        board.getCommentList().size()))
+                .map(board -> {
+                    LocalDateTime now = LocalDateTime.now();
+                    LocalDateTime dateTime = board.getCreatedAt();
+                    long minutes = ChronoUnit.MINUTES.between(dateTime, now);
+                    long hours = ChronoUnit.HOURS.between(dateTime, now);
+                    long days = ChronoUnit.DAYS.between(dateTime, now);
+                    String updatedAt = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    if (minutes < 1) {
+                        updatedAt = "방금전";
+                    }else if (minutes < 60) {
+                        updatedAt = minutes + "분전";
+                    }else if (hours < 24) {
+                        updatedAt = hours + "시간전";
+                    }else if(days < 7) {
+                        updatedAt = days + "일전";
+                    }
+
+                    return new BoardDto.BoardListResponse(board.getBoardId(),
+                            board.getBoardCategory().getName(),
+                            board.getContent(),
+                            updatedAt,
+                            board.getMember().getNickname(),
+                            board.getDong(),
+                            board.getBoardImgList()
+                                    .stream()
+                                    .map(BoardImg::getImgUrl)
+                                    .collect(Collectors.toList()),
+                            board.getHeartList().size(),
+                            board.getCommentList().size());
+                })
                 .collect(Collectors.toList());
     }
 
@@ -137,18 +158,36 @@ public class MyPageServiceImpl implements MyPageService {
                 .map(Scrap::getBoard)
                 .filter(board -> board.getDeletedYn() == 'N')
                 .sorted(Comparator.comparing(Board::getCreatedAt).reversed())
-                .map(board -> new BoardDto.BoardListResponse(board.getBoardId(),
-                        board.getBoardCategory().getName(),
-                        board.getContent(),
-                        board.getCreatedAt().toString(),
-                        board.getMember().getNickname(),
-                        board.getDong(),
-                        board.getBoardImgList()
-                                .stream()
-                                .map(BoardImg::getImgUrl)
-                                .collect(Collectors.toList()),
-                        board.getHeartList().size(),
-                        board.getCommentList().size()))
+                .map(board -> {
+                    LocalDateTime now = LocalDateTime.now();
+                    LocalDateTime dateTime = board.getCreatedAt();
+                    long minutes = ChronoUnit.MINUTES.between(dateTime, now);
+                    long hours = ChronoUnit.HOURS.between(dateTime, now);
+                    long days = ChronoUnit.DAYS.between(dateTime, now);
+                    String updatedAt = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    if (minutes < 1) {
+                        updatedAt = "방금전";
+                    }else if (minutes < 60) {
+                        updatedAt = minutes + "분전";
+                    }else if (hours < 24) {
+                        updatedAt = hours + "시간전";
+                    }else if(days < 7) {
+                        updatedAt = days + "일전";
+                    }
+
+                    return new BoardDto.BoardListResponse(board.getBoardId(),
+                            board.getBoardCategory().getName(),
+                            board.getContent(),
+                            updatedAt,
+                            board.getMember().getNickname(),
+                            board.getDong(),
+                            board.getBoardImgList()
+                                    .stream()
+                                    .map(BoardImg::getImgUrl)
+                                    .collect(Collectors.toList()),
+                            board.getHeartList().size(),
+                            board.getCommentList().size());
+                })
                 .collect(Collectors.toList());
     }
 
