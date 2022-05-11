@@ -4,9 +4,9 @@ import LocalStorage from "utils/localStorage";
 function setInterceptors(instance: any) {
   instance.interceptors.request.use(
     (config: any) => {
-      const accessTokenJSON = LocalStorage.getItem("accessToken");
-      if (accessTokenJSON) {
-        config.headers.Authorization = JSON.parse(accessTokenJSON);
+      const userInfoJSON = LocalStorage.getItem("userInfo");
+      if (userInfoJSON) {
+        config.headers.Authorization = JSON.parse(userInfoJSON).accessToken;
       }
       return config;
     },

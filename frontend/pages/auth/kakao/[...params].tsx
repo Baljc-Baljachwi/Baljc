@@ -2,13 +2,12 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 
-import { accessTokenState, memberIdState } from "atoms/atoms";
+import { userInfoState } from "atoms/atoms";
 import { kakaoLogin } from "../../../api/member";
 import { getToken } from "utils/FirebaseInit";
 
 export default function KakaoAuth() {
-  const [_, setAccessToken] = useRecoilState(accessTokenState);
-  const [memberId, setMemberId] = useRecoilState(memberIdState);
+  const [_, setUserInfo] = useRecoilState(userInfoState);
   const router = useRouter();
   const { code } = router.query;
 
@@ -35,9 +34,11 @@ export default function KakaoAuth() {
           if (res.data.code === 1000) {
             const accessToken = res.headers.authorization;
             console.log(`accessToken : ${accessToken}`);
+            console.log(res.data.data);
 
-            setAccessToken(accessToken);
-            setMemberId(res.data.data.memberId);
+            const { memberId, surveyedYn } = res.data.data;
+
+            setUserInfo({ accessToken, memberId, surveyedYn });
 
             router.push(
               res.data.data.surveyedYn ? "/calendar" : "/auth/survey"
@@ -46,7 +47,7 @@ export default function KakaoAuth() {
         });
       })
       .catch((err) => console.error(err));
-  }, [code, router, setAccessToken, setMemberId]);
+  }, [code, router, setUserInfo]);
 
   return null;
 }

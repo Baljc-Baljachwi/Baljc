@@ -18,17 +18,39 @@ const localStorageEffect =
     });
   };
 
-export const accessTokenState = atom<string>({
-  key: "accessToken",
-  default: "",
-  effects: [localStorageEffect("accessToken")],
+interface IUserInfo {
+  accessToken: string;
+  memberId: string;
+  surveyedYn: boolean;
+}
+
+export const userInfoState = atom<IUserInfo>({
+  key: "userInfo",
+  default: {
+    accessToken: "",
+    memberId: "",
+    surveyedYn: false,
+  },
+  effects: [localStorageEffect("userInfo")],
 });
 
-export const memberIdState = atom<string>({
-  key: "userInfo",
-  default: "",
-  effects: [localStorageEffect("memberId")],
-});
+// export const accessTokenState = atom<string>({
+//   key: "accessToken",
+//   default: "",
+//   effects: [localStorageEffect("accessToken")],
+// });
+
+// export const memberIdState = atom<string>({
+//   key: "userInfo",
+//   default: "",
+//   effects: [localStorageEffect("memberId")],
+// });
+
+// export const surveyedYNState = atom<"Y" | "N">({
+//   key: "surveyedYN",
+//   default: "N",
+//   effects: [localStorageEffect("surveyedYN")],
+// });
 
 export interface ITodoTypes {
   todoId: string;
