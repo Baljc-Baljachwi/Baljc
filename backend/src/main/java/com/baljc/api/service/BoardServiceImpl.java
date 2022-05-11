@@ -78,7 +78,6 @@ public class BoardServiceImpl implements BoardService {
         Board board = Board.builder()
                     .content(boardRequest.getContent())
                     .member(member)
-                    .place(boardRequest.getPlace())
                     .boardCategory(category)
                     .latitude(member.getLatitude())
                     .longitude(member.getLongitude())

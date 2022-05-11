@@ -29,7 +29,6 @@ public class Board {
     private Double latitude;
     private Double longitude;
     private String dong;
-    private String place;
     private Character deletedYn;
     @CreatedDate
     private LocalDateTime createdAt;
@@ -42,12 +41,11 @@ public class Board {
     private BoardCategory boardCategory;
 
     @Builder
-    public Board(String content, Double latitude, Double longitude, String dong, String place, Character deletedYn, Member member, BoardCategory boardCategory) {
+    public Board(String content, Double latitude, Double longitude, String dong, Character deletedYn, Member member, BoardCategory boardCategory) {
         this.content = content;
         this.latitude = latitude;
         this.longitude = longitude;
         this.dong = dong;
-        this.place = place;
         this.deletedYn = deletedYn;
         this.member = member;
         this.boardCategory = boardCategory;
