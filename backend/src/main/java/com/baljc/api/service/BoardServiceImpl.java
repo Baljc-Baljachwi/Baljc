@@ -128,6 +128,19 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    public void deleteBoard(UUID boardId) {
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new NullPointerException("해당 게시글이 존재하지 않습니다."));
+        board.deleteBoard();
+
+        List<BoardImg> boardImgList = boardRepositorySupport.getDeleteImgList(boardId);
+        for (BoardImg bi : boardImgList) {
+            bi.deleteBoardImg();
+            fileService.deleteImage(bi.getImgUrl());
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
     public void insertComment(UUID boardId, BoardDto.CommentRequest commentRequest) {
         Member member = memberService.getMemberByAuthentication();
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new NullPointerException("해당 게시글이 존재하지 않습니다."));
