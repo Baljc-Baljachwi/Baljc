@@ -19,6 +19,10 @@ export const getBoardsDetail = async (boardId: string) => {
   return await api.get(`/api/boards/${boardId}`);
 };
 
+export const putBoard = async (boardId: string, data: FormData) => {
+  return await api.put(`/api/boards/${boardId}`, data);
+};
+
 export const postComment = async (boardId: string, data: object) => {
   return await api.post(`/api/boards/${boardId}/comments`, data);
 };
