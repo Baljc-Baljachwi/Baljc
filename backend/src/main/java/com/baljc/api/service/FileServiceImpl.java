@@ -21,9 +21,9 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public String uploadImage(MultipartFile multipartFile, String folderPath) {
-        // 이미지 파일의 크기가 2MB를 초과하는 경우
-        if (multipartFile.getSize() > 2 * Math.pow(2, 20))
-            throw new IllegalArgumentException("파일의 크기가 2MB를 초과합니다.");
+        // 이미지 파일의 크기가 10MB를 초과하는 경우
+        if (multipartFile.getSize() > 10 * Math.pow(2, 20))
+            throw new IllegalArgumentException("파일의 크기가 10MB를 초과합니다.");
         // MIME Type 확인
         Tika tika = new Tika();
         String mimeType;
