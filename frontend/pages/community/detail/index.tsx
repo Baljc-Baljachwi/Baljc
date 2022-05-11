@@ -168,16 +168,14 @@ export default function CommunityDetail() {
     if (boardId) {
       getBoardsDetail(boardId as string)
         .then((res) => {
-          // console.log(res.data);
           if (res.data.code === 1703) {
-            // console.log(res.data.data);
             setBoardDetail(res.data.data);
             setCommentList(res.data.data.commentList);
           }
         })
         .catch((err) => console.error(err));
     }
-  }, [router.query.boardId]);
+  }, [router.query.boardId, commentList]);
 
   return (
     <>
