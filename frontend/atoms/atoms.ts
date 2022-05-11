@@ -24,6 +24,12 @@ export const accessTokenState = atom<string>({
   effects: [localStorageEffect("accessToken")],
 });
 
+export const memberIdState = atom<string>({
+  key: "userInfo",
+  default: "",
+  effects: [localStorageEffect("memberId")],
+});
+
 export interface ITodoTypes {
   todoId: string;
   date: string;
