@@ -223,7 +223,9 @@ public class BoardServiceImpl implements BoardService {
 
                     String dayFormat = board.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-                    if (minutes < 60) {
+                    if (minutes < 1) {
+                        date = "방금전";
+                    } else if (minutes < 60) {
                         date = minutes + "분전";
                     } else if (hours < 24) {
                         date = hours + "시간전";
@@ -270,7 +272,9 @@ public class BoardServiceImpl implements BoardService {
 
             String dayFormat = commentListDto.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-            if (minutes < 60) {
+            if (minutes < 1) {
+                date = "방금전";
+            } else if (minutes < 60) {
                 date = minutes + "분전";
             } else if (hours < 24) {
                 date = hours + "시간전";
@@ -320,7 +324,9 @@ public class BoardServiceImpl implements BoardService {
 
         String dayFormat = boardDetail.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-        if (minutes < 60) {
+        if (minutes < 1) {
+            date = "방금전";
+        } else if (minutes < 60) {
             date = minutes + "분전";
         } else if (hours < 24) {
             date = hours + "시간전";
