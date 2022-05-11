@@ -14,16 +14,16 @@ export default function ProfileContentList() {
   return (
     <>
       <PageContainer>
-        {/* <ProfileContentCard
+        <ProfileContentCard
           title='내가 쓴 글 모아보기'
           description='내가 쓴 글을 모아보세요.'
           onClick={() => router.push("/mypage/posts")}
         />
         <ProfileContentCard
-          title='좋아요 한 글 모아보기'
+          title='스크랩한 글 모아보기'
           description='내가 스크랩한 글을 모아보세요.'
-          onClick={() => router.push("/mypage/liked")}
-        /> */}
+          onClick={() => router.push("/mypage/clipped")}
+        />
         <ProfileContentCard
           title='목표를 향해서!'
           description='내 생활 습관을 분석해보세요.'

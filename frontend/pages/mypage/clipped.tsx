@@ -6,7 +6,7 @@ import styled from "styled-components";
 import Header from "components/common/Header";
 import CommunityCard from "components/community/CommunityCard";
 
-const Liked = () => {
+const Clipped = () => {
   const router = useRouter();
   const [ready, setReady] = useState(false);
 
@@ -19,19 +19,19 @@ const Liked = () => {
 
   return (
     <>
-      <Header label='좋아요한 글 목록'></Header>
+      <Header label='스크랩한 글 목록'></Header>
       <Container>
+        {/* <CommunityCard />
         <CommunityCard />
         <CommunityCard />
-        <CommunityCard />
-        <CommunityCard />
+        <CommunityCard /> */}
       </Container>
     </>
   );
 };
 
-export default Liked;
-Liked.requireAuth = true;
+export default Clipped;
+Clipped.requireAuth = true;
 
 const Container = styled.div`
   padding-bottom: 7rem;

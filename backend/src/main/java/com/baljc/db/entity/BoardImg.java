@@ -37,4 +37,8 @@ public class BoardImg {
         this.deletedYn = deletedYn;
         this.board = board;
     }
+
+    public void deleteBoardImg() {
+        this.deletedYn = 'Y';
+    }
 }

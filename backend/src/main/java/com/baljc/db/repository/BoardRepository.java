@@ -2,6 +2,8 @@ package com.baljc.db.repository;
 
 import com.baljc.api.dto.BoardDto;
 import com.baljc.db.entity.Board;
+import com.baljc.db.entity.BoardImg;
+import com.baljc.db.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -28,7 +30,7 @@ public interface BoardRepository extends JpaRepository<Board, UUID> {
             "WHERE b.deleted_yn = 'N' " +
             "GROUP BY b.board_id " +
             "having distance <= 4 " +
-            "ORDER BY b.created_at " +
+            "ORDER BY b.created_at desc " +
             "LIMIT :idx, 20", nativeQuery = true)
     List<BoardDto.BoardListInterface> getBoardListAll(@Param(value = "lat") double lat, @Param(value = "lon") double lon, @Param(value = "idx") long idx);
 
@@ -47,7 +49,8 @@ public interface BoardRepository extends JpaRepository<Board, UUID> {
             "WHERE b.deleted_yn = 'N' and b.board_category_id = :categoryId " +
             "GROUP BY b.board_id " +
             "having distance <= 4 " +
-            "ORDER BY b.created_at " +
+            "ORDER BY b.created_at desc " +
             "LIMIT :idx, 20", nativeQuery = true)
     List<BoardDto.BoardListInterface> getBoardListByCategory(@Param(value = "lat") double lat, @Param(value = "lon") double lon, @Param(value = "idx") long idx, @Param(value = "categoryId") byte[] categoryId);
+
 }

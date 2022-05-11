@@ -1,6 +1,6 @@
 import Image from "next/image";
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useRecoilValue } from "recoil";
 
@@ -9,7 +9,7 @@ import Icon from "../../../components/common/Icon";
 import Avatar from "../../../public/assets/img/mypage/avatar/avartar_h.jpg";
 import ImageModal from "../../../components/community/detail/CommunityImageModal";
 import CommentCard from "components/community/detail/CommentCard";
-import { getBoardsDetail } from "api/community";
+import { getBoardsDetail, postComment } from "api/community";
 import defaultProfileImage from "public/assets/img/mypage/avatar/default_profile.png";
 import { IPost, IComment } from "types";
 import axios from "axios";
@@ -143,6 +143,7 @@ export default function CommunityDetail() {
     {} as IPostDetail
   );
   const [commentList, setCommentList] = useState<IComment[]>([]);
+  const [comment, setComment] = useState("");
 
   const onClickImage = () => {
     setOpen((prev) => !prev);
@@ -152,14 +153,30 @@ export default function CommunityDetail() {
     setIsFocused(true);
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value);
+    setComment(e.target.value);
+  };
+
+  const handleSubmit = (e: any) => {
+    const boardId = router.query.boardId;
+    const data = {
+      parentId: null,
+      content: comment,
+    };
+    postComment(boardId as string, data as object).then((res) => {
+      console.log(res.data.data);
+    });
+  };
+
   useEffect(() => {
     const boardId = router.query.boardId;
     if (boardId) {
       getBoardsDetail(boardId as string)
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           if (res.data.code === 1703) {
-            console.log(res.data.data);
+            // console.log(res.data.data);
             setBoardDetail(res.data.data);
             setCommentList(res.data.data.commentList);
           }
@@ -278,10 +295,18 @@ export default function CommunityDetail() {
       </CommentContainer>
 
       <InputContainer>
-        <Input placeholder="댓글을 입력해주세요." onFocus={HandleFocus} />
+        <Input
+          placeholder="댓글을 입력해주세요."
+          onFocus={HandleFocus}
+          onChange={handleChange}
+        />
         <IconWrapper>
           {isFocused ? (
-            <Typography fs="1.6rem" style={{ lineHeight: "16px" }}>
+            <Typography
+              fs="1.6rem"
+              style={{ lineHeight: "16px" }}
+              onClick={handleSubmit}
+            >
               등록
             </Typography>
           ) : (
