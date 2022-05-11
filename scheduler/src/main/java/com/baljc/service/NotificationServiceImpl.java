@@ -91,7 +91,7 @@ public class NotificationServiceImpl implements NotificationService {
                     }
                 }
 
-                System.out.println("메시지 전송에 실패한 토큰의 목록: " + failedTokens);
+                log.debug("메시지 전송에 실패한 토큰의 목록: " + failedTokens);
             }
         }
     }

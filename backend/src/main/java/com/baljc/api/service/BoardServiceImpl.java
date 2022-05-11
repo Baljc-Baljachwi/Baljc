@@ -244,10 +244,12 @@ public class BoardServiceImpl implements BoardService {
             if (commentListDto.getParentId() == null) {
                 commentResponse.add(new BoardDto.BoardDetailCommentResponse(
                         commentListDto.getCommentId(),
+                        commentListDto.getMemberId(),
                         commentListDto.getProfileUrl(),
                         commentListDto.getNickname(),
                         commentListDto.getContent(),
                         date,
+                        commentListDto.getDeletedYn(),
                         new ArrayList<>()
                 ));
             } else {
@@ -257,10 +259,12 @@ public class BoardServiceImpl implements BoardService {
                         comment.getList().add(
                                 new BoardDto.BoardDetailCommentResponse(
                                         commentListDto.getCommentId(),
+                                        commentListDto.getMemberId(),
                                         commentListDto.getProfileUrl(),
                                         commentListDto.getNickname(),
                                         commentListDto.getContent(),
                                         date,
+                                        commentListDto.getDeletedYn(),
                                         null
                         ));
                         break;
@@ -287,8 +291,11 @@ public class BoardServiceImpl implements BoardService {
             date = dayFormat;
         }
 
+        List<String> imgList = boardRepositorySupport.getImgURLList(boardId);
+
         BoardDto.BoardDetailResponse response = new BoardDto.BoardDetailResponse(
                     boardDetail.getBoardId(),
+                    boardDetail.getMemberId(),
                     boardDetail.getProfileUrl(),
                     boardDetail.getNickname(),
                     boardDetail.getCategoryName(),
@@ -298,6 +305,7 @@ public class BoardServiceImpl implements BoardService {
                     boardDetail.getCommentCnt(),
                     boardDetail.getIsHeart(),
                     boardDetail.getIsScrap(),
+                    imgList,
                     commentResponse
                 );
 

@@ -42,6 +42,9 @@ public class PushAlarmScheduler {
                         && pushAlarm.getMember().getFcmToken() != null)
                 .collect(Collectors.toList());
 
+        for (PushAlarm p:pushAlarmList)
+            log.debug("scheduleByMinute - p: {}, {}", p.getAccountAlarmTime(), p.getTodoAlarmTime());
+
         // 가계부 푸시 알람
         List<String> accountFcmTokenList = pushAlarmList
                 .stream()
