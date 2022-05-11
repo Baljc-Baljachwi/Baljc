@@ -1,9 +1,12 @@
 import styled from "styled-components";
 import Image from "next/image";
+import { Fragment } from "react";
 
 import Avatar from "../../../public/assets/img/mypage/avatar/avartar_h.jpg";
 import ReplyCard from "./ReplyCard";
 import { useRouter } from "next/router";
+import { IComment } from "types";
+import defaultProfileImage from "public/assets/img/mypage/avatar/default_profile.png";
 
 const Container = styled.div`
   display: grid;
@@ -40,30 +43,74 @@ const Typography = styled.div<{
   padding: ${(props) => (props.p ? props.p : "0")};
 `;
 
-export default function CommentCard() {
+interface CommentCardProps {
+  commentList: IComment[];
+  boardCreatorId: string;
+}
+
+export default function CommentCard({
+  commentList,
+  boardCreatorId,
+}: CommentCardProps) {
   return (
     <Container>
-      <ImageWrapper>
-        <Image src={Avatar} alt="" width="100%" height="100%" />
-      </ImageWrapper>
-      <TextContainer>
-        <FlexContainer>
-          <Typography fs="1.6rem" fw="600">
-            줌줌따리줌줌따리줌줌따리
+      {commentList.map((comment) => (
+        <Fragment key={comment.commentId}>
+          <ImageWrapper>
+            <Image
+              src={comment.profileUrl || defaultProfileImage}
+              alt=""
+              width="100%"
+              height="100%"
+            />
+          </ImageWrapper>
+
+          <TextContainer>
+            <FlexContainer>
+              <Typography fs="1.6rem" fw="600">
+                {comment.nickname}
+              </Typography>
+            </FlexContainer>
+            <Typography fs="1.4rem" color="#3D3D3D">
+              {comment.createdAt}
+            </Typography>
+            <Typography fs="1.8rem">{comment.content}</Typography>
+            <Typography fs="1.4rem" p="0 0 1rem 0">
+              답글쓰기
+            </Typography>
+          </TextContainer>
+          {comment.list?.map((reply) => (
+            <Fragment key={reply.commentId}>
+              <div></div> {/* div tag 있어야 됩니당 grid때무네*/}
+              <ReplyCard reply={reply} boardCreatorId={boardCreatorId} />
+            </Fragment>
+          ))}
+        </Fragment>
+      ))}
+      {/* <Fragment>
+        <ImageWrapper>
+          <Image src={Avatar} alt="" width="100%" height="100%" />
+        </ImageWrapper>
+
+        <TextContainer>
+          <FlexContainer>
+            <Typography fs="1.6rem" fw="600">
+              줌줌따리줌줌따리줌줌따리
+            </Typography>
+          </FlexContainer>
+          <Typography fs="1.4rem" color="#3D3D3D">
+            4분 전
           </Typography>
-        </FlexContainer>
-        <Typography fs="1.4rem" color="#3D3D3D">
-          4분 전
-        </Typography>
-        <Typography fs="1.8rem">저 가능해요 ! 채팅 주세요 채팅 😁</Typography>
-        <Typography fs="1.4rem" p="0 0 1rem 0">
-          답글쓰기
-        </Typography>
-      </TextContainer>
+          <Typography fs="1.8rem">저 가능해요 ! 채팅 주세요 채팅 😁</Typography>
+          <Typography fs="1.4rem" p="0 0 1rem 0">
+            답글쓰기
+          </Typography>
+        </TextContainer>
+      </Fragment> */}
       <div></div> {/* div tag 있어야 됩니당 grid때무네*/}
-      <ReplyCard />
+      {/* <ReplyCard /> */}
       <div></div> {/* div tag 있어야 됩니당 grid때무네*/}
-      <ReplyCard />
+      {/* <ReplyCard /> */}
     </Container>
   );
 }

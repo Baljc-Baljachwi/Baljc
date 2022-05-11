@@ -1,6 +1,6 @@
 import Image from "next/image";
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import Header from "../../../components/common/Header";
@@ -8,6 +8,10 @@ import Icon from "../../../components/common/Icon";
 import Avatar from "../../../public/assets/img/mypage/avatar/avartar_h.jpg";
 import ImageModal from "../../../components/community/detail/CommunityImageModal";
 import CommentCard from "components/community/detail/CommentCard";
+import { getBoardsDetail } from "api/community";
+import defaultProfileImage from "public/assets/img/mypage/avatar/default_profile.png";
+import { IPost, IComment } from "types";
+import axios from "axios";
 
 const Container = styled.div`
   display: flex;
@@ -39,6 +43,7 @@ const InfoWrapper = styled.div`
 
 const Content = styled.div`
   padding: 0 0 1rem 0;
+  white-space: pre-wrap;
 `;
 
 const GrayButton = styled.div`
@@ -91,7 +96,7 @@ const InputContainer = styled.div`
   bottom: 0;
   display: grid;
   grid-template-columns: 8fr 1fr;
-  z-index: 10000;
+  z-index: 11000;
   height: 5.6rem;
   margin-bottom: 5.6rem; // 나중에 없애기
 `;
@@ -116,15 +121,27 @@ const Input = styled.input`
   }
 `;
 
+interface IPostDetail extends IPost {
+  memberId: string;
+  nickname: string;
+  profileUrl: string | null;
+  isHeart: 0 | 1;
+  isScrap: 0 | 1;
+}
+
 export default function CommunityDetail() {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false); // 이미지 확대 모달
   const imageList = [
     "/assets/img/mypage/avatar/avartar_h.jpg",
     "/assets/img/mypage/avatar/avatar_member4.png",
     "/assets/img/mypage/avatar/avatar_member6.png",
   ];
-  const [isFocused, setIsFocused] = useState(false);
+  const [isFocused, setIsFocused] = useState(false); // 댓글 입력창
+  const [boardDetail, setBoardDetail] = useState<IPostDetail>(
+    {} as IPostDetail
+  );
+  const [commentList, setCommentList] = useState<IComment[]>([]);
 
   const onClickImage = () => {
     setOpen((prev) => !prev);
@@ -134,58 +151,84 @@ export default function CommunityDetail() {
     setIsFocused(true);
   };
 
+  useEffect(() => {
+    const boardId = router.query.boardId;
+    if (boardId) {
+      getBoardsDetail(boardId as string)
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.code === 1703) {
+            console.log(res.data.data);
+            setBoardDetail(res.data.data);
+            setCommentList(res.data.data.commentList);
+          }
+        })
+        .catch((err) => console.error(err));
+    }
+  }, [router.query.boardId]);
+
   return (
     <>
       <Header label="" onClickBackButton={() => router.push("/community")} />
       <Container>
         <div>
-          <Tag>부탁해요</Tag>
+          <Tag>{boardDetail.categoryName}</Tag>
         </div>
         <Profile>
           <Image
-            src={Avatar}
-            alt=""
+            src={
+              boardDetail.profileUrl
+                ? boardDetail.profileUrl
+                : defaultProfileImage
+            }
+            alt={boardDetail.nickname}
             width={60}
             height={60}
             style={{ borderRadius: "50%" }}
           />
           <InfoWrapper>
             <Typography fs="1.6rem" fw="600">
-              발챙쓰
+              {boardDetail.creator}
             </Typography>
             <Typography fs="1.4rem" color="#3D3D3D">
-              10분 전
+              {boardDetail.createdAt}
             </Typography>
           </InfoWrapper>
         </Profile>
         <Content>
           <Typography fs="1.8rem" p="0 0 1rem 0">
-            주말에 멍멍이 산책 도와주실 분 있나요? 하루라도 편하게 늦잠 자는 게
-            소원이에요 ㅠㅠ{" "}
+            {boardDetail.content}
           </Typography>
           {/* image 있으면 */}
-          <Image
-            src={Avatar}
-            width={150}
-            height={150}
-            alt=""
-            onClick={onClickImage}
-          />
+          {boardDetail.imgUrlList?.length > 0 && (
+            <Image
+              src={boardDetail.imgUrlList[0]}
+              width={150}
+              height={150}
+              alt=""
+              onClick={onClickImage}
+            />
+          )}
         </Content>
         <FlexContainer>
           <ButtonContainer>
             <GrayButton>
               <Icon
-                mode="far"
-                icon="thumbs-up"
-                color="#646464"
+                mode={boardDetail.isHeart ? "fas" : "far"}
+                icon="heart"
+                color={boardDetail.isHeart ? "#000000" : "#646464"}
                 display="flex"
               />
-              공감
+              좋아요
             </GrayButton>
 
             <GrayButton>
-              <Icon mode="far" icon="bookmark" color="#646464" display="flex" />
+              <Icon
+                mode={boardDetail.isScrap ? "fas" : "far"}
+                icon="bookmark"
+                color={boardDetail.isScrap ? "#000000" : "#646464"}
+                display="flex"
+              />
               스크랩
             </GrayButton>
           </ButtonContainer>
@@ -193,38 +236,46 @@ export default function CommunityDetail() {
           <FlexContainer>
             <Icon mode="fas" icon="comment" size="14px" />
             <Typography fs="1.4rem" p="0 0.5rem">
-              1
+              {boardDetail.commentCnt}
             </Typography>
             <Icon mode="fas" icon="heart" size="14px" />
             <Typography fs="1.4rem" p="0 0.5rem">
-              1
+              {boardDetail.heartCnt}
             </Typography>
           </FlexContainer>
         </FlexContainer>
       </Container>
-      {open ? (
-        <ImageModal open={open} setOpen={setOpen} imageList={imageList} />
-      ) : (
-        ""
-      )}
+
+      {boardDetail.imgUrlList?.length > 0 && open ? (
+        <ImageModal
+          open={open}
+          setOpen={setOpen}
+          imageList={boardDetail.imgUrlList}
+        />
+      ) : null}
+
       <CommentContainer>
         <Typography fs="1.4rem" p="0 0 2rem 0">
           댓글
         </Typography>
-        <CommentCard />
-        <InputContainer>
-          <Input placeholder="댓글을 입력해주세요." onFocus={HandleFocus} />
-          <IconWrapper>
-            {isFocused ? (
-              <Typography fs="1.6rem" style={{ lineHeight: "16px" }}>
-                등록
-              </Typography>
-            ) : (
-              <Icon mode="fas" icon="keyboard" size="25px" color="3d3d3d" />
-            )}
-          </IconWrapper>
-        </InputContainer>
+        <CommentCard
+          commentList={commentList}
+          boardCreatorId={boardDetail.memberId}
+        />
       </CommentContainer>
+
+      <InputContainer>
+        <Input placeholder="댓글을 입력해주세요." onFocus={HandleFocus} />
+        <IconWrapper>
+          {isFocused ? (
+            <Typography fs="1.6rem" style={{ lineHeight: "16px" }}>
+              등록
+            </Typography>
+          ) : (
+            <Icon mode="fas" icon="keyboard" size="25px" color="3d3d3d" />
+          )}
+        </IconWrapper>
+      </InputContainer>
     </>
   );
 }

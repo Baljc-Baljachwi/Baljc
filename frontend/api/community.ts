@@ -14,3 +14,7 @@ export const getBoardsList = async (
 ) => {
   return await api.get(`/api/boards?index=${index}&category=${category}`);
 };
+
+export const getBoardsDetail = async (boardId: string) => {
+  return await api.get(`/api/boards/${boardId}`);
+};

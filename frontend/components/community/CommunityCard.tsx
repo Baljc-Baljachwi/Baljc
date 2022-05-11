@@ -77,7 +77,7 @@ export default function CommunityCard({
   const handleClick = () => {
     router.push({
       pathname: "/community/detail",
-      // query: { boardId },
+      query: { boardId },
     });
   };
 
