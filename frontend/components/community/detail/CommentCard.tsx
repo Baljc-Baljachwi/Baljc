@@ -87,30 +87,6 @@ export default function CommentCard({
           ))}
         </Fragment>
       ))}
-      {/* <Fragment>
-        <ImageWrapper>
-          <Image src={Avatar} alt="" width="100%" height="100%" />
-        </ImageWrapper>
-
-        <TextContainer>
-          <FlexContainer>
-            <Typography fs="1.6rem" fw="600">
-              줌줌따리줌줌따리줌줌따리
-            </Typography>
-          </FlexContainer>
-          <Typography fs="1.4rem" color="#3D3D3D">
-            4분 전
-          </Typography>
-          <Typography fs="1.8rem">저 가능해요 ! 채팅 주세요 채팅 😁</Typography>
-          <Typography fs="1.4rem" p="0 0 1rem 0">
-            답글쓰기
-          </Typography>
-        </TextContainer>
-      </Fragment> */}
-      <div></div> {/* div tag 있어야 됩니당 grid때무네*/}
-      {/* <ReplyCard /> */}
-      <div></div> {/* div tag 있어야 됩니당 grid때무네*/}
-      {/* <ReplyCard /> */}
     </Container>
   );
 }
