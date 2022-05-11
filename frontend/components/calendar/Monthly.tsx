@@ -7,6 +7,8 @@ import styled from "styled-components";
 import Daily from "./daily/index";
 import { getMonthlyCalendar } from "api/calendar";
 import Icon from "../common/Icon";
+import { useRecoilValue } from "recoil";
+import { todosState } from "atoms/atoms";
 
 const StyledHeader = styled.header`
   width: 100%;
@@ -102,6 +104,8 @@ export default function Monthly() {
   const dayMonthYear = dayjs(date).format("YYYY-MM-DD");
   dayjs.locale("ko");
 
+  const todos = useRecoilValue(todosState);
+
   const handleClickLeft = () => {
     const y = date.getFullYear();
     const m = date.getMonth();
@@ -128,7 +132,7 @@ export default function Monthly() {
         setIncome(res.data.data.monthTotal.I);
       }
     });
-  }, [year, month, date]);
+  }, [year, month, date, todos]);
 
   useEffect(() => {
     setSaved([]);
