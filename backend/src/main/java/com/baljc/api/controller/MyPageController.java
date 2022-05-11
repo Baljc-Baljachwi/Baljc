@@ -1,5 +1,6 @@
 package com.baljc.api.controller;
 
+import com.baljc.api.dto.BoardDto;
 import com.baljc.api.dto.MyPageDto;
 import com.baljc.api.service.MyPageService;
 import com.baljc.common.response.BaseDataResponse;
@@ -70,5 +71,19 @@ public class MyPageController {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new BaseDataResponse<>(1103, "일별 지출 조회에 성공했습니다.",
                         myPageService.getDailyExpenditure(year, month)));
+    }
+
+    @GetMapping("/my/boards")
+    public ResponseEntity<BaseDataResponse<List<BoardDto.BoardListResponse>>> getMyBoards() {
+
+        return ResponseEntity.status(HttpStatus.OK).body(new BaseDataResponse<>(1105,
+                "내가 쓴 게시글 목록 조회에 성공했습니다.", myPageService.getMyBoardList()));
+    }
+
+    @GetMapping("/scrap/boards")
+    public ResponseEntity<BaseDataResponse<List<BoardDto.BoardListResponse>>> getScrapBoards() {
+
+        return ResponseEntity.status(HttpStatus.OK).body(new BaseDataResponse<>(1106,
+        "스크랩한 게시글 목록 조회에 성공했습니다.", myPageService.getScrapBoardList()));
     }
 }
