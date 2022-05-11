@@ -93,6 +93,7 @@ const InputContainer = styled.div`
   grid-template-columns: 8fr 1fr;
   z-index: 10000;
   height: 5.6rem;
+  margin-bottom: 5.6rem; // 나중에 없애기
 `;
 
 const IconWrapper = styled.div`
