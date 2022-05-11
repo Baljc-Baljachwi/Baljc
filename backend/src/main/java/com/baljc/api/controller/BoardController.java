@@ -52,9 +52,9 @@ public class BoardController {
 
     @PutMapping("/{boardId}")
     public ResponseEntity<BaseResponse> updateBoard(@PathVariable("boardId") UUID boardId,
-                                                    @Valid @RequestPart(value = "boardInfo") BoardDto.BoardRequest boardRequest,
+                                                    @Valid @RequestPart(value = "boardInfo") BoardDto.BoardUpdateRequest boardUpdateRequest,
                                                     @RequestPart(value = "boardImg", required = false) List<MultipartFile> files) {
-        boardService.updateBoard(boardId, boardRequest, files);
+        boardService.updateBoard(boardId, boardUpdateRequest, files);
         return ResponseEntity.status(200).body(new BaseResponse(1704, "게시글 수정 성공"));
     }
 

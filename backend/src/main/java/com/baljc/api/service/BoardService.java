@@ -12,7 +12,7 @@ public interface BoardService {
 
     List<BoardDto.BoardCategoryResponse> getBoardCategory();
     void insertBoard(BoardDto.BoardRequest boardRequest, List<MultipartFile> files);
-    void updateBoard(UUID boardId, BoardDto.BoardRequest boardRequest, List<MultipartFile> files);
+    void updateBoard(UUID boardId, BoardDto.BoardUpdateRequest boardUpdateRequest, List<MultipartFile> files);
     void insertComment(UUID boardId, BoardDto.CommentRequest commentRequest);
     void deleteComment(UUID commentId);
     void updateHeart(UUID boardId, BoardDto.HeartRequest heartRequest);

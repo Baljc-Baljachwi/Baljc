@@ -60,8 +60,8 @@ public class Board {
     @OneToMany(mappedBy = "board")
     List<Comment> commentList = new ArrayList<>();
 
-    public void updateBoard(BoardDto.BoardRequest boardRequest, BoardCategory category) {
-        this.content = boardRequest.getContent();
+    public void updateBoard(BoardDto.BoardUpdateRequest boardUpdateRequest, BoardCategory category) {
+        this.content = boardUpdateRequest.getContent();
         this.boardCategory = category;
     }
 }

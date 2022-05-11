@@ -101,16 +101,16 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateBoard(UUID boardId, BoardDto.BoardRequest boardRequest, List<MultipartFile> files) {
-        BoardCategory category = boardCategoryRepository.getById(boardRequest.getCategoryId());
+    public void updateBoard(UUID boardId, BoardDto.BoardUpdateRequest boardUpdateRequest, List<MultipartFile> files) {
+        BoardCategory category = boardCategoryRepository.getById(boardUpdateRequest.getCategoryId());
 
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new NullPointerException("해당 게시글이 존재하지 않습니다."));
-        board.updateBoard(boardRequest, category);
+        board.updateBoard(boardUpdateRequest, category);
 
-        List<BoardImg> deleteImgList = boardRepository.findByBoardId(boardId);
-        for (BoardImg bi : deleteImgList) {
-            bi.deleteBoardImg();
-            fileService.deleteImage(bi.getImgUrl());
+        for (UUID uuid : boardUpdateRequest.getDeleteBoardImgIdList()) {
+            BoardImg boardImg = boardImgRepository.findById(uuid).orElseThrow(() -> new NullPointerException("해당 이미지가 존재하지 않습니다."));
+            boardImg.deleteBoardImg();
+            fileService.deleteImage(boardImg.getImgUrl());
         }
 
         if (files != null) {
