@@ -189,8 +189,9 @@ public class MemberServiceImpl implements MemberService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         log.debug("authenticateMember - surveyedYn: {}",  member.getSurveyedYn());
+        boolean surveyedYn = member.getSurveyedYn() == 'Y';
         return new MemberDto.SigninInfo(tokenProvider.createToken(authentication), member.getMemberId(),
-                member.getSurveyedYn() == 'Y');
+                surveyedYn, surveyedYn && member.getLatitude() != null && member.getLongitude() != null);
     }
 
     @Override
