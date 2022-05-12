@@ -223,24 +223,20 @@ public class BoardServiceImpl implements BoardService {
 
         List<BoardDto.BoardListResponse> response = list.stream()
                 .map(board -> {
-                    String date = "";
-
                     Long minutes = ChronoUnit.MINUTES.between(board.getCreatedAt(), LocalDateTime.now());
                     Long hours = ChronoUnit.HOURS.between(board.getCreatedAt(), LocalDateTime.now());
                     Long days = ChronoUnit.DAYS.between(board.getCreatedAt(), LocalDateTime.now());
 
-                    String dayFormat = board.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    String date = board.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-                    if (minutes < 1) {
-                        date = "방금전";
-                    } else if (minutes < 60) {
-                        date = minutes + "분전";
-                    } else if (hours < 24) {
-                        date = hours + "시간전";
-                    } else if (days < 7) {
+                    if (days >= 1 && days < 7) {
                         date = days + "일전";
-                    } else {
-                        date = dayFormat;
+                    } else if (hours >= 1 && hours < 24) {
+                        date = hours + "시간전";
+                    } else if (minutes >= 1 && minutes < 60) {
+                        date = minutes + "분전";
+                    } else if (minutes < 1) {
+                        date = "방금전";
                     }
 
                     ByteBuffer byteBuffer = ByteBuffer.wrap(board.getBoardId());
@@ -272,24 +268,20 @@ public class BoardServiceImpl implements BoardService {
         List<BoardDto.CommentListDto> commentList = boardRepositorySupport.getCommentList(boardId);
         List<BoardDto.BoardDetailCommentResponse> commentResponse = new ArrayList<>();
         for (BoardDto.CommentListDto commentListDto : commentList) {
-            String date = "";
-
             Long minutes = ChronoUnit.MINUTES.between(commentListDto.getCreatedAt(), LocalDateTime.now());
             Long hours = ChronoUnit.HOURS.between(commentListDto.getCreatedAt(), LocalDateTime.now());
             Long days = ChronoUnit.DAYS.between(commentListDto.getCreatedAt(), LocalDateTime.now());
 
-            String dayFormat = commentListDto.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            String date = commentListDto.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-            if (minutes < 1) {
-                date = "방금전";
-            } else if (minutes < 60) {
-                date = minutes + "분전";
-            } else if (hours < 24) {
-                date = hours + "시간전";
-            } else if (days < 7) {
+            if (days >= 1 && days < 7) {
                 date = days + "일전";
-            } else {
-                date = dayFormat;
+            } else if (hours >= 1 && hours < 24) {
+                date = hours + "시간전";
+            } else if (minutes >= 1 && minutes < 60) {
+                date = minutes + "분전";
+            } else if (minutes < 1) {
+                date = "방금전";
             }
 
             if (commentListDto.getParentId() == null) {
@@ -324,24 +316,20 @@ public class BoardServiceImpl implements BoardService {
             }
         }
 
-        String date = "";
-
         Long minutes = ChronoUnit.MINUTES.between(boardDetail.getCreatedAt(), LocalDateTime.now());
         Long hours = ChronoUnit.HOURS.between(boardDetail.getCreatedAt(), LocalDateTime.now());
         Long days = ChronoUnit.DAYS.between(boardDetail.getCreatedAt(), LocalDateTime.now());
 
-        String dayFormat = boardDetail.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String date = boardDetail.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-        if (minutes < 1) {
-            date = "방금전";
-        } else if (minutes < 60) {
-            date = minutes + "분전";
-        } else if (hours < 24) {
-            date = hours + "시간전";
-        } else if (days < 7) {
+        if (days >= 1 && days < 7) {
             date = days + "일전";
-        } else {
-            date = dayFormat;
+        } else if (hours >= 1 && hours < 24) {
+            date = hours + "시간전";
+        } else if (minutes >= 1 && minutes < 60) {
+            date = minutes + "분전";
+        } else if (minutes < 1) {
+            date = "방금전";
         }
 
         List<BoardDto.BoardImgURLDto> imgList = boardRepositorySupport.getBoardDetailImgURLList(boardId);
