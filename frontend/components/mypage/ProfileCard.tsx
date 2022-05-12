@@ -139,7 +139,7 @@ const ProfileCard = ({}) => {
                 : null}
               {/* .toLocaleString() */}
             </span>
-            <span>한 달 예산 | {memberInfo?.budget.toLocaleString()} 원</span>
+            <span>이번 달 예산 | {memberInfo?.budget.toLocaleString()} 원</span>
           </ProfileInfo>
         </ProfileCardContainer>
       </Container>
