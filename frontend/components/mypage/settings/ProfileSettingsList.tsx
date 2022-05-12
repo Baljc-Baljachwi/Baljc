@@ -88,6 +88,7 @@ const ProfileSettingsList = () => {
           onClick={onClickLogout}
         />
         <ProfileContentCard
+          color="#747373"
           onClick={() => setIsModalOpen(true)}
           title="탈퇴하기"
           description="안녀엉..."
