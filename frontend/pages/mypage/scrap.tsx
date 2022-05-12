@@ -74,10 +74,10 @@ const Scrap = () => {
                   커뮤니티에서 우리 동네 소식을 알아볼까요?
                   {/* <div className="btn_MoveTo">동네 소식 보러 가기</div> */}
                 </NoContentMessage>
-                <ButtonImage
+                {/* <ButtonImage
                   label="동네 소식 보러 가기"
                   // onClick={router.push("/community")}
-                ></ButtonImage>
+                ></ButtonImage> */}
               </NoContentMessage>
             </NoContentContainer>
           )}
@@ -132,7 +132,7 @@ const ChatButtonDiv = styled.div`
 `;
 const NoContentContainer = styled.section`
   width: 100%;
-  // height: calc(100vh - 50rem);
+  height: calc(100vh - 13.2rem);
   // height: 100%;
   // height: 100vh;
   top: 0;
@@ -144,6 +144,10 @@ const NoContentContainer = styled.section`
 `;
 
 const NoContentMessage = styled.p`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   font-size: 2.4rem;
   font-weight: 700;

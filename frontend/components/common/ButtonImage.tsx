@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 import Icon from "./Icon";
 
-const StyledButton = styled.div`
+const StyledButton = styled.button`
   color: #cccccc;
   display: flex;
   justify-content: center;
@@ -26,7 +26,8 @@ const StyledButton = styled.div`
 
 interface ButtonImageProps {
   label?: string;
-  onClick?: () => void;
+  // onClick?: () => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export default function ButtonImage({ onClick, label }: ButtonImageProps) {
