@@ -14,6 +14,7 @@ import ButtonBottom from "components/common/ButtonBottom";
 import ButtonTrashCan from "components/common/ButtonTrashCan";
 import { IAccountbook } from "types";
 import { useRouter } from "next/router";
+import ButtonModal from "components/common/ButtonModal";
 
 const FormContainer = styled.form`
   display: flex;
@@ -210,6 +211,15 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
   });
 
   const [categoryList, setCategoryList] = useState<Category[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const modalChildren = [
+    {
+      label: "삭제",
+      labelColor: "#ff0000",
+      onClick: () => onClickDeleteButton(),
+    },
+    { label: "취소" },
+  ];
 
   useEffect(() => {
     console.log(type);
@@ -303,252 +313,277 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
   const paymentMethod = watch("paymentMethod");
 
   return (
-    <FormContainer onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <InputContainer>
-          <StyledLabel>제목</StyledLabel>
-          <InputDiv isError={!!errors.title}>
-            <StyledInput
-              {...register("title", {
-                required: { value: true, message: "제목을 입력해주세요" },
-                maxLength: { value: 18, message: "1~18자로 입력해주세요" },
-              })}
-            />
-          </InputDiv>
-        </InputContainer>
-        <ErrorMessage>{errors.title?.message}</ErrorMessage>
-      </div>
-
-      <div>
-        <InputContainer>
-          <StyledLabel>금액</StyledLabel>
-          <InputDiv isError={!!errors.price}>
-            <StyledInput
-              type="number"
-              {...register("price", {
-                required: { value: true, message: "금액을 입력해주세요" },
-                min: { value: 0, message: "금액을 입력해주세요" },
-                max: { value: 2147483647, message: "너무 큰 금액입니다" },
-                pattern: { value: /[0-9]/, message: "숫자만 입력해주세요" },
-              })}
-              placeholder="0"
-            />
-            <InputUnit>원</InputUnit>
-          </InputDiv>
-        </InputContainer>
-        <ErrorMessage>{errors.price?.message}</ErrorMessage>
-
-        <CheckboxContainer>
-          <DisplayNoneInput
-            type="checkbox"
-            {...register(type === "E" ? "fixedExpenditureYn" : "fixedIncomeYn")}
-            id={type === "E" ? "fixedExpenditureYn" : "fixedIncomeYn"}
-          />
-          <CheckLabel
-            htmlFor={type === "E" ? "fixedExpenditureYn" : "fixedIncomeYn"}
-          >
-            {(type === "E" && fixedExpenditureTF) ||
-            (type === "I" && fixedIncomeTF) ? (
-              <Icon
-                mode="fas"
-                icon="square-check"
-                color="#ffd469"
-                size="1.6rem"
-              />
-            ) : (
-              <Icon mode="far" icon="square" color="#ffd469" size="1.6rem" />
-            )}
-          </CheckLabel>
-          <CheckLabel
-            htmlFor={type === "E" ? "fixedExpenditureYn" : "fixedIncomeYn"}
-          >
-            {type === "E" ? "고정지출" : "고정수입"}
-          </CheckLabel>
-        </CheckboxContainer>
-      </div>
-
-      {(type === "E" && getValues("fixedExpenditureYn")) ||
-      (type === "I" && getValues("fixedIncomeYn")) ? (
-        <>
-          {/* 고정 지출 또는 고정 수입일 때*/}
-          <div>
-            <InputContainer>
-              <StyledLabel>날짜</StyledLabel>
-              <InputDiv isError={!!errors.startDate || !!errors.endDate}>
-                <StyledInput
-                  type="month"
-                  {...register("startDate", {
-                    required: { value: true, message: "종료일을 입력해주세요" },
-                  })}
-                />
-                <InputUnit>부터</InputUnit>
-                <StyledInput
-                  type="month"
-                  {...register("endDate", {
-                    required: { value: true, message: "종료일을 입력해주세요" },
-                    min: {
-                      value: getValues("startDate"),
-                      message: "시작일보다 빠를 수 없습니다",
-                    },
-                  })}
-                />
-                <InputUnit>까지</InputUnit>
-              </InputDiv>
-            </InputContainer>
-          </div>
-          <div>
-            <InputContainer>
-              <InputDiv isError={!!errors.monthlyPeriod}>
-                <InputUnit>매월</InputUnit>
-                <StyledInput
-                  type="number"
-                  {...register("monthlyPeriod", {
-                    required: {
-                      value: true,
-                      message: "주기를 입력해주세요",
-                    },
-                    min: {
-                      value: 1,
-                      message: "주기는 1일부터 28일까지만 가능합니다",
-                    },
-                    max: {
-                      value: 28,
-                      message: "주기는 1일부터 28일까지만 가능합니다",
-                    },
-                  })}
-                />
-                <InputUnit>일마다</InputUnit>
-              </InputDiv>
-            </InputContainer>
-            <ErrorMessage>{errors.monthlyPeriod?.message}</ErrorMessage>
-          </div>
-        </>
-      ) : (
-        <>
-          {/* 고정 지출 또는 고정 수입 아닐 때*/}
-          <div>
-            <InputContainer>
-              <StyledLabel>날짜</StyledLabel>
-              <InputDiv isError={!!errors.date}>
-                <StyledInput
-                  type="date"
-                  {...register("date", {
-                    required: { value: true, message: "날짜를 입력해주세요" },
-                  })}
-                />
-              </InputDiv>
-            </InputContainer>
-            <ErrorMessage>{errors.date?.message}</ErrorMessage>
-          </div>
-          <div>
-            <InputContainer>
-              <StyledLabel>시각</StyledLabel>
-              <InputDiv isError={!!errors.time}>
-                <StyledInput
-                  type="time"
-                  {...register("time", {
-                    required: { value: true, message: "시각을 입력해주세요" },
-                  })}
-                />
-              </InputDiv>
-            </InputContainer>
-            <ErrorMessage>{errors.time?.message}</ErrorMessage>
-          </div>
-        </>
-      )}
-      <div>
-        <StyledLabel>카테고리</StyledLabel>
-        <CategoryListContainer>
-          {categoryList.map((category) => (
-            <CategoryButton
-              key={category.categoryId}
-              // onClick={() => onClickCategoryButton(category.categoryId)}
-            >
-              <CategoryImage
-                htmlFor={category.categoryId}
-                isSelected={categoryId === category.categoryId}
-                // isSelected={financeForm.categoryId === category.categoryId}
-              >
-                <Image
-                  src={category.imgUrl}
-                  alt={category.name}
-                  layout="fill"
-                />
-              </CategoryImage>
-              <span>{category.name}</span>
-              <DisplayNoneInput
-                {...register("categoryId", {
-                  required: { value: true, message: "카테고리를 선택해주세요" },
+    <>
+      <FormContainer onSubmit={handleSubmit(onSubmit)}>
+        <div>
+          <InputContainer>
+            <StyledLabel>제목</StyledLabel>
+            <InputDiv isError={!!errors.title}>
+              <StyledInput
+                {...register("title", {
+                  required: { value: true, message: "제목을 입력해주세요" },
+                  maxLength: { value: 18, message: "1~18자로 입력해주세요" },
                 })}
-                type="radio"
-                value={category.categoryId}
-                id={category.categoryId}
               />
-            </CategoryButton>
-          ))}
-        </CategoryListContainer>
-        <ErrorMessage>{errors.categoryId?.message}</ErrorMessage>
-      </div>
+            </InputDiv>
+          </InputContainer>
+          <ErrorMessage>{errors.title?.message}</ErrorMessage>
+        </div>
 
-      {type === "E" && (
-        <>
-          <div>
-            <StyledLabel>결제 수단</StyledLabel>
-            <PaymentContainer>
-              {[
-                { name: "카드", value: "C" },
-                { name: "현금", value: "M" },
-                { name: "기타", value: "E" },
-              ].map((obj) => (
-                <Fragment key={obj.value}>
-                  <PaymentLabel
-                    isSelected={paymentMethod === obj.value}
-                    htmlFor={obj.value}
-                  >
-                    {obj.name}
-                  </PaymentLabel>
-                  <DisplayNoneInput
-                    {...register("paymentMethod", {
+        <div>
+          <InputContainer>
+            <StyledLabel>금액</StyledLabel>
+            <InputDiv isError={!!errors.price}>
+              <StyledInput
+                type="number"
+                {...register("price", {
+                  required: { value: true, message: "금액을 입력해주세요" },
+                  min: { value: 0, message: "금액을 입력해주세요" },
+                  max: { value: 2147483647, message: "너무 큰 금액입니다" },
+                  pattern: { value: /[0-9]/, message: "숫자만 입력해주세요" },
+                })}
+                placeholder="0"
+              />
+              <InputUnit>원</InputUnit>
+            </InputDiv>
+          </InputContainer>
+          <ErrorMessage>{errors.price?.message}</ErrorMessage>
+
+          <CheckboxContainer>
+            <DisplayNoneInput
+              type="checkbox"
+              {...register(
+                type === "E" ? "fixedExpenditureYn" : "fixedIncomeYn"
+              )}
+              id={type === "E" ? "fixedExpenditureYn" : "fixedIncomeYn"}
+            />
+            <CheckLabel
+              htmlFor={type === "E" ? "fixedExpenditureYn" : "fixedIncomeYn"}
+            >
+              {(type === "E" && fixedExpenditureTF) ||
+              (type === "I" && fixedIncomeTF) ? (
+                <Icon
+                  mode="fas"
+                  icon="square-check"
+                  color="#ffd469"
+                  size="1.6rem"
+                />
+              ) : (
+                <Icon mode="far" icon="square" color="#ffd469" size="1.6rem" />
+              )}
+            </CheckLabel>
+            <CheckLabel
+              htmlFor={type === "E" ? "fixedExpenditureYn" : "fixedIncomeYn"}
+            >
+              {type === "E" ? "고정지출" : "고정수입"}
+            </CheckLabel>
+          </CheckboxContainer>
+        </div>
+
+        {(type === "E" && getValues("fixedExpenditureYn")) ||
+        (type === "I" && getValues("fixedIncomeYn")) ? (
+          <>
+            {/* 고정 지출 또는 고정 수입일 때*/}
+            <div>
+              <InputContainer>
+                <StyledLabel>날짜</StyledLabel>
+                <InputDiv isError={!!errors.startDate || !!errors.endDate}>
+                  <StyledInput
+                    type="month"
+                    {...register("startDate", {
                       required: {
                         value: true,
-                        message: "결제 수단을 선택해주세요",
+                        message: "종료일을 입력해주세요",
                       },
                     })}
-                    type="radio"
-                    value={obj.value}
-                    id={obj.value}
                   />
-                </Fragment>
-              ))}
-            </PaymentContainer>
-          </div>
-        </>
-      )}
+                  <InputUnit>부터</InputUnit>
+                  <StyledInput
+                    type="month"
+                    {...register("endDate", {
+                      required: {
+                        value: true,
+                        message: "종료일을 입력해주세요",
+                      },
+                      min: {
+                        value: getValues("startDate"),
+                        message: "시작일보다 빠를 수 없습니다",
+                      },
+                    })}
+                  />
+                  <InputUnit>까지</InputUnit>
+                </InputDiv>
+              </InputContainer>
+            </div>
+            <div>
+              <InputContainer>
+                <InputDiv isError={!!errors.monthlyPeriod}>
+                  <InputUnit>매월</InputUnit>
+                  <StyledInput
+                    type="number"
+                    {...register("monthlyPeriod", {
+                      required: {
+                        value: true,
+                        message: "주기를 입력해주세요",
+                      },
+                      min: {
+                        value: 1,
+                        message: "주기는 1일부터 28일까지만 가능합니다",
+                      },
+                      max: {
+                        value: 28,
+                        message: "주기는 1일부터 28일까지만 가능합니다",
+                      },
+                    })}
+                  />
+                  <InputUnit>일마다</InputUnit>
+                </InputDiv>
+              </InputContainer>
+              <ErrorMessage>{errors.monthlyPeriod?.message}</ErrorMessage>
+            </div>
+          </>
+        ) : (
+          <>
+            {/* 고정 지출 또는 고정 수입 아닐 때*/}
+            <div>
+              <InputContainer>
+                <StyledLabel>날짜</StyledLabel>
+                <InputDiv isError={!!errors.date}>
+                  <StyledInput
+                    type="date"
+                    {...register("date", {
+                      required: { value: true, message: "날짜를 입력해주세요" },
+                    })}
+                  />
+                </InputDiv>
+              </InputContainer>
+              <ErrorMessage>{errors.date?.message}</ErrorMessage>
+            </div>
+            <div>
+              <InputContainer>
+                <StyledLabel>시각</StyledLabel>
+                <InputDiv isError={!!errors.time}>
+                  <StyledInput
+                    type="time"
+                    {...register("time", {
+                      required: { value: true, message: "시각을 입력해주세요" },
+                    })}
+                  />
+                </InputDiv>
+              </InputContainer>
+              <ErrorMessage>{errors.time?.message}</ErrorMessage>
+            </div>
+          </>
+        )}
+        <div>
+          <StyledLabel>카테고리</StyledLabel>
+          <CategoryListContainer>
+            {categoryList.map((category) => (
+              <CategoryButton
+                key={category.categoryId}
+                // onClick={() => onClickCategoryButton(category.categoryId)}
+              >
+                <CategoryImage
+                  htmlFor={category.categoryId}
+                  isSelected={categoryId === category.categoryId}
+                  // isSelected={financeForm.categoryId === category.categoryId}
+                >
+                  <Image
+                    src={category.imgUrl}
+                    alt={category.name}
+                    layout="fill"
+                  />
+                </CategoryImage>
+                <span>{category.name}</span>
+                <DisplayNoneInput
+                  {...register("categoryId", {
+                    required: {
+                      value: true,
+                      message: "카테고리를 선택해주세요",
+                    },
+                  })}
+                  type="radio"
+                  value={category.categoryId}
+                  id={category.categoryId}
+                />
+              </CategoryButton>
+            ))}
+          </CategoryListContainer>
+          <ErrorMessage>{errors.categoryId?.message}</ErrorMessage>
+        </div>
 
-      <div>
-        <InputContainer>
-          <StyledLabel>메모</StyledLabel>
-          <InputDiv isError={!!errors.memo}>
-            <StyledInput
-              type="text"
-              {...register("memo", {
-                maxLength: { value: 100, message: "100자를 넘을 수 없습니다" },
-              })}
-              placeholder="메모 남기기"
+        {type === "E" && (
+          <>
+            <div>
+              <StyledLabel>결제 수단</StyledLabel>
+              <PaymentContainer>
+                {[
+                  { name: "카드", value: "C" },
+                  { name: "현금", value: "M" },
+                  { name: "기타", value: "E" },
+                ].map((obj) => (
+                  <Fragment key={obj.value}>
+                    <PaymentLabel
+                      isSelected={paymentMethod === obj.value}
+                      htmlFor={obj.value}
+                    >
+                      {obj.name}
+                    </PaymentLabel>
+                    <DisplayNoneInput
+                      {...register("paymentMethod", {
+                        required: {
+                          value: true,
+                          message: "결제 수단을 선택해주세요",
+                        },
+                      })}
+                      type="radio"
+                      value={obj.value}
+                      id={obj.value}
+                    />
+                  </Fragment>
+                ))}
+              </PaymentContainer>
+            </div>
+          </>
+        )}
+
+        <div>
+          <InputContainer>
+            <StyledLabel>메모</StyledLabel>
+            <InputDiv isError={!!errors.memo}>
+              <StyledInput
+                type="text"
+                {...register("memo", {
+                  maxLength: {
+                    value: 100,
+                    message: "100자를 넘을 수 없습니다",
+                  },
+                })}
+                placeholder="메모 남기기"
+              />
+            </InputDiv>
+          </InputContainer>
+          <ErrorMessage>{errors.memo?.message}</ErrorMessage>
+        </div>
+
+        {!initForm ? (
+          <ButtonBottom label="확인" type="submit"></ButtonBottom>
+        ) : (
+          <ButtonContainer>
+            <ButtonTrashCan
+              type="button"
+              onClick={() => setIsModalOpen(true)}
             />
-          </InputDiv>
-        </InputContainer>
-        <ErrorMessage>{errors.memo?.message}</ErrorMessage>
-      </div>
-
-      {!initForm ? (
-        <ButtonBottom label="확인" type="submit"></ButtonBottom>
-      ) : (
-        <ButtonContainer>
-          <ButtonTrashCan onClick={onClickDeleteButton} />
-          <ButtonBottom label="수정" type="submit" />
-        </ButtonContainer>
-      )}
-    </FormContainer>
+            <ButtonBottom label="수정" type="submit" />
+          </ButtonContainer>
+        )}
+      </FormContainer>
+      <ButtonModal
+        open={isModalOpen}
+        setOpen={setIsModalOpen}
+        modalTitle="정말 삭제하시겠습니까?"
+        modalChildren={modalChildren}
+      />
+    </>
   );
 }
