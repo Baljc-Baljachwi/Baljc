@@ -42,7 +42,7 @@ const Typography = styled.div<{
   font-weight: ${(props) => (props.fw ? props.fw : "")};
   padding: ${(props) => (props.p ? props.p : "0")};
   .textTypo {
-    color: #dfdede;
+    color: #cdcdcd;
   }
 `;
 
@@ -109,11 +109,11 @@ export default function CommunityCard({
               {createdAt} | {creator} | {dong}
             </Typography>
             <FlexContainer>
-              <Icon mode="fas" icon="comment" size="10px" color="#DFDEDE" />
+              <Icon mode="fas" icon="comment" size="10px" color="#cdcdcd" />
               <Typography p="0 0.5rem">
                 <span className="textTypo">{commentCnt}</span>
               </Typography>
-              <Icon mode="fas" icon="heart" size="10px" color="#DFDEDE" />
+              <Icon mode="fas" icon="heart" size="10px" color="#cdcdcd" />
               <Typography p="0 0.5rem">
                 <span className="textTypo">{heartCnt}</span>
               </Typography>
