@@ -13,10 +13,12 @@ import {
   postLikeBoards,
   postScrapBoards,
   postComment,
+  deleteBoards,
 } from "api/community";
 import defaultProfileImage from "public/assets/img/mypage/avatar/default_profile.png";
 import { IPost, IComment } from "types";
 import { userInfoState } from "atoms/atoms";
+import ButtonModal from "components/common/ButtonModal";
 
 const Container = styled.div`
   display: flex;
@@ -37,13 +39,19 @@ const Tag = styled.div`
 const Profile = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 2rem;
   padding: 1rem 0;
+  > div {
+    display: flex;
+    gap: 2rem;
+  }
 `;
 
 const InfoWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
 `;
 
 const Content = styled.div`
@@ -77,6 +85,7 @@ const FlexContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 1rem;
 `;
 
 const ButtonContainer = styled.div`
@@ -125,6 +134,29 @@ const Input = styled.input`
     color: #aeb1b9;
   }
 `;
+const ImageCard = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+`;
+
+const ImageWrapper = styled.div`
+  position: relative;
+  width: 15rem;
+  height: 15rem;
+  .image {
+    object-fit: contain;
+  }
+`;
+
+const ImagePlusButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #646464;
+  font-size: 1.4rem;
+`;
 
 type imgInfo = { boardImgId: string; imgUrl: string };
 
@@ -148,6 +180,43 @@ export default function CommunityDetail() {
   const [commentList, setCommentList] = useState<IComment[]>([]);
   const [comment, setComment] = useState("");
   const [isChanged, setIsChanged] = useState(false); // 변경 감지할 변수
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState<boolean>(false);
+
+  const modalChildren = [
+    {
+      label: "수정",
+      onClick: () =>
+        router.push({
+          pathname: "/community/communityEditForm",
+          query: { boardId: boardDetail.boardId },
+        }),
+    },
+    {
+      label: "삭제",
+      labelColor: "#ff0000",
+      onClick: () => setIsConfirmModalOpen(true),
+    },
+    { label: "취소" },
+  ];
+
+  const confirmModalChildren = [
+    {
+      label: "삭제",
+      labelColor: "#ff0000",
+      onClick: () => onClickDeleteBoardButton(),
+    },
+    { label: "취소" },
+  ];
+
+  const onClickDeleteBoardButton = () => {
+    deleteBoards(boardId as string)
+      .then((res) => {
+        router.push("/community");
+        console.log(res.data);
+      })
+      .catch((err) => console.error(err));
+  };
 
   const handleLikeBoard = () => {
     if (boardDetail.isHeart === 0) {
@@ -262,7 +331,6 @@ export default function CommunityDetail() {
       {/* 사용자가 게시글 작성자인 경우 구분 */}
       <Header
         label=""
-        icon={userInfo.memberId === boardDetail.memberId ? "pencil" : undefined}
         onClickBackButton={() => router.push("/community")}
         onClickRightButton={
           userInfo.memberId === boardDetail.memberId
@@ -279,25 +347,52 @@ export default function CommunityDetail() {
           <Tag>{boardDetail.categoryName}</Tag>
         </div>
         <Profile>
-          <Image
-            src={
-              boardDetail.profileUrl
-                ? boardDetail.profileUrl
-                : defaultProfileImage
-            }
-            alt={boardDetail.nickname}
-            width={60}
-            height={60}
-            style={{ borderRadius: "50%" }}
-          />
-          <InfoWrapper>
-            <Typography fs="1.6rem" fw="600">
-              {boardDetail.nickname}
-            </Typography>
-            <Typography fs="1.4rem" color="#3D3D3D">
-              {boardDetail.createdAt}
-            </Typography>
-          </InfoWrapper>
+          <div>
+            <Image
+              src={
+                boardDetail.profileUrl
+                  ? boardDetail.profileUrl
+                  : defaultProfileImage
+              }
+              alt={boardDetail.nickname}
+              width={60}
+              height={60}
+              style={{ borderRadius: "50%" }}
+            />
+            <InfoWrapper>
+              <Typography fs="1.6rem" fw="600">
+                {boardDetail.nickname}
+              </Typography>
+              <Typography fs="1.4rem" color="#3D3D3D">
+                {boardDetail.createdAt}
+              </Typography>
+            </InfoWrapper>
+          </div>
+          {/* 사용자가 게시글 작성자면 */}
+          {userInfo.memberId === boardDetail.memberId && (
+            <>
+              <Icon
+                mode="fas"
+                icon="ellipsis-vertical"
+                size="20px"
+                color="#c9c9c9"
+                onClick={() => setIsModalOpen(true)}
+              />
+              {/* 수정 / 삭제 모달 */}
+              <ButtonModal
+                open={isModalOpen}
+                setOpen={setIsModalOpen}
+                modalChildren={modalChildren}
+              />
+              {/* 삭제 확인 모달 */}
+              <ButtonModal
+                open={isConfirmModalOpen}
+                setOpen={setIsConfirmModalOpen}
+                modalTitle="정말 삭제하시겠습니까?"
+                modalChildren={confirmModalChildren}
+              />
+            </>
+          )}
         </Profile>
         <Content>
           <Typography fs="1.8rem" p="0 0 1rem 0">
@@ -305,13 +400,22 @@ export default function CommunityDetail() {
           </Typography>
           {/* image 있으면 */}
           {boardDetail.imgUrlList?.length > 0 && (
-            <Image
-              src={boardDetail.imgUrlList[0]}
-              width={150}
-              height={150}
-              alt=""
-              onClick={onClickImage}
-            />
+            <ImageCard>
+              <div onClick={onClickImage}>
+                <ImageWrapper>
+                  <Image
+                    src={boardDetail.imgUrlList[0]}
+                    layout="fill"
+                    alt=""
+                    className="image"
+                  />
+                </ImageWrapper>
+                <ImagePlusButton>
+                  {/* <Icon mode="fas" icon="images" size="2.4rem" /> */}
+                  <span>클릭해서 이미지 더보기</span>
+                </ImagePlusButton>
+              </div>
+            </ImageCard>
           )}
         </Content>
         <FlexContainer>
