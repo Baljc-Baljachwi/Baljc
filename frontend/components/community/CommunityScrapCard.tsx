@@ -58,7 +58,8 @@ export default function CommunityScrapCard({
       query: { boardId },
     });
   };
-  const handleScrapBoard = async () => {
+  const handleScrapBoard = async (e: any) => {
+    e.stopPropagation();
     if (!isScrap) {
       const data = {
         scrapYn: "Y",
@@ -85,8 +86,8 @@ export default function CommunityScrapCard({
     }
   };
   return (
-    // <CardContainer onClick={handleClick}>
-    <CardContainer>
+    <CardContainer onClick={handleClick}>
+      {/* <CardContainer> */}
       <CardContent>
         <div className="topContent">
           <Tag>{categoryName}</Tag>
@@ -99,10 +100,6 @@ export default function CommunityScrapCard({
             <BookmarkIcon onClick={handleScrapBoard} className="toggleIcon" />
           )}
           {/* <Icon
-            // mode={boardDetail.isScrap ? "fas" : "far"}
-            // icon="bookmark"
-            // color={boardDetail.isScrap ? "#FFB800" : "#646464"}
-            // mode={boardDetail.isScrap ? "fas" : "far"}
             mode={isScrap ? "fas" : "far"}
             icon="bookmark"
             color={isScrap ? "#FFB800" : "#646464"}
@@ -128,12 +125,12 @@ export default function CommunityScrapCard({
             </Typography>
 
             <FlexContainer>
-              <Icon mode="fas" icon="comment" size="10px" color="#DFDEDE" />
+              <Icon mode="fas" icon="comment" size="10px" color="#cdcdcd" />
               <Typography p="0 0.5rem">
                 <span className="textTypo">{commentCnt}</span>
               </Typography>
 
-              <Icon mode="fas" icon="heart" size="10px" color="#DFDEDE" />
+              <Icon mode="fas" icon="heart" size="10px" color="#cdcdcd" />
               <Typography p="0 0.5rem">
                 <span className="textTypo">{heartCnt}</span>
               </Typography>
@@ -147,8 +144,8 @@ export default function CommunityScrapCard({
 const CardContainer = styled.div`
   background-color: #f4f4f4;
   padding: 1rem 0 0 0;
-  // position: absolute;
-  // z-index: 2;
+  position: relative;
+  z-index: 2;
 `;
 
 const CardContent = styled.div`
@@ -169,14 +166,12 @@ const CardContent = styled.div`
       width: 3rem;
       z-index: 20;
       position: relative;
-      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
     }
     .toggleIcon {
       color: #ffb800;
       width: 3rem;
       z-index: 20;
       position: relative;
-      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
     }
   }
 `;
@@ -206,7 +201,7 @@ const Typography = styled.div<{
   font-weight: ${(props) => (props.fw ? props.fw : "")};
   padding: ${(props) => (props.p ? props.p : "0")};
   .textTypo {
-    color: #dfdede;
+    color: #cdcdcd;
   }
 `;
 
