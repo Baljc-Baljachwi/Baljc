@@ -18,12 +18,13 @@ const StyledButton = styled.button`
 `;
 
 interface ButtonTrashCanProps {
+  type?: "button" | "submit" | "reset";
   onClick?: () => void;
 }
 
-export default function ButtonTrashCan({ onClick }: ButtonTrashCanProps) {
+export default function ButtonTrashCan({ type, onClick }: ButtonTrashCanProps) {
   return (
-    <StyledButton onClick={onClick}>
+    <StyledButton type={type} onClick={onClick}>
       <Icon mode="fas" icon="trash-can" size="3rem" color="#8E8E8E"></Icon>
     </StyledButton>
   );

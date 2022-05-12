@@ -29,7 +29,7 @@ const ModalOverlay = styled.div<{ visible: boolean }>`
 
 const ModalBody = styled.div`
   width: 90%;
-  margin-bottom: 4rem;
+  margin-bottom: 6rem;
 `;
 
 const ModalInner = styled.div`
