@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Image from "next/image";
-import { useState, Fragment } from "react";
+import { useState, useRef, Fragment } from "react";
 
 import ReplyCard from "./ReplyCard";
 import Icon from "../../common/Icon";
@@ -61,6 +61,13 @@ export default function CommentCard({
 
   const onClickEdit = () => {
     setOpen((prev) => !prev);
+  };
+  const [showReply, setShowReply] = useState(false);
+
+  const inputFocus = useRef<any>(undefined);
+  const handleReply = () => {
+    inputFocus.current.focus();
+    setShowReply(true);
   };
 
   return (
@@ -142,9 +149,10 @@ export default function CommentCard({
                   ? "삭제된 댓글입니다"
                   : comment.content}
               </Typography>
-              <Typography fs="1.4rem" p="0 0 1rem 0">
+              <Typography fs="1.4rem" p="0 0 1rem 0" onClick={handleReply}>
                 답글쓰기
               </Typography>
+              {showReply ? <input ref={inputFocus} /> : <></>}
             </TextContainer>
             {comment.list?.map((reply) => (
               <Fragment key={reply.commentId}>
