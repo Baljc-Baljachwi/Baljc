@@ -338,7 +338,6 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
           ))}
         </CategoryLabelContainer>
       </FlexContainer>
-
       <ImageContainer>
         {imagePreviewList.map((imageInfo, index) => (
           <ImageWrapper key={index}>
@@ -365,7 +364,6 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
         {imagePreviewList.length}
         /3)
       </MutedText>
-
       <InputDiv isError={!!errors.content}>
         <StyledTextarea
           {...register("content", {
@@ -379,36 +377,19 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
       </InputDiv>
       <ErrorMessage>{errors.content?.message}</ErrorMessage>
 
-      {!boardContent ? (
-        <ButtonContainer>
-          <ImageButtonLabel htmlFor="image">
-            <Icon mode="fas" icon="image" size="3rem" color="#8E8E8E" />
-          </ImageButtonLabel>
-          <DisplayNoneInput
-            onChange={handleImageUpload}
-            type="file"
-            id="image"
-            accept="image/png, image/jpeg, image/bmp"
-            name="image"
-          />
-          <ButtonBottom label="완료" type="submit" />
-        </ButtonContainer>
-      ) : (
-        <ButtonContainer>
-          <ImageButtonLabel htmlFor="image">
-            <Icon mode="fas" icon="image" size="3rem" color="#8E8E8E" />
-          </ImageButtonLabel>
-          <DisplayNoneInput
-            onChange={handleImageUpload}
-            type="file"
-            id="image"
-            accept="image/png, image/jpeg, image/bmp"
-            name="image"
-          />
-          <ButtonTrashCan onClick={onClickDeleteButton} />
-          <ButtonBottom label="완료" type="submit" />
-        </ButtonContainer>
-      )}
+      <ButtonContainer>
+        <ImageButtonLabel htmlFor="image">
+          <Icon mode="fas" icon="image" size="3rem" color="#8E8E8E" />
+        </ImageButtonLabel>
+        <DisplayNoneInput
+          onChange={handleImageUpload}
+          type="file"
+          id="image"
+          accept="image/png, image/jpeg, image/bmp"
+          name="image"
+        />
+        <ButtonBottom label="완료" type="submit" />
+      </ButtonContainer>
     </FormContainer>
   );
 }
