@@ -6,14 +6,12 @@ import { useRecoilValue } from "recoil";
 
 import Header from "../../../components/common/Header";
 import Icon from "../../../components/common/Icon";
-import Avatar from "../../../public/assets/img/mypage/avatar/avartar_h.jpg";
 import ImageModal from "../../../components/community/detail/CommunityImageModal";
 import CommentCard from "components/community/detail/CommentCard";
 import { getBoardsDetail, postComment } from "api/community";
 import defaultProfileImage from "public/assets/img/mypage/avatar/default_profile.png";
 import { IPost, IComment } from "types";
-import axios from "axios";
-import { memberIdState } from "atoms/atoms";
+import { userInfoState } from "atoms/atoms";
 
 const Container = styled.div`
   display: flex;
@@ -136,25 +134,23 @@ interface IPostDetail extends IPost {
 
 export default function CommunityDetail() {
   const router = useRouter();
-  const memberId = useRecoilValue(memberIdState);
+  const userInfo = useRecoilValue(userInfoState);
   const [open, setOpen] = useState(false); // 이미지 확대 모달
-  const [isFocused, setIsFocused] = useState(false); // 댓글 입력창
   const [boardDetail, setBoardDetail] = useState<IPostDetail>(
     {} as IPostDetail
   );
   const [commentList, setCommentList] = useState<IComment[]>([]);
   const [comment, setComment] = useState("");
 
+  const onReset = () => {
+    setComment("");
+  };
+
   const onClickImage = () => {
     setOpen((prev) => !prev);
   };
 
-  const HandleFocus = () => {
-    setIsFocused(true);
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
     setComment(e.target.value);
   };
 
@@ -165,7 +161,7 @@ export default function CommunityDetail() {
       content: comment,
     };
     postComment(boardId as string, data as object).then((res) => {
-      console.log(res.data.data);
+      onReset();
     });
   };
 
@@ -208,24 +204,26 @@ export default function CommunityDetail() {
               profileUrl,
               imgInfoList: imgUrlList,
             });
-            setCommentList(res.data.data.commentList);
+            res.data.data.commentList.map((item: any, idx: string) => {
+              if (item.deletedYn === "N") {
+                setCommentList((prev) => [...prev, item]);
+              }
+            });
           }
         })
         .catch((err) => console.error(err));
     }
-  }, [router.query.boardId]);
-  console.log("boardDetail: ", boardDetail);
-  console.log(memberId);
+  }, [router.query.boardId]); // 함수 실행될 때 useEffect 실행 가능한지 찾아보기
 
   return (
     <>
       {/* 사용자가 게시글 작성자인 경우 구분 */}
       <Header
         label=""
-        icon={memberId === boardDetail.memberId ? "pencil" : undefined}
+        icon={userInfo.memberId === boardDetail.memberId ? "pencil" : undefined}
         onClickBackButton={() => router.push("/community")}
         onClickRightButton={
-          memberId === boardDetail.memberId
+          userInfo.memberId === boardDetail.memberId
             ? () =>
                 router.push({
                   pathname: "/community/communityEditForm",
@@ -323,6 +321,7 @@ export default function CommunityDetail() {
           댓글
         </Typography>
         <CommentCard
+          setCommentList={setCommentList}
           commentList={commentList}
           boardCreatorId={boardDetail.memberId}
         />
@@ -331,21 +330,17 @@ export default function CommunityDetail() {
       <InputContainer>
         <Input
           placeholder="댓글을 입력해주세요."
-          onFocus={HandleFocus}
+          value={comment}
           onChange={handleChange}
         />
         <IconWrapper>
-          {isFocused ? (
-            <Typography
-              fs="1.6rem"
-              style={{ lineHeight: "16px" }}
-              onClick={handleSubmit}
-            >
-              등록
-            </Typography>
-          ) : (
-            <Icon mode="fas" icon="keyboard" size="25px" color="3d3d3d" />
-          )}
+          <Typography
+            fs="1.6rem"
+            style={{ lineHeight: "16px" }}
+            onClick={handleSubmit}
+          >
+            등록
+          </Typography>
         </IconWrapper>
       </InputContainer>
     </>

@@ -9,6 +9,8 @@ import ButtonBottom from "../../components/common/ButtonBottom";
 import { getMemberInfo, putMembers, kakaoCoord2Region } from "api/member";
 import defaultProfileImage from "public/assets/img/mypage/avatar/default_profile.png";
 import Icon from "components/common/Icon";
+import { useRecoilState } from "recoil";
+import { userInfoState } from "atoms/atoms";
 
 const PageContainer = styled.main`
   padding: 0 2rem 2rem 2rem;
@@ -216,6 +218,7 @@ export default function ProfileModify() {
   const salaryType = watch("salaryType");
 
   const [ready, setReady] = useState(false);
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
   const [profileImageFile, setProfileImageFile] = useState<Blob>();
   const [imagePreview, setImagePreview] = useState<string>("");
   const [imageError, setImageError] = useState<boolean>(false);
@@ -332,6 +335,7 @@ export default function ProfileModify() {
       console.log(res.data);
       if (res.data.code === 1002) {
         router.push("/mypage");
+        setUserInfo((prev) => ({ ...prev, regionYn: !!memberInfo.depth3 }));
       } else {
         confirm("설문조사 생성 실패!");
       }

@@ -51,7 +51,7 @@ public class MemberController {
 
         return ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(new BaseDataResponse<>(1000,
                 "소셜로그인에 성공하였습니다.", new MemberDto.SigninResponse(signinInfo.getMemberId(),
-                signinInfo.getSurveyedYn())));
+                signinInfo.getSurveyedYn(), signinInfo.getRegionYn())));
     }
 
     @GetMapping

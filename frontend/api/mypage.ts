@@ -48,6 +48,6 @@ export const getMyBoardList = async () => {
 };
 
 // getMyClippedList
-export const getScrapBoardList = async () => {
+export const getMyScrapList = async () => {
   return await api.get(`/api/mypages/scrap/boards`);
 };

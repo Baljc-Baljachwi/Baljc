@@ -6,7 +6,7 @@ import Header from "../../components/common/Header";
 import CommunityForm from "components/community/CommunityForm";
 import { getBoardsDetail } from "api/community";
 import { IPost, IComment } from "types";
-import { memberIdState } from "atoms/atoms";
+import { userInfoState } from "atoms/atoms";
 
 type ImageInfo = { imgUrl: string; boardImgId: string };
 
@@ -17,7 +17,7 @@ interface IBoardContent {
 
 export default function CommunityEditForm() {
   const router = useRouter();
-  const memberId = useRecoilValue(memberIdState);
+  const userInfo = useRecoilValue(userInfoState);
 
   // 새로고침 hydration error 해결
   const [ready, setReady] = useState(false);
@@ -33,8 +33,8 @@ export default function CommunityEditForm() {
         const data = await (await getBoardsDetail(boardId)).data;
         if (data.code === 1703) {
           // 창작자 아니면 인가 거부
-          if (data.data.memberId !== memberId) {
-            console.log("저리가", memberId, data.data);
+          if (data.data.memberId !== userInfo.memberId) {
+            console.log("저리가", userInfo.memberId, data.data);
             router.push({
               pathname: "/community/detail",
               query: { boardId },
@@ -51,7 +51,7 @@ export default function CommunityEditForm() {
         console.error(err);
       }
     },
-    [router, memberId]
+    [router, userInfo.memberId]
   );
 
   useEffect(() => {
