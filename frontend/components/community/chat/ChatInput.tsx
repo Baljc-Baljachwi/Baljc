@@ -14,6 +14,7 @@ const ChatInputDiv = styled.div`
   display: flex;
   gap: 1rem;
   align-items: center;
+  z-index: 999999;
 `;
 
 const InputDiv = styled.input`
