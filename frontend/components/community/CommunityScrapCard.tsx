@@ -76,7 +76,6 @@ export default function CommunityScrapCard({
         scrapYn: "N",
       };
       // setIsScrap(!isScrap);
-      //
       await postScrapBoards(boardId as string, data as object)
         .then((res) => {
           setIsChanged((prev) => !prev);
@@ -85,11 +84,9 @@ export default function CommunityScrapCard({
         .catch((err) => console.log(err));
     }
   };
-  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setComment(e.target.value);
-  // };
   return (
-    <CardContainer onClick={handleClick}>
+    // <CardContainer onClick={handleClick}>
+    <CardContainer>
       <CardContent>
         <div className="topContent">
           <Tag>{categoryName}</Tag>
@@ -97,7 +94,6 @@ export default function CommunityScrapCard({
             <BookmarkIconFilled
               onClick={handleScrapBoard}
               className="toggleIconFilled"
-              // className="btn text-red-500"
             />
           ) : (
             <BookmarkIcon onClick={handleScrapBoard} className="toggleIcon" />
@@ -107,10 +103,11 @@ export default function CommunityScrapCard({
             // icon="bookmark"
             // color={boardDetail.isScrap ? "#FFB800" : "#646464"}
             // mode={boardDetail.isScrap ? "fas" : "far"}
-            mode="fas"
+            mode={isScrap ? "fas" : "far"}
             icon="bookmark"
-            color={boardDetail.isScrap ? "#FFB800" : "#646464"}
+            color={isScrap ? "#FFB800" : "#646464"}
             display="flex"
+            size="2rem"
             onClick={handleScrapBoard}
           /> */}
         </div>
@@ -169,7 +166,7 @@ const CardContent = styled.div`
       position: relative;
     }
     .toggleIcon {
-      color: #ff6767;
+      color: #ffb800;
       width: 3rem;
       z-index: 20;
       position: relative;
