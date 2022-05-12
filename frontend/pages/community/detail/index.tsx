@@ -16,7 +16,7 @@ import {
 } from "api/community";
 import defaultProfileImage from "public/assets/img/mypage/avatar/default_profile.png";
 import { IPost, IComment } from "types";
-import { memberIdState } from "atoms/atoms";
+import { userInfoState } from "atoms/atoms";
 
 const Container = styled.div`
   display: flex;
@@ -140,7 +140,7 @@ interface IPostDetail extends IPost {
 export default function CommunityDetail() {
   const router = useRouter();
   const boardId = router.query.boardId;
-  const memberId = useRecoilValue(memberIdState);
+  const userInfo = useRecoilValue(userInfoState);
   const [open, setOpen] = useState(false); // 이미지 확대 모달
   const [boardDetail, setBoardDetail] = useState<IPostDetail>(
     {} as IPostDetail
@@ -262,10 +262,10 @@ export default function CommunityDetail() {
       {/* 사용자가 게시글 작성자인 경우 구분 */}
       <Header
         label=""
-        icon={memberId === boardDetail.memberId ? "pencil" : undefined}
+        icon={userInfo.memberId === boardDetail.memberId ? "pencil" : undefined}
         onClickBackButton={() => router.push("/community")}
         onClickRightButton={
-          memberId === boardDetail.memberId
+          userInfo.memberId === boardDetail.memberId
             ? () =>
                 router.push({
                   pathname: "/community/communityEditForm",

@@ -3,7 +3,7 @@ import ProfileContentCard from "../ProfileContentCard";
 
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
-import { accessTokenState, memberIdState } from "atoms/atoms";
+import { userInfoState } from "atoms/atoms";
 import { deleteMembers, logout } from "../../../api/member";
 import { getAlarms } from "../../../api/alarm";
 
@@ -15,8 +15,7 @@ const PageContainer = styled.main`
 `;
 
 const ProfileSettingsList = () => {
-  const [_, setAccessToken] = useRecoilState(accessTokenState);
-  const [memberId, setMemberId] = useRecoilState(memberIdState);
+  const [_, setUserInfoState] = useRecoilState(userInfoState);
   const router = useRouter();
   const { code } = router.query;
 
@@ -26,8 +25,12 @@ const ProfileSettingsList = () => {
       // console.log(res.data);
       console.log("메세지 찍어본다!" + res.data.message);
       router.push(res.data.code === 1003 ? "/" : "/mypage/settings");
-      setAccessToken("");
-      setMemberId("");
+      setUserInfoState({
+        accessToken: "",
+        memberId: "",
+        surveyedYn: false,
+        regionYn: false,
+      });
     });
   };
 
@@ -47,8 +50,12 @@ const ProfileSettingsList = () => {
     logout()
       .then((res) => {
         if (res.data.code === 1004) {
-          setAccessToken("");
-          setMemberId("");
+          setUserInfoState({
+            accessToken: "",
+            memberId: "",
+            surveyedYn: false,
+            regionYn: false,
+          });
           router.push("/");
         } else {
           console.log(res.data.message);

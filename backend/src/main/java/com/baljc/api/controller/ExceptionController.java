@@ -1,7 +1,9 @@
 package com.baljc.api.controller;
 
 import com.baljc.common.response.BaseResponse;
+import com.baljc.exception.HeartAlreadyExistException;
 import com.baljc.exception.NotExistedAccountBookException;
+import com.baljc.exception.ScrapAlreadyExistException;
 import com.baljc.exception.UnauthenticatedMemberException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -110,5 +112,19 @@ public class ExceptionController {
         log.error("NotExistedAccountBookException - {}", e.getMessage());
         // 400
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse(3300, e.getMessage()));
+    }
+
+    @ExceptionHandler(HeartAlreadyExistException.class)
+    public ResponseEntity<BaseResponse> HeartAlreadyExistExceptionHandler(HeartAlreadyExistException e) {
+        log.error("HeartAlreadyExistException - {}", e.getMessage());
+        // 400
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse(3700, e.getMessage()));
+    }
+
+    @ExceptionHandler(ScrapAlreadyExistException.class)
+    public ResponseEntity<BaseResponse> ScrapAlreadyExistExceptionHandler(ScrapAlreadyExistException e) {
+        log.error("ScrapAlreadyExistException - {}", e.getMessage());
+        // 400
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse(3701, e.getMessage()));
     }
 }

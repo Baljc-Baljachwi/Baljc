@@ -47,6 +47,7 @@ public class MemberDto {
         private String jwt;
         private UUID memberId;
         private Boolean surveyedYn;
+        private Boolean regionYn;
     }
 
     @Getter
@@ -54,6 +55,7 @@ public class MemberDto {
     public static class SigninResponse {
         private UUID memberId;
         private Boolean surveyedYn;
+        private Boolean regionYn;
     }
 
     @Getter
