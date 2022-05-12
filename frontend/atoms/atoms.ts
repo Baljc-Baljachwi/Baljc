@@ -36,24 +36,6 @@ export const userInfoState = atom<IUserInfo>({
   effects: [localStorageEffect("userInfo")],
 });
 
-// export const accessTokenState = atom<string>({
-//   key: "accessToken",
-//   default: "",
-//   effects: [localStorageEffect("accessToken")],
-// });
-
-// export const memberIdState = atom<string>({
-//   key: "userInfo",
-//   default: "",
-//   effects: [localStorageEffect("memberId")],
-// });
-
-// export const surveyedYNState = atom<"Y" | "N">({
-//   key: "surveyedYN",
-//   default: "N",
-//   effects: [localStorageEffect("surveyedYN")],
-// });
-
 export interface ITodoTypes {
   todoId: string;
   date: string;

@@ -2,7 +2,7 @@ import { userInfoState } from "atoms/atoms";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import Icon from "../common/Icon";
 
@@ -36,7 +36,7 @@ const Item = styled.div`
 export default function NavBar() {
   const router = useRouter();
   const [rootPathname, setRootPathname] = useState<string>("/");
-  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  const userInfo = useRecoilValue(userInfoState);
 
   useEffect(() => {
     const root = router.pathname.split("/")[1];
