@@ -3,13 +3,29 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import { getMyBoardList, getMyScrapList } from "api/mypage";
+import { useRecoilValue } from "recoil";
+import {
+  getBoardsDetail,
+  postLikeBoards,
+  postScrapBoards,
+  postComment,
+} from "api/community";
 import { IPost, IMyBoard } from "types";
+import Icon from "components/common/Icon";
+import { userInfoState } from "atoms/atoms";
 // import NotFoundTransaction from "components/common/not-found-transaction/NotFoundTransaction";
 // import Icon from "components/common/Icon";
 import ButtonImage from "components/common/ButtonImage";
 import Header from "components/common/Header";
-import CommunityCard from "components/community/CommunityCard";
-
+// import CommunityCard from "components/community/CommunityCard";
+import CommunityScrapCard from "components/community/CommunityScrapCard";
+interface IPostDetail extends IPost {
+  memberId: string;
+  nickname: string;
+  profileUrl: string | null;
+  isHeart: 0 | 1;
+  isScrap: 0 | 1;
+}
 interface IBoardCategory {
   boardCategoryId: string;
   imgUrl: string;
@@ -17,6 +33,13 @@ interface IBoardCategory {
 }
 const Scrap = () => {
   const router = useRouter();
+  const userInfo = useRecoilValue(userInfoState);
+  const [boardDetail, setBoardDetail] = useState<IPostDetail>(
+    {} as IPostDetail
+  );
+  const [isScrap, setIsScrap] = useState(1);
+  const [isChanged, setIsChanged] = useState(false); // 변경 감지할 변수
+
   const [ready, setReady] = useState(false);
   const [boardCategories, setBoardCategories] = useState<IBoardCategory[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>(
@@ -25,23 +48,46 @@ const Scrap = () => {
   const [idx, setIdx] = useState<number>(0);
   const [posts, setPosts] = useState<IPost[]>();
   const [myScrapList, setMyScrapList] = useState<IMyBoard[]>();
-
+  const [boardId, setBoardId] = useState("");
+  // const [likes, setLikes] = useState([])
+  // const [hasLiked, setHasLiked] = useState(false)
+  // const [isHeart, setHasLiked] = useState(false)
+  const [bookmark, setBookmark] = useState(1);
   useEffect(() => {
     getMyScrapList()
       .then((res) => {
         console.log(res.data.data);
         setMyScrapList(res.data.data);
+        setBoardId(res.data.data.boardId);
       })
       .catch((err) => {
         console.log(err.data.message);
       });
   }, []);
-  useEffect(() => {
-    setReady(true);
-  }, []);
-  if (!ready) {
-    return null;
-  }
+  const handleScrapBoard = () => {
+    if (isScrap === 0) {
+      const data = {
+        scrapYn: "Y",
+      };
+      postScrapBoards(boardId as string, data as object)
+        .then((res) => setIsChanged((prev) => !prev))
+        .catch((err) => console.log(err.message));
+    } else {
+      const data = {
+        scrapYn: "N",
+      };
+      postScrapBoards(boardId as string, data as object)
+        .then((res) => setIsChanged((prev) => !prev))
+        .catch((err) => console.log(err));
+    }
+  };
+
+  // useEffect(() => {
+  //   setReady(true);
+  // }, []);
+  // if (!ready) {
+  //   return null;
+  // }
   return (
     <>
       <Header
@@ -52,7 +98,7 @@ const Scrap = () => {
         <BodyContainer>
           {myScrapList?.length !== 0 ? (
             myScrapList?.map((myScrapList: any) => (
-              <CommunityCard
+              <CommunityScrapCard
                 key={myScrapList.boardId}
                 boardId={myScrapList.boardId}
                 categoryName={myScrapList.categoryName}

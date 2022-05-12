@@ -595,7 +595,9 @@ export default function Survey() {
               </div>
             </LocationDiv>
             <MutedMessage>
-              (선택) 커뮤니티 이용을 위해 위치 정보가 필요합니다
+              (선택) 커뮤니티 이용을 위해 위치 정보가 필요합니다.
+              <p />
+              '마이페이지 &gt; 내 정보 수정'에서 후에 수정할 수 있습니다.
             </MutedMessage>
           </div>
           <ButtonBottom label="가입" type="submit" />
