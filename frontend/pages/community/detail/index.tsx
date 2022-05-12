@@ -71,6 +71,9 @@ const Typography = styled.div<{
   font-size: ${(props) => (props.fs ? props.fs : "1rem")};
   font-weight: ${(props) => (props.fw ? props.fw : "")};
   padding: ${(props) => (props.p ? props.p : "0")};
+  .textTypo {
+    color: #dfdede;
+  }
 `;
 
 const FlexContainer = styled.div`
@@ -320,7 +323,7 @@ export default function CommunityDetail() {
               <Icon
                 mode={boardDetail.isHeart ? "fas" : "far"}
                 icon="heart"
-                color={boardDetail.isHeart ? "#000000" : "#646464"}
+                color={boardDetail.isHeart ? "#FF6767" : "#646464"}
                 display="flex"
               />
               좋아요
@@ -330,7 +333,7 @@ export default function CommunityDetail() {
               <Icon
                 mode={boardDetail.isScrap ? "fas" : "far"}
                 icon="bookmark"
-                color={boardDetail.isScrap ? "#000000" : "#646464"}
+                color={boardDetail.isScrap ? "#FFB800" : "#646464"}
                 display="flex"
               />
               스크랩
@@ -338,13 +341,13 @@ export default function CommunityDetail() {
           </ButtonContainer>
 
           <FlexContainer>
-            <Icon mode="fas" icon="comment" size="14px" />
+            <Icon mode="fas" icon="comment" size="14px" color="#DFDEDE" />
             <Typography fs="1.4rem" p="0 0.5rem">
-              {boardDetail.commentCnt}
+              <span className="textTypo">{boardDetail.commentCnt}</span>
             </Typography>
-            <Icon mode="fas" icon="heart" size="14px" />
+            <Icon mode="fas" icon="heart" size="14px" color="#DFDEDE" />
             <Typography fs="1.4rem" p="0 0.5rem">
-              {boardDetail.heartCnt}
+              <span className="textTypo">{boardDetail.heartCnt}</span>
             </Typography>
           </FlexContainer>
         </FlexContainer>
