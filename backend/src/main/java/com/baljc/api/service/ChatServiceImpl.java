@@ -43,18 +43,20 @@ public class ChatServiceImpl implements ChatService{
                 .map(room -> {
                     LocalDateTime now = LocalDateTime.now();
                     LocalDateTime dateTime = room.getUpdatedAt();
-                    long minutes = ChronoUnit.MINUTES.between(dateTime, now);
-                    long hours = ChronoUnit.HOURS.between(dateTime, now);
-                    long days = ChronoUnit.DAYS.between(dateTime, now);
                     String updatedAt = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                    if (minutes < 1) {
-                        updatedAt = "방금전";
-                    }else if (minutes < 60) {
-                        updatedAt = minutes + "분전";
-                    }else if (hours < 24) {
-                        updatedAt = hours + "시간전";
-                    }else if(days < 7) {
-                        updatedAt = days + "일전";
+                    long diff = ChronoUnit.DAYS.between(dateTime, now);
+
+                    if (diff < 7) {
+                        if (diff >= 1) updatedAt = diff + "일전";
+                        else {
+                            diff = ChronoUnit.HOURS.between(dateTime, now);
+                            if (diff >= 1) updatedAt = diff + "시간전";
+                            else {
+                                diff = ChronoUnit.MINUTES.between(dateTime, now);
+                                if (diff >= 1) updatedAt = diff + "분전";
+                                else updatedAt = "방금전";
+                            }
+                        }
                     }
 
                     Member other = room.getMember1();
