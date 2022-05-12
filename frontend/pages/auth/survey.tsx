@@ -321,7 +321,11 @@ export default function Survey() {
     putMembers(formData).then((res) => {
       console.log(res.data);
       if (res.data.code === 1002) {
-        setUserInfo((prev) => ({ ...prev, surveyedYn: true }));
+        setUserInfo((prev) => ({
+          ...prev,
+          surveyedYn: true,
+          regionYn: !!memberInfo.depth1,
+        }));
         router.push("/calendar");
       } else {
         confirm("설문조사 생성 실패!");

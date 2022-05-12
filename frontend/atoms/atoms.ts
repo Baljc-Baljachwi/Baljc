@@ -22,6 +22,7 @@ interface IUserInfo {
   accessToken: string;
   memberId: string;
   surveyedYn: boolean;
+  regionYn: boolean;
 }
 
 export const userInfoState = atom<IUserInfo>({
@@ -30,6 +31,7 @@ export const userInfoState = atom<IUserInfo>({
     accessToken: "",
     memberId: "",
     surveyedYn: false,
+    regionYn: false,
   },
   effects: [localStorageEffect("userInfo")],
 });

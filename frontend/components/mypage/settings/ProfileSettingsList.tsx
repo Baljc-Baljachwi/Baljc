@@ -25,7 +25,12 @@ const ProfileSettingsList = () => {
       // console.log(res.data);
       console.log("메세지 찍어본다!" + res.data.message);
       router.push(res.data.code === 1003 ? "/" : "/mypage/settings");
-      setUserInfoState({ accessToken: "", memberId: "", surveyedYn: false });
+      setUserInfoState({
+        accessToken: "",
+        memberId: "",
+        surveyedYn: false,
+        regionYn: false,
+      });
     });
   };
 
@@ -49,6 +54,7 @@ const ProfileSettingsList = () => {
             accessToken: "",
             memberId: "",
             surveyedYn: false,
+            regionYn: false,
           });
           router.push("/");
         } else {

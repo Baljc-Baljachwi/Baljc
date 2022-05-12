@@ -36,9 +36,9 @@ export default function KakaoAuth() {
             console.log(`accessToken : ${accessToken}`);
             console.log(res.data.data);
 
-            const { memberId, surveyedYn } = res.data.data;
+            const { memberId, surveyedYn, regionYn } = res.data.data;
 
-            setUserInfo({ accessToken, memberId, surveyedYn });
+            setUserInfo({ accessToken, memberId, surveyedYn, regionYn });
 
             router.push(
               res.data.data.surveyedYn ? "/calendar" : "/auth/survey"
