@@ -26,6 +26,7 @@ const Tag = styled.div`
   color: #646464;
   padding: 0.1rem 1rem;
   border-radius: 3px;
+  height: 2rem;
 `;
 
 const Content = styled.div`
