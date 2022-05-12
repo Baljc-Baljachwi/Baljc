@@ -169,12 +169,14 @@ const CardContent = styled.div`
       width: 3rem;
       z-index: 20;
       position: relative;
+      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
     }
     .toggleIcon {
       color: #ffb800;
       width: 3rem;
       z-index: 20;
       position: relative;
+      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
     }
   }
 `;
