@@ -247,7 +247,7 @@ export default function CommunityDetail() {
               imgInfoList: imgUrlList,
             });
             res.data.data.commentList.map((item: any, idx: string) => {
-              if (item.deletedYn === "N") {
+              if (item.deletedYn === "N" || item.list.length > 0) {
                 setCommentList((prev) => [...prev, item]);
               }
             });
