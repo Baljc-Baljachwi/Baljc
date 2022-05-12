@@ -160,14 +160,14 @@ public class AccountBookServiceImpl implements AccountBookService {
 
     @Override
     public void updateAccountBook(UUID accoutbookId, AccountBookDto.AccountBookRequest accountBookRequest) {
-        AccountBook accountBook = accountBookRepository.getById(accoutbookId);
+        AccountBook accountBook = accountBookRepository.findById(accoutbookId).orElseThrow(() -> new NullPointerException("해당 가계부가 존재하지 않습니다."));;
         Category category = categoryRepository.getById(accountBookRequest.getCategoryId());
         accountBook.updateAccontBook(accountBookRequest, category);
     }
 
     @Override
     public void deleteAccountBook(UUID accoutbookId) {
-        AccountBook accountBook = accountBookRepository.getById(accoutbookId);
+        AccountBook accountBook = accountBookRepository.findById(accoutbookId).orElseThrow(() -> new NullPointerException("해당 가계부가 존재하지 않습니다."));;
         accountBook.deleteAccountBook();
     }
 

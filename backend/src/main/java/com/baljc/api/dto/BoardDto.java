@@ -204,12 +204,14 @@ public class BoardDto {
     @Getter
     @NoArgsConstructor
     public static class HeartRequest {
+        @Pattern(regexp = "^[YN]$", message = "올바른 형식(Y/N)이 아닙니다.")
         private String heartYn;
     }
 
     @Getter
     @NoArgsConstructor
     public static class ScrapRequest {
+        @Pattern(regexp = "^[YN]$", message = "올바른 형식(Y/N)이 아닙니다.")
         private String scrapYn;
     }
 }

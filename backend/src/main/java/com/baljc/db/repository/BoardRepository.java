@@ -53,4 +53,6 @@ public interface BoardRepository extends JpaRepository<Board, UUID> {
             "LIMIT :idx, 20", nativeQuery = true)
     List<BoardDto.BoardListInterface> getBoardListByCategory(@Param(value = "lat") double lat, @Param(value = "lon") double lon, @Param(value = "idx") long idx, @Param(value = "categoryId") byte[] categoryId);
 
+    @Query("select b from Board b where b.deletedYn='N' and b.boardId=:boardId")
+    Optional<Board> findById(@Param(value = "boardId") UUID boardId);
 }
