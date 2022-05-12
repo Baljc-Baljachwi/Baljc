@@ -79,9 +79,7 @@ export default function CommunityList() {
 
   // state
   const [posts, setPosts] = useState<IPost[]>([]);
-  // ref
-  const observerRef = useRef<IntersectionObserver>();
-  const boxRef = useRef<HTMLDivElement>(null);
+  const [lastPost, setLastPost] = useState<HTMLDivElement | null>(null);
 
   // 카테고리 setting
   useEffect(() => {
@@ -94,30 +92,48 @@ export default function CommunityList() {
     });
   }, []);
 
-  // function
+  // API호출하는 함수
   const getInfo = async () => {
-    getBoardsList(idx, selectedCategory)
-      .then((res) => {
-        setPosts((prev) => [...prev, ...res.data.data]); // state에 추가
-        console.log("info data add...");
-      })
-      .catch((err) => console.log(err));
+    try {
+      getBoardsList(idx, selectedCategory).then((res) => {
+        console.log("res.data.data", res.data.data);
+        setPosts(posts.concat(res.data.data)); // state에 추가
+        console.log("posts", posts);
+      });
+    } catch {
+      console.error("fetching error");
+    }
   };
 
   // IntersectionObserver 설정
-  const intersectionObserver = (
+  const onIntersect: IntersectionObserverCallback = (
     entries: IntersectionObserverEntry[],
-    io: IntersectionObserver
+    observer: IntersectionObserver
   ) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        // 관찰하고 있는 entry가 화면에 보여지는 경우
-        io.unobserve(entry.target); // entry 관찰 해제
-        setIdx((prev) => prev + 1);
-        getInfo(); // 데이터 가져오기
+        // 뷰포트에 마지막 이미지 들어오면
+        setIdx((prev) => prev + 20);
+        // 현재 타깃을 unobserve
+        observer.unobserve(entry.target);
       }
     });
   };
+  useEffect(() => {
+    console.log("page ? ", idx);
+    getInfo();
+  }, [idx]); // idx 바뀔 때마다 함수 실행
+
+  useEffect(() => {
+    //observer 인스턴스를 생성한 후 구독
+    let observer: IntersectionObserver;
+    if (lastPost) {
+      observer = new IntersectionObserver(onIntersect, { threshold: 0.5 });
+      //observer 생성 시 observe할 target 요소는 불러온 이미지의 마지막아이템(randomImageList 배열의 마지막 아이템)으로 지정
+      observer.observe(lastPost);
+    }
+    return () => observer && observer.disconnect();
+  }, [lastPost]);
 
   // 게시글
   useEffect(() => {
@@ -125,11 +141,6 @@ export default function CommunityList() {
     setPosts([]);
     getInfo();
   }, [selectedCategory]);
-
-  useEffect(() => {
-    observerRef.current = new IntersectionObserver(intersectionObserver); // IntersectionObserver
-    boxRef.current && observerRef.current.observe(boxRef.current);
-  }, [posts]);
 
   return (
     <Container>
@@ -153,9 +164,9 @@ export default function CommunityList() {
       </Header>
       <BodyContainer>
         {posts?.map((post: any, idx: number) => {
-          if (posts.length - 3 === idx) {
+          if (posts.length - 1 === idx) {
             return (
-              <div ref={boxRef} key={post.boardId}>
+              <div ref={setLastPost} key={post.boardId}>
                 <CommunityCard
                   boardId={post.boardId}
                   categoryName={post.categoryName}
