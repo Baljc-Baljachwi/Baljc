@@ -74,6 +74,10 @@ const ModalInner = styled.div`
     -webkit-align-items: center;
     align-items: center;
   }
+
+  .image {
+    object-fit: contain;
+  }
 `;
 
 interface ImageProps {
@@ -117,8 +121,16 @@ export default function CommunityImageModal({
                 className="mySwiper"
               >
                 {imageList?.map((image, idx) => (
-                  <SwiperSlide key={idx} style={{ width: "100%" }}>
-                    <Image src={image} alt="" width={400} height={300} />
+                  <SwiperSlide
+                    key={idx}
+                    style={{
+                      width: "100%",
+                      height: "30rem",
+                      position: "relative",
+                    }}
+                  >
+                    {/* <Image src={image} alt="" width={400} height={300} /> */}
+                    <Image src={image} alt="" layout="fill" className="image" />
                   </SwiperSlide>
                 ))}
               </Swiper>
