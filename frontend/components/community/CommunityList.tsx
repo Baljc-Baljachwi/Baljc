@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState, Fragment } from "react";
+import { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 
 import all from "../../public/assets/img/community/all.png";
@@ -73,16 +73,20 @@ export default function CommunityList() {
   const router = useRouter();
   const [boardCategories, setBoardCategories] = useState<IBoardCategory[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>(
-    // "271105c2-f94c-47bc-8af4-dc156dcad3eb"
-    "b0756160-eb30-4ac7-90c5-1b2e2d73c645"
+    "38383037-3665-3162-6433-356534303833"
   );
   const [idx, setIdx] = useState<number>(0);
-  const [posts, setPosts] = useState<IPost[]>();
 
+  // state
+  const [posts, setPosts] = useState<IPost[]>([]);
+  // ref
+  const observerRef = useRef<IntersectionObserver>();
+  const boxRef = useRef<HTMLDivElement>(null);
+
+  // 카테고리 setting
   useEffect(() => {
     getBoardsCategories().then((res) => {
       if (res.data.code === 1700) {
-        console.log(res.data.data);
         setBoardCategories(res.data.data);
       } else {
         console.log(res.data.message);
@@ -90,18 +94,43 @@ export default function CommunityList() {
     });
   }, []);
 
-  useEffect(() => {
-    getBoardsList(idx, selectedCategory).then((res) => {
-      if (res.data.code === 1702) {
-        console.log(res.data.data);
-        setPosts(res.data.data);
-      } else {
-        console.log(res.data.message);
+  // function
+  const getInfo = async () => {
+    getBoardsList(idx, selectedCategory)
+      .then((res) => {
+        setPosts((prev) => [...prev, ...res.data.data]); // state에 추가
+        console.log("info data add...");
+      })
+      .catch((err) => console.log(err));
+  };
+
+  // IntersectionObserver 설정
+  const intersectionObserver = (
+    entries: IntersectionObserverEntry[],
+    io: IntersectionObserver
+  ) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        // 관찰하고 있는 entry가 화면에 보여지는 경우
+        io.unobserve(entry.target); // entry 관찰 해제
+        setIdx((prev) => prev + 1);
+        getInfo(); // 데이터 가져오기
       }
     });
-  }, [idx, selectedCategory]);
+  };
 
-  console.log(111, posts);
+  // 게시글
+  useEffect(() => {
+    setIdx(0);
+    setPosts([]);
+    getInfo();
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    observerRef.current = new IntersectionObserver(intersectionObserver); // IntersectionObserver
+    boxRef.current && observerRef.current.observe(boxRef.current);
+  }, [posts]);
+
   return (
     <Container>
       <Header>
@@ -111,7 +140,7 @@ export default function CommunityList() {
             onClick={() => setSelectedCategory(item.boardCategoryId)}
             isSelected={selectedCategory === item.boardCategoryId}
           >
-            <Image src={all} alt="전체보기" width="40%" height="40%" />
+            <Image src={item.imgUrl} alt={item.name} width="40%" height="40%" />
             <Typography
               fs="1.2rem"
               m="0.5rem 0 0 0"
@@ -123,20 +152,41 @@ export default function CommunityList() {
         ))}
       </Header>
       <BodyContainer>
-        {posts?.map((post: any) => (
-          <CommunityCard
-            key={post.boardId}
-            boardId={post.boardId}
-            categoryName={post.categoryName}
-            content={post.content}
-            createdAt={post.createdAt}
-            creator={post.creator}
-            dong={post.dong}
-            imgUrlList={post.imgUrlList}
-            heartCnt={post.heartCnt}
-            commentCnt={post.commentCnt}
-          />
-        ))}
+        {posts?.map((post: any, idx: number) => {
+          if (posts.length - 3 === idx) {
+            return (
+              <div ref={boxRef} key={post.boardId}>
+                <CommunityCard
+                  boardId={post.boardId}
+                  categoryName={post.categoryName}
+                  content={post.content}
+                  createdAt={post.createdAt}
+                  creator={post.creator}
+                  dong={post.dong}
+                  imgUrlList={post.imgUrlList}
+                  heartCnt={post.heartCnt}
+                  commentCnt={post.commentCnt}
+                />
+              </div>
+            );
+          } else {
+            return (
+              <div key={post.boardId}>
+                <CommunityCard
+                  boardId={post.boardId}
+                  categoryName={post.categoryName}
+                  content={post.content}
+                  createdAt={post.createdAt}
+                  creator={post.creator}
+                  dong={post.dong}
+                  imgUrlList={post.imgUrlList}
+                  heartCnt={post.heartCnt}
+                  commentCnt={post.commentCnt}
+                />
+              </div>
+            );
+          }
+        })}
       </BodyContainer>
       <ChatButtonDiv>
         <ChatButton
