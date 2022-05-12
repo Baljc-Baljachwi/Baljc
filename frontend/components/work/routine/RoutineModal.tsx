@@ -220,28 +220,35 @@ export default function RoutineModal({
 
   const editRoutine = () => {
     const routinId = routineId || "";
-    putRoutines(routinId, routineForm)
-      .then((res) => {
-        console.log(res.data);
-        setRoutineList(
-          routineList.map((routine: IRoutine) => {
-            return routine.routineId === routineId
-              ? {
-                  ...routine,
-                  routineId: routineId,
-                  title: routineForm.title,
-                  repetition: routineForm.repetition,
-                }
-              : routine;
-          })
-        );
-        alert("일과 수정 완료");
-        setOpen(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        alert("일과 수정 실패");
-      });
+    if (routineForm.title.length > 0 && routineForm.repetition !== 0) {
+      putRoutines(routinId, routineForm)
+        .then((res) => {
+          console.log(res.data);
+          setRoutineList(
+            routineList.map((routine: IRoutine) => {
+              return routine.routineId === routineId
+                ? {
+                    ...routine,
+                    routineId: routineId,
+                    title: routineForm.title,
+                    repetition: routineForm.repetition,
+                  }
+                : routine;
+            })
+          );
+          setOpen(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      if (routineForm.title.length === 0) {
+        setTitleValidation(true);
+      }
+      if (routineForm.repetition === 0) {
+        setRepetitionValidation(true);
+      }
+    }
   };
 
   const deleteRoutine = () => {
