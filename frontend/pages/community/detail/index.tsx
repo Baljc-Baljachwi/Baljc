@@ -8,7 +8,11 @@ import Header from "../../../components/common/Header";
 import Icon from "../../../components/common/Icon";
 import ImageModal from "../../../components/community/detail/CommunityImageModal";
 import CommentCard from "components/community/detail/CommentCard";
-import { getBoardsDetail, postComment } from "api/community";
+import {
+  getBoardsDetail,
+  postLikeBoards,
+  postComment,
+} from "api/community";
 import defaultProfileImage from "public/assets/img/mypage/avatar/default_profile.png";
 import { IPost, IComment } from "types";
 import { memberIdState } from "atoms/atoms";
@@ -134,6 +138,7 @@ interface IPostDetail extends IPost {
 
 export default function CommunityDetail() {
   const router = useRouter();
+  const boardId = router.query.boardId;
   const memberId = useRecoilValue(memberIdState);
   const [open, setOpen] = useState(false); // 이미지 확대 모달
   const [boardDetail, setBoardDetail] = useState<IPostDetail>(
@@ -141,9 +146,26 @@ export default function CommunityDetail() {
   );
   const [commentList, setCommentList] = useState<IComment[]>([]);
   const [comment, setComment] = useState("");
+  const [isChanged, setIsChanged] = useState(false); // 변경 감지할 변수
 
-  const onReset = () => {
-    setComment("");
+  const handleLikeBoard = () => {
+    if (boardDetail.isHeart === 0) {
+      const data = {
+        heartYn: "Y",
+      };
+      postLikeBoards(boardId as string, data as object)
+        .then((res) => setIsChanged((prev) => !prev))
+        .catch((err) => console.log(err));
+    } else {
+      const data = {
+        heartYn: "N",
+      };
+      postLikeBoards(boardId as string, data as object)
+        .then((res) => setIsChanged((prev) => !prev))
+        .catch((err) => console.log(err));
+    }
+  };
+
   };
 
   const onClickImage = () => {
@@ -155,24 +177,27 @@ export default function CommunityDetail() {
   };
 
   const handleSubmit = (e: any) => {
-    const boardId = router.query.boardId;
     const data = {
       parentId: null,
       content: comment,
     };
     postComment(boardId as string, data as object).then((res) => {
+      setIsChanged((prev) => !prev);
       onReset();
     });
   };
 
+  const onReset = () => {
+    setComment("");
+  };
+
   useEffect(() => {
+    setCommentList([]);
     const boardId = router.query.boardId;
     if (boardId) {
       getBoardsDetail(boardId as string)
         .then((res) => {
-          console.log(res.data);
           if (res.data.code === 1703) {
-            // console.log(res.data.data);
             const { data } = res.data;
             const {
               boardId,
@@ -213,7 +238,7 @@ export default function CommunityDetail() {
         })
         .catch((err) => console.error(err));
     }
-  }, [router.query.boardId]); // 함수 실행될 때 useEffect 실행 가능한지 찾아보기
+  }, [router.query.boardId, isChanged]);
 
   return (
     <>
@@ -274,7 +299,7 @@ export default function CommunityDetail() {
         </Content>
         <FlexContainer>
           <ButtonContainer>
-            <GrayButton>
+            <GrayButton onClick={handleLikeBoard}>
               <Icon
                 mode={boardDetail.isHeart ? "fas" : "far"}
                 icon="heart"
