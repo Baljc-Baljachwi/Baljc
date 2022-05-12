@@ -11,6 +11,7 @@ import CommentCard from "components/community/detail/CommentCard";
 import {
   getBoardsDetail,
   postLikeBoards,
+  postScrapBoards,
   postComment,
 } from "api/community";
 import defaultProfileImage from "public/assets/img/mypage/avatar/default_profile.png";
@@ -166,6 +167,22 @@ export default function CommunityDetail() {
     }
   };
 
+  const handleScrapBoard = () => {
+    if (boardDetail.isScrap === 0) {
+      const data = {
+        scrapYn: "Y",
+      };
+      postScrapBoards(boardId as string, data as object)
+        .then((res) => setIsChanged((prev) => !prev))
+        .catch((err) => console.log(err));
+    } else {
+      const data = {
+        scrapYn: "N",
+      };
+      postScrapBoards(boardId as string, data as object)
+        .then((res) => setIsChanged((prev) => !prev))
+        .catch((err) => console.log(err));
+    }
   };
 
   const onClickImage = () => {
@@ -309,7 +326,7 @@ export default function CommunityDetail() {
               좋아요
             </GrayButton>
 
-            <GrayButton>
+            <GrayButton onClick={handleScrapBoard}>
               <Icon
                 mode={boardDetail.isScrap ? "fas" : "far"}
                 icon="bookmark"

@@ -27,6 +27,10 @@ export const postLikeBoards = async (boardId: string, data: object) => {
   return await api.post(`/api/boards/${boardId}/like`, data);
 };
 
+export const postScrapBoards = async (boardId: string, data: object) => {
+  return await api.post(`/api/boards/${boardId}/scrap`, data);
+};
+
 export const postComment = async (boardId: string, data: object) => {
   return await api.post(`/api/boards/${boardId}/comments`, data);
 };
