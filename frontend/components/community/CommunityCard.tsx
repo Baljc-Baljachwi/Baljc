@@ -41,6 +41,9 @@ const Typography = styled.div<{
   font-size: ${(props) => (props.fs ? props.fs : "1rem")};
   font-weight: ${(props) => (props.fw ? props.fw : "")};
   padding: ${(props) => (props.p ? props.p : "0")};
+  .textTypo {
+    color: #dfdede;
+  }
 `;
 
 const ImageContainer = styled.div`
@@ -106,10 +109,14 @@ export default function CommunityCard({
               {createdAt} | {creator} | {dong}
             </Typography>
             <FlexContainer>
-              <Icon mode="fas" icon="comment" size="10px" />
-              <Typography p="0 0.5rem">{commentCnt}</Typography>
-              <Icon mode="fas" icon="heart" size="10px" />
-              <Typography p="0 0.5rem">{heartCnt}</Typography>
+              <Icon mode="fas" icon="comment" size="10px" color="#DFDEDE" />
+              <Typography p="0 0.5rem">
+                <span className="textTypo">{commentCnt}</span>
+              </Typography>
+              <Icon mode="fas" icon="heart" size="10px" color="#DFDEDE" />
+              <Typography p="0 0.5rem">
+                <span className="textTypo">{heartCnt}</span>
+              </Typography>
             </FlexContainer>
           </FlexContainer>
         </Content>
