@@ -285,34 +285,11 @@ export default function CommunityDetail() {
         .then((res) => {
           if (res.data.code === 1703) {
             const { data } = res.data;
-            const {
-              boardId,
-              categoryName,
-              commentCnt,
-              content,
-              createdAt,
-              heartCnt,
-              imgUrlList,
-              isHeart,
-              isScrap,
-              memberId,
-              nickname,
-              profileUrl,
-            } = data;
+            const { imgUrlList } = data;
 
             setBoardDetail({
-              boardId,
-              categoryName,
-              commentCnt,
-              content,
-              createdAt,
-              heartCnt,
+              ...data,
               imgUrlList: imgUrlList.map((obj: any) => obj.imgUrl),
-              isHeart,
-              isScrap,
-              memberId,
-              nickname,
-              profileUrl,
               imgInfoList: imgUrlList,
             });
             res.data.data.commentList.map((item: any, idx: string) => {
@@ -326,22 +303,11 @@ export default function CommunityDetail() {
     }
   }, [router.query.boardId, isChanged]);
 
+  console.log(boardDetail);
   return (
     <>
       {/* 사용자가 게시글 작성자인 경우 구분 */}
-      <Header
-        label=""
-        onClickBackButton={() => router.push("/community")}
-        onClickRightButton={
-          userInfo.memberId === boardDetail.memberId
-            ? () =>
-                router.push({
-                  pathname: "/community/communityEditForm",
-                  query: { boardId: boardDetail.boardId },
-                })
-            : () => {}
-        }
-      />
+      <Header label="" onClickBackButton={() => router.push("/community")} />
       <Container>
         <div>
           <Tag>{boardDetail.categoryName}</Tag>
