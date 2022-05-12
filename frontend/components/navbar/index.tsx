@@ -1,6 +1,8 @@
+import { userInfoState } from "atoms/atoms";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import Icon from "../common/Icon";
 
@@ -34,6 +36,7 @@ const Item = styled.div`
 export default function NavBar() {
   const router = useRouter();
   const [rootPathname, setRootPathname] = useState<string>("/");
+  const userInfo = useRecoilValue(userInfoState);
 
   useEffect(() => {
     const root = router.pathname.split("/")[1];
@@ -42,7 +45,17 @@ export default function NavBar() {
 
   return (
     <Container>
-      <Item onClick={() => router.push("/community")}>
+      <Item
+        onClick={() => {
+          if (userInfo.regionYn) {
+            router.push("/community");
+          } else {
+            confirm(
+              "커뮤니티 이용을 위해서는 위치 정보가 필요합니다!\n마이페이지에서 위치 정보를 수정해주세요."
+            );
+          }
+        }}
+      >
         <Icon
           mode="fas"
           icon="comments"

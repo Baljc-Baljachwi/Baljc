@@ -121,24 +121,26 @@ public class MyPageServiceImpl implements MyPageService {
                 .map(board -> {
                     LocalDateTime now = LocalDateTime.now();
                     LocalDateTime dateTime = board.getCreatedAt();
-                    long minutes = ChronoUnit.MINUTES.between(dateTime, now);
-                    long hours = ChronoUnit.HOURS.between(dateTime, now);
-                    long days = ChronoUnit.DAYS.between(dateTime, now);
-                    String updatedAt = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                    if (minutes < 1) {
-                        updatedAt = "방금전";
-                    }else if (minutes < 60) {
-                        updatedAt = minutes + "분전";
-                    }else if (hours < 24) {
-                        updatedAt = hours + "시간전";
-                    }else if(days < 7) {
-                        updatedAt = days + "일전";
+                    String createdAt = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    long diff = ChronoUnit.DAYS.between(dateTime, now);
+
+                    if (diff < 7) {
+                        if (diff >= 1) createdAt = diff + "일전";
+                        else {
+                            diff = ChronoUnit.HOURS.between(dateTime, now);
+                            if (diff >= 1) createdAt = diff + "시간전";
+                            else {
+                                diff = ChronoUnit.MINUTES.between(dateTime, now);
+                                if (diff >= 1) createdAt = diff + "분전";
+                                else createdAt = "방금전";
+                            }
+                        }
                     }
 
                     return new BoardDto.BoardListResponse(board.getBoardId(),
                             board.getBoardCategory().getName(),
                             board.getContent(),
-                            updatedAt,
+                            createdAt,
                             board.getMember().getNickname(),
                             board.getDong(),
                             board.getBoardImgList()
@@ -161,24 +163,26 @@ public class MyPageServiceImpl implements MyPageService {
                 .map(board -> {
                     LocalDateTime now = LocalDateTime.now();
                     LocalDateTime dateTime = board.getCreatedAt();
-                    long minutes = ChronoUnit.MINUTES.between(dateTime, now);
-                    long hours = ChronoUnit.HOURS.between(dateTime, now);
-                    long days = ChronoUnit.DAYS.between(dateTime, now);
-                    String updatedAt = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                    if (minutes < 1) {
-                        updatedAt = "방금전";
-                    }else if (minutes < 60) {
-                        updatedAt = minutes + "분전";
-                    }else if (hours < 24) {
-                        updatedAt = hours + "시간전";
-                    }else if(days < 7) {
-                        updatedAt = days + "일전";
+                    String createdAt = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    long diff = ChronoUnit.DAYS.between(dateTime, now);
+
+                    if (diff < 7) {
+                        if (diff >= 1) createdAt = diff + "일전";
+                        else {
+                            diff = ChronoUnit.HOURS.between(dateTime, now);
+                            if (diff >= 1) createdAt = diff + "시간전";
+                            else {
+                                diff = ChronoUnit.MINUTES.between(dateTime, now);
+                                if (diff >= 1) createdAt = diff + "분전";
+                                else createdAt = "방금전";
+                            }
+                        }
                     }
 
                     return new BoardDto.BoardListResponse(board.getBoardId(),
                             board.getBoardCategory().getName(),
                             board.getContent(),
-                            updatedAt,
+                            createdAt,
                             board.getMember().getNickname(),
                             board.getDong(),
                             board.getBoardImgList()

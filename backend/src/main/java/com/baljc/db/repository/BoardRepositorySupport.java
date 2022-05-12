@@ -91,7 +91,7 @@ public class BoardRepositorySupport {
     public BoardDto.BoardDetailDto getBoardDetail(UUID boardId, Member member) {
         BoardDto.BoardDetailDto response = jpaQueryFactory.select(
                         new QBoardDto_BoardDetailDto(qBoard.boardId, qMember.memberId, qMember.profileUrl, qMember.nickname,
-                                qBoardCategory.name, qBoard.content, qBoard.createdAt, qHeart.count(), qComment.count(),
+                                qBoardCategory.name, qBoard.content, qBoard.createdAt, qHeart.countDistinct(), qComment.countDistinct(),
                                 ExpressionUtils.as(
                                         JPAExpressions.select(count(qHeart.heartId))
                                                 .from(qHeart)
@@ -107,9 +107,9 @@ public class BoardRepositorySupport {
                 .leftJoin(qBoardCategory).on(qBoard.boardCategory.eq(qBoardCategory))
                 .leftJoin(qMember).on(qBoard.member.eq(qMember))
                 .leftJoin(qHeart).on(qHeart.board.eq(qBoard))
-                .leftJoin(qComment).on(qComment.board.eq(qBoard))
+                .leftJoin(qComment).on(qComment.board.eq(qBoard).and(qComment.deletedYn.eq('N')))
                 .groupBy(qBoard.boardId)
-                .where(qBoard.boardId.eq(boardId))
+                .where(qBoard.boardId.eq(boardId).and(qBoard.deletedYn.eq('N')))
                 .fetchOne();
 
         return response;

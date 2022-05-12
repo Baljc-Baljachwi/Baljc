@@ -1,23 +1,24 @@
 import type { NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
-import styled from "styled-components";
+
 import KakaoLoginButton from "../components/auth/KakaoLoginButton";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useRecoilValue } from "recoil";
-import { accessTokenState } from "atoms/atoms";
+import { userInfoState } from "atoms/atoms";
 
 const Home: NextPage = () => {
   const router = useRouter();
-  const accessToken = useRecoilValue(accessTokenState);
+  const userInfo = useRecoilValue(userInfoState);
 
   useEffect(() => {
-    if (accessToken) {
-      router.push("/calendar");
+    if (userInfo.accessToken) {
+      if (userInfo.surveyedYn) {
+        router.push("/calendar");
+      } else {
+        router.push("/auth/survey");
+      }
     }
-  }, [router, accessToken]);
+  }, [router, userInfo]);
   return (
     <>
       <KakaoLoginButton></KakaoLoginButton>

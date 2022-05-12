@@ -52,7 +52,6 @@ const CardDiv = styled.div`
 
 export default function RoutineDetail() {
   const router = useRouter();
-  // query로 보내면 문자열이 되네요..?
   const dow = Number(router.query.dow);
 
   const [open, setOpen] = useState(false);
@@ -66,13 +65,6 @@ export default function RoutineDetail() {
   };
 
   const getRoutineList = () => {
-    // getRoutines(dow)
-    //   .then((res) => {
-    //     setRoutineList(res.data.data);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
     getAllRoutines()
       .then((res) => {
         console.log(res.data.data);

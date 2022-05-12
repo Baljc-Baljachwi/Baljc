@@ -8,6 +8,8 @@ import ButtonBottom from "../../components/common/ButtonBottom";
 import { putMembers, kakaoCoord2Region } from "api/member";
 import defaultProfileImage from "public/assets/img/mypage/avatar/default_profile.png";
 import Icon from "components/common/Icon";
+import { useRecoilState } from "recoil";
+import { userInfoState } from "atoms/atoms";
 
 const Container = styled.div`
   margin-top: 5.5rem;
@@ -217,6 +219,8 @@ interface ILocation {
 
 export default function Survey() {
   const router = useRouter();
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+
   const {
     register,
     setValue,
@@ -236,8 +240,6 @@ export default function Survey() {
     },
   });
   const salaryType = watch("salaryType");
-
-  const [ready, setReady] = useState(false);
   const [profileImageFile, setProfileImageFile] = useState<Blob>();
   const [imagePreview, setImagePreview] = useState<string>("");
   const [imageError, setImageError] = useState<boolean>(false);
@@ -250,14 +252,6 @@ export default function Survey() {
     depth2: null, // API 요청보낼 주소
     depth3: null, // API 요청보낼 주소
   });
-
-  useEffect(() => {
-    setReady(true);
-  }, []);
-
-  if (!ready) {
-    return null;
-  }
 
   function validFile(file: any) {
     if (file.size > 2097152) {
@@ -327,6 +321,11 @@ export default function Survey() {
     putMembers(formData).then((res) => {
       console.log(res.data);
       if (res.data.code === 1002) {
+        setUserInfo((prev) => ({
+          ...prev,
+          surveyedYn: true,
+          regionYn: !!memberInfo.depth1,
+        }));
         router.push("/calendar");
       } else {
         confirm("설문조사 생성 실패!");
@@ -382,6 +381,14 @@ export default function Survey() {
       depth3: null,
     });
   }
+
+  useEffect(() => {
+    if (!userInfo.accessToken) {
+      router.push("/");
+    } else if (userInfo.surveyedYn) {
+      router.push("/calendar");
+    }
+  }, [router, userInfo.accessToken, userInfo.surveyedYn]);
 
   return (
     <Container>
@@ -600,4 +607,4 @@ export default function Survey() {
   );
 }
 
-Survey.requireAuth = true;
+// Survey.requireAuth = true;

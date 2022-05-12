@@ -8,10 +8,15 @@ import Header from "../../../components/common/Header";
 import Icon from "../../../components/common/Icon";
 import ImageModal from "../../../components/community/detail/CommunityImageModal";
 import CommentCard from "components/community/detail/CommentCard";
-import { getBoardsDetail, postComment } from "api/community";
+import {
+  getBoardsDetail,
+  postLikeBoards,
+  postScrapBoards,
+  postComment,
+} from "api/community";
 import defaultProfileImage from "public/assets/img/mypage/avatar/default_profile.png";
 import { IPost, IComment } from "types";
-import { memberIdState } from "atoms/atoms";
+import { userInfoState } from "atoms/atoms";
 
 const Container = styled.div`
   display: flex;
@@ -134,16 +139,50 @@ interface IPostDetail extends IPost {
 
 export default function CommunityDetail() {
   const router = useRouter();
-  const memberId = useRecoilValue(memberIdState);
+  const boardId = router.query.boardId;
+  const userInfo = useRecoilValue(userInfoState);
   const [open, setOpen] = useState(false); // 이미지 확대 모달
   const [boardDetail, setBoardDetail] = useState<IPostDetail>(
     {} as IPostDetail
   );
   const [commentList, setCommentList] = useState<IComment[]>([]);
   const [comment, setComment] = useState("");
+  const [isChanged, setIsChanged] = useState(false); // 변경 감지할 변수
 
-  const onReset = () => {
-    setComment("");
+  const handleLikeBoard = () => {
+    if (boardDetail.isHeart === 0) {
+      const data = {
+        heartYn: "Y",
+      };
+      postLikeBoards(boardId as string, data as object)
+        .then((res) => setIsChanged((prev) => !prev))
+        .catch((err) => console.log(err));
+    } else {
+      const data = {
+        heartYn: "N",
+      };
+      postLikeBoards(boardId as string, data as object)
+        .then((res) => setIsChanged((prev) => !prev))
+        .catch((err) => console.log(err));
+    }
+  };
+
+  const handleScrapBoard = () => {
+    if (boardDetail.isScrap === 0) {
+      const data = {
+        scrapYn: "Y",
+      };
+      postScrapBoards(boardId as string, data as object)
+        .then((res) => setIsChanged((prev) => !prev))
+        .catch((err) => console.log(err));
+    } else {
+      const data = {
+        scrapYn: "N",
+      };
+      postScrapBoards(boardId as string, data as object)
+        .then((res) => setIsChanged((prev) => !prev))
+        .catch((err) => console.log(err));
+    }
   };
 
   const onClickImage = () => {
@@ -155,24 +194,27 @@ export default function CommunityDetail() {
   };
 
   const handleSubmit = (e: any) => {
-    const boardId = router.query.boardId;
     const data = {
       parentId: null,
       content: comment,
     };
     postComment(boardId as string, data as object).then((res) => {
+      setIsChanged((prev) => !prev);
       onReset();
     });
   };
 
+  const onReset = () => {
+    setComment("");
+  };
+
   useEffect(() => {
+    setCommentList([]);
     const boardId = router.query.boardId;
     if (boardId) {
       getBoardsDetail(boardId as string)
         .then((res) => {
-          console.log(res.data);
           if (res.data.code === 1703) {
-            // console.log(res.data.data);
             const { data } = res.data;
             const {
               boardId,
@@ -205,7 +247,7 @@ export default function CommunityDetail() {
               imgInfoList: imgUrlList,
             });
             res.data.data.commentList.map((item: any, idx: string) => {
-              if (item.deletedYn === "N") {
+              if (item.deletedYn === "N" || item.list.length > 0) {
                 setCommentList((prev) => [...prev, item]);
               }
             });
@@ -213,17 +255,17 @@ export default function CommunityDetail() {
         })
         .catch((err) => console.error(err));
     }
-  }, [router.query.boardId]); // 함수 실행될 때 useEffect 실행 가능한지 찾아보기
+  }, [router.query.boardId, isChanged]);
 
   return (
     <>
       {/* 사용자가 게시글 작성자인 경우 구분 */}
       <Header
         label=""
-        icon={memberId === boardDetail.memberId ? "pencil" : undefined}
+        icon={userInfo.memberId === boardDetail.memberId ? "pencil" : undefined}
         onClickBackButton={() => router.push("/community")}
         onClickRightButton={
-          memberId === boardDetail.memberId
+          userInfo.memberId === boardDetail.memberId
             ? () =>
                 router.push({
                   pathname: "/community/communityEditForm",
@@ -274,7 +316,7 @@ export default function CommunityDetail() {
         </Content>
         <FlexContainer>
           <ButtonContainer>
-            <GrayButton>
+            <GrayButton onClick={handleLikeBoard}>
               <Icon
                 mode={boardDetail.isHeart ? "fas" : "far"}
                 icon="heart"
@@ -284,7 +326,7 @@ export default function CommunityDetail() {
               좋아요
             </GrayButton>
 
-            <GrayButton>
+            <GrayButton onClick={handleScrapBoard}>
               <Icon
                 mode={boardDetail.isScrap ? "fas" : "far"}
                 icon="bookmark"

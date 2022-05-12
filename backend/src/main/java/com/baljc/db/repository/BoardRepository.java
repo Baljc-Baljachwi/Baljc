@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public interface BoardRepository extends JpaRepository<Board, UUID> {
 
-    @Query(value = "SELECT b.board_id as boardId, bc.name as categoryName, b.content as content, b.created_at as createdAt, m.nickname as creator, b.dong as dong, count(h.heart_id) as heartCnt, count(c.comment_id) as commentCnt, " +
+    @Query(value = "SELECT b.board_id as boardId, bc.name as categoryName, b.content as content, b.created_at as createdAt, m.nickname as creator, b.dong as dong, count(distinct h.heart_id) as heartCnt, count(distinct c.comment_id) as commentCnt, " +
             "(6371*acos(cos(radians(:lat))*cos(radians(b.latitude))*cos(radians(b.longitude) " +
             "-radians(:lon))+sin(radians(:lat))*sin(radians(b.latitude)))) as distance " +
             "FROM board b " +
@@ -34,7 +34,7 @@ public interface BoardRepository extends JpaRepository<Board, UUID> {
             "LIMIT :idx, 20", nativeQuery = true)
     List<BoardDto.BoardListInterface> getBoardListAll(@Param(value = "lat") double lat, @Param(value = "lon") double lon, @Param(value = "idx") long idx);
 
-    @Query(value = "SELECT b.board_id as boardId, bc.name as categoryName, b.content as content, b.created_at as createdAt, m.nickname as creator, b.dong as dong, count(h.heart_id) as heartCnt, count(c.comment_id) as commentCnt, " +
+    @Query(value = "SELECT b.board_id as boardId, bc.name as categoryName, b.content as content, b.created_at as createdAt, m.nickname as creator, b.dong as dong, count(distinct h.heart_id) as heartCnt, count(distinct c.comment_id) as commentCnt, " +
             "(6371*acos(cos(radians(:lat))*cos(radians(b.latitude))*cos(radians(b.longitude) " +
             "-radians(:lon))+sin(radians(:lat))*sin(radians(b.latitude)))) as distance " +
             "FROM board b " +
@@ -53,4 +53,6 @@ public interface BoardRepository extends JpaRepository<Board, UUID> {
             "LIMIT :idx, 20", nativeQuery = true)
     List<BoardDto.BoardListInterface> getBoardListByCategory(@Param(value = "lat") double lat, @Param(value = "lon") double lon, @Param(value = "idx") long idx, @Param(value = "categoryId") byte[] categoryId);
 
+    @Query("select b from Board b where b.deletedYn='N' and b.boardId=:boardId")
+    Optional<Board> findById(@Param(value = "boardId") UUID boardId);
 }
