@@ -306,7 +306,6 @@ export default function CommunityDetail() {
     }
   }, [router.query.boardId, isChanged]);
 
-  // console.log(boardDetail);
   return (
     <>
       {/* 사용자가 게시글 작성자인 경우 구분 */}
@@ -439,6 +438,7 @@ export default function CommunityDetail() {
           setCommentList={setCommentList}
           commentList={commentList}
           boardCreatorId={boardDetail.memberId}
+          setIsChanged={setIsChanged}
         />
       </CommentContainer>
 
