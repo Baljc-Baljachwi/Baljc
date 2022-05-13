@@ -41,6 +41,7 @@ public class Member {
     private String depth1;
     private String depth2;
     private String depth3;
+    private String refreshToken;
     @CreatedDate
     private LocalDateTime createdAt;
 
@@ -48,7 +49,7 @@ public class Member {
     public Member(String kakaoId, String fcmToken, String email, String nickname, String profileUrl,
                   Character salaryType, Integer salary, Integer workingHours, Integer budget,
                   Character surveyedYn, LocalDateTime deletedAt, Double latitude, Double longitude,
-                  String depth1, String depth2, String depth3) {
+                  String depth1, String depth2, String depth3, String refreshToken) {
         this.kakaoId = kakaoId;
         this.fcmToken = fcmToken;
         this.email = email;
@@ -65,6 +66,7 @@ public class Member {
         this.depth1 = depth1;
         this.depth2 = depth2;
         this.depth3 = depth3;
+        this.refreshToken = refreshToken;
     }
 
     @OneToMany(mappedBy = "member")
@@ -104,6 +106,7 @@ public class Member {
         this.depth1 = null;
         this.depth2 = null;
         this.depth3 = null;
+        this.refreshToken = null;
         this.createdAt = null;
         this.deletedAt = LocalDateTime.now();
     }
