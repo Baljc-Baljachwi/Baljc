@@ -91,6 +91,14 @@ const FlexContainer = styled.div`
   margin-top: 1rem;
 `;
 
+const ColumnContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 3rem;
+`;
+
 const ButtonContainer = styled.div`
   display: flex;
   gap: 1rem;
@@ -434,12 +442,19 @@ export default function CommunityDetail() {
         <Typography fs="1.4rem" p="0 0 2rem 0">
           댓글
         </Typography>
-        <CommentCard
-          setCommentList={setCommentList}
-          commentList={commentList}
-          boardCreatorId={boardDetail.memberId}
-          setIsChanged={setIsChanged}
-        />
+        {commentList.length > 0 ? (
+          <CommentCard
+            setCommentList={setCommentList}
+            commentList={commentList}
+            boardCreatorId={boardDetail.memberId}
+            setIsChanged={setIsChanged}
+          />
+        ) : (
+          <ColumnContainer>
+            <Typography fs="1.6rem">아직 댓글이 없습니다.</Typography>
+            <Typography fs="1.6rem">가장 먼저 댓글을 남겨보세요.</Typography>
+          </ColumnContainer>
+        )}
       </CommentContainer>
 
       <InputContainer>
