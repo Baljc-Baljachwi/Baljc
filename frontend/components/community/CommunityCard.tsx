@@ -117,13 +117,6 @@ export default function CommunityCard({
           <Typography fs="1.6rem" p="1rem 0">
             {content}
           </Typography>
-          {/* <ImageContainer>
-            {imgUrlList?.map((item: string, idx: number) => (
-              <div className="item" key={idx}>
-                <Image src={item} alt="" layout="fill" />
-              </div>
-            ))}
-          </ImageContainer> */}
           {imgUrlList.length === 1 ? (
             <ImageContainer>
               {imgUrlList?.map((item: string, idx: number) => (

@@ -145,28 +145,41 @@ const Input = styled.input`
     color: #aeb1b9;
   }
 `;
-const ImageCard = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-`;
 
-const ImageWrapper = styled.div`
-  position: relative;
-  width: 15rem;
-  height: 15rem;
-  .image {
-    object-fit: contain;
+const ImageContainer = styled.div`
+  display: grid;
+  padding-bottom: 1rem;
+  .item_1 {
+    height: 20rem;
+    position: relative;
   }
 `;
 
-const ImagePlusButton = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #646464;
-  font-size: 1.4rem;
+const ImageContainer2 = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  .item {
+    height: 20rem;
+    position: relative;
+  }
+`;
+
+const ImageContainer3 = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  .item {
+    height: 10rem;
+    position: relative;
+  }
+  .item:nth-child(1) {
+    height: 21rem;
+    grid-row: 1/3;
+    grid-column: 1/2;
+  }
 `;
 
 type imgInfo = { boardImgId: string; imgUrl: string };
@@ -184,7 +197,7 @@ export default function CommunityDetail() {
   const router = useRouter();
   const boardId = router.query.boardId;
   const userInfo = useRecoilValue(userInfoState);
-  const [open, setOpen] = useState(false); // 이미지 확대 모달
+  const [zoomImg, setZoomImg] = useState(false); // 이미지 확대 모달
   const [boardDetail, setBoardDetail] = useState<IPostDetail>(
     {} as IPostDetail
   );
@@ -266,7 +279,7 @@ export default function CommunityDetail() {
   };
 
   const onClickImage = () => {
-    setOpen((prev) => !prev);
+    setZoomImg((prev) => !prev);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -380,24 +393,35 @@ export default function CommunityDetail() {
           <Typography fs="1.8rem" p="0 0 1rem 0">
             {boardDetail.content}
           </Typography>
-          {/* image 있으면 */}
-          {boardDetail.imgUrlList?.length > 0 && (
-            <ImageCard>
-              <div onClick={onClickImage}>
-                <ImageWrapper>
-                  <Image
-                    src={boardDetail.imgUrlList[0]}
-                    layout="fill"
-                    alt=""
-                    className="image"
-                  />
-                </ImageWrapper>
-                <ImagePlusButton>
-                  {/* <Icon mode="fas" icon="images" size="2.4rem" /> */}
-                  <span>클릭해서 이미지 더보기</span>
-                </ImagePlusButton>
-              </div>
-            </ImageCard>
+          {/* image 개수별로 layout 다름*/}
+          {boardDetail.imgUrlList ? (
+            boardDetail.imgUrlList.length === 1 ? (
+              <ImageContainer>
+                {boardDetail.imgUrlList?.map((item: string, idx: number) => (
+                  <div className="item_1" key={idx} onClick={onClickImage}>
+                    <Image src={item} alt="" layout="fill" />
+                  </div>
+                ))}
+              </ImageContainer>
+            ) : boardDetail.imgUrlList.length === 2 ? (
+              <ImageContainer2>
+                {boardDetail.imgUrlList?.map((item: string, idx: number) => (
+                  <div className="item" key={idx} onClick={onClickImage}>
+                    <Image src={item} alt="" layout="fill" />
+                  </div>
+                ))}
+              </ImageContainer2>
+            ) : (
+              <ImageContainer3>
+                {boardDetail.imgUrlList?.map((item: string, idx: number) => (
+                  <div className="item" key={idx} onClick={onClickImage}>
+                    <Image src={item} alt="" layout="fill" />
+                  </div>
+                ))}
+              </ImageContainer3>
+            )
+          ) : (
+            <></>
           )}
         </Content>
         <FlexContainer>
@@ -436,10 +460,10 @@ export default function CommunityDetail() {
         </FlexContainer>
       </Container>
 
-      {boardDetail.imgUrlList?.length > 0 && open ? (
+      {boardDetail.imgUrlList?.length > 0 && zoomImg ? (
         <ImageModal
-          open={open}
-          setOpen={setOpen}
+          open={zoomImg}
+          setOpen={setZoomImg}
           imageList={boardDetail.imgUrlList}
         />
       ) : null}

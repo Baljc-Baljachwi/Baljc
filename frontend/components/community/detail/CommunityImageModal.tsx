@@ -7,6 +7,8 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper";
 
+import Icon from "components/common/Icon";
+
 const ModalOverlay = styled.div<{ visible: boolean }>`
   box-sizing: border-box;
   display: ${(props) => (props.visible ? "block" : "none")};
@@ -106,9 +108,9 @@ export default function CommunityImageModal({
         <>
           <ModalOverlay visible={open} />
           <ModalWrapper visible={open} tabIndex={-1} onClick={onMaskClick}>
-            {/* <IconWrapper tabIndex={1} onClick={onClose}>
+            <IconWrapper tabIndex={1} onClick={onClose}>
               <Icon mode="fas" icon="xmark" color="#ffffff" size="3rem" />
-            </IconWrapper> */}
+            </IconWrapper>
             <ModalInner
               tabIndex={0}
               className="modal-inner"
