@@ -21,6 +21,7 @@ import "firebase/messaging";
 import * as ga from "../lib/ga/index";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import NextNProgress from "nextjs-progressbar";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAeqGoiBaRdhGeL7GstkELh1ntZBk_4ibo",
@@ -248,6 +249,20 @@ export default function MyApp(props: AppProps) {
           /> */}
         </Head>
         <RecoilRoot>
+          <NextNProgress
+            color="#4338C9"
+            startPosition={0.3}
+            stopDelayMs={200}
+            height={6}
+            options={{ easing: "ease", speed: 500 }}
+          />
+          {/* <NextNProgress
+            color="#29D"
+            showOnShallow={false}
+            height={6}
+            startPosition={0.3}
+            options={{ easing: "ease", speed: 500, showSpinner: true }}
+          /> */}
           <Layout>
             {Component.requireAuth ? (
               <AuthGuard>

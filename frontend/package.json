@@ -22,6 +22,7 @@
     "firebase": "^8.10.1",
     "next": "12.1.5",
     "next-pwa": "^5.5.2",
+    "nextjs-progressbar": "^0.0.14",
     "react": "18.0.0",
     "react-calendar": "^3.7.0",
     "react-chartjs-2": "^4.1.0",
