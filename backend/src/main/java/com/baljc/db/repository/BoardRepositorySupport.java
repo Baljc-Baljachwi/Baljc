@@ -141,4 +141,33 @@ public class BoardRepositorySupport {
         return response;
     }
 
+    public BoardDto.CommentListDto getComment(UUID commentId) {
+        BoardDto.CommentListDto response = jpaQueryFactory.select(
+                        new QBoardDto_CommentListDto(
+                                qComment.commentId, qMember.memberId, qMember.profileUrl, qMember.nickname,
+                                qComment.content, qComment.createdAt, qComment.comment.commentId, qComment.deletedYn
+                        ))
+                .from(qComment)
+                .leftJoin(qMember).on(qComment.member.eq(qMember))
+                .where(qComment.commentId.eq(commentId))
+                .fetchOne();
+
+        return response;
+    }
+
+    public List<BoardDto.CommentListDto> getSubCommentList(UUID commentId) {
+        List<BoardDto.CommentListDto> response = jpaQueryFactory.select(
+                        new QBoardDto_CommentListDto(
+                                qComment.commentId, qMember.memberId, qMember.profileUrl, qMember.nickname,
+                                qComment.content, qComment.createdAt, qComment.comment.commentId, qComment.deletedYn
+                        ))
+                .from(qComment)
+                .leftJoin(qMember).on(qComment.member.eq(qMember))
+                .where(qComment.comment.commentId.eq(commentId))
+                .orderBy(qComment.createdAt.asc())
+                .fetch();
+
+        return response;
+    }
+
 }

@@ -88,4 +88,10 @@ public class BoardController {
         return ResponseEntity.status(200).body(new BaseResponse(1709, "스크랩/스크랩 취소 성공"));
     }
 
+    @GetMapping("/{boardId}/comments/{commentId}")
+    public ResponseEntity<BaseDataResponse> getComment(@PathVariable("boardId") UUID boardId, @PathVariable("commentId") UUID commentId) {
+        BoardDto.BoardDetailCommentResponse response = boardService.getComment(commentId);
+        return ResponseEntity.status(200).body(new BaseDataResponse(1710, "댓글 조회 성공", response));
+    }
+
 }

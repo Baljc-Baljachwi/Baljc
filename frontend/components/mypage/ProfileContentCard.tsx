@@ -30,8 +30,9 @@ const ProfileMenuCardContent = styled.div`
   justify-content: space-between;
 `;
 
-const ProfileMenuCardTitle = styled.span`
-  color: #33487f;
+const ProfileMenuCardTitle = styled.span<{ color?: string }>`
+  // color: #33487f;
+  color: ${(props) => (props.color ? props.color : "#33487f")};
   font-weight: 700;
 `;
 
@@ -45,12 +46,14 @@ interface ProfileContentProps {
   title: string;
   description: string;
   onClick?: () => void;
+  color?: string;
 }
 
 const ProfileContentCard = ({
   title,
   description,
   onClick,
+  color,
 }: ProfileContentProps) => {
   const router = useRouter();
 
@@ -58,7 +61,7 @@ const ProfileContentCard = ({
     <>
       <ProfileMenuCardItem onClick={onClick}>
         <ProfileMenuCardContent>
-          <ProfileMenuCardTitle>{title}</ProfileMenuCardTitle>
+          <ProfileMenuCardTitle color={color}>{title}</ProfileMenuCardTitle>
         </ProfileMenuCardContent>
         <ProfileMenuCardDetail>{description}</ProfileMenuCardDetail>
       </ProfileMenuCardItem>
