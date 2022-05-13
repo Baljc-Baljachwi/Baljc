@@ -118,7 +118,7 @@ export default function TodoItem({
             })
           );
         })
-        .catch((err) => // console.log(err));
+        .catch((err) => console.log(err));
     } else {
       completedTodos(todoId, { completedYn: "N" })
         .then((res) => {
@@ -131,7 +131,7 @@ export default function TodoItem({
             })
           );
         })
-        .catch((err) => // console.log(err));
+        .catch((err) => console.log(err));
     }
   };
 
