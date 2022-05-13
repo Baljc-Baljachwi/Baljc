@@ -212,7 +212,7 @@ public class BoardServiceImpl implements BoardService {
         Member member = memberService.getMemberByAuthentication();
 
         List<BoardDto.BoardListInterface> list = null;
-        if (categoryId.toString().equals("271105c2-f94c-47bc-8af4-dc156dcad3eb")) {
+        if (categoryId.toString().equals("38383037-3665-3162-6433-356534303833")) {
             list = boardRepository.getBoardListAll(member.getLatitude(), member.getLongitude(), index);
         } else {
             ByteBuffer bb = ByteBuffer.wrap(new byte[16]);
