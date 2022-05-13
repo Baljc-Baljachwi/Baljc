@@ -72,23 +72,30 @@ const Fixed = () => {
         label="고정 지출 조회"
         onClickBackButton={() => router.push("/mypage")}
       />
-      <HeaderCard>
-        <span>이번 달 고정 지출</span>
-        <span>
-          <span>총 </span>
-          {fixedExpenditure.toLocaleString()}
-          <span>원</span>
-        </span>
-      </HeaderCard>
-      <ContentsContainer>
+      <Container>
+        {/* <BodyContainer> */}
+        <HeaderCard>
+          <span>이번 달 고정 지출</span>
+          <span>
+            <span>총 </span>
+            {fixedExpenditure.toLocaleString()}
+            <span>원</span>
+          </span>
+        </HeaderCard>
+        {/* <ContentsContainer> */}
         {fixedEList && fixedEList.length > 0 ? (
           fixedEList.map((item, idx) => <FixedList key={idx} item={item} />)
         ) : (
           <NoContentContainer>
-            <p>고정 지출 내역이 없습니다!</p>
+            고정 지출 내역이 없습니다!
+            <NoContentMessage className="small">
+              고정 지출을 등록해주세요.
+            </NoContentMessage>
           </NoContentContainer>
         )}
-      </ContentsContainer>
+        {/* </ContentsContainer> */}
+        {/* </BodyContainer> */}
+      </Container>
     </>
   );
 };
@@ -104,7 +111,8 @@ const HeaderCard = styled.div`
   flex-wrap: nowrap;
 
   background-color: #2e437a;
-  height: 20vh;
+  // height: 20vh;
+  height: 20rem;
   padding: 0 4rem;
 
   color: #ffffff;
@@ -126,23 +134,60 @@ const ContentsContainer = styled.div`
 `;
 
 const NoContentContainer = styled.section`
+  background-color: #f4f4f4;
   width: 100%;
-  height: calc(100vh - 50rem);
+  // height: calc(100vh - 50rem);
+  // height: calc(100vh - 33.2rem);
+  height: calc(100vh - 32.2rem);
+  // height: calc(100vh - 13.2rem);
   top: 0;
   left: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  p {
-    text-align: center;
-    font-size: 2.4rem;
-    font-weight: 700;
-    padding: 1rem;
-    color: #cccccc;
-    &.small {
-      font-size: 1.8rem;
-      font-weight: 500;
+  color: #cccccc;
+  font-size: 2.4rem;
+  font-weight: 700;
+  // p {
+  //   text-align: center;
+  //   font-size: 2.4rem;
+  //   font-weight: 700;
+  //   padding: 1rem;
+  //   color: #cccccc;
+  //   &.small {
+  //     font-size: 1.8rem;
+  //     font-weight: 500;
+  //   }
+  // }
+`;
+
+const NoContentMessage = styled.p`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 2.4rem;
+  font-weight: 700;
+  padding: 1rem;
+  color: #cccccc;
+  &.small {
+    font-size: 1.8rem;
+    font-weight: 500;
+    .btn_MoveTo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
+`;
+
+const Container = styled.div`
+  background-color: #f4f4f4;
+  // padding: 1rem 0 0 0;
+  // padding-bottom: 7rem;
+`;
+const BodyContainer = styled.div`
+  padding: 0 0 1rem 0;
 `;
