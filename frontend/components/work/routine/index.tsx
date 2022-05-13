@@ -50,7 +50,7 @@ export default function Routine({ dow }: RoutineProps) {
         setRoutineList(res.data.data);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   };
 

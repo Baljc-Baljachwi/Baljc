@@ -99,13 +99,13 @@ const ProfileCard = ({}) => {
   useEffect(() => {
     getMemberInfo().then((res) => {
       // console.log(res.data);
-      console.log(res.data.data);
+      // console.log(res.data.data);
       if (res.data.code === 1001) {
         // console.log("1001도 넘어왔음!");
         // console.log(res.data.data);
         setMemberInfo(res.data.data);
       } else {
-        console.log(res.data.message);
+        // console.log(res.data.message);
       }
     });
   }, []);

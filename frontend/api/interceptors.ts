@@ -1,4 +1,4 @@
-import { AxiosInstance } from "axios";
+import { AxiosError, AxiosInstance, AxiosResponse } from "axios";
 import LocalStorage from "utils/localStorage";
 
 function setInterceptors(instance: any) {
@@ -11,6 +11,18 @@ function setInterceptors(instance: any) {
       return config;
     },
     (error: any) => {
+      return Promise.reject(error);
+    }
+  );
+
+  instance.interceptors.response.use(
+    (response: AxiosResponse) => {
+      return response;
+    },
+    (error: AxiosError) => {
+      console.log(error);
+      console.log(error.config);
+      console.log(error.response);
       return Promise.reject(error);
     }
   );

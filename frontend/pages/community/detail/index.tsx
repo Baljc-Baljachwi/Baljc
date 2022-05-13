@@ -216,7 +216,7 @@ export default function CommunityDetail() {
     deleteBoards(boardId as string)
       .then((res) => {
         router.push("/community");
-        console.log(res.data);
+        // console.log(res.data);
       })
       .catch((err) => console.error(err));
   };
@@ -306,7 +306,7 @@ export default function CommunityDetail() {
     }
   }, [router.query.boardId, isChanged]);
 
-  console.log(boardDetail);
+  // console.log(boardDetail);
   return (
     <>
       {/* 사용자가 게시글 작성자인 경우 구분 */}

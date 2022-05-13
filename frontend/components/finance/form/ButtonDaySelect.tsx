@@ -31,7 +31,7 @@ export default function ButtonDaySelect({
 }: ButtonDaySelectProps) {
   const dayList = ["일", "월", "화", "수", "목", "금", "토"];
   function onClickDayButton(event: React.ChangeEvent<HTMLInputElement>) {
-    console.log(selectedDays);
+    // console.log(selectedDays);
     handleWeeklyDayUpdate(+event.target.value);
   }
   return (

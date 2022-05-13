@@ -34,7 +34,7 @@ export default function CommunityEditForm() {
         if (data.code === 1703) {
           // 창작자 아니면 인가 거부
           if (data.data.memberId !== userInfo.memberId) {
-            console.log("저리가", userInfo.memberId, data.data);
+            // console.log("저리가", userInfo.memberId, data.data);
             router.push({
               pathname: "/community/detail",
               query: { boardId },
