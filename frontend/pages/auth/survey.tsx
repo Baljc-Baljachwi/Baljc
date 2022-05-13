@@ -319,7 +319,7 @@ export default function Survey() {
     );
 
     putMembers(formData).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       if (res.data.code === 1002) {
         setUserInfo((prev) => ({
           ...prev,
@@ -334,7 +334,7 @@ export default function Survey() {
   }
 
   function onClickGeoButton() {
-    console.log(navigator);
+    // console.log(navigator);
     if ("geolocation" in navigator) {
       // 현재 위도, 경도
       navigator.geolocation.getCurrentPosition(
@@ -348,7 +348,7 @@ export default function Survey() {
           // 카카오 로컬 API coord => region
           kakaoCoord2Region(pos.coords.longitude, pos.coords.latitude)
             .then((res) => {
-              console.log(res.data.documents);
+              // console.log(res.data.documents);
               setLocation((prev) => ({
                 ...prev,
                 addressName: res.data.documents[0].address_name,
@@ -361,7 +361,7 @@ export default function Survey() {
             .catch((err) => console.error(err));
         },
         (err: GeolocationPositionError) => {
-          console.log(err.message);
+          // console.log(err.message);
           if (err.code === 1) {
             confirm("위치 액세스를 허용해주세요");
           }
@@ -595,7 +595,10 @@ export default function Survey() {
               </div>
             </LocationDiv>
             <MutedMessage>
-              (선택) 커뮤니티 이용을 위해 위치 정보가 필요합니다
+              (선택) 커뮤니티 이용을 위해 위치 정보가 필요합니다.
+              <p />
+              &apos;마이페이지 &gt; 내 정보 수정&apos;에서 후에 수정할 수
+              있습니다.
             </MutedMessage>
           </div>
           <ButtonBottom label="가입" type="submit" />

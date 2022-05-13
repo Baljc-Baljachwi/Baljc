@@ -34,7 +34,7 @@ export default function CommunityEditForm() {
         if (data.code === 1703) {
           // 창작자 아니면 인가 거부
           if (data.data.memberId !== userInfo.memberId) {
-            console.log("저리가", userInfo.memberId, data.data);
+            // console.log("저리가", userInfo.memberId, data.data);
             router.push({
               pathname: "/community/detail",
               query: { boardId },
@@ -59,21 +59,6 @@ export default function CommunityEditForm() {
     const boardId = router.query.boardId;
     if (boardId) {
       fetchBoard(boardId as string);
-      // getBoardsDetail(boardId as string)
-      //   .then((res) => {
-      //     console.log(res.data);
-      //     if (res.data.code === 1703) {
-      //       // 창작자 아니면 인가 거부
-      //       if (res.data.data.memberId !== memberId) {
-      //         router.push();
-      //         return;
-      //       }
-      //       console.log(res.data.data);
-      //       setBoardDetail(res.data.data);
-      //       setCommentList(res.data.data.commentList);
-      //     }
-      //   })
-      //   .catch((err) => console.error(err));
     }
   }, [router.query.boardId, fetchBoard]);
 

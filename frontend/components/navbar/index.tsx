@@ -9,7 +9,11 @@ import Icon from "../common/Icon";
 const Container = styled.nav`
   padding: 1rem;
   background-color: #ffffff;
-  box-shadow: 0 -1px 1px #00000014;
+  // box-shadow: 0px, -2px rgba(0, 0, 0, 0.1);
+  // filter: drop-shadow(0px -2px -2px rgba(0, 0, 0, 0.1));
+  // offset: 0px, -2px;
+  // box-shadow: 1px #00000014;
+  border-top: 2px solid #dfdede;
   position: fixed;
   width: 100%;
   left: 0;
@@ -60,7 +64,7 @@ export default function NavBar() {
           mode="fas"
           icon="comments"
           size="2rem"
-          color={rootPathname === "community" ? undefined : "#cbcbcb"}
+          color={rootPathname === "community" ? undefined : "#cdcdcd"}
         />
         <div className={rootPathname === "community" ? "" : "active"}>
           커뮤니티

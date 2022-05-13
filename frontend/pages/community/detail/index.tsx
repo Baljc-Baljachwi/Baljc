@@ -8,10 +8,17 @@ import Header from "../../../components/common/Header";
 import Icon from "../../../components/common/Icon";
 import ImageModal from "../../../components/community/detail/CommunityImageModal";
 import CommentCard from "components/community/detail/CommentCard";
-import { getBoardsDetail, postComment } from "api/community";
+import {
+  getBoardsDetail,
+  postLikeBoards,
+  postScrapBoards,
+  postComment,
+  deleteBoards,
+} from "api/community";
 import defaultProfileImage from "public/assets/img/mypage/avatar/default_profile.png";
 import { IPost, IComment } from "types";
 import { userInfoState } from "atoms/atoms";
+import ButtonModal from "components/common/ButtonModal";
 
 const Container = styled.div`
   display: flex;
@@ -32,13 +39,19 @@ const Tag = styled.div`
 const Profile = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 2rem;
   padding: 1rem 0;
+  > div {
+    display: flex;
+    gap: 2rem;
+  }
 `;
 
 const InfoWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
 `;
 
 const Content = styled.div`
@@ -66,12 +79,16 @@ const Typography = styled.div<{
   font-size: ${(props) => (props.fs ? props.fs : "1rem")};
   font-weight: ${(props) => (props.fw ? props.fw : "")};
   padding: ${(props) => (props.p ? props.p : "0")};
+  .textTypo {
+    color: #dfdede;
+  }
 `;
 
 const FlexContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 1rem;
 `;
 
 const ButtonContainer = styled.div`
@@ -120,6 +137,29 @@ const Input = styled.input`
     color: #aeb1b9;
   }
 `;
+const ImageCard = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+`;
+
+const ImageWrapper = styled.div`
+  position: relative;
+  width: 15rem;
+  height: 15rem;
+  .image {
+    object-fit: contain;
+  }
+`;
+
+const ImagePlusButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #646464;
+  font-size: 1.4rem;
+`;
 
 type imgInfo = { boardImgId: string; imgUrl: string };
 
@@ -134,6 +174,7 @@ interface IPostDetail extends IPost {
 
 export default function CommunityDetail() {
   const router = useRouter();
+  const boardId = router.query.boardId;
   const userInfo = useRecoilValue(userInfoState);
   const [open, setOpen] = useState(false); // 이미지 확대 모달
   const [boardDetail, setBoardDetail] = useState<IPostDetail>(
@@ -141,9 +182,79 @@ export default function CommunityDetail() {
   );
   const [commentList, setCommentList] = useState<IComment[]>([]);
   const [comment, setComment] = useState("");
+  const [isChanged, setIsChanged] = useState(false); // 변경 감지할 변수
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState<boolean>(false);
 
-  const onReset = () => {
-    setComment("");
+  const modalChildren = [
+    {
+      label: "수정",
+      onClick: () =>
+        router.push({
+          pathname: "/community/communityEditForm",
+          query: { boardId: boardDetail.boardId },
+        }),
+    },
+    {
+      label: "삭제",
+      labelColor: "#ff0000",
+      onClick: () => setIsConfirmModalOpen(true),
+    },
+    { label: "취소" },
+  ];
+
+  const confirmModalChildren = [
+    {
+      label: "삭제",
+      labelColor: "#ff0000",
+      onClick: () => onClickDeleteBoardButton(),
+    },
+    { label: "취소" },
+  ];
+
+  const onClickDeleteBoardButton = () => {
+    deleteBoards(boardId as string)
+      .then((res) => {
+        router.push("/community");
+        // console.log(res.data);
+      })
+      .catch((err) => console.error(err));
+  };
+
+  const handleLikeBoard = () => {
+    if (boardDetail.isHeart === 0) {
+      const data = {
+        heartYn: "Y",
+      };
+      postLikeBoards(boardId as string, data as object)
+        .then((res) => setIsChanged((prev) => !prev))
+        .catch((err) => console.log(err));
+    } else {
+      const data = {
+        heartYn: "N",
+      };
+      postLikeBoards(boardId as string, data as object)
+        .then((res) => setIsChanged((prev) => !prev))
+        .catch((err) => console.log(err));
+    }
+  };
+
+  const handleScrapBoard = () => {
+    if (boardDetail.isScrap === 0) {
+      const data = {
+        scrapYn: "Y",
+      };
+      postScrapBoards(boardId as string, data as object)
+        .then((res) => setIsChanged((prev) => !prev))
+        .catch((err) => console.log(err));
+    } else {
+      const data = {
+        scrapYn: "N",
+      };
+      postScrapBoards(boardId as string, data as object)
+        .then((res) => setIsChanged((prev) => !prev))
+        .catch((err) => console.log(err));
+    }
   };
 
   const onClickImage = () => {
@@ -155,57 +266,37 @@ export default function CommunityDetail() {
   };
 
   const handleSubmit = (e: any) => {
-    const boardId = router.query.boardId;
     const data = {
       parentId: null,
       content: comment,
     };
     postComment(boardId as string, data as object).then((res) => {
+      setIsChanged((prev) => !prev);
       onReset();
     });
   };
 
+  const onReset = () => {
+    setComment("");
+  };
+
   useEffect(() => {
+    setCommentList([]);
     const boardId = router.query.boardId;
     if (boardId) {
       getBoardsDetail(boardId as string)
         .then((res) => {
-          console.log(res.data);
           if (res.data.code === 1703) {
-            // console.log(res.data.data);
             const { data } = res.data;
-            const {
-              boardId,
-              categoryName,
-              commentCnt,
-              content,
-              createdAt,
-              heartCnt,
-              imgUrlList,
-              isHeart,
-              isScrap,
-              memberId,
-              nickname,
-              profileUrl,
-            } = data;
+            const { imgUrlList } = data;
 
             setBoardDetail({
-              boardId,
-              categoryName,
-              commentCnt,
-              content,
-              createdAt,
-              heartCnt,
+              ...data,
               imgUrlList: imgUrlList.map((obj: any) => obj.imgUrl),
-              isHeart,
-              isScrap,
-              memberId,
-              nickname,
-              profileUrl,
               imgInfoList: imgUrlList,
             });
             res.data.data.commentList.map((item: any, idx: string) => {
-              if (item.deletedYn === "N") {
+              if (item.deletedYn === "N" || item.list.length > 0) {
                 setCommentList((prev) => [...prev, item]);
               }
             });
@@ -213,49 +304,63 @@ export default function CommunityDetail() {
         })
         .catch((err) => console.error(err));
     }
-  }, [router.query.boardId]); // 함수 실행될 때 useEffect 실행 가능한지 찾아보기
+  }, [router.query.boardId, isChanged]);
 
   return (
     <>
       {/* 사용자가 게시글 작성자인 경우 구분 */}
-      <Header
-        label=""
-        icon={userInfo.memberId === boardDetail.memberId ? "pencil" : undefined}
-        onClickBackButton={() => router.push("/community")}
-        onClickRightButton={
-          userInfo.memberId === boardDetail.memberId
-            ? () =>
-                router.push({
-                  pathname: "/community/communityEditForm",
-                  query: { boardId: boardDetail.boardId },
-                })
-            : () => {}
-        }
-      />
+      <Header label="" onClickBackButton={() => router.push("/community")} />
       <Container>
         <div>
           <Tag>{boardDetail.categoryName}</Tag>
         </div>
         <Profile>
-          <Image
-            src={
-              boardDetail.profileUrl
-                ? boardDetail.profileUrl
-                : defaultProfileImage
-            }
-            alt={boardDetail.nickname}
-            width={60}
-            height={60}
-            style={{ borderRadius: "50%" }}
-          />
-          <InfoWrapper>
-            <Typography fs="1.6rem" fw="600">
-              {boardDetail.nickname}
-            </Typography>
-            <Typography fs="1.4rem" color="#3D3D3D">
-              {boardDetail.createdAt}
-            </Typography>
-          </InfoWrapper>
+          <div>
+            <Image
+              src={
+                boardDetail.profileUrl
+                  ? boardDetail.profileUrl
+                  : defaultProfileImage
+              }
+              alt={boardDetail.nickname}
+              width={60}
+              height={60}
+              style={{ borderRadius: "50%" }}
+            />
+            <InfoWrapper>
+              <Typography fs="1.6rem" fw="600">
+                {boardDetail.nickname}
+              </Typography>
+              <Typography fs="1.4rem" color="#3D3D3D">
+                {boardDetail.createdAt}
+              </Typography>
+            </InfoWrapper>
+          </div>
+          {/* 사용자가 게시글 작성자면 */}
+          {userInfo.memberId === boardDetail.memberId && (
+            <>
+              <Icon
+                mode="fas"
+                icon="ellipsis-vertical"
+                size="20px"
+                color="#c9c9c9"
+                onClick={() => setIsModalOpen(true)}
+              />
+              {/* 수정 / 삭제 모달 */}
+              <ButtonModal
+                open={isModalOpen}
+                setOpen={setIsModalOpen}
+                modalChildren={modalChildren}
+              />
+              {/* 삭제 확인 모달 */}
+              <ButtonModal
+                open={isConfirmModalOpen}
+                setOpen={setIsConfirmModalOpen}
+                modalTitle="정말 삭제하시겠습니까?"
+                modalChildren={confirmModalChildren}
+              />
+            </>
+          )}
         </Profile>
         <Content>
           <Typography fs="1.8rem" p="0 0 1rem 0">
@@ -263,32 +368,41 @@ export default function CommunityDetail() {
           </Typography>
           {/* image 있으면 */}
           {boardDetail.imgUrlList?.length > 0 && (
-            <Image
-              src={boardDetail.imgUrlList[0]}
-              width={150}
-              height={150}
-              alt=""
-              onClick={onClickImage}
-            />
+            <ImageCard>
+              <div onClick={onClickImage}>
+                <ImageWrapper>
+                  <Image
+                    src={boardDetail.imgUrlList[0]}
+                    layout="fill"
+                    alt=""
+                    className="image"
+                  />
+                </ImageWrapper>
+                <ImagePlusButton>
+                  {/* <Icon mode="fas" icon="images" size="2.4rem" /> */}
+                  <span>클릭해서 이미지 더보기</span>
+                </ImagePlusButton>
+              </div>
+            </ImageCard>
           )}
         </Content>
         <FlexContainer>
           <ButtonContainer>
-            <GrayButton>
+            <GrayButton onClick={handleLikeBoard}>
               <Icon
                 mode={boardDetail.isHeart ? "fas" : "far"}
                 icon="heart"
-                color={boardDetail.isHeart ? "#000000" : "#646464"}
+                color={boardDetail.isHeart ? "#FF6767" : "#646464"}
                 display="flex"
               />
               좋아요
             </GrayButton>
 
-            <GrayButton>
+            <GrayButton onClick={handleScrapBoard}>
               <Icon
                 mode={boardDetail.isScrap ? "fas" : "far"}
                 icon="bookmark"
-                color={boardDetail.isScrap ? "#000000" : "#646464"}
+                color={boardDetail.isScrap ? "#FFB800" : "#646464"}
                 display="flex"
               />
               스크랩
@@ -296,13 +410,13 @@ export default function CommunityDetail() {
           </ButtonContainer>
 
           <FlexContainer>
-            <Icon mode="fas" icon="comment" size="14px" />
+            <Icon mode="fas" icon="comment" size="14px" color="#DFDEDE" />
             <Typography fs="1.4rem" p="0 0.5rem">
-              {boardDetail.commentCnt}
+              <span className="textTypo">{boardDetail.commentCnt}</span>
             </Typography>
-            <Icon mode="fas" icon="heart" size="14px" />
+            <Icon mode="fas" icon="heart" size="14px" color="#DFDEDE" />
             <Typography fs="1.4rem" p="0 0.5rem">
-              {boardDetail.heartCnt}
+              <span className="textTypo">{boardDetail.heartCnt}</span>
             </Typography>
           </FlexContainer>
         </FlexContainer>
@@ -324,6 +438,7 @@ export default function CommunityDetail() {
           setCommentList={setCommentList}
           commentList={commentList}
           boardCreatorId={boardDetail.memberId}
+          setIsChanged={setIsChanged}
         />
       </CommentContainer>
 

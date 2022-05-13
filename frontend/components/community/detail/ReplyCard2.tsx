@@ -50,20 +50,20 @@ const Typography = styled.div<{
 interface ReplyCardProps {
   reply: IComment;
   boardCreatorId: string;
-  setIsChanged: any;
-  commentList: any;
-  setCommentList: any;
-  commentId: string;
+  // commentList: any;
+  // setCommentList: any;
+  // commentId: string;
+  // open: boolean;
+  // setOpen: any;
 }
 
 export default function ReplyCard({
   reply,
   boardCreatorId,
-  setIsChanged,
-  commentList,
-  setCommentList,
-  commentId,
-}: ReplyCardProps) {
+}: // commentList,
+// setCommentList,
+// commentId,
+ReplyCardProps) {
   const userInfo = useRecoilValue(userInfoState);
   const [open, setOpen] = useState(false); // 댓글 삭제 확인 모달
   const onClickEdit = () => {
@@ -80,45 +80,23 @@ export default function ReplyCard({
         />
       </ImageWrapper>
       <TextContainer>
-        <FlexContainer style={{ justifyContent: "space-between" }}>
-          <FlexContainer>
-            <Typography fs="1.6rem" fw="600">
-              {reply.nickname}
-            </Typography>
-            {/* 작성자인 경우만 */}
-            {reply.memberId === boardCreatorId && (
-              <>
-                <Typography
-                  p="0.2rem 0.5rem"
-                  style={{
-                    backgroundColor: "#EDEDED",
-                    borderRadius: "4px",
-                    alignSelf: "center",
-                  }}
-                >
-                  작성자
-                </Typography>
-              </>
-            )}
-          </FlexContainer>
-          {/* 댓글 작성자인 경우만 수정 버튼 */}
-          {reply.memberId === userInfo.memberId && reply.deletedYn === "N" && (
+        <FlexContainer>
+          <Typography fs="1.6rem" fw="600">
+            {reply.nickname}
+          </Typography>
+          {/* 작성자인 경우만 */}
+          {reply.memberId === boardCreatorId && (
             <>
-              <Icon
-                mode="fas"
-                icon="ellipsis-vertical"
-                onClick={onClickEdit}
-                size="20px"
-                color="#c9c9c9"
-              />
-              <EditModal
-                commentList={commentList}
-                setCommentList={setCommentList}
-                open={open}
-                setOpen={setOpen}
-                commentId={commentId}
-                setIsChanged={setIsChanged}
-              />
+              <Typography
+                p="0.2rem 0.5rem"
+                style={{
+                  backgroundColor: "#EDEDED",
+                  borderRadius: "4px",
+                  alignSelf: "center",
+                }}
+              >
+                작성자
+              </Typography>
             </>
           )}
         </FlexContainer>

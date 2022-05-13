@@ -98,8 +98,6 @@ const TitleErrorMessage = styled.p<{ titleValidation: boolean }>`
 
 const RepetitionErrorMessage = styled.p<{ repetitionValidation: boolean }>`
   visibility: ${(props) => (props.repetitionValidation ? "visible" : "hidden")};
-  // border-top: ${(props) =>
-    props.repetitionValidation ? "1px solid #ff0000" : ""};
   color: #ff0000;
   font-size: 1.2rem;
   margin-bottom: 2rem;
@@ -199,13 +197,13 @@ export default function RoutineModal({
     if (routineForm.title.length > 0 && routineForm.repetition !== 0) {
       postRoutines(routineForm)
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           setRoutineList([...routineList, res.data.data]);
           alert("일과 등록 완료");
           setOpen(false);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
           alert("일과 등록 실패");
         });
     } else {
@@ -223,7 +221,7 @@ export default function RoutineModal({
     if (routineForm.title.length > 0 && routineForm.repetition !== 0) {
       putRoutines(routinId, routineForm)
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           setRoutineList(
             routineList.map((routine: IRoutine) => {
               return routine.routineId === routineId
@@ -239,7 +237,7 @@ export default function RoutineModal({
           setOpen(false);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         });
     } else {
       if (routineForm.title.length === 0) {
@@ -255,7 +253,7 @@ export default function RoutineModal({
     const routinId = routineId || "";
     deleteRoutines(routinId)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setRoutineList(
           routineList.filter(
             (routine: IRoutine) => routine.routineId !== routineId
@@ -265,7 +263,7 @@ export default function RoutineModal({
         setOpen(false);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         alert("일과 삭제 실패");
       });
   };

@@ -26,15 +26,15 @@ export default function KakaoAuth() {
 
     firebaseMessageToken()
       .then((currentToken) => {
-        console.log("FCM token: ", currentToken);
+        // console.log("FCM token: ", currentToken);
         return currentToken;
       })
       .then((currentToken) => {
         kakaoLogin(code as string, currentToken).then((res) => {
           if (res.data.code === 1000) {
             const accessToken = res.headers.authorization;
-            console.log(`accessToken : ${accessToken}`);
-            console.log(res.data.data);
+            // console.log(`accessToken : ${accessToken}`);
+            // console.log(res.data.data);
 
             const { memberId, surveyedYn, regionYn } = res.data.data;
 

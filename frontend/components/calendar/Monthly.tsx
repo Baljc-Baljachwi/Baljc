@@ -146,7 +146,7 @@ export default function Monthly() {
   }, [mark]);
 
   const callDay = (e: any) => {
-    console.log(e);
+    // console.log(e);
   };
 
   if (!mounted) return null;

@@ -39,7 +39,7 @@ export default function FixedItem({
   const [categoryImg, setCategoryImg] = useState("");
   useEffect(() => {
     getCategories("E").then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       setExCategories(res.data.data);
     });
   }, []);

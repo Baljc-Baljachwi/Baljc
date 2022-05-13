@@ -60,6 +60,7 @@ const Typography = styled.div<{
 interface EditProps {
   commentList: any;
   setCommentList: any;
+  setIsChanged: any;
   commentId: string;
   open: boolean;
   setOpen: any;
@@ -68,6 +69,7 @@ interface EditProps {
 export default function EditModal({
   commentList,
   setCommentList,
+  setIsChanged,
   commentId,
   open,
   setOpen,
@@ -104,7 +106,11 @@ export default function EditModal({
                 삭제하기
               </Typography>
             </ModalInner>
-            <ModalInner tabIndex={0} className="modal-inner">
+            <ModalInner
+              tabIndex={0}
+              className="modal-inner"
+              onClick={onMaskClick}
+            >
               <Typography fs="1.8rem" p="1.2rem">
                 취소하기
               </Typography>
@@ -114,6 +120,7 @@ export default function EditModal({
           <ConfirmModal
             commentList={commentList}
             setCommentList={setCommentList}
+            setIsChanged={setIsChanged}
             commentId={commentId}
             open={open}
             setOpen={setOpen}

@@ -147,6 +147,7 @@ const ChatButtonDiv = styled.div`
 `;
 const NoContentContainer = styled.section`
   width: 100%;
+  height: calc(100vh - 13.2rem);
   // height: calc(100vh - 50rem);
   // height: 100%;
   // height: 100vh;
@@ -159,6 +160,10 @@ const NoContentContainer = styled.section`
 `;
 
 const NoContentMessage = styled.p`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   font-size: 2.4rem;
   font-weight: 700;

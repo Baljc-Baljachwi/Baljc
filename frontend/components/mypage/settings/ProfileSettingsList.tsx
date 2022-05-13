@@ -1,11 +1,13 @@
 import styled from "styled-components";
 import ProfileContentCard from "../ProfileContentCard";
 
+import { useState } from "react";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { userInfoState } from "atoms/atoms";
 import { deleteMembers, logout } from "../../../api/member";
 import { getAlarms } from "../../../api/alarm";
+import ButtonModal from "components/common/ButtonModal";
 
 const PageContainer = styled.main`
   display: flex;
@@ -16,14 +18,23 @@ const PageContainer = styled.main`
 
 const ProfileSettingsList = () => {
   const [_, setUserInfoState] = useRecoilState(userInfoState);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const modalChildren = [
+    {
+      label: "탈퇴하기",
+      labelColor: "#ff0000",
+      onClick: () => handleDeleteMember(),
+    },
+    { label: "취소" },
+  ];
   const router = useRouter();
   const { code } = router.query;
 
   const handleDeleteMember = () => {
-    console.log("탈퇴하기 안녀엉...");
+    // console.log("탈퇴하기 안녀엉...");
     deleteMembers().then((res) => {
       // console.log(res.data);
-      console.log("메세지 찍어본다!" + res.data.message);
+      // console.log("메세지 찍어본다!" + res.data.message);
       router.push(res.data.code === 1003 ? "/" : "/mypage/settings");
       setUserInfoState({
         accessToken: "",
@@ -58,7 +69,7 @@ const ProfileSettingsList = () => {
           });
           router.push("/");
         } else {
-          console.log(res.data.message);
+          // console.log(res.data.message);
         }
       })
       .catch((err) => console.error(err));
@@ -77,11 +88,18 @@ const ProfileSettingsList = () => {
           onClick={onClickLogout}
         />
         <ProfileContentCard
-          onClick={handleDeleteMember}
+          color="#747373"
+          onClick={() => setIsModalOpen(true)}
           title="탈퇴하기"
           description="안녀엉..."
         />
       </PageContainer>
+      <ButtonModal
+        open={isModalOpen}
+        setOpen={setIsModalOpen}
+        modalTitle="정말 탈퇴하시겠습니까?"
+        modalChildren={modalChildren}
+      />
     </>
   );
 };

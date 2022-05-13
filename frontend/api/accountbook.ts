@@ -10,7 +10,7 @@ export const getCategories = async (type: "E" | "I") => {
 };
 
 export const postAccountbooks = async (params: IPostAccountbooksParams) => {
-  console.log(params);
+  // console.log(params);
   return await api.post(`/api/accountbooks`, params);
 };
 

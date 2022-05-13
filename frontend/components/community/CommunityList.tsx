@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState, Fragment } from "react";
+import { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 
 import all from "../../public/assets/img/community/all.png";
@@ -73,35 +73,75 @@ export default function CommunityList() {
   const router = useRouter();
   const [boardCategories, setBoardCategories] = useState<IBoardCategory[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>(
-    // "271105c2-f94c-47bc-8af4-dc156dcad3eb"
-    "b0756160-eb30-4ac7-90c5-1b2e2d73c645"
+    "38383037-3665-3162-6433-356534303833"
   );
   const [idx, setIdx] = useState<number>(0);
-  const [posts, setPosts] = useState<IPost[]>();
 
+  // state
+  const [posts, setPosts] = useState<IPost[]>([]);
+  const [lastPost, setLastPost] = useState<HTMLDivElement | null>(null);
+
+  // 카테고리 setting
   useEffect(() => {
     getBoardsCategories().then((res) => {
       if (res.data.code === 1700) {
-        console.log(res.data.data);
         setBoardCategories(res.data.data);
       } else {
-        console.log(res.data.message);
+        // console.log(res.data.message);
       }
     });
   }, []);
 
-  useEffect(() => {
-    getBoardsList(idx, selectedCategory).then((res) => {
-      if (res.data.code === 1702) {
-        console.log(res.data.data);
-        setPosts(res.data.data);
-      } else {
-        console.log(res.data.message);
+  // API호출하는 함수
+  const getInfo = async () => {
+    try {
+      getBoardsList(idx, selectedCategory).then((res) => {
+        // console.log("res.data.data", res.data.data);
+        setPosts(posts.concat(res.data.data)); // state에 추가
+        // console.log("posts", posts);
+      });
+    } catch {
+      console.error("fetching error");
+    }
+  };
+
+  // IntersectionObserver 설정
+  const onIntersect: IntersectionObserverCallback = (
+    entries: IntersectionObserverEntry[],
+    observer: IntersectionObserver
+  ) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        // 뷰포트에 마지막 이미지 들어오면
+        setIdx((prev) => prev + 20);
+        // 현재 타깃을 unobserve
+        observer.unobserve(entry.target);
       }
     });
-  }, [idx, selectedCategory]);
+  };
+  useEffect(() => {
+    // console.log("page ? ", idx);
+    getInfo();
+  }, [idx]); // idx 바뀔 때마다 함수 실행
 
-  console.log(111, posts);
+  useEffect(() => {
+    //observer 인스턴스를 생성한 후 구독
+    let observer: IntersectionObserver;
+    if (lastPost) {
+      observer = new IntersectionObserver(onIntersect, { threshold: 0.5 });
+      //observer 생성 시 observe할 target 요소는 불러온 이미지의 마지막아이템(randomImageList 배열의 마지막 아이템)으로 지정
+      observer.observe(lastPost);
+    }
+    return () => observer && observer.disconnect();
+  }, [lastPost]);
+
+  // 게시글
+  useEffect(() => {
+    setIdx(0);
+    setPosts([]);
+    getInfo();
+  }, [selectedCategory]);
+
   return (
     <Container>
       <Header>
@@ -111,7 +151,7 @@ export default function CommunityList() {
             onClick={() => setSelectedCategory(item.boardCategoryId)}
             isSelected={selectedCategory === item.boardCategoryId}
           >
-            <Image src={all} alt="전체보기" width="40%" height="40%" />
+            <Image src={item.imgUrl} alt={item.name} width="40%" height="40%" />
             <Typography
               fs="1.2rem"
               m="0.5rem 0 0 0"
@@ -123,20 +163,41 @@ export default function CommunityList() {
         ))}
       </Header>
       <BodyContainer>
-        {posts?.map((post: any) => (
-          <CommunityCard
-            key={post.boardId}
-            boardId={post.boardId}
-            categoryName={post.categoryName}
-            content={post.content}
-            createdAt={post.createdAt}
-            creator={post.creator}
-            dong={post.dong}
-            imgUrlList={post.imgUrlList}
-            heartCnt={post.heartCnt}
-            commentCnt={post.commentCnt}
-          />
-        ))}
+        {posts?.map((post: any, idx: number) => {
+          if (posts.length - 1 === idx) {
+            return (
+              <div ref={setLastPost} key={post.boardId}>
+                <CommunityCard
+                  boardId={post.boardId}
+                  categoryName={post.categoryName}
+                  content={post.content}
+                  createdAt={post.createdAt}
+                  creator={post.creator}
+                  dong={post.dong}
+                  imgUrlList={post.imgUrlList}
+                  heartCnt={post.heartCnt}
+                  commentCnt={post.commentCnt}
+                />
+              </div>
+            );
+          } else {
+            return (
+              <div key={post.boardId}>
+                <CommunityCard
+                  boardId={post.boardId}
+                  categoryName={post.categoryName}
+                  content={post.content}
+                  createdAt={post.createdAt}
+                  creator={post.creator}
+                  dong={post.dong}
+                  imgUrlList={post.imgUrlList}
+                  heartCnt={post.heartCnt}
+                  commentCnt={post.commentCnt}
+                />
+              </div>
+            );
+          }
+        })}
       </BodyContainer>
       <ChatButtonDiv>
         <ChatButton
