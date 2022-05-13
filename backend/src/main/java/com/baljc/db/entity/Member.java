@@ -128,4 +128,6 @@ public class Member {
     public void updateProfileUrl(String profileUrl) { this.profileUrl = profileUrl; }
 
     public void updateFcmToken(String fcmToken) { this.fcmToken = fcmToken; }
+
+    public void updateRefreshToken(String refreshToken) { this.refreshToken = refreshToken; }
 }

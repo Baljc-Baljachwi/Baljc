@@ -61,17 +61,11 @@ public class TokenProvider implements InitializingBean {
                 .compact();
     }
 
-    public String createRefreshToken(Authentication authentication) {
-        log.debug("createRefreshToken - authentication: {}", authentication);
-        String authorities = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
-
+    public String createRefreshToken() {
         long now = (new Date()).getTime();
         Date validity = new Date(now + this.refreshTokenValidityInMilliseconds);
 
         return Jwts.builder()
-                .setSubject(authentication.getName())
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(validity)
                 .compact();

@@ -48,6 +48,7 @@ public class MemberController {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + signinInfo.getJwt());
+        httpHeaders.add(JwtFilter.REFRESH_TOKEN_HEADER, "Bearer " + signinInfo.getRefreshToken());
 
         return ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(new BaseDataResponse<>(1000,
                 "소셜로그인에 성공하였습니다.", new MemberDto.SigninResponse(signinInfo.getMemberId(),
