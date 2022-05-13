@@ -216,7 +216,7 @@ export default function CommunityDetail() {
     deleteBoards(boardId as string)
       .then((res) => {
         router.push("/community");
-        console.log(res.data);
+        // console.log(res.data);
       })
       .catch((err) => console.error(err));
   };

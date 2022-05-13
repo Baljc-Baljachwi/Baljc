@@ -87,7 +87,7 @@ export default function CommunityList() {
       if (res.data.code === 1700) {
         setBoardCategories(res.data.data);
       } else {
-        console.log(res.data.message);
+        // console.log(res.data.message);
       }
     });
   }, []);
@@ -96,9 +96,9 @@ export default function CommunityList() {
   const getInfo = async () => {
     try {
       getBoardsList(idx, selectedCategory).then((res) => {
-        console.log("res.data.data", res.data.data);
+        // console.log("res.data.data", res.data.data);
         setPosts(posts.concat(res.data.data)); // state에 추가
-        console.log("posts", posts);
+        // console.log("posts", posts);
       });
     } catch {
       console.error("fetching error");
@@ -120,7 +120,7 @@ export default function CommunityList() {
     });
   };
   useEffect(() => {
-    console.log("page ? ", idx);
+    // console.log("page ? ", idx);
     getInfo();
   }, [idx]); // idx 바뀔 때마다 함수 실행
 

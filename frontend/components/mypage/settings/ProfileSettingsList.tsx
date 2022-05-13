@@ -31,10 +31,10 @@ const ProfileSettingsList = () => {
   const { code } = router.query;
 
   const handleDeleteMember = () => {
-    console.log("탈퇴하기 안녀엉...");
+    // console.log("탈퇴하기 안녀엉...");
     deleteMembers().then((res) => {
       // console.log(res.data);
-      console.log("메세지 찍어본다!" + res.data.message);
+      // console.log("메세지 찍어본다!" + res.data.message);
       router.push(res.data.code === 1003 ? "/" : "/mypage/settings");
       setUserInfoState({
         accessToken: "",
@@ -69,7 +69,7 @@ const ProfileSettingsList = () => {
           });
           router.push("/");
         } else {
-          console.log(res.data.message);
+          // console.log(res.data.message);
         }
       })
       .catch((err) => console.error(err));

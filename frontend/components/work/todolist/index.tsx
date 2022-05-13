@@ -78,7 +78,7 @@ export default function Todo({ viewOnly, date }: TodoProps) {
         setTodos(res.data.data);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   }, [date, setTodos]);
 
@@ -94,7 +94,7 @@ export default function Todo({ viewOnly, date }: TodoProps) {
     if (inputForm.content.length !== 0) {
       postTodos(inputForm)
         .then((res) => {
-          console.log(res.data.data);
+          // console.log(res.data.data);
           // alert("todo 등록 완료!");
           setInputForm((prev) => ({
             ...prev,
@@ -103,7 +103,7 @@ export default function Todo({ viewOnly, date }: TodoProps) {
           getTodoList();
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         });
     }
     // else {

@@ -13,6 +13,8 @@
     "@fortawesome/free-regular-svg-icons": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fortawesome/react-fontawesome": "^0.1.18",
+    "@heroicons/react": "^1.0.6",
+    "@types/gtag.js": "^0.0.10",
     "@types/styled-components": "^5.1.25",
     "axios": "^0.26.1",
     "chart.js": "^3.7.1",
@@ -29,8 +31,7 @@
     "recoil": "^0.7.2",
     "styled-components": "^5.3.5",
     "styled-normalize": "^8.0.7",
-    "swiper": "^8.1.4",
-    "@heroicons/react": "^1.0.6"
+    "swiper": "^8.1.4"
   },
   "devDependencies": {
     "@types/chart.js": "^2.9.37",

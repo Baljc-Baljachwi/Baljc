@@ -60,14 +60,14 @@ export default function RoutineDetail() {
     useRecoilState<IRoutine[]>(routineState);
 
   const onClick = () => {
-    console.log(open);
+    // console.log(open);
     setOpen((prev) => !prev);
   };
 
   const getRoutineList = () => {
     getAllRoutines()
       .then((res) => {
-        console.log(res.data.data);
+        // console.log(res.data.data);
         setRoutineList(res.data.data);
       })
       .catch((err) => console.log(err.response));

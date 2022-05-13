@@ -99,21 +99,21 @@ const FinanceDetail = () => {
     const accountbookId = router.query.accountbookId;
     if (accountbookId && typeof accountbookId === "string") {
       getAccountbooks(accountbookId).then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         if (res.data.code === 1302) {
           setFinanceDetailInfo(res.data.data);
           getCategories(res.data.data.type).then((res) => {
-            console.log(res.data);
+            // console.log(res.data);
             if (res.data.code === 1300) {
-              console.log(res.data.data);
+              // console.log(res.data.data);
               setCategoryList(res.data.data);
             } else {
-              console.log(res.data.message);
+              // console.log(res.data.message);
               confirm("카테고리 조회 실패");
             }
           });
         } else {
-          console.log(res.data.message);
+          // console.log(res.data.message);
           confirm("가계부 상세 조회 실패!");
         }
       });
@@ -128,7 +128,7 @@ const FinanceDetail = () => {
     );
   }, [categoryList, setCategoryImageUrl, financeDetailInfo]);
 
-  console.log(
+  // console.log(
     categoryList.find(
       (category) => category.categoryId === financeDetailInfo?.categoryId
     )?.imgUrl
@@ -159,7 +159,7 @@ const FinanceDetail = () => {
   }
 
   function onClickEditButton() {
-    console.log("Edit Button Clicked !!");
+    // console.log("Edit Button Clicked !!");
     if (!financeDetailInfo) {
       return;
     }
