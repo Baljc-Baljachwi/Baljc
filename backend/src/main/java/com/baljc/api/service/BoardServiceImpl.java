@@ -212,7 +212,7 @@ public class BoardServiceImpl implements BoardService {
         Member member = memberService.getMemberByAuthentication();
 
         List<BoardDto.BoardListInterface> list = null;
-        if (categoryId.toString().equals("271105c2-f94c-47bc-8af4-dc156dcad3eb")) {
+        if (categoryId.toString().equals("38383037-3665-3162-6433-356534303833")) {
             list = boardRepository.getBoardListAll(member.getLatitude(), member.getLongitude(), index);
         } else {
             ByteBuffer bb = ByteBuffer.wrap(new byte[16]);
@@ -349,6 +349,72 @@ public class BoardServiceImpl implements BoardService {
                     imgList,
                     commentResponse
                 );
+
+        return response;
+    }
+
+    @Override
+    public BoardDto.BoardDetailCommentResponse getComment(UUID commentId) {
+        BoardDto.CommentListDto commentDto = boardRepositorySupport.getComment(commentId);
+        List<BoardDto.CommentListDto> subCommentList = boardRepositorySupport.getSubCommentList(commentId);
+
+        List<BoardDto.BoardDetailCommentResponse> commentResponse = new ArrayList<>();
+        for (BoardDto.CommentListDto commentListDto : subCommentList) {
+            Long minutes = ChronoUnit.MINUTES.between(commentListDto.getCreatedAt(), LocalDateTime.now());
+            Long hours = ChronoUnit.HOURS.between(commentListDto.getCreatedAt(), LocalDateTime.now());
+            Long days = ChronoUnit.DAYS.between(commentListDto.getCreatedAt(), LocalDateTime.now());
+
+            String date = commentListDto.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+            if (days >= 1 && days < 7) {
+                date = days + "일전";
+            } else if (hours >= 1 && hours < 24) {
+                date = hours + "시간전";
+            } else if (minutes >= 1 && minutes < 60) {
+                date = minutes + "분전";
+            } else if (minutes < 1) {
+                date = "방금전";
+            }
+
+            commentResponse.add(
+                    new BoardDto.BoardDetailCommentResponse(
+                            commentListDto.getCommentId(),
+                            commentListDto.getMemberId(),
+                            commentListDto.getProfileUrl(),
+                            commentListDto.getNickname(),
+                            commentListDto.getContent(),
+                            date,
+                            commentListDto.getDeletedYn(),
+                            null
+                    ));
+        }
+
+        Long minutes = ChronoUnit.MINUTES.between(commentDto.getCreatedAt(), LocalDateTime.now());
+        Long hours = ChronoUnit.HOURS.between(commentDto.getCreatedAt(), LocalDateTime.now());
+        Long days = ChronoUnit.DAYS.between(commentDto.getCreatedAt(), LocalDateTime.now());
+
+        String date = commentDto.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+        if (days >= 1 && days < 7) {
+            date = days + "일전";
+        } else if (hours >= 1 && hours < 24) {
+            date = hours + "시간전";
+        } else if (minutes >= 1 && minutes < 60) {
+            date = minutes + "분전";
+        } else if (minutes < 1) {
+            date = "방금전";
+        }
+
+        BoardDto.BoardDetailCommentResponse response = new BoardDto.BoardDetailCommentResponse(
+                commentDto.getCommentId(),
+                commentDto.getMemberId(),
+                commentDto.getProfileUrl(),
+                commentDto.getNickname(),
+                commentDto.getContent(),
+                date,
+                commentDto.getDeletedYn(),
+                commentResponse
+        );
 
         return response;
     }
