@@ -18,6 +18,10 @@ import { AuthGuard } from "components/auth/AuthGuard";
 import firebase from "firebase/app";
 import "firebase/messaging";
 
+import * as ga from "../lib/ga";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+
 const firebaseConfig = {
   apiKey: "AIzaSyAeqGoiBaRdhGeL7GstkELh1ntZBk_4ibo",
   authDomain: "baljc-145fa.firebaseapp.com",
@@ -43,6 +47,18 @@ export default function MyApp(props: AppProps) {
     Component,
     pageProps,
   }: { Component: NextApplicationPage; pageProps: any } = props;
+
+  const router = useRouter();
+  useEffect(() => {
+    const handleRouteChange = (url: string) => {
+      ga.pageview(url);
+    };
+    router.events.on("routeChangeComplete", handleRouteChange);
+
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange);
+    };
+  }, [router.events]);
 
   return (
     <>
