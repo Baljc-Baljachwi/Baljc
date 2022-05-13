@@ -182,7 +182,18 @@ interface Category {
 }
 
 export default function FinanceForm({ type, initForm }: FinanceFormProps) {
+  // console.log("render");
   const router = useRouter();
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = ("0" + (today.getMonth() + 1)).slice(-2);
+  const day = ("0" + today.getDate()).slice(-2);
+  const date = year + "-" + month + "-" + day;
+  const time =
+    ("0" + today.getHours()).slice(-2) +
+    ":" +
+    ("0" + today.getMinutes()).slice(-2);
+
   const {
     register,
     watch,
@@ -202,11 +213,11 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
       paymentMethod: initForm?.paymentMethod || (type === "E" ? "C" : "N"),
       fixedExpenditureYn: initForm?.fixedExpenditureYn === "Y" || false,
       fixedIncomeYn: initForm?.fixedIncomeYn === "Y" || false,
-      monthlyPeriod: initForm?.monthlyPeriod || "",
-      startDate: initForm?.startDate || "",
-      endDate: initForm?.endDate || "",
-      date: initForm?.date || "",
-      time: initForm?.time || "",
+      monthlyPeriod: initForm?.monthlyPeriod || (day < "28" ? day : "28"),
+      startDate: initForm?.startDate || year + "-" + month,
+      endDate: initForm?.endDate || year + "-" + month,
+      date: initForm?.date || date,
+      time: initForm?.time || time,
     },
   });
 
@@ -222,14 +233,14 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
   ];
 
   useEffect(() => {
-    console.log(type);
+    // console.log(type);
     getCategories(type).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       if (res.data.code === 1300) {
-        console.log(res.data.data);
+        // console.log(res.data.data);
         setCategoryList(res.data.data);
       } else {
-        console.log(res.data.message);
+        // console.log(res.data.message);
         confirm("카테고리 조회 실패!");
       }
     });
@@ -245,7 +256,7 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
   }, [type, initForm, setValue]);
 
   function onSubmit(data: any) {
-    console.log("Confirm!!");
+    // console.log("Confirm!!");
 
     const isFixed =
       (type === "E" && data.fixedExpenditureYn) ||
@@ -275,30 +286,30 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
           confirm("가계부 삭제 실패");
         }
       });
-      console.log(params);
+      // console.log(params);
 
       // 추가 페이지에서
     } else {
       postAccountbooks(params).then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         if (res.data.code === 1301) {
           router.push("/finance");
         } else {
           confirm("가계부 생성 실패");
         }
       });
-      console.log(params);
+      // console.log(params);
     }
   }
 
   function onClickDeleteButton() {
-    console.log("Delete!");
+    // console.log("Delete!");
     if (!initForm || !initForm.accountbookId) {
       return;
     }
 
     deleteAccountbooks(initForm.accountbookId).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       if (res.data.code === 1305) {
         router.push("/finance");
       } else {
@@ -311,6 +322,18 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
   const fixedIncomeTF = watch("fixedIncomeYn");
   const categoryId = watch("categoryId");
   const paymentMethod = watch("paymentMethod");
+
+  useEffect(() => {
+    if (fixedExpenditureTF || fixedIncomeTF) {
+      setValue("date", "");
+      setValue("startDate", initForm?.startDate || year + "-" + month);
+      setValue("endDate", initForm?.endDate || year + "-" + month);
+    } else {
+      setValue("startDate", "");
+      setValue("endDate", "");
+      setValue("date", initForm?.date || date);
+    }
+  }, [fixedExpenditureTF, fixedIncomeTF, date]);
 
   return (
     <>
@@ -393,7 +416,7 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
                     {...register("startDate", {
                       required: {
                         value: true,
-                        message: "종료일을 입력해주세요",
+                        message: "시작일을 입력해주세요",
                       },
                     })}
                   />
@@ -414,6 +437,8 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
                   <InputUnit>까지</InputUnit>
                 </InputDiv>
               </InputContainer>
+              <ErrorMessage>{errors.startDate?.message}</ErrorMessage>
+              <ErrorMessage>{errors.endDate?.message}</ErrorMessage>
             </div>
             <div>
               <InputContainer>
@@ -479,14 +504,10 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
           <StyledLabel>카테고리</StyledLabel>
           <CategoryListContainer>
             {categoryList.map((category) => (
-              <CategoryButton
-                key={category.categoryId}
-                // onClick={() => onClickCategoryButton(category.categoryId)}
-              >
+              <CategoryButton key={category.categoryId}>
                 <CategoryImage
                   htmlFor={category.categoryId}
                   isSelected={categoryId === category.categoryId}
-                  // isSelected={financeForm.categoryId === category.categoryId}
                 >
                   <Image
                     src={category.imgUrl}
