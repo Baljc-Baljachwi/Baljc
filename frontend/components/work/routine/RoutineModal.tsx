@@ -98,7 +98,7 @@ const TitleErrorMessage = styled.p<{ titleValidation: boolean }>`
 
 const RepetitionErrorMessage = styled.p<{ repetitionValidation: boolean }>`
   visibility: ${(props) => (props.repetitionValidation ? "visible" : "hidden")};
-  // border-top: ${(props) =>
+  border-top: ${(props) =>
     props.repetitionValidation ? "1px solid #ff0000" : ""};
   color: #ff0000;
   font-size: 1.2rem;
