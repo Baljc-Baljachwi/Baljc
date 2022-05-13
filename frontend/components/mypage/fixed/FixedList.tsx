@@ -62,8 +62,8 @@ export default function FixedList({ item }: FixedListProps) {
         // setPaymentMethod(res.data.data.paymentMethod);
       })
       .catch((err) => {
-        console.log("😥🙀 고정 지출 조회 실패");
-        console.log(err.response);
+        // // console.log("😥🙀 고정 지출 조회 실패");
+        // console.log(err.response);
       });
   }, []);
 

@@ -108,7 +108,7 @@ export default function TodoItem({
     if (completedYn === "N") {
       completedTodos(todoId, { completedYn: "Y" })
         .then((res) => {
-          console.log(res.data.data);
+          // console.log(res.data.data);
           // 객체 업데이트
           setTodos(
             todos.map((todo: ITodoTypes) => {
@@ -118,11 +118,11 @@ export default function TodoItem({
             })
           );
         })
-        .catch((err) => console.log(err));
+        .catch((err) => // console.log(err));
     } else {
       completedTodos(todoId, { completedYn: "N" })
         .then((res) => {
-          console.log(res.data.data);
+          // console.log(res.data.data);
           setTodos(
             todos.map((todo: ITodoTypes) => {
               return todo.todoId === todoId
@@ -131,7 +131,7 @@ export default function TodoItem({
             })
           );
         })
-        .catch((err) => console.log(err));
+        .catch((err) => // console.log(err));
     }
   };
 
@@ -140,7 +140,7 @@ export default function TodoItem({
       if (!isError) {
         editTodos(e.target.id, contentForm)
           .then((res) => {
-            console.log(res);
+            // console.log(res);
             setTodos(
               todos.map((todo: ITodoTypes) => {
                 return todo.todoId === todoId
@@ -170,13 +170,13 @@ export default function TodoItem({
         content: e.target.value,
       }));
     }
-    console.log(isError);
+    // console.log(isError);
   };
 
   const deleteTodo = () => {
     deleteTodos(todoId)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setTodos(todos.filter((todo: ITodoTypes) => todo.todoId !== todoId));
       })
       .catch((err) => console.log(err));
@@ -191,7 +191,7 @@ export default function TodoItem({
     if (!isError) {
       editTodos(e.target.id, contentForm)
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           setTodos(
             todos.map((todo: ITodoTypes) => {
               return todo.todoId === todoId

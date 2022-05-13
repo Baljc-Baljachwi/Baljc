@@ -112,7 +112,7 @@ export default function ConfirmModal({
     const boardId = router.query.boardId;
     deleteComment(boardId as string, commentId as string)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data.code === 1707) {
           setCommentList(
             commentList.filter(

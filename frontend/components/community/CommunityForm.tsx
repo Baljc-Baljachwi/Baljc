@@ -178,14 +178,6 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
   const [deletedImageIdList, setDeletedImageIdList] = useState<string[]>([]);
   const [boardCategories, setBoardCategories] = useState<IBoardCategory[]>([]);
 
-  const onClickDeleteButton = () => {
-    console.log("Delete!");
-    // if (!initForm || !initForm.accountbookId) {
-    //   return;
-    // }
-    // 게시글 삭제 API 추가하기
-  };
-
   function validFile(file: any) {
     if (file.size > 2097152) {
       return false;
@@ -196,8 +188,8 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
   }
 
   function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
-    console.log("image upload");
-    console.log(event.target.files);
+    // console.log("image upload");
+    // console.log(event.target.files);
     const files = event.target.files;
     if (files && files.length > 0) {
       const file = files[0];
@@ -241,8 +233,8 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
       deleteBoardImgIdList: deletedImageIdList,
     };
 
-    console.log("data: ", data);
-    console.log("boardInfo: ", boardInfo);
+    // console.log("data: ", data);
+    // console.log("boardInfo: ", boardInfo);
 
     const formData = new FormData();
     imageFileList.forEach((file) => {
@@ -256,27 +248,27 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
     if (boardContent) {
       putBoard(router.query.boardId as string, formData)
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           if (res.data.code === 1704) {
-            console.log(res.data.message);
+            // console.log(res.data.message);
             router.push({
               pathname: "/community/detail",
               query: { boardId: router.query.boardId },
             });
           } else {
-            console.log(res.data.message);
+            // console.log(res.data.message);
           }
         })
         .catch((err) => console.error(err));
     } else {
       postBoards(formData)
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           if (res.data.code === 1701) {
-            console.log(res.data.message);
+            // console.log(res.data.message);
             router.push("/community");
           } else {
-            console.log(res.data.message);
+            // console.log(res.data.message);
           }
         })
         .catch((err) => console.error(err));
@@ -287,7 +279,7 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
     setReady(true);
     // 카테고리 가져오기
     getBoardsCategories().then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       if (res.data.code === 1700) {
         const { data } = res.data;
         const withOutAll = data.filter(
@@ -296,7 +288,7 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
         setBoardCategories(withOutAll);
         setValue("category", withOutAll[0].boardCategoryId);
       } else {
-        console.log(res.data.message);
+        // console.log(res.data.message);
       }
     });
     if (boardContent) {
