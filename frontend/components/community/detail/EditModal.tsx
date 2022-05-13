@@ -106,11 +106,7 @@ export default function EditModal({
                 삭제하기
               </Typography>
             </ModalInner>
-            <ModalInner
-              tabIndex={0}
-              className="modal-inner"
-              onClick={onMaskClick}
-            >
+            <ModalInner tabIndex={0} className="modal-inner" onClick={onClose}>
               <Typography fs="1.8rem" p="1.2rem">
                 취소하기
               </Typography>
