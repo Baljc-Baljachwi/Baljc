@@ -18,7 +18,7 @@ import { AuthGuard } from "components/auth/AuthGuard";
 import firebase from "firebase/app";
 import "firebase/messaging";
 
-import * as ga from "../lib/ga";
+import * as ga from "../lib/ga/index";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
