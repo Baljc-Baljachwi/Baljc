@@ -128,7 +128,7 @@ const FinanceDetail = () => {
     );
   }, [categoryList, setCategoryImageUrl, financeDetailInfo]);
 
-  // console.log(
+  console.log(
     categoryList.find(
       (category) => category.categoryId === financeDetailInfo?.categoryId
     )?.imgUrl
