@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Image from "next/image";
 import { useState, useRef, Fragment } from "react";
+import Link from "next/link";
 
 import ReplyCard from "./ReplyCard";
 import Icon from "../../common/Icon";
@@ -9,6 +10,7 @@ import defaultProfileImage from "public/assets/img/mypage/avatar/default_profile
 import EditModal from "./EditModal";
 import { useRecoilValue } from "recoil";
 import { userInfoState } from "atoms/atoms";
+import { useRouter } from "next/router";
 
 const Container = styled.div`
   display: grid;
@@ -47,27 +49,23 @@ const Typography = styled.div<{
 
 interface CommentCardProps {
   setCommentList: any;
+  setIsChanged: any;
   commentList: IComment[];
   boardCreatorId: string;
 }
 
 export default function CommentCard({
   setCommentList,
+  setIsChanged,
   commentList,
   boardCreatorId,
 }: CommentCardProps) {
   const [open, setOpen] = useState(false); // 댓글 삭제 확인 모달
   const userInfo = useRecoilValue(userInfoState);
-
+  const router = useRouter();
+  const boardId = router.query.boardId;
   const onClickEdit = () => {
     setOpen((prev) => !prev);
-  };
-  const [showReply, setShowReply] = useState(false);
-
-  const inputFocus = useRef<any>(undefined);
-  const handleReply = () => {
-    inputFocus.current.focus();
-    setShowReply(true);
   };
 
   return (
@@ -103,7 +101,7 @@ export default function CommentCard({
                   </Typography>
                   {/* 작성자인 경우만 */}
                   {comment.memberId === boardCreatorId &&
-                    comment.deletedYn === "Y" &&
+                    comment.deletedYn === "N" &&
                     comment.list !== [] && (
                       <>
                         <Typography
@@ -134,6 +132,7 @@ export default function CommentCard({
                       <EditModal
                         commentList={commentList}
                         setCommentList={setCommentList}
+                        setIsChanged={setIsChanged}
                         open={open}
                         setOpen={setOpen}
                         commentId={comment.commentId}
@@ -149,17 +148,39 @@ export default function CommentCard({
                   ? "삭제된 댓글입니다"
                   : comment.content}
               </Typography>
-              <Typography fs="1.4rem" p="0 0 1rem 0" onClick={handleReply}>
-                답글쓰기
-              </Typography>
-              {showReply ? <input ref={inputFocus} /> : <></>}
+              <Link
+                href={{
+                  pathname: `/community/detail/${comment.commentId}`,
+                  query: {
+                    commentId: comment.commentId,
+                    boardId: boardId,
+                    boardCreatorId: boardCreatorId,
+                  },
+                }}
+                as={`/community/detail/${comment.commentId}`}
+                passHref
+              >
+                <Typography fs="1.4rem" p="0 0 1rem 0">
+                  답글쓰기
+                </Typography>
+              </Link>
             </TextContainer>
-            {comment.list?.map((reply) => (
-              <Fragment key={reply.commentId}>
-                <div></div> {/* div tag 있어야 됩니당 grid때무네*/}
-                <ReplyCard reply={reply} boardCreatorId={boardCreatorId} />
-              </Fragment>
-            ))}
+            {comment.list?.map(
+              (reply) =>
+                reply.deletedYn === "N" && (
+                  <Fragment key={reply.commentId}>
+                    <div></div> {/* div tag 있어야 됩니당 grid때무네*/}
+                    <ReplyCard
+                      reply={reply}
+                      boardCreatorId={boardCreatorId}
+                      setIsChanged={setIsChanged}
+                      commentList={commentList}
+                      setCommentList={setCommentList}
+                      commentId={reply.commentId}
+                    />
+                  </Fragment>
+                )
+            )}
           </Fragment>
         ))
       ) : (

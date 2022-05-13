@@ -31,6 +31,10 @@ export const postScrapBoards = async (boardId: string, data: object) => {
   return await api.post(`/api/boards/${boardId}/scrap`, data);
 };
 
+export const getComment = async (boardId: string, commentId: string) => {
+  return await api.get(`/api/boards/${boardId}/comments/${commentId}`);
+};
+
 export const postComment = async (boardId: string, data: object) => {
   return await api.post(`/api/boards/${boardId}/comments`, data);
 };
