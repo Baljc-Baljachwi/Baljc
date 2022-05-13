@@ -273,6 +273,12 @@ export default function CommunityDetail() {
     setComment(e.target.value);
   };
 
+  const handlePressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSubmit(e);
+    }
+  };
+
   const handleSubmit = (e: any) => {
     const data = {
       parentId: null,
@@ -462,6 +468,7 @@ export default function CommunityDetail() {
           placeholder="댓글을 입력해주세요."
           value={comment}
           onChange={handleChange}
+          onKeyUp={handlePressEnter}
         />
         <IconWrapper>
           <Typography

@@ -97,6 +97,12 @@ export default function Reply() {
     setReply(e.target.value);
   };
 
+  const handlePressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSubmit(e);
+    }
+  };
+
   const handleSubmit = (e: any) => {
     const data = {
       parentId: commentId,
@@ -123,7 +129,6 @@ export default function Reply() {
     <div>
       <Header
         label="답글 작성"
-        icon="plus"
         onClickBackButton={() =>
           router.push({
             pathname: "/community/detail",
@@ -204,6 +209,7 @@ export default function Reply() {
           placeholder="답글을 입력해주세요."
           value={reply}
           onChange={handleChange}
+          onKeyUp={handlePressEnter}
         />
         <IconWrapper>
           <Typography
