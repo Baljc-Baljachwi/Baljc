@@ -5,8 +5,6 @@ import com.baljc.common.jwt.TokenProvider;
 import com.baljc.common.util.SecurityUtil;
 import com.baljc.db.entity.*;
 import com.baljc.db.repository.*;
-import com.baljc.exception.NotExpiredTokenException;
-import com.baljc.exception.NotValidRefreshTokenException;
 import com.baljc.exception.UnauthenticatedMemberException;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -23,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -193,9 +190,9 @@ public class MemberServiceImpl implements MemberService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         log.debug("authenticateMember - surveyedYn: {}",  member.getSurveyedYn());
         boolean surveyedYn = member.getSurveyedYn() == 'Y';
-        String refreshToken = tokenProvider.createRefreshToken();
-        member.updateRefreshToken(refreshToken);
-        return new MemberDto.SigninInfo(tokenProvider.createToken(authentication), refreshToken, member.getMemberId(),
+//        String refreshToken = tokenProvider.createRefreshToken();
+//        member.updateRefreshToken(refreshToken);
+        return new MemberDto.SigninInfo(tokenProvider.createToken(authentication), member.getMemberId(),
                 surveyedYn, surveyedYn && member.getLatitude() != null && member.getLongitude() != null);
     }
 
@@ -264,29 +261,29 @@ public class MemberServiceImpl implements MemberService {
         SecurityContextHolder.clearContext();
     }
 
-    @Override
-    public MemberDto.SigninInfo updateToken(String authorization, String refreshToken) {
-        //accessToken 유효기간 확인
-        if (tokenProvider.validateRefreshToken(authorization)) {
-            throw new NotExpiredTokenException("유효한 토큰입니다.");
-        }
-
-        //accessToken 파싱
-        UUID memberId = UUID.fromString(tokenProvider.getUserPk(authorization));
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NullPointerException("해당 회원이 존재하지 않습니다."));
-
-        //refreshToken 유효기간 확인 & 데이터베이스에 저장된 값과 같은지 확인
-        if (!tokenProvider.validateRefreshToken(refreshToken) || !refreshToken.equals(member.getRefreshToken())) {
-            throw new NotValidRefreshTokenException("유효하지 않은 리프레시 토큰입니다.");
-        }
-
-        //accessToken & refreshToken 재발급
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(member.getMemberId(), member.getKakaoId());
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        String refresh = tokenProvider.createRefreshToken();
-        member.updateRefreshToken(refresh);
-        MemberDto.SigninInfo signinInfo = new MemberDto.SigninInfo(tokenProvider.createToken(authentication), refresh, null, null, null);
-        return signinInfo;
-    }
+//    @Override
+//    public MemberDto.SigninInfo updateToken(String authorization, String refreshToken) {
+//        //accessToken 유효기간 확인
+//        if (tokenProvider.validateRefreshToken(authorization)) {
+//            throw new NotExpiredTokenException("유효한 토큰입니다.");
+//        }
+//
+//        //accessToken 파싱
+//        UUID memberId = UUID.fromString(tokenProvider.getUserPk(authorization));
+//        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NullPointerException("해당 회원이 존재하지 않습니다."));
+//
+//        //refreshToken 유효기간 확인 & 데이터베이스에 저장된 값과 같은지 확인
+//        if (!tokenProvider.validateRefreshToken(refreshToken) || !refreshToken.equals(member.getRefreshToken())) {
+//            throw new NotValidRefreshTokenException("유효하지 않은 리프레시 토큰입니다.");
+//        }
+//
+//        //accessToken & refreshToken 재발급
+//        UsernamePasswordAuthenticationToken authenticationToken =
+//                new UsernamePasswordAuthenticationToken(member.getMemberId(), member.getKakaoId());
+//        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+//        String refresh = tokenProvider.createRefreshToken();
+//        member.updateRefreshToken(refresh);
+//        MemberDto.SigninInfo signinInfo = new MemberDto.SigninInfo(tokenProvider.createToken(authentication), refresh, null, null, null);
+//        return signinInfo;
+//    }
 }

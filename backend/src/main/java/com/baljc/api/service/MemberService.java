@@ -13,5 +13,5 @@ public interface MemberService {
     void updateMember(MemberDto.RegisterRequest registerRequest, MultipartFile multipartFile);
     void deleteMember();
     void signoutMember();
-    MemberDto.SigninInfo updateToken(String authorization, String refreshToken);
+//    MemberDto.SigninInfo updateToken(String authorization, String refreshToken);
 }

@@ -45,7 +45,7 @@ public class MemberDto {
     @AllArgsConstructor
     public static class SigninInfo {
         private String jwt;
-        private String refreshToken;
+//        private String refreshToken;
         private UUID memberId;
         private Boolean surveyedYn;
         private Boolean regionYn;
