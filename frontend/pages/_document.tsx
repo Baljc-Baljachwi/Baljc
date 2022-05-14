@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-sync-scripts */
 import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
@@ -13,7 +12,7 @@ export default function Document() {
           name="keywords"
           content="자취생활, 자취길잡이, 자취하는방법, 자취처음, 발자취, 자취생"
         />
-        <title>발지취, 슬기로운 자취생활 길잡이</title>
+        <title>발자취</title>
         <meta
           name="viewport"
           content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
