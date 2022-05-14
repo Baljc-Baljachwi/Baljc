@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 
-import all from "../../public/assets/img/community/all.png";
 import CommunityCard from "./CommunityCard";
 import { getBoardsCategories, getBoardsList } from "api/community";
 import { IPost } from "types";
@@ -76,33 +75,27 @@ export default function CommunityList() {
     "38383037-3665-3162-6433-356534303833"
   );
   const [idx, setIdx] = useState<number>(0);
-
+  const [isChanged, setIsChanged] = useState<boolean>(false);
   // state
   const [posts, setPosts] = useState<IPost[]>([]);
   const [lastPost, setLastPost] = useState<HTMLDivElement | null>(null);
 
   // 카테고리 setting
   useEffect(() => {
-    getBoardsCategories().then((res) => {
-      if (res.data.code === 1700) {
+    getBoardsCategories()
+      .then((res) => {
         setBoardCategories(res.data.data);
-      } else {
-        // console.log(res.data.message);
-      }
-    });
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   // API호출하는 함수
   const getInfo = async () => {
-    try {
-      getBoardsList(idx, selectedCategory).then((res) => {
-        // console.log("res.data.data", res.data.data);
+    getBoardsList(idx, selectedCategory)
+      .then((res) => {
         setPosts(posts.concat(res.data.data)); // state에 추가
-        // console.log("posts", posts);
-      });
-    } catch {
-      console.error("fetching error");
-    }
+      })
+      .catch((err) => console.log(err));
   };
 
   // IntersectionObserver 설정
@@ -120,9 +113,9 @@ export default function CommunityList() {
     });
   };
   useEffect(() => {
-    // console.log("page ? ", idx);
+    console.log("page ? ", idx);
     getInfo();
-  }, [idx]); // idx 바뀔 때마다 함수 실행
+  }, [idx, isChanged]); // idx 바뀔 때마다 함수 실행
 
   useEffect(() => {
     //observer 인스턴스를 생성한 후 구독
@@ -139,9 +132,10 @@ export default function CommunityList() {
   useEffect(() => {
     setIdx(0);
     setPosts([]);
-    getInfo();
+    setIsChanged(!isChanged);
   }, [selectedCategory]);
 
+  console.log(4, idx, posts, selectedCategory);
   return (
     <Container>
       <Header>

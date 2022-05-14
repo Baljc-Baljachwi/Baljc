@@ -107,7 +107,7 @@ const ButtonContainer = styled.div`
 const CommentContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 2rem;
+  padding: 2rem 2rem 7rem 2rem;
 `;
 
 const InputContainer = styled.div`
@@ -323,7 +323,10 @@ export default function CommunityDetail() {
               imgInfoList: imgUrlList,
             });
             res.data.data.commentList.map((item: any, idx: string) => {
-              if (item.deletedYn === "N" || item.list.length > 0) {
+              if (
+                item.deletedYn === "N" ||
+                item.list.some((reply: any) => reply.deletedYn === "N")
+              ) {
                 setCommentList((prev) => [...prev, item]);
               }
             });
@@ -473,12 +476,23 @@ export default function CommunityDetail() {
           댓글
         </Typography>
         {commentList.length > 0 ? (
-          <CommentCard
-            setCommentList={setCommentList}
-            commentList={commentList}
-            boardCreatorId={boardDetail.memberId}
-            setIsChanged={setIsChanged}
-          />
+          commentList.map((comment: any) => (
+            <CommentCard
+              key={comment.commentId}
+              setCommentList={setCommentList}
+              commentList={commentList}
+              boardCreatorId={boardDetail.memberId}
+              setIsChanged={setIsChanged}
+              commentId={comment.commentId}
+              memberId={comment.memberId}
+              profileUrl={comment.profileUrl}
+              nickname={comment.nickname}
+              content={comment.content}
+              createdAt={comment.createdAt}
+              deletedYn={comment.deletedYn}
+              list={comment.list}
+            />
+          ))
         ) : (
           <ColumnContainer>
             <Typography fs="1.6rem">아직 댓글이 없습니다.</Typography>

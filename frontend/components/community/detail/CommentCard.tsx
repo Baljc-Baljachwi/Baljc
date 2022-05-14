@@ -48,17 +48,36 @@ const Typography = styled.div<{
 `;
 
 interface CommentCardProps {
+  key: string;
   setCommentList: any;
   setIsChanged: any;
   commentList: IComment[];
+  // card props
   boardCreatorId: string;
+  commentId: string;
+  memberId: string;
+  profileUrl: string | null;
+  nickname: string;
+  content: string;
+  createdAt: string;
+  deletedYn: "Y" | "N";
+  list: IComment[];
 }
 
 export default function CommentCard({
+  key,
   setCommentList,
   setIsChanged,
   commentList,
   boardCreatorId,
+  commentId,
+  memberId,
+  profileUrl,
+  nickname,
+  content,
+  createdAt,
+  deletedYn,
+  list,
 }: CommentCardProps) {
   const [open, setOpen] = useState(false); // 댓글 삭제 확인 모달
   const userInfo = useRecoilValue(userInfoState);
@@ -70,121 +89,105 @@ export default function CommentCard({
 
   return (
     <Container>
-      {commentList.length > 0 ? (
-        commentList.map((comment) => (
-          <Fragment key={comment.commentId}>
-            <ImageWrapper>
-              {comment.deletedYn === "Y" && comment.list !== [] ? (
-                <Image
-                  src={defaultProfileImage}
-                  alt=""
-                  width="100%"
-                  height="100%"
-                />
-              ) : (
-                <Image
-                  src={comment.profileUrl || defaultProfileImage}
-                  alt=""
-                  width="100%"
-                  height="100%"
-                />
-              )}
-            </ImageWrapper>
+      <ImageWrapper>
+        {deletedYn === "Y" && list !== [] ? (
+          <Image src={defaultProfileImage} alt="" width="100%" height="100%" />
+        ) : (
+          <Image
+            src={profileUrl || defaultProfileImage}
+            alt=""
+            width="100%"
+            height="100%"
+          />
+        )}
+      </ImageWrapper>
 
-            <TextContainer>
-              <FlexContainer style={{ justifyContent: "space-between" }}>
-                <FlexContainer>
-                  <Typography fs="1.6rem" fw="600">
-                    {comment.deletedYn === "Y" && comment.list !== []
-                      ? ""
-                      : comment.nickname}
-                  </Typography>
-                  {/* 작성자인 경우만 */}
-                  {comment.memberId === boardCreatorId &&
-                    comment.deletedYn === "N" &&
-                    comment.list !== [] && (
-                      <>
-                        <Typography
-                          p="0.2rem 0.5rem"
-                          style={{
-                            backgroundColor: "#EDEDED",
-                            borderRadius: "4px",
-                            alignSelf: "center",
-                          }}
-                        >
-                          작성자
-                        </Typography>
-                      </>
-                    )}
-                </FlexContainer>
-
-                {/* 댓글 작성자인 경우만 수정 버튼 */}
-                {comment.memberId === userInfo.memberId &&
-                  comment.deletedYn === "N" && (
-                    <>
-                      <Icon
-                        mode="fas"
-                        icon="ellipsis-vertical"
-                        onClick={onClickEdit}
-                        size="20px"
-                        color="#c9c9c9"
-                      />
-                      <EditModal
-                        commentList={commentList}
-                        setCommentList={setCommentList}
-                        setIsChanged={setIsChanged}
-                        open={open}
-                        setOpen={setOpen}
-                        commentId={comment.commentId}
-                      />
-                    </>
-                  )}
-              </FlexContainer>
-              <Typography fs="1.4rem" color="#3D3D3D">
-                {comment.createdAt}
-              </Typography>
-              <Typography fs="1.8rem">
-                {comment.deletedYn === "Y" && comment.list !== []
-                  ? "삭제된 댓글입니다"
-                  : comment.content}
-              </Typography>
-              <Link
-                href={{
-                  pathname: `/community/detail/${comment.commentId}`,
-                  query: {
-                    commentId: comment.commentId,
-                    boardId: boardId,
-                    boardCreatorId: boardCreatorId,
-                  },
-                }}
-                as={`/community/detail/${comment.commentId}`}
-                passHref
-              >
-                <Typography fs="1.4rem" p="0 0 1rem 0">
-                  답글쓰기
+      <TextContainer>
+        <FlexContainer style={{ justifyContent: "space-between" }}>
+          <FlexContainer>
+            <Typography fs="1.6rem" fw="600">
+              {deletedYn === "Y" && list !== [] ? "" : nickname}
+            </Typography>
+            {/* 작성자인 경우만 */}
+            {memberId === boardCreatorId && deletedYn === "N" && list !== [] && (
+              <>
+                <Typography
+                  p="0.2rem 0.5rem"
+                  style={{
+                    backgroundColor: "#EDEDED",
+                    borderRadius: "4px",
+                    alignSelf: "center",
+                  }}
+                >
+                  작성자
                 </Typography>
-              </Link>
-            </TextContainer>
-            {comment.list?.map(
-              (reply) =>
-                reply.deletedYn === "N" && (
-                  <Fragment key={reply.commentId}>
-                    <div></div> {/* div tag 있어야 됩니당 grid때무네*/}
-                    <ReplyCard
-                      reply={reply}
-                      boardCreatorId={boardCreatorId}
-                      setIsChanged={setIsChanged}
-                      commentList={commentList}
-                      setCommentList={setCommentList}
-                      commentId={reply.commentId}
-                    />
-                  </Fragment>
-                )
+              </>
             )}
-          </Fragment>
-        ))
-      ) : (
-        <></>
+          </FlexContainer>
+
+          {/* 댓글 작성자인 경우만 수정 버튼 */}
+          {memberId === userInfo.memberId && deletedYn === "N" && (
+            <>
+              <Icon
+                mode="fas"
+                icon="ellipsis-vertical"
+                onClick={onClickEdit}
+                size="20px"
+                color="#c9c9c9"
+              />
+              <EditModal
+                commentList={commentList}
+                setCommentList={setCommentList}
+                setIsChanged={setIsChanged}
+                open={open}
+                setOpen={setOpen}
+                commentId={commentId}
+              />
+            </>
+          )}
+        </FlexContainer>
+        <Typography fs="1.4rem" color="#3D3D3D">
+          {createdAt}
+        </Typography>
+        <Typography fs="1.8rem">
+          {deletedYn === "Y" && list !== [] ? "삭제된 댓글입니다" : content}
+        </Typography>
+        <Link
+          href={{
+            pathname: `/community/detail/${commentId}`,
+            query: {
+              commentId: commentId,
+              boardId: boardId,
+              boardCreatorId: boardCreatorId,
+            },
+          }}
+          as={`/community/detail/${commentId}`}
+          passHref
+        >
+          {deletedYn === "N" ? (
+            <Typography fs="1.4rem" p="0 0 1rem 0">
+              답글 쓰기
+            </Typography>
+          ) : (
+            ""
+          )}
+        </Link>
+      </TextContainer>
+      {list?.map(
+        (reply: any) =>
+          reply.deletedYn === "N" && (
+            <Fragment key={reply.commentId}>
+              <div></div> {/* div tag 있어야 됩니당 grid때무네*/}
+              <ReplyCard
+                reply={reply}
+                boardCreatorId={boardCreatorId}
+                setIsChanged={setIsChanged}
+                commentList={commentList}
+                setCommentList={setCommentList}
+                commentId={reply.commentId}
+              />
+            </Fragment>
+          )
       )}
     </Container>
   );
