@@ -3,9 +3,6 @@ package com.baljc.api.controller;
 import com.baljc.common.response.BaseResponse;
 import com.baljc.exception.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -43,26 +40,26 @@ public class ExceptionController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse(2002, e.getMessage()));
     }
 
-    @ExceptionHandler(MalformedJwtException.class)
-    public ResponseEntity<BaseResponse> MalformedJwtExceptionHandler(MalformedJwtException e) {
-        log.error("MalformedJwtException - {}", e.getMessage());
-        // 401
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new BaseResponse(2003, e.getMessage()));
-    }
-
-    @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<BaseResponse> ExpiredJwtExceptionHandler(ExpiredJwtException e) {
-        log.error("ExpiredJwtException - {}", e.getMessage());
-        // 401
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new BaseResponse(2004, e.getMessage()));
-    }
-
-    @ExceptionHandler(UnsupportedJwtException.class)
-    public ResponseEntity<BaseResponse> UnsupportedJwtExceptionHandler(UnsupportedJwtException e) {
-        log.error("UnsupportedJwtException - {}", e.getMessage());
-        // 401
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new BaseResponse(2005, e.getMessage()));
-    }
+//    @ExceptionHandler(MalformedJwtException.class)
+//    public ResponseEntity<BaseResponse> MalformedJwtExceptionHandler(MalformedJwtException e) {
+//        log.error("MalformedJwtException - {}", e.getMessage());
+//        // 401
+//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new BaseResponse(2003, e.getMessage()));
+//    }
+//
+//    @ExceptionHandler(ExpiredJwtException.class)
+//    public ResponseEntity<BaseResponse> ExpiredJwtExceptionHandler(ExpiredJwtException e) {
+//        log.error("ExpiredJwtException - {}", e.getMessage());
+//        // 401
+//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new BaseResponse(2004, e.getMessage()));
+//    }
+//
+//    @ExceptionHandler(UnsupportedJwtException.class)
+//    public ResponseEntity<BaseResponse> UnsupportedJwtExceptionHandler(UnsupportedJwtException e) {
+//        log.error("UnsupportedJwtException - {}", e.getMessage());
+//        // 401
+//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new BaseResponse(2005, e.getMessage()));
+//    }
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<BaseResponse> BadCredentialsExceptionHandler(BadCredentialsException e) {
