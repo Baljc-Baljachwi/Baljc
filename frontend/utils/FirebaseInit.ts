@@ -1,4 +1,5 @@
 import firebase from "firebase";
+import { toast } from "react-toastify";
 
 export async function getToken() {
   if (firebase.messaging.isSupported() === false) {
@@ -12,6 +13,20 @@ export async function getToken() {
     const currentToken = await messaging.getToken({
       vapidKey:
         "BEUtZMXn0EyfJMLSF7j979ocXCzI7Ft4PvIgmQHHMI0g3eH0_nb1zHQY5AUK4PcUSLAKSaDEJJcx66xiWVaZjsw",
+    });
+
+    await messaging.onMessage((payload) => {
+      console.log("Message received. ", payload);
+      console.log(payload.notification);
+
+      toast.success(
+        payload.notification.title + "\n" + payload.notification.body,
+        {
+          position: toast.POSITION.BOTTOM_CENTER,
+          hideProgressBar: true,
+          autoClose: 5000,
+        }
+      );
     });
 
     if (currentToken) {

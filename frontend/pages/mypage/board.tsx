@@ -8,6 +8,7 @@ import { IPost, IMyBoard } from "types";
 import ButtonImage from "components/common/ButtonImage";
 import Header from "components/common/Header";
 import CommunityCard from "components/community/CommunityCard";
+import Spinner from "components/common/Spinner";
 
 interface IBoardCategory {
   boardCategoryId: string;
@@ -17,6 +18,7 @@ interface IBoardCategory {
 
 const Board = () => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
   const [ready, setReady] = useState(false);
   const [boardCategories, setBoardCategories] = useState<IBoardCategory[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>(
@@ -34,16 +36,19 @@ const Board = () => {
   // }
 
   useEffect(() => {
-    getMyBoardList()
-      .then((res) => {
-        console.log("하이");
-        console.log(res.data.data);
-        setMyBoardList(res.data.data);
-      })
-      .catch((err) => {
-        console.log(err.data.message);
-      });
-  }, []);
+    if (isLoading) {
+      getMyBoardList()
+        .then((res) => {
+          console.log("하이");
+          console.log(res.data.data);
+          setMyBoardList(res.data.data);
+        })
+        .then(() => setIsLoading(false))
+        .catch((err) => {
+          console.log(err.data.message);
+        });
+    }
+  }, [isLoading]);
   // console.log(posts);
   // console.log(myBoardList);
   return (
@@ -52,37 +57,40 @@ const Board = () => {
         label="내가 쓴 글 목록"
         onClickBackButton={() => router.push("/mypage")}
       ></Header>
-      <Container>
-        <BodyContainer>
-          {myBoardList?.length !== 0 ? (
-            myBoardList?.map((myBoardList: any) => (
-              <CommunityCard
-                key={myBoardList.boardId}
-                boardId={myBoardList.boardId}
-                categoryName={myBoardList.categoryName}
-                content={myBoardList.content}
-                createdAt={myBoardList.createdAt}
-                creator={myBoardList.creator}
-                dong={myBoardList.dong}
-                imgUrlList={myBoardList.imgUrlList}
-                heartCnt={myBoardList.heartCnt}
-                commentCnt={myBoardList.commentCnt}
-              />
-            ))
-          ) : (
-            <NoContentContainer>
-              <NoContentMessage>
-                {/* <NotFoundTransaction /> */}
-                작성한 글이 없습니다!
-                <NoContentMessage className="small">
-                  커뮤니티에서 글을 써보세요!
-                  {/* <div className="btn_MoveTo">동네 소식 보러 가기</div> */}
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <Container>
+          <BodyContainer>
+            {myBoardList?.length !== 0 ? (
+              myBoardList?.map((myBoardList: any) => (
+                <CommunityCard
+                  key={myBoardList.boardId}
+                  boardId={myBoardList.boardId}
+                  categoryName={myBoardList.categoryName}
+                  content={myBoardList.content}
+                  createdAt={myBoardList.createdAt}
+                  creator={myBoardList.creator}
+                  dong={myBoardList.dong}
+                  imgUrlList={myBoardList.imgUrlList}
+                  heartCnt={myBoardList.heartCnt}
+                  commentCnt={myBoardList.commentCnt}
+                />
+              ))
+            ) : (
+              <NoContentContainer>
+                <NoContentMessage>
+                  {/* <NotFoundTransaction /> */}
+                  작성한 글이 없습니다!
+                  <NoContentMessage className="small">
+                    커뮤니티에서 글을 써보세요!
+                    {/* <div className="btn_MoveTo">동네 소식 보러 가기</div> */}
+                  </NoContentMessage>
+                  {/* <ButtonImage label="동네 소식 보러 가기"></ButtonImage> */}
                 </NoContentMessage>
-                {/* <ButtonImage label="동네 소식 보러 가기"></ButtonImage> */}
-              </NoContentMessage>
-            </NoContentContainer>
-          )}
-          {/* {myBoardList?.map((myBoardList: any) => (
+              </NoContentContainer>
+            )}
+            {/* {myBoardList?.map((myBoardList: any) => (
             <CommunityCard
               key={myBoardList.boardId}
               boardId={myBoardList.boardId}
@@ -96,8 +104,9 @@ const Board = () => {
               commentCnt={myBoardList.commentCnt}
             />
           ))} */}
-        </BodyContainer>
-      </Container>
+          </BodyContainer>
+        </Container>
+      )}
     </>
   );
 };
@@ -107,6 +116,8 @@ Board.requireAuth = true;
 
 const Container = styled.div`
   background-color: #f4f4f4;
+  /* height: calc(100vh - 13.2rem); */
+  height: 100%;
   // padding: 1rem 0 0 0;
   // padding-bottom: 7rem;
 `;
