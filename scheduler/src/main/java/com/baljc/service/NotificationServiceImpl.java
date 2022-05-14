@@ -80,6 +80,11 @@ public class NotificationServiceImpl implements NotificationService {
                             .setImage(notification.getImage())
                             .build())
                     .addAllTokens(tokenSubList)
+                    .setWebpushConfig(WebpushConfig.builder()
+                            .setFcmOptions(WebpushFcmOptions.builder()
+                                    .setLink("https://baljc.com/finance")
+                                    .build())
+                            .build())
                     .build();
 
             // 메시지 응답 목록
