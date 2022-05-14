@@ -12,7 +12,7 @@ import { userInfoState } from "atoms/atoms";
 import ReplyCard2 from "components/community/detail/ReplyCard2";
 
 const Container = styled.div`
-  padding: 2rem;
+  padding: 2rem 2rem 9rem 2rem;
   display: grid;
   grid-template-columns: 1fr 6fr;
 `;
@@ -42,10 +42,12 @@ const Typography = styled.div<{
   fs?: string;
   fw?: string;
   p?: string;
+  color?: string;
 }>`
-  font-size: ${(props) => (props.fs ? props.fs : "1rem")};
+  font-size: ${(props) => (props.fs ? props.fs : "")};
   font-weight: ${(props) => (props.fw ? props.fw : "")};
   padding: ${(props) => (props.p ? props.p : "0")};
+  color: ${(props) => (props.color ? props.color : "")};
 `;
 
 const InputContainer = styled.div`
@@ -55,13 +57,13 @@ const InputContainer = styled.div`
   border: none;
   position: fixed;
   width: 100%;
-  left: 0;
+  max-width: 512px;
   bottom: 0;
   display: grid;
   grid-template-columns: 8fr 1fr;
   z-index: 11000;
   height: 5.6rem;
-  margin-bottom: 5.6rem; // 나중에 없애기
+  margin-bottom: 8rem; // 나중에 없애기
 `;
 
 const IconWrapper = styled.div`
@@ -182,7 +184,7 @@ export default function Reply() {
                 )}
             </FlexContainer>
           </FlexContainer>
-          <Typography fs="1.4rem" color="#3D3D3D">
+          <Typography fs="1.4rem" color="#878B93">
             {comment.createdAt}
           </Typography>
           <Typography fs="1.8rem">

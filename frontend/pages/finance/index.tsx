@@ -19,15 +19,12 @@ const PageContainer = styled.main`
   padding: 0 2rem;
 `;
 
-const DivisionLine = styled.hr`
-  border-top: 2px solid lightgray;
-`;
-
 const MonthlyContentContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 2rem 0;
+  padding: 2rem;
   color: #3d3d3d;
+  box-shadow: 0 1px 1px #00000014;
 `;
 
 const MonthlySection = styled.div`
@@ -37,6 +34,7 @@ const MonthlySection = styled.div`
   font-size: 2rem;
   font-weight: 700;
   font-style: bold;
+  padding-bottom: 2rem;
 `;
 const MonthlyContentWrapper = styled.div`
   display: flex;
@@ -44,13 +42,13 @@ const MonthlyContentWrapper = styled.div`
   font-size: 1.4rem;
   font-weight: 400;
   font-style: normal;
-  padding: 2rem 0;
 `;
 
 const MonthlyContent = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+  padding-bottom: 0.5rem;
 `;
 
 const Typography = styled.div<{
@@ -58,13 +56,11 @@ const Typography = styled.div<{
   fw?: string;
   color?: string;
   p?: string;
-  cursor?: string;
 }>`
   color: ${(props) => (props.color ? props.color : "")};
   font-size: ${(props) => (props.fs ? props.fs : "1rem")};
   font-weight: ${(props) => (props.fw ? props.fw : "")};
   padding: ${(props) => (props.p ? props.p : "0")};
-  cursor: ${(props) => (props.cursor ? props.cursor : "")};
 `;
 
 const NoContencContainer = styled.section`
@@ -144,44 +140,37 @@ export default function Finance(): JSX.Element {
           onClickRightButton={() => router.push("/finance/financeCreateForm")}
           onClickBackButton={() => router.push("/calendar")}
         ></Header>
+
+        <MonthlyContentContainer>
+          <MonthlySection>
+            <div onClick={handleClickPrev}>
+              <Icon mode="fas" icon="caret-left" size="14px" display="flex" />
+            </div>
+            <Typography fs="2.4rem">{month}월</Typography>
+            <div onClick={handleClickNext}>
+              <Icon mode="fas" icon="caret-right" size="14px" display="flex" />
+            </div>
+          </MonthlySection>
+          <MonthlyContentWrapper>
+            <MonthlyContent>
+              <Typography fs="1.6rem" color="#878B93">
+                수입
+              </Typography>
+              <Typography fs="2rem" fw="600" color="#0075ff">
+                {income.toLocaleString()} 원
+              </Typography>
+            </MonthlyContent>
+            <MonthlyContent>
+              <Typography fs="1.6rem" color="#878B93">
+                지출
+              </Typography>
+              <Typography fs="2rem" fw="600">
+                - {expenditure.toLocaleString()} 원
+              </Typography>
+            </MonthlyContent>
+          </MonthlyContentWrapper>
+        </MonthlyContentContainer>
         <PageContainer>
-          <MonthlyContentContainer>
-            <MonthlySection>
-              <div onClick={handleClickPrev}>
-                <Icon
-                  mode="fas"
-                  icon="chevron-left"
-                  size="16px"
-                  display="flex"
-                />
-              </div>
-              <span>{year}년 </span>
-              <span>{month}월</span>
-              <div onClick={handleClickNext}>
-                <Icon
-                  mode="fas"
-                  icon="chevron-right"
-                  size="16px"
-                  display="flex"
-                />
-              </div>
-            </MonthlySection>
-            <MonthlyContentWrapper>
-              <MonthlyContent>
-                <Typography fs="1.6rem">수입</Typography>
-                <Typography fs="1.6rem" fw="600" color="#0075ff">
-                  {income.toLocaleString()} 원
-                </Typography>
-              </MonthlyContent>
-              <MonthlyContent>
-                <Typography fs="1.6rem">지출</Typography>
-                <Typography fs="1.6rem" fw="600">
-                  - {expenditure.toLocaleString()} 원
-                </Typography>
-              </MonthlyContent>
-            </MonthlyContentWrapper>
-            <DivisionLine />
-          </MonthlyContentContainer>
           {amount && amount.length > 0 ? (
             amount.map((item, idx) => <FinanceList key={idx} item={item} />)
           ) : (

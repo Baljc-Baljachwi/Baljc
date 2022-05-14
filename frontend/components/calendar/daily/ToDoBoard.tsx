@@ -5,7 +5,7 @@ import TodoList from "../../work/todolist/index";
 const Container = styled.div`
   background-color: #4d5f8f;
   border-radius: 10px;
-  padding: 1rem 2rem;
+  padding: 2rem;
   margin-bottom: 1rem;
 `;
 
@@ -25,7 +25,7 @@ export default function ToDoBoard({ date }: ToDoBoardProps) {
   return (
     <Container>
       <Title>할 일</Title>
-      <TodoList viewOnly={true} date={date} />
+      <TodoList monthlyTodo={true} date={date} />
     </Container>
   );
 }

@@ -135,7 +135,6 @@ export default function CommunityList() {
     setIsChanged(!isChanged);
   }, [selectedCategory]);
 
-  console.log(4, idx, posts, selectedCategory);
   return (
     <Container>
       <Header>

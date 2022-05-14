@@ -6,7 +6,7 @@ import HashLoader from "react-spinners/HashLoader";
 const Spinner = () => {
   return (
     <LayoutSpinner>
-      <HashLoader color={"#EDB83C"} size={30} />
+      <HashLoader color={"#cdcdcd"} size={30} />
     </LayoutSpinner>
   );
 };

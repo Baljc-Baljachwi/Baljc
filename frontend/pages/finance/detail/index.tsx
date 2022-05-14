@@ -159,7 +159,6 @@ const FinanceDetail = () => {
   }
 
   function onClickEditButton() {
-    // console.log("Edit Button Clicked !!");
     if (!financeDetailInfo) {
       return;
     }
@@ -201,7 +200,7 @@ const FinanceDetail = () => {
             </DetailContents>
             <DetailContents>
               금액
-              <span>{financeDetailInfo?.price || "0"} 원</span>
+              <span>{financeDetailInfo?.price.toLocaleString() || "0"} 원</span>
             </DetailContents>
             <DetailContents>
               날짜
@@ -247,7 +246,7 @@ const FinanceDetail = () => {
                 <span>{financeDetailInfo?.categoryName}</span>
               </CategoryContent>
             </DetailContents>
-            <DetailContents>
+            <DetailContents style={{ paddingBottom: "4rem" }}>
               메모
               <span>{financeDetailInfo?.memo}</span>
             </DetailContents>

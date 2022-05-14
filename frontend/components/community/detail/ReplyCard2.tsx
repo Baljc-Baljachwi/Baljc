@@ -2,18 +2,15 @@ import styled from "styled-components";
 import Image from "next/image";
 import { useState } from "react";
 
-import Icon from "../../common/Icon";
 import { IComment } from "types";
 import defaultProfileImage from "public/assets/img/mypage/avatar/default_profile.png";
-import EditModal from "./EditModal";
 import { useRecoilValue } from "recoil";
 import { userInfoState } from "atoms/atoms";
 
 const Container = styled.div`
   display: grid;
   grid-template-columns: 1fr 5fr;
-  padding-top: 1rem;
-  border-top: 1px solid #e8e8e8;
+  padding-top: 1.5rem;
 `;
 
 const ImageWrapper = styled.div`
@@ -41,29 +38,19 @@ const Typography = styled.div<{
   fs?: string;
   fw?: string;
   p?: string;
+  color?: string;
 }>`
-  font-size: ${(props) => (props.fs ? props.fs : "1rem")};
+  font-size: ${(props) => (props.fs ? props.fs : "")};
   font-weight: ${(props) => (props.fw ? props.fw : "")};
-  padding: ${(props) => (props.p ? props.p : "0")};
+  padding: ${(props) => (props.p ? props.p : "")};
+  color: ${(props) => (props.color ? props.color : "")};
 `;
-
 interface ReplyCardProps {
   reply: IComment;
   boardCreatorId: string;
-  // commentList: any;
-  // setCommentList: any;
-  // commentId: string;
-  // open: boolean;
-  // setOpen: any;
 }
 
-export default function ReplyCard({
-  reply,
-  boardCreatorId,
-}: // commentList,
-// setCommentList,
-// commentId,
-ReplyCardProps) {
+export default function ReplyCard({ reply, boardCreatorId }: ReplyCardProps) {
   const userInfo = useRecoilValue(userInfoState);
   const [open, setOpen] = useState(false); // 댓글 삭제 확인 모달
   const onClickEdit = () => {
@@ -100,7 +87,7 @@ ReplyCardProps) {
             </>
           )}
         </FlexContainer>
-        <Typography fs="1.4rem" color="#3D3D3D">
+        <Typography fs="1.4rem" color="#878B93">
           {reply.createdAt}
         </Typography>
         <Typography fs="1.8rem">{reply.content}</Typography>

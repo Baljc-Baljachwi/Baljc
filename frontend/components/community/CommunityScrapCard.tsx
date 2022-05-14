@@ -120,19 +120,30 @@ export default function CommunityScrapCard({
             ))}
           </ImageContainer>
           <FlexContainer>
-            <Typography>
+            <Typography fs="1.2rem" color="#878B93">
               {createdAt} | {creator} | {dong}{" "}
             </Typography>
 
             <FlexContainer>
-              <Icon mode="fas" icon="comment" size="10px" color="#cdcdcd" />
-              <Typography p="0 0.5rem">
-                <span className="textTypo">{commentCnt}</span>
+              <Icon
+                mode="fas"
+                icon="comment"
+                size="12px"
+                color="#878B93"
+                display="flex"
+              />
+              <Typography fs="1.2rem" color="#4D5158">
+                {commentCnt}{" "}
               </Typography>
-
-              <Icon mode="fas" icon="heart" size="10px" color="#cdcdcd" />
-              <Typography p="0 0.5rem">
-                <span className="textTypo">{heartCnt}</span>
+              <Icon
+                mode="fas"
+                icon="heart"
+                size="12px"
+                color="#878B93"
+                display="flex"
+              />
+              <Typography fs="1.2rem" color="#4D5158">
+                {heartCnt}
               </Typography>
             </FlexContainer>
           </FlexContainer>
@@ -196,13 +207,12 @@ const Typography = styled.div<{
   fs?: string;
   fw?: string;
   p?: string;
+  color?: string;
 }>`
-  font-size: ${(props) => (props.fs ? props.fs : "1rem")};
+  font-size: ${(props) => (props.fs ? props.fs : "")};
   font-weight: ${(props) => (props.fw ? props.fw : "")};
-  padding: ${(props) => (props.p ? props.p : "0")};
-  .textTypo {
-    color: #cdcdcd;
-  }
+  padding: ${(props) => (props.p ? props.p : "")};
+  color: ${(props) => (props.color ? props.color : "")};
 `;
 
 const ImageContainer = styled.div`
@@ -224,6 +234,7 @@ const ImageContainer = styled.div`
 const FlexContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const GrayButton = styled.div`

@@ -37,18 +37,17 @@ const Typography = styled.div<{
   fs?: string;
   fw?: string;
   p?: string;
+  color?: string;
 }>`
-  font-size: ${(props) => (props.fs ? props.fs : "1rem")};
+  font-size: ${(props) => (props.fs ? props.fs : "")};
   font-weight: ${(props) => (props.fw ? props.fw : "")};
   padding: ${(props) => (props.p ? props.p : "0")};
-  .textTypo {
-    color: #cdcdcd;
-  }
+  color: ${(props) => (props.color ? props.color : "")};
 `;
 
 const ImageContainer = styled.div`
   display: grid;
-  padding-bottom: 1rem;
+  padding-bottom: 2rem;
   .item_1 {
     height: 20rem;
     position: relative;
@@ -59,7 +58,7 @@ const ImageContainer2 = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  padding-bottom: 1rem;
+  padding-bottom: 2rem;
   .item {
     height: 20rem;
     position: relative;
@@ -70,7 +69,7 @@ const ImageContainer3 = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  padding-bottom: 1rem;
+  padding-bottom: 2rem;
   .item {
     height: 10rem;
     position: relative;
@@ -85,6 +84,7 @@ const ImageContainer3 = styled.div`
 const FlexContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `;
 
 export default function CommunityCard({
@@ -133,7 +133,7 @@ export default function CommunityCard({
                 </div>
               ))}
             </ImageContainer2>
-          ) : (
+          ) : imgUrlList.length === 3 ? (
             <ImageContainer3>
               {imgUrlList?.map((item: string, idx: number) => (
                 <div className="item" key={idx}>
@@ -141,19 +141,33 @@ export default function CommunityCard({
                 </div>
               ))}
             </ImageContainer3>
+          ) : (
+            <></>
           )}
           <FlexContainer>
-            <Typography>
+            <Typography fs="1.2rem" color="#878B93">
               {createdAt} | {creator} | {dong}
             </Typography>
             <FlexContainer>
-              <Icon mode="fas" icon="comment" size="10px" color="#cdcdcd" />
-              <Typography p="0 0.5rem">
-                <span className="textTypo">{commentCnt}</span>
+              <Icon
+                mode="far"
+                icon="comment"
+                size="12px"
+                color="#878B93"
+                display="flex"
+              />
+              <Typography fs="1.2rem" p="0 0.5rem" color="#4D5158">
+                {commentCnt}
               </Typography>
-              <Icon mode="fas" icon="heart" size="10px" color="#cdcdcd" />
-              <Typography p="0 0.5rem">
-                <span className="textTypo">{heartCnt}</span>
+              <Icon
+                mode="far"
+                icon="heart"
+                size="12px"
+                color="#878B93"
+                display="flex"
+              />
+              <Typography fs="1.2rem" p="0 0.5rem" color="#4D5158">
+                {heartCnt}
               </Typography>
             </FlexContainer>
           </FlexContainer>
