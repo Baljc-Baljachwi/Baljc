@@ -1,8 +1,6 @@
-import { Html, Main, NextScript } from "next/document";
-import Head from "next/head";
+import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
-  console.log(process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS);
   return (
     <Html>
       <Head>
