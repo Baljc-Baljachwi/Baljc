@@ -88,6 +88,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.addAllowedOrigin("https://www.baljc.com");
         configuration.addAllowedOrigin("https://baljc.com");
         configuration.addExposedHeader("authorization");
+        configuration.addExposedHeader("refreshtoken");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);
