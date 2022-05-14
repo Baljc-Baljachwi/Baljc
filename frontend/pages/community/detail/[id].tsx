@@ -186,13 +186,15 @@ export default function Reply() {
             {comment.createdAt}
           </Typography>
           <Typography fs="1.8rem">
-            {comment.deletedYn === "Y" && comment.list !== []
+            {comment.deletedYn === "Y" &&
+            comment.list &&
+            comment.list.length > 0
               ? "삭제된 댓글입니다"
               : comment.content}
           </Typography>
         </TextContainer>
         {comment.list?.map(
-          (reply) =>
+          (reply: any) =>
             reply.deletedYn === "N" && (
               <Fragment key={reply.commentId}>
                 <div></div> {/* div tag 있어야 됩니당 grid때무네*/}

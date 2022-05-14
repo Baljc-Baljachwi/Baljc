@@ -89,7 +89,7 @@ export interface IComment {
   content: string;
   createdAt: string;
   deletedYn: YNType;
-  list: IComment[] | null;
+  list: IComment[] | null | any;
 }
 
 export interface IMyBoard {
