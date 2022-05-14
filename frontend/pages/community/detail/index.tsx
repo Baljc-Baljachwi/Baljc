@@ -117,7 +117,7 @@ const InputContainer = styled.div`
   border: none;
   position: fixed;
   width: 100%;
-  left: 0;
+  max-width: 512px;
   bottom: 0;
   display: grid;
   grid-template-columns: 8fr 1fr;
