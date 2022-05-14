@@ -1,5 +1,6 @@
 package com.baljc.common.jwt;
 
+import com.baljc.common.response.BaseResponse;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.ServletRequest;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
@@ -92,20 +94,25 @@ public class TokenProvider implements InitializingBean {
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
-    public boolean validateToken(String token) {
+    public boolean validateToken(ServletRequest servletRequest, String token) {
         log.debug("validateToken - token: {}", token);
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            throw new MalformedJwtException("잘못된 JWT 서명입니다.");
+            // 잘못된 타입의 토큰인 경우
+            servletRequest.setAttribute("exception", new BaseResponse(2003, "잘못된 JWT 서명입니다."));
         } catch (ExpiredJwtException e) {
-            throw new ExpiredJwtException(null, null, "만료된 JWT 토큰입니다.");
+            // 만료된 토큰인 경우
+            servletRequest.setAttribute("exception", new BaseResponse(2004, "만료된 JWT 토큰입니다."));
         } catch (UnsupportedJwtException e) {
-            throw new UnsupportedJwtException("지원되지 않는 JWT 토큰입니다.");
+            // 지원하지 않는 토큰인 경우
+            servletRequest.setAttribute("exception", new BaseResponse(2005, "지원되지 않는 JWT 토큰입니다."));
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("JWT 토큰이 잘못되었습니다.");
+            // 잘못된 토큰인 경우
+            servletRequest.setAttribute("exception", new BaseResponse(2002, "JWT 토큰이 잘못되었습니다."));
         }
+        return false;
     }
 
     public boolean validateRefreshToken(String token) {
