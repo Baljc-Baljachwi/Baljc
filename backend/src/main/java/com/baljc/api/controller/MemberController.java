@@ -1,5 +1,6 @@
 package com.baljc.api.controller;
 
+import com.baljc.api.dto.BoardDto;
 import com.baljc.api.dto.MemberDto;
 import com.baljc.api.service.MemberService;
 import com.baljc.common.jwt.JwtFilter;
@@ -84,8 +85,8 @@ public class MemberController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<BaseResponse> updateToken(@RequestHeader(value="Authorization") String authorization, @RequestHeader(value="RefreshToken") String refreshToken) {
-        MemberDto.SigninInfo signinInfo = memberService.updateToken(authorization, refreshToken);
+    public ResponseEntity<BaseResponse> updateToken(@Valid @RequestBody MemberDto.TokenRequest tokenRequest) {
+        MemberDto.SigninInfo signinInfo = memberService.updateToken(tokenRequest.getAuthorization(), tokenRequest.getRefreshToken());
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + signinInfo.getJwt());
         httpHeaders.add(JwtFilter.REFRESH_TOKEN_HEADER, "Bearer " + signinInfo.getRefreshToken());
