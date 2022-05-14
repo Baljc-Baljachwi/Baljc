@@ -12,6 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.security.Key;
 import java.util.Arrays;
@@ -26,18 +27,17 @@ public class TokenProvider implements InitializingBean {
 
     private final String secret;
     private final long tokenValidityInMilliseconds;
-//    private final long refreshTokenValidityInMilliseconds;
+    private final long refreshTokenValidityInMilliseconds;
 
     private Key key;
     public TokenProvider(
             @Value("${jwt.secret}") String secret,
-            @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds
-//            ,
-//            @Value("${jwt.refresh-token-validity-in-seconds}") long refreshTokenValidityInMilliseconds
+            @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds,
+            @Value("${jwt.refresh-token-validity-in-seconds}") long refreshTokenValidityInMilliseconds
     ) {
         this.secret = secret;
         this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
-//        this.refreshTokenValidityInMilliseconds = refreshTokenValidityInMilliseconds * 1000;
+        this.refreshTokenValidityInMilliseconds = refreshTokenValidityInMilliseconds * 1000;
     }
 
     @Override
@@ -63,15 +63,15 @@ public class TokenProvider implements InitializingBean {
                 .compact();
     }
 
-//    public String createRefreshToken() {
-//        long now = (new Date()).getTime();
-//        Date validity = new Date(now + this.refreshTokenValidityInMilliseconds);
-//
-//        return Jwts.builder()
-//                .signWith(key, SignatureAlgorithm.HS512)
-//                .setExpiration(validity)
-//                .compact();
-//    }
+    public String createRefreshToken() {
+        long now = (new Date()).getTime();
+        Date validity = new Date(now + this.refreshTokenValidityInMilliseconds);
+
+        return Jwts.builder()
+                .signWith(key, SignatureAlgorithm.HS512)
+                .setExpiration(validity)
+                .compact();
+    }
 
     public Authentication getAuthentication(String token) {
         log.debug("getAuthentication - token: {}", token);
@@ -108,28 +108,28 @@ public class TokenProvider implements InitializingBean {
         }
     }
 
-//    public boolean validateRefreshToken(String token) {
-//        log.debug("validateRefreshToken - token: {}", token);
-//        try {
-//            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-//            return true;
-//        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-//            return false;
-//        } catch (ExpiredJwtException e) {
-//            return false;
-//        } catch (UnsupportedJwtException e) {
-//            return false;
-//        } catch (IllegalArgumentException e) {
-//            return false;
-//        }
-//    }
-//
-//    public String getUserPk(String bearerToken) {
-//        String token = "";
-//        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-//            token = bearerToken.substring(7);
-//        }
-//
-//        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
-//    }
+    public boolean validateRefreshToken(String token) {
+        log.debug("validateRefreshToken - token: {}", token);
+        try {
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            return true;
+        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+            return false;
+        } catch (ExpiredJwtException e) {
+            return false;
+        } catch (UnsupportedJwtException e) {
+            return false;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    public String getUserPk(String bearerToken) {
+        String token = "";
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            token = bearerToken.substring(7);
+        }
+
+        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
+    }
 }

@@ -15,11 +15,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @Slf4j
-//@Component
+@Component
 public class JwtFilter extends GenericFilterBean {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
-//    public static final String REFRESH_TOKEN_HEADER = "RefreshToken";
+    public static final String REFRESH_TOKEN_HEADER = "RefreshToken";
 
     // TokenProvider injection
     private final TokenProvider tokenProvider;
