@@ -84,4 +84,11 @@ public class MemberDto {
         private String depth2;
         private String depth3;
     }
+
+    @Getter
+    @NoArgsConstructor
+    public static class TokenRequest {
+        private String authorization;
+        private String refreshToken;
+    }
 }
