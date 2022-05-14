@@ -83,20 +83,6 @@ export default function MyApp(props: AppProps) {
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <RecoilRoot>
-          {/* <NextNProgress
-            color="#4338C9"
-            startPosition={0.3}
-            stopDelayMs={200}
-            height={6}
-            options={{ easing: "ease", speed: 500, showSpinner: false }}
-          /> */}
-          {/* <NextNProgress
-            color="#29D"
-            showOnShallow={false}
-            height={6}
-            startPosition={0.3}
-            options={{ easing: "ease", speed: 500, showSpinner: true }}
-          /> */}
           {pageLoading ? (
             <LayoutSpinner>
               <HashLoader color={"#EDB83C"} size={30} />
@@ -112,16 +98,6 @@ export default function MyApp(props: AppProps) {
               )}
             </Layout>
           )}
-
-          {/* <Layout>
-            {Component.requireAuth ? (
-              <AuthGuard>
-                <Component {...pageProps} />
-              </AuthGuard>
-            ) : (
-              <Component {...pageProps} />
-            )}
-          </Layout> */}
         </RecoilRoot>
       </ThemeProvider>
     </>
@@ -136,3 +112,28 @@ const LayoutSpinner = styled.div`
   background-color: white;
   opacity: 100;
 `;
+
+/* <NextNProgress
+            color="#4338C9"
+            startPosition={0.3}
+            stopDelayMs={200}
+            height={6}
+            options={{ easing: "ease", speed: 500, showSpinner: false }}
+          /> */
+/* <NextNProgress
+            color="#29D"
+            showOnShallow={false}
+            height={6}
+            startPosition={0.3}
+            options={{ easing: "ease", speed: 500, showSpinner: true }}
+          /> */
+
+/* <Layout>
+            {Component.requireAuth ? (
+              <AuthGuard>
+                <Component {...pageProps} />
+              </AuthGuard>
+            ) : (
+              <Component {...pageProps} />
+            )}
+          </Layout> */
