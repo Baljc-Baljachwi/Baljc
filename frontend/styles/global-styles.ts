@@ -5,6 +5,8 @@ export const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -ms-overflow-style: none;
+    scrollbar-width: none; 
   }
   html {
     font-size: 62.5%;
@@ -14,11 +16,19 @@ export const GlobalStyle = createGlobalStyle`
     height: 100%;
   }
   body { font-family: 'Noto Sans KR', sans-serif;
-  background-color: #2e437a;
+  background-color: #ffffff;
+  margin: 0 auto;
+  max-width: 512px;
+  @media screen and (max-width: 512px) {
+    background-color: #2e437a;
+  }
 }
-    .normal		{ font-weight: 400 }
-    .bold		  { font-weight: 700 }
-    .bolder		{ font-weight: 800 }
-    .light		{ font-weight: 300 }
-  a { cursor: pointer; text-decoration: none; }
+::-webkit-scrollbar {
+  display: none;
+}
+.normal		{ font-weight: 400 }
+.bold		  { font-weight: 700 }
+.bolder		{ font-weight: 800 }
+.light		{ font-weight: 300 }
+a { cursor: pointer; text-decoration: none; }
 `;

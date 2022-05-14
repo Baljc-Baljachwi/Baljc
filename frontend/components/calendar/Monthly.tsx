@@ -12,6 +12,7 @@ import { todosState } from "atoms/atoms";
 
 const StyledHeader = styled.header`
   width: 100%;
+  max-width: 512px;
   height: 6.6rem;
   background-color: #2e437a;
   font-size: 2rem;
