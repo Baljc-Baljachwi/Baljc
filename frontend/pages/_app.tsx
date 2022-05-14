@@ -82,6 +82,11 @@ export default function MyApp(props: AppProps) {
     <>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
+        <Head>
+          <meta charSet="utf-8" />
+          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+          <title>발자취</title>
+        </Head>
         <RecoilRoot>
           {pageLoading ? (
             <LayoutSpinner>
