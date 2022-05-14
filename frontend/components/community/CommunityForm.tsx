@@ -179,7 +179,7 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
   const [boardCategories, setBoardCategories] = useState<IBoardCategory[]>([]);
 
   function validFile(file: any) {
-    if (file.size > 2097152) {
+    if (file.size > 10485760) {
       return false;
     }
     const extensions = ["png", "jpeg", "jpg", "bmp"];
@@ -194,7 +194,7 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
     if (files && files.length > 0) {
       const file = files[0];
       if (!validFile(file)) {
-        confirm("2MB 이하의 이미지만 업로드 가능합니다.");
+        confirm("10MB 이하의 이미지만 업로드 가능합니다.");
         return;
       }
       if (imagePreviewList.length < 3) {
@@ -352,7 +352,7 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
         ))}
       </ImageContainer>
       <MutedText>
-        2MB 이하의 사진 최대 3개까지 업로드 가능합니다. (
+        10MB 이하의 사진 최대 3개까지 업로드 가능합니다. (
         {imagePreviewList.length}
         /3)
       </MutedText>

@@ -28,6 +28,9 @@ const BackButton = styled.span`
 const AddorModifyButton = styled.span`
   /* padding-right: 2rem; */
   cursor: pointer;
+  :active svg {
+    color: #cccccc;
+  }
 `;
 
 interface HeaderProps {

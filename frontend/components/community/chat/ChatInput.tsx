@@ -6,7 +6,7 @@ const ChatInputDiv = styled.div`
   width: 100%;
   height: 5.6rem;
   position: fixed;
-  left: 0;
+  max-width: 512px;
   bottom: 0;
   padding: 1rem 2rem;
   background-color: #ffffff;
@@ -20,6 +20,7 @@ const ChatInputDiv = styled.div`
 const InputDiv = styled.input`
   width: 100%;
   height: 90%;
+  max-width: 512px;
   background: #e4e4e4;
   border: none;
   border-radius: 1.5rem;

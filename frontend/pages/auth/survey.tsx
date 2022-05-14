@@ -254,7 +254,7 @@ export default function Survey() {
   });
 
   function validFile(file: any) {
-    if (file.size > 2097152) {
+    if (file.size > 10485760) {
       return false;
     }
     const extensions = ["png", "jpeg", "jpg", "bmp"];
@@ -408,7 +408,7 @@ export default function Survey() {
           </DefaultImageButton>
           <ErrorMessage>
             {imageError &&
-              "2MB 이하 이미지(.png, .jpeg, .bmp) 파일만 가능합니다"}
+              "10MB 이하 이미지(.png, .jpeg, .bmp) 파일만 가능합니다"}
           </ErrorMessage>
         </LabelProfileImageContiainer>
         <DisplayNoneInput

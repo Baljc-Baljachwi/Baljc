@@ -15,6 +15,9 @@ const StyledButton = styled.button`
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
+  :active {
+    background-color: #29375c;
+  }
 `;
 
 interface ButtonBottomProps {
