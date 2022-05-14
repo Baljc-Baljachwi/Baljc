@@ -12,7 +12,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
@@ -104,5 +106,30 @@ public class TokenProvider implements InitializingBean {
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("JWT 토큰이 잘못되었습니다.");
         }
+    }
+
+    public boolean validateRefreshToken(String token) {
+        log.debug("validateRefreshToken - token: {}", token);
+        try {
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            return true;
+        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+            return false;
+        } catch (ExpiredJwtException e) {
+            return false;
+        } catch (UnsupportedJwtException e) {
+            return false;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    public String getUserPk(String bearerToken) {
+        String token = "";
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            token = bearerToken.substring(7);
+        }
+
+        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
     }
 }

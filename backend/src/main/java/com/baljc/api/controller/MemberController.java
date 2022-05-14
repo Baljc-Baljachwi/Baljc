@@ -82,4 +82,13 @@ public class MemberController {
         memberService.signoutMember();
         return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse(1004, "로그아웃이 완료되었습니다."));
     }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<BaseResponse> updateToken(@RequestHeader(value="Authorization") String authorization, @RequestHeader(value="RefreshToken") String refreshToken) {
+        MemberDto.SigninInfo signinInfo = memberService.updateToken(authorization, refreshToken);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + signinInfo.getJwt());
+        httpHeaders.add(JwtFilter.REFRESH_TOKEN_HEADER, "Bearer " + signinInfo.getRefreshToken());
+        return ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(new BaseResponse(1005, "토큰이 재발급되었습니다."));
+    }
 }
