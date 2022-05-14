@@ -16,12 +16,13 @@ const Container = styled.nav`
   border-top: 2px solid #dfdede;
   position: fixed;
   width: 100%;
-  left: 0;
   bottom: 0;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   z-index: 10000;
   height: 5.6rem;
+  max-width: 512px;
+  margin: auto;
 `;
 
 const Item = styled.div`

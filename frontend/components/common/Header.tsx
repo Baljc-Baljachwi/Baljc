@@ -17,6 +17,7 @@ const StyledHeader = styled.header`
   position: fixed;
   top: 0;
   z-index: 10000;
+  max-width: 512px;
 `;
 
 const BackButton = styled.span`

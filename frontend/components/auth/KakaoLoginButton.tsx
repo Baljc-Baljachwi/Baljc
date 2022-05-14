@@ -7,6 +7,9 @@ import kakaoLoginButtonImage from "../../public/assets/img/login/kakao_login_med
 
 const kakaoGetAuthCodeURL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&response_type=code`;
 
+const Container = styled.div`
+  background-color: #2e437a;
+`;
 const ButtonContainer = styled.div`
   position: relative;
   border-radius: 1.2rem;
@@ -30,13 +33,13 @@ const MainContainer = styled.main`
 
 const BottomContainer = styled.section`
   width: 100%;
-  width: 100%;
   display: flex;
+  background-color: #2e437a;
   flex-direction: column;
   align-items: center;
   justify-content: start;
   gap: 0.6rem;
-  height: 20vh;
+  height: 24vh;
 `;
 
 const LoginTitle = styled.article`
@@ -71,7 +74,7 @@ const AnchorText = styled.span`
 export default function KakaoLoginButton() {
   const router = useRouter();
   return (
-    <>
+    <Container>
       <MainContainer>
         <Image
           src="/assets/img/login/login_logo_white.png"
@@ -110,6 +113,6 @@ export default function KakaoLoginButton() {
         </TermsContainer>
         <TermsContainer>동의하게 됩니다.</TermsContainer>
       </BottomContainer>
-    </>
+    </Container>
   );
 }
