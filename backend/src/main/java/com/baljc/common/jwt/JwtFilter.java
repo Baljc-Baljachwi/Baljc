@@ -3,6 +3,7 @@ package com.baljc.common.jwt;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -14,9 +15,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @Slf4j
+@Component
 public class JwtFilter extends GenericFilterBean {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
+    public static final String REFRESH_TOKEN_HEADER = "RefreshToken";
 
     // TokenProvider injection
     private final TokenProvider tokenProvider;

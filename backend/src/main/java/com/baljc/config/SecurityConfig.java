@@ -1,9 +1,6 @@
 package com.baljc.config;
 
-import com.baljc.common.jwt.JwtAccessDeniedHandler;
-import com.baljc.common.jwt.JwtAuthenticationEntryPoint;
-import com.baljc.common.jwt.JwtSecurityConfig;
-import com.baljc.common.jwt.TokenProvider;
+import com.baljc.common.jwt.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -13,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
@@ -23,15 +21,21 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final TokenProvider tokenProvider;
+    private final JwtFilter jwtFilter;
+    private final JwtExceptionFilter jwtExceptionFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     public SecurityConfig(
             TokenProvider tokenProvider,
+            JwtFilter jwtFilter,
+            JwtExceptionFilter jwtExceptionFilter,
             JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
             JwtAccessDeniedHandler jwtAccessDeniedHandler
     ) {
         this.tokenProvider = tokenProvider;
+        this.jwtFilter = jwtFilter;
+        this.jwtExceptionFilter = jwtExceptionFilter;
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
         this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
     }
@@ -70,6 +74,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider));
+
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtExceptionFilter, JwtFilter.class);
     }
 
     @Bean

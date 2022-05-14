@@ -1,10 +1,7 @@
 package com.baljc.api.controller;
 
 import com.baljc.common.response.BaseResponse;
-import com.baljc.exception.HeartAlreadyExistException;
-import com.baljc.exception.NotExistedAccountBookException;
-import com.baljc.exception.ScrapAlreadyExistException;
-import com.baljc.exception.UnauthenticatedMemberException;
+import com.baljc.exception.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -126,5 +123,19 @@ public class ExceptionController {
         log.error("ScrapAlreadyExistException - {}", e.getMessage());
         // 400
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse(3701, e.getMessage()));
+    }
+
+    @ExceptionHandler(NotExpiredTokenException.class)
+    public ResponseEntity<BaseResponse> NotExpiredTokenExceptionHandler(NotExpiredTokenException e) {
+        log.error("NotExpiredTokenException - {}", e.getMessage());
+        // 400
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse(3001, e.getMessage()));
+    }
+
+    @ExceptionHandler(NotValidRefreshTokenException.class)
+    public ResponseEntity<BaseResponse> NotValidRefreshTokenExceptionHandler(NotValidRefreshTokenException e) {
+        log.error("NotValidRefreshTokenException - {}", e.getMessage());
+        // 401
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new BaseResponse(3002, e.getMessage()));
     }
 }
