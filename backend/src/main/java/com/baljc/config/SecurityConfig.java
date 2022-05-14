@@ -2,7 +2,6 @@ package com.baljc.config;
 
 import com.baljc.common.jwt.*;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -10,7 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
@@ -68,15 +66,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeHttpRequests()    // HttpServletRequest를 사용하는 요청들에 대한 접근을 제한(인증 요청)
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() // Preflight 요청에 대해 인증 처리X
                 .antMatchers("/members/login/kakao").permitAll() // 해당 URL은 인증 처리X
-                .antMatchers("/**").permitAll()
+                .antMatchers("/members/refresh").permitAll()
                 .anyRequest()
                 .authenticated()
 
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider));
 
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(jwtExceptionFilter, JwtFilter.class);
     }
 
     @Bean
@@ -88,6 +84,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.addAllowedOrigin("https://www.baljc.com");
         configuration.addAllowedOrigin("https://baljc.com");
         configuration.addExposedHeader("authorization");
+        configuration.addExposedHeader("refreshtoken");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);

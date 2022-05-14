@@ -49,6 +49,7 @@ const BodyContainer = styled.div`
 
 const ChatButtonDiv = styled.div`
   width: 100%;
+  max-width: 512px;
   position: fixed;
   bottom: 14rem;
   z-index: 1000;
@@ -58,7 +59,8 @@ const ChatButton = styled.img`
   width: 7rem;
   position: absolute;
   top: 0;
-  right: 2rem;
+  right: 0;
+  margin: 0 1rem;
   cursor: pointer;
 `;
 
