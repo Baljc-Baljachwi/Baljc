@@ -82,55 +82,7 @@ export default function MyApp(props: AppProps) {
     <>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
-        <Head>
-          <meta charSet="utf-8" />
-          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-          <meta name="description" content="Description" />
-          <meta name="keywords" content="Keywords" />
-          <title>발자취</title>
-          <meta
-            name="viewport"
-            content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
-          />
-          <meta name="mobile-web-app-capable" content="yes" />
-          <meta name="apple-mobile-web-app-capable" content="yes" />
-          <meta
-            name="apple-mobile-web-app-status-bar-style"
-            content="black-translucent"
-          />
-          <meta name="apple-mobile-web-app-title" content="발자취" />
-          <meta name="application-name" content="발자취" />
-          <meta name="description" content="슬기로운 자취생활 길잡이" />
-          <meta property="og:image" content="icons/192x192.png"></meta>
-          <link rel="manifest" href="/manifest.json" />
-          <link rel="assetlinks" href="/.well-known/assetlinks.json" />
-
-          <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" />
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/earlyaccess/notosanskr.css"
-          />
-          {/* <link
-            href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
-            rel="stylesheet"
-          /> */}
-        </Head>
         <RecoilRoot>
-          {/* <NextNProgress
-            color="#4338C9"
-            startPosition={0.3}
-            stopDelayMs={200}
-            height={6}
-            options={{ easing: "ease", speed: 500, showSpinner: false }}
-          /> */}
-          {/* <NextNProgress
-            color="#29D"
-            showOnShallow={false}
-            height={6}
-            startPosition={0.3}
-            options={{ easing: "ease", speed: 500, showSpinner: true }}
-          /> */}
           {pageLoading ? (
             <LayoutSpinner>
               <HashLoader color={"#EDB83C"} size={30} />
@@ -146,16 +98,6 @@ export default function MyApp(props: AppProps) {
               )}
             </Layout>
           )}
-
-          {/* <Layout>
-            {Component.requireAuth ? (
-              <AuthGuard>
-                <Component {...pageProps} />
-              </AuthGuard>
-            ) : (
-              <Component {...pageProps} />
-            )}
-          </Layout> */}
         </RecoilRoot>
       </ThemeProvider>
     </>
@@ -170,3 +112,28 @@ const LayoutSpinner = styled.div`
   background-color: white;
   opacity: 100;
 `;
+
+/* <NextNProgress
+            color="#4338C9"
+            startPosition={0.3}
+            stopDelayMs={200}
+            height={6}
+            options={{ easing: "ease", speed: 500, showSpinner: false }}
+          /> */
+/* <NextNProgress
+            color="#29D"
+            showOnShallow={false}
+            height={6}
+            startPosition={0.3}
+            options={{ easing: "ease", speed: 500, showSpinner: true }}
+          /> */
+
+/* <Layout>
+            {Component.requireAuth ? (
+              <AuthGuard>
+                <Component {...pageProps} />
+              </AuthGuard>
+            ) : (
+              <Component {...pageProps} />
+            )}
+          </Layout> */
