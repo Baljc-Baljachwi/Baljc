@@ -323,7 +323,10 @@ export default function CommunityDetail() {
               imgInfoList: imgUrlList,
             });
             res.data.data.commentList.map((item: any, idx: string) => {
-              if (item.deletedYn === "N" || item.list.length > 0) {
+              if (
+                item.deletedYn === "N" ||
+                item.list.some((reply: any) => reply.deletedYn === "N")
+              ) {
                 setCommentList((prev) => [...prev, item]);
               }
             });
