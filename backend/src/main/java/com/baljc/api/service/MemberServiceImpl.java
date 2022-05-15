@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -268,7 +269,11 @@ public class MemberServiceImpl implements MemberService {
     @Transactional(rollbackFor = Exception.class)
     public MemberDto.SigninInfo updateToken(String authorization, String refreshToken) {
         //accessToken 유효기간 확인
-        if (tokenProvider.validateRefreshToken(authorization)) {
+        String aToken = "";
+        if (StringUtils.hasText(authorization) && authorization.startsWith("Bearer ")) {
+            aToken = authorization.substring(7);
+        }
+        if (tokenProvider.validateRefreshToken(aToken)) {
             throw new NotExpiredTokenException("유효한 토큰입니다.");
         }
 
@@ -277,7 +282,11 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NullPointerException("해당 회원이 존재하지 않습니다."));
 
         //refreshToken 유효기간 확인 & 데이터베이스에 저장된 값과 같은지 확인
-        if (!tokenProvider.validateRefreshToken(refreshToken) || !refreshToken.equals(member.getRefreshToken())) {
+        String rToken = "";
+        if (StringUtils.hasText(refreshToken) && refreshToken.startsWith("Bearer ")) {
+            rToken = refreshToken.substring(7);
+        }
+        if (!tokenProvider.validateRefreshToken(rToken) || !rToken.equals(member.getRefreshToken())) {
             throw new NotValidRefreshTokenException("유효하지 않은 리프레시 토큰입니다.");
         }
 
