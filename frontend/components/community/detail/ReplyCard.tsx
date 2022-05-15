@@ -18,8 +18,9 @@ const Container = styled.div`
 const ImageWrapper = styled.div`
   display: flex;
   border-radius: 50%;
-  height: 36px;
-  width: 36px;
+  height: 4.2rem;
+  width: 4.2rem;
+  margin-left: 0.5rem;
   overflow: hidden;
 `;
 
@@ -103,7 +104,7 @@ export default function ReplyCard({
             )}
           </FlexContainer>
           {/* 댓글 작성자인 경우만 수정 버튼 */}
-          {reply.memberId === userInfo.memberId && reply.deletedYn === "N" && (
+          {reply.deletedYn === "N" && (
             <>
               <Icon
                 mode="fas"
@@ -112,14 +113,27 @@ export default function ReplyCard({
                 size="20px"
                 color="#c9c9c9"
               />
-              <EditModal
-                commentList={commentList}
-                setCommentList={setCommentList}
-                open={open}
-                setOpen={setOpen}
-                commentId={commentId}
-                setIsChanged={setIsChanged}
-              />
+              {reply.memberId === userInfo.memberId ? (
+                <EditModal
+                  commentList={commentList}
+                  setCommentList={setCommentList}
+                  open={open}
+                  setOpen={setOpen}
+                  commentId={commentId}
+                  setIsChanged={setIsChanged}
+                  isMe={true}
+                />
+              ) : (
+                <EditModal
+                  commentList={commentList}
+                  setCommentList={setCommentList}
+                  open={open}
+                  setOpen={setOpen}
+                  commentId={commentId}
+                  setIsChanged={setIsChanged}
+                  isMe={false}
+                />
+              )}
             </>
           )}
         </FlexContainer>

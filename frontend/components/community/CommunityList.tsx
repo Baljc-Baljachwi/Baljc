@@ -58,7 +58,7 @@ const ChatButtonDiv = styled.div`
 const ChatButton = styled.img`
   width: 7rem;
   position: absolute;
-  top: 0;
+  bottom: -5rem;
   right: 0;
   margin: 0 1rem;
   cursor: pointer;

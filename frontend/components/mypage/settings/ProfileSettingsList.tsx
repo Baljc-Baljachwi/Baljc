@@ -45,6 +45,7 @@ const ProfileSettingsList = () => {
       router.push(res.data.code === 1003 ? "/" : "/mypage/settings");
       setUserInfoState({
         accessToken: "",
+        refreshToken: "",
         memberId: "",
         surveyedYn: false,
         regionYn: false,
@@ -70,6 +71,7 @@ const ProfileSettingsList = () => {
         if (res.data.code === 1004) {
           setUserInfoState({
             accessToken: "",
+            refreshToken: "",
             memberId: "",
             surveyedYn: false,
             regionYn: false,

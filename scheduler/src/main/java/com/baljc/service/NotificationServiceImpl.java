@@ -58,7 +58,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void sendMessageByTokenList(List<String> tokenList, Notification notification) throws FirebaseMessagingException {
+    public void sendMessageByTokenList(List<String> tokenList, Notification notification, String url) throws FirebaseMessagingException {
         int N = (int)Math.ceil((double)tokenList.size() / MAX_REGISTRATION_TOKENS);
         int from = 0, to = 0;
         List<String> tokenSubList;
@@ -82,7 +82,7 @@ public class NotificationServiceImpl implements NotificationService {
                     .addAllTokens(tokenSubList)
                     .setWebpushConfig(WebpushConfig.builder()
                             .setFcmOptions(WebpushFcmOptions.builder()
-                                    .setLink("https://baljc.com/finance")
+                                    .setLink(url)
                                     .build())
                             .build())
                     .build();

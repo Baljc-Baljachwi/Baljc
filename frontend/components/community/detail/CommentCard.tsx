@@ -21,8 +21,9 @@ const Container = styled.div`
 const ImageWrapper = styled.div`
   display: flex;
   border-radius: 50%;
-  height: 36px;
-  width: 36px;
+  height: 4.2rem;
+  width: 4.2rem;
+  margin-left: 0.5rem;
   overflow: hidden;
 `;
 
@@ -128,8 +129,10 @@ export default function CommentCard({
             )}
           </FlexContainer>
 
-          {/* 댓글 작성자인 경우만 수정 버튼 */}
-          {memberId === userInfo.memberId && deletedYn === "N" && (
+          {/* 댓글 작성자인 경우만 수정 버튼 => 수정 중
+          본인 댓글일 경우, 삭제버튼
+          다른 사용자 댓글일 경우, 채팅 버튼 */}
+          {deletedYn === "N" && (
             <>
               <Icon
                 mode="fas"
@@ -138,14 +141,27 @@ export default function CommentCard({
                 size="20px"
                 color="#c9c9c9"
               />
-              <EditModal
-                commentList={commentList}
-                setCommentList={setCommentList}
-                setIsChanged={setIsChanged}
-                open={open}
-                setOpen={setOpen}
-                commentId={commentId}
-              />
+              {memberId === userInfo.memberId ? (
+                <EditModal
+                  commentList={commentList}
+                  setCommentList={setCommentList}
+                  setIsChanged={setIsChanged}
+                  open={open}
+                  setOpen={setOpen}
+                  commentId={commentId}
+                  isMe={true}
+                />
+              ) : (
+                <EditModal
+                  commentList={commentList}
+                  setCommentList={setCommentList}
+                  setIsChanged={setIsChanged}
+                  open={open}
+                  setOpen={setOpen}
+                  commentId={commentId}
+                  isMe={false}
+                />
+              )}
             </>
           )}
         </FlexContainer>
