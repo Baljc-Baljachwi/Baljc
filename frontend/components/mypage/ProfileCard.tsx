@@ -40,7 +40,6 @@ const ProfileCardContainer = styled.div`
 
 const ProfileImage = styled.div`
   border: 3px solid #fafafe;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.5));
   border-radius: 50%;
   width: 10rem;
   height: 10rem;

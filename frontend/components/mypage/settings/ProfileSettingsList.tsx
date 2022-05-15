@@ -12,8 +12,15 @@ import ButtonModal from "components/common/ButtonModal";
 const PageContainer = styled.main`
   display: flex;
   flex-direction: column;
-  gap: 1.8rem;
   width: 100%;
+  background-color: #f4f4f4;
+  border-radius: 1rem;
+  filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
+  overflow: hidden;
+`;
+
+const Hr = styled.div`
+  border-bottom: 0.1px solid rgba(0, 0, 0, 0.25);
 `;
 
 const ProfileSettingsList = () => {
@@ -82,18 +89,22 @@ const ProfileSettingsList = () => {
         <ProfileContentCard
           onClick={handleClickToAlarmPage}
           title="푸쉬 알림 설정"
-          description="푸쉬 알림을 받습니다."
+          height="7rem"
         />
+        <Hr />
         <ProfileContentCard
           title="로그아웃"
-          description="로그아웃"
           onClick={onClickLogout}
+          height="7rem"
         />
+        <Hr />
+      </PageContainer>
+      <PageContainer>
         <ProfileContentCard
           color="#747373"
           onClick={() => setIsModalOpen(true)}
           title="탈퇴하기"
-          description="안녀엉..."
+          height="7rem"
         />
       </PageContainer>
       <ButtonModal

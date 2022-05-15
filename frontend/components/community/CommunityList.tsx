@@ -51,7 +51,7 @@ const ChatButtonDiv = styled.div`
   width: 100%;
   max-width: 512px;
   position: fixed;
-  bottom: 14rem;
+  bottom: 16rem;
   z-index: 1000;
 `;
 
@@ -62,6 +62,40 @@ const ChatButton = styled.img`
   right: 0;
   margin: 0 1rem;
   cursor: pointer;
+`;
+
+const NoContentContainer = styled.section`
+  width: 100%;
+  height: calc(100vh - 13.2rem);
+  // height: 100%;
+  // height: 100vh;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const NoContentMessage = styled.p`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 2.4rem;
+  font-weight: 700;
+  padding: 1rem;
+  color: #cccccc;
+  &.small {
+    font-size: 1.8rem;
+    font-weight: 500;
+    .btn_MoveTo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
 `;
 
 interface IBoardCategory {
@@ -158,41 +192,52 @@ export default function CommunityList() {
         ))}
       </Header>
       <BodyContainer>
-        {posts?.map((post: any, idx: number) => {
-          if (posts.length - 1 === idx) {
-            return (
-              <div ref={setLastPost} key={post.boardId}>
-                <CommunityCard
-                  boardId={post.boardId}
-                  categoryName={post.categoryName}
-                  content={post.content}
-                  createdAt={post.createdAt}
-                  creator={post.creator}
-                  dong={post.dong}
-                  imgUrlList={post.imgUrlList}
-                  heartCnt={post.heartCnt}
-                  commentCnt={post.commentCnt}
-                />
-              </div>
-            );
-          } else {
-            return (
-              <div key={post.boardId}>
-                <CommunityCard
-                  boardId={post.boardId}
-                  categoryName={post.categoryName}
-                  content={post.content}
-                  createdAt={post.createdAt}
-                  creator={post.creator}
-                  dong={post.dong}
-                  imgUrlList={post.imgUrlList}
-                  heartCnt={post.heartCnt}
-                  commentCnt={post.commentCnt}
-                />
-              </div>
-            );
-          }
-        })}
+        {posts.length !== 0 ? (
+          posts?.map((post: any, idx: number) => {
+            if (posts.length - 1 === idx) {
+              return (
+                <div ref={setLastPost} key={post.boardId}>
+                  <CommunityCard
+                    boardId={post.boardId}
+                    categoryName={post.categoryName}
+                    content={post.content}
+                    createdAt={post.createdAt}
+                    creator={post.creator}
+                    dong={post.dong}
+                    imgUrlList={post.imgUrlList}
+                    heartCnt={post.heartCnt}
+                    commentCnt={post.commentCnt}
+                  />
+                </div>
+              );
+            } else {
+              return (
+                <div key={post.boardId}>
+                  <CommunityCard
+                    boardId={post.boardId}
+                    categoryName={post.categoryName}
+                    content={post.content}
+                    createdAt={post.createdAt}
+                    creator={post.creator}
+                    dong={post.dong}
+                    imgUrlList={post.imgUrlList}
+                    heartCnt={post.heartCnt}
+                    commentCnt={post.commentCnt}
+                  />
+                </div>
+              );
+            }
+          })
+        ) : (
+          <NoContentContainer>
+            <NoContentMessage>
+              작성된 글이 없습니다.
+              <NoContentMessage className="small">
+                가장 먼저 글을 남겨 보세요!
+              </NoContentMessage>
+            </NoContentMessage>
+          </NoContentContainer>
+        )}
       </BodyContainer>
       <ChatButtonDiv>
         <ChatButton

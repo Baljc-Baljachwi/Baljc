@@ -14,7 +14,6 @@ const PageContainer = styled.main`
   color: #3d3d3d;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
 `;
 
 const ProfileCardContainer = styled.div`
@@ -35,10 +34,8 @@ const PageTitle = styled.span`
   color: #33487f;
 `;
 const ProfileContentListContainer = styled.div`
-  margin-top: 2rem;
   display: flex;
   flex-direction: column;
-  /* appearance: none; */
   border: none;
   border-radius: 1rem;
   width: 100%;
@@ -47,7 +44,7 @@ const ProfileContentListContainer = styled.div`
   /* filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25)); */
 
   font-size: 1.6rem;
-  padding: 1.6rem 2rem;
+  padding: 2rem 2rem;
   gap: 2rem;
 `;
 

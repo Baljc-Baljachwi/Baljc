@@ -46,7 +46,7 @@ const ProgressDiv = styled.div`
     /* background-color: #ffd469; */
     /* background-color: #2e437a; */
     align-items: flex-start;
-    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25));
+    filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
     /* box-shadow: 0 3px 3px -5px #ffd469, 0 2px 5px #ffb800; */
     /* box-shadow: 0 3px 3px -5px #ffd469, 0 2px 5px #2e437a; */
     border-radius: 20px;

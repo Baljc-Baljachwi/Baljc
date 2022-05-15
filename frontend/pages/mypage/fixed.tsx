@@ -72,17 +72,18 @@ const Fixed = () => {
         label="고정 지출 조회"
         onClickBackButton={() => router.push("/mypage")}
       />
+
+      {/* <BodyContainer> */}
+      <HeaderCard>
+        <span>이번 달 고정 지출</span>
+        <span>
+          <span>총 </span>
+          {fixedExpenditure.toLocaleString()}
+          <span>원</span>
+        </span>
+      </HeaderCard>
+      {/* <ContentsContainer> */}
       <Container>
-        {/* <BodyContainer> */}
-        <HeaderCard>
-          <span>이번 달 고정 지출</span>
-          <span>
-            <span>총 </span>
-            {fixedExpenditure.toLocaleString()}
-            <span>원</span>
-          </span>
-        </HeaderCard>
-        {/* <ContentsContainer> */}
         {fixedEList && fixedEList.length > 0 ? (
           fixedEList.map((item, idx) => <FixedList key={idx} item={item} />)
         ) : (
@@ -184,10 +185,5 @@ const NoContentMessage = styled.p`
 `;
 
 const Container = styled.div`
-  background-color: #f4f4f4;
-  // padding: 1rem 0 0 0;
-  // padding-bottom: 7rem;
-`;
-const BodyContainer = styled.div`
-  padding: 0 0 1rem 0;
+  padding: 2rem;
 `;

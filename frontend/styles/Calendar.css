@@ -29,7 +29,7 @@
 .react-calendar button {
   margin: 0;
   border: 0;
-  font-size: 1.3rem;
+  font-size: 1.6rem;
   height: 5rem;
 }
 
@@ -134,16 +134,16 @@ abbr[title] {
 }
 
 .cost {
-  font-size: 0.5rem;
-  line-height: 1rem;
+  font-size: 1.4rem;
+  line-height: 1.4rem;
   color: #4d5158;
   font-weight: 300;
   text-decoration: none;
 }
 
 .income {
-  font-size: 0.5rem;
-  line-height: 1.2rem;
+  font-size: 1.4rem;
+  line-height: 1.4rem;
   color: #8cbff2;
   font-weight: 300;
   text-decoration: none;

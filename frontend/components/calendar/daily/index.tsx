@@ -11,7 +11,8 @@ import { IRoutine } from "types";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 1rem 2rem 5rem 2rem;
+  padding: 1rem 2rem 2rem 2rem;
+  border-top: 1rem solid #f4f4f4;
 `;
 
 const Title = styled.div`
