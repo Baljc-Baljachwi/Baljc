@@ -82,10 +82,39 @@ export default function MyApp(props: AppProps) {
     <>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
+        <Head>
+          <meta charSet="utf-8" />
+          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="description" content="슬기로운 자취생활 길잡이, 발자취" />
+          <meta
+            name="keywords"
+            content="자취생활, 자취길잡이, 자취하는방법, 자취처음, 발자취, 자취생"
+          />
+          <title>발자취</title>
+          <meta
+            name="viewport"
+            content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
+          />
+          <meta name="mobile-web-app-capable" content="yes" />
+          <meta name="apple-mobile-web-app-capable" content="yes" />
+          <meta
+            name="apple-mobile-web-app-status-bar-style"
+            content="black-translucent"
+          />
+          <meta name="apple-mobile-web-app-title" content="발자취" />
+          <meta name="application-name" content="발자취" />
+          <meta name="description" content="슬기로운 자취생활 길잡이" />
+          <meta property="og:image" content="icons/192x192.png"></meta>
+          <link rel="manifest" href="/manifest.json" />
+          <link rel="assetlinks" href="/.well-known/assetlinks.json" />
+
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" />
+        </Head>
         <RecoilRoot>
           {pageLoading ? (
             <LayoutSpinner>
-              <HashLoader color={"#EDB83C"} size={30} />
+              <HashLoader color={"#cdcdcd"} size={30} />
             </LayoutSpinner>
           ) : (
             <Layout>

@@ -1,15 +1,18 @@
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 
 import { userInfoState } from "atoms/atoms";
 import { kakaoLogin } from "../../../api/member";
 import { getToken } from "utils/FirebaseInit";
 
+import Spinner from "components/common/Spinner";
+
 export default function KakaoAuth() {
   const [_, setUserInfo] = useRecoilState(userInfoState);
   const router = useRouter();
   const { code } = router.query;
+  const [isLoading, setIsLoading] = useState(true);
 
   const firebaseMessageToken = async () => {
     try {
@@ -60,5 +63,5 @@ export default function KakaoAuth() {
       .catch((err) => console.error(err));
   }, [code, router, setUserInfo]);
 
-  return null;
+  return <Spinner />;
 }

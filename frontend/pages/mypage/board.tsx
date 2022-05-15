@@ -39,7 +39,6 @@ const Board = () => {
     if (isLoading) {
       getMyBoardList()
         .then((res) => {
-          console.log("하이");
           console.log(res.data.data);
           setMyBoardList(res.data.data);
         })

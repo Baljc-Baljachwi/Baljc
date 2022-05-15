@@ -7,7 +7,7 @@ import Icon from "../../common/Icon";
 const Container = styled.div`
   background-color: #4d5f8f;
   border-radius: 10px;
-  padding: 1rem 2rem;
+  padding: 2rem;
   margin-bottom: 1rem;
 `;
 
@@ -31,6 +31,18 @@ const RoutineListItem = styled.li`
   margin-top: 0.2rem;
   gap: 1rem;
   font-size: 1.6rem;
+`;
+
+const Typography = styled.div<{
+  fs?: string;
+  fw?: string;
+  p?: string;
+  color?: string;
+}>`
+  font-size: ${(props) => (props.fs ? props.fs : "")};
+  font-weight: ${(props) => (props.fw ? props.fw : "")};
+  padding: ${(props) => (props.p ? props.p : "")};
+  color: ${(props) => (props.color ? props.color : "")};
 `;
 
 export default function RoutineBoard({ routines }: any) {
@@ -59,8 +71,8 @@ export default function RoutineBoard({ routines }: any) {
                 onClick={() => router.push({ pathname: "/work/routine" })}
                 style={{ padding: "1rem 0", flexWrap: "wrap" }}
               >
-                <p>등록된 일과가 없습니다! </p>
-                <p>추가하려면 클릭하세요.</p>
+                <Typography fs="1.6rem">등록된 일과가 없습니다! </Typography>
+                <Typography fs="1.6rem">추가하려면 클릭하세요.</Typography>
               </RoutineListItem>
             )
           ) : null}

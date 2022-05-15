@@ -41,7 +41,7 @@ const Profile = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 2rem;
-  padding: 1rem 0;
+  padding: 2rem 0;
   > div {
     display: flex;
     gap: 2rem;
@@ -75,20 +75,18 @@ const Typography = styled.div<{
   fs?: string;
   fw?: string;
   p?: string;
+  color?: string;
 }>`
-  font-size: ${(props) => (props.fs ? props.fs : "1rem")};
+  font-size: ${(props) => (props.fs ? props.fs : "")};
   font-weight: ${(props) => (props.fw ? props.fw : "")};
-  padding: ${(props) => (props.p ? props.p : "0")};
-  .textTypo {
-    color: #dfdede;
-  }
+  padding: ${(props) => (props.p ? props.p : "")};
+  color: ${(props) => (props.color ? props.color : "")};
 `;
 
 const FlexContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1rem;
 `;
 
 const ColumnContainer = styled.div`
@@ -107,7 +105,7 @@ const ButtonContainer = styled.div`
 const CommentContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 2rem 2rem 7rem 2rem;
+  padding: 2rem 2rem 10rem 2rem;
 `;
 
 const InputContainer = styled.div`
@@ -123,7 +121,7 @@ const InputContainer = styled.div`
   grid-template-columns: 8fr 1fr;
   z-index: 11000;
   height: 5.6rem;
-  margin-bottom: 5.6rem; // 나중에 없애기
+  margin-bottom: 8rem; // 나중에 없애기
 `;
 
 const IconWrapper = styled.div`
@@ -313,24 +311,22 @@ export default function CommunityDetail() {
     if (boardId) {
       getBoardsDetail(boardId as string)
         .then((res) => {
-          if (res.data.code === 1703) {
-            const { data } = res.data;
-            const { imgUrlList } = data;
+          const { data } = res.data;
+          const { imgUrlList } = data;
 
-            setBoardDetail({
-              ...data,
-              imgUrlList: imgUrlList.map((obj: any) => obj.imgUrl),
-              imgInfoList: imgUrlList,
-            });
-            res.data.data.commentList.map((item: any, idx: string) => {
-              if (
-                item.deletedYn === "N" ||
-                item.list.some((reply: any) => reply.deletedYn === "N")
-              ) {
-                setCommentList((prev) => [...prev, item]);
-              }
-            });
-          }
+          setBoardDetail({
+            ...data,
+            imgUrlList: imgUrlList.map((obj: any) => obj.imgUrl),
+            imgInfoList: imgUrlList,
+          });
+          res.data.data.commentList.map((item: any, idx: string) => {
+            if (
+              item.deletedYn === "N" ||
+              item.list.some((reply: any) => reply.deletedYn === "N")
+            ) {
+              setCommentList((prev) => [...prev, item]);
+            }
+          });
         })
         .catch((err) => console.error(err));
     }
@@ -361,7 +357,7 @@ export default function CommunityDetail() {
               <Typography fs="1.6rem" fw="600">
                 {boardDetail.nickname}
               </Typography>
-              <Typography fs="1.4rem" color="#3D3D3D">
+              <Typography fs="1.4rem" color="#878B93">
                 {boardDetail.createdAt}
               </Typography>
             </InfoWrapper>
@@ -373,7 +369,7 @@ export default function CommunityDetail() {
                 mode="fas"
                 icon="ellipsis-vertical"
                 size="20px"
-                color="#c9c9c9"
+                color="#878B93"
                 onClick={() => setIsModalOpen(true)}
               />
               {/* 수정 / 삭제 모달 */}
@@ -451,13 +447,25 @@ export default function CommunityDetail() {
           </ButtonContainer>
 
           <FlexContainer>
-            <Icon mode="fas" icon="comment" size="14px" color="#DFDEDE" />
-            <Typography fs="1.4rem" p="0 0.5rem">
-              <span className="textTypo">{boardDetail.commentCnt}</span>
+            <Icon
+              mode="far"
+              icon="comment"
+              size="14px"
+              color="#878B93"
+              display="flex"
+            />
+            <Typography fs="1.4rem" p="0 0.5rem" color="#4D5158">
+              {boardDetail.commentCnt}
             </Typography>
-            <Icon mode="fas" icon="heart" size="14px" color="#DFDEDE" />
-            <Typography fs="1.4rem" p="0 0.5rem">
-              <span className="textTypo">{boardDetail.heartCnt}</span>
+            <Icon
+              mode="far"
+              icon="heart"
+              size="14px"
+              color="#878B93"
+              display="flex"
+            />
+            <Typography fs="1.4rem" p="0 0.5rem" color="#4D5158">
+              {boardDetail.heartCnt}
             </Typography>
           </FlexContainer>
         </FlexContainer>
@@ -495,8 +503,12 @@ export default function CommunityDetail() {
           ))
         ) : (
           <ColumnContainer>
-            <Typography fs="1.6rem">아직 댓글이 없습니다.</Typography>
-            <Typography fs="1.6rem">가장 먼저 댓글을 남겨보세요.</Typography>
+            <Typography fs="1.6rem" color="#878B93">
+              아직 댓글이 없습니다.
+            </Typography>
+            <Typography fs="1.6rem" color="#878B93">
+              가장 먼저 댓글을 남겨보세요.
+            </Typography>
           </ColumnContainer>
         )}
       </CommentContainer>
