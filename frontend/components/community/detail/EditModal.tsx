@@ -64,6 +64,7 @@ interface EditProps {
   commentId: string;
   open: boolean;
   setOpen: any;
+  isMe: boolean;
 }
 
 export default function EditModal({
@@ -73,6 +74,7 @@ export default function EditModal({
   commentId,
   open,
   setOpen,
+  isMe,
 }: EditProps) {
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -94,32 +96,37 @@ export default function EditModal({
     console.log("채팅방으로 연결은 곧");
   };
 
+  // console.log(isMe);
   return (
     <>
       {open ? (
         <>
           <ModalOverlay visible={open} />
           <ModalWrapper visible={open} tabIndex={-1} onClick={onMaskClick}>
-            <ModalInner tabIndex={0} className="modal-inner">
-              <Typography
-                fs="1.8rem"
-                p="1.2rem"
-                color="#2F2FFF"
-                onClick={onClickChat}
-              >
-                채팅하기
-              </Typography>
-            </ModalInner>
-            <ModalInner tabIndex={0} className="modal-inner">
-              <Typography
-                fs="1.8rem"
-                p="1.2rem"
-                color="red"
-                onClick={onClickConfirm}
-              >
-                삭제하기
-              </Typography>
-            </ModalInner>
+            {isMe ? (
+              <ModalInner tabIndex={0} className="modal-inner">
+                <Typography
+                  fs="1.8rem"
+                  p="1.2rem"
+                  color="red"
+                  onClick={onClickConfirm}
+                >
+                  삭제하기
+                </Typography>
+              </ModalInner>
+            ) : (
+              <ModalInner tabIndex={0} className="modal-inner">
+                <Typography
+                  fs="1.8rem"
+                  p="1.2rem"
+                  color="#2F2FFF"
+                  onClick={onClickChat}
+                >
+                  채팅하기
+                </Typography>
+              </ModalInner>
+            )}
+
             <ModalInner tabIndex={0} className="modal-inner" onClick={onClose}>
               <Typography fs="1.8rem" p="1.2rem">
                 취소하기
