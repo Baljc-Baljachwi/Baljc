@@ -61,18 +61,18 @@ function setInterceptors(instance: any) {
               accessToken: newAccessToken,
               refreshToken: newRefreshToken,
             };
-            LocalStorage.setItem("userInfo", JSON.stringify(newUserInfo));
 
+            LocalStorage.setItem("userInfo", JSON.stringify(newUserInfo));
             isTokenRefreshing = false;
             onTokenRefreshed(newAccessToken);
           } catch (err: any) {
             console.error(err);
             console.log(err.response.data);
             // 유효하지 않은 리프레시 토큰
-            // if (err.response.data.code === 3002) {
-            //   LocalStorage.removeItem("userInfo");
-            //   axios.get(`${process.env.BASE_URL}/api/members/logout`);
-            // }
+            if (err.response.data.code === 3002) {
+              LocalStorage.removeItem("userInfo");
+              window.location.replace("/");
+            }
           }
         }
         // 토큰 재발급 동안 요청 refreshSubscriber에 저장
