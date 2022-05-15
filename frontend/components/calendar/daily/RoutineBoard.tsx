@@ -9,6 +9,7 @@ const Container = styled.div`
   border-radius: 10px;
   padding: 2rem;
   margin-bottom: 1rem;
+  filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
 `;
 
 const Title = styled.div`

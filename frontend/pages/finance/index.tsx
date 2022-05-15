@@ -9,7 +9,7 @@ import FinanceList from "../../components/finance/list/FinanceList";
 import Icon from "../../components/common/Icon";
 
 const Container = styled.div`
-  padding-bottom: 2rem;
+  padding-bottom: 5rem;
   background-color: #ffffff;
   position: relative;
 `;
@@ -24,7 +24,7 @@ const MonthlyContentContainer = styled.div`
   flex-direction: column;
   padding: 2rem;
   color: #3d3d3d;
-  box-shadow: 0 1px 1px #00000014;
+  border-bottom: 1rem solid #f4f4f4;
 `;
 
 const MonthlySection = styled.div`
@@ -132,58 +132,56 @@ export default function Finance(): JSX.Element {
   }
 
   return (
-    <>
-      <Container>
-        <Header
-          label="가계부 목록"
-          icon="plus"
-          onClickRightButton={() => router.push("/finance/financeCreateForm")}
-          onClickBackButton={() => router.push("/calendar")}
-        ></Header>
+    <Container>
+      <Header
+        label="가계부 목록"
+        icon="plus"
+        onClickRightButton={() => router.push("/finance/financeCreateForm")}
+        onClickBackButton={() => router.push("/calendar")}
+      ></Header>
 
-        <MonthlyContentContainer>
-          <MonthlySection>
-            <div onClick={handleClickPrev}>
-              <Icon mode="fas" icon="caret-left" size="14px" display="flex" />
-            </div>
-            <Typography fs="2.4rem">{month}월</Typography>
-            <div onClick={handleClickNext}>
-              <Icon mode="fas" icon="caret-right" size="14px" display="flex" />
-            </div>
-          </MonthlySection>
-          <MonthlyContentWrapper>
-            <MonthlyContent>
-              <Typography fs="1.6rem" color="#4d5158">
-                지출
-              </Typography>
-              <Typography fs="2rem" fw="600">
-                - {expenditure.toLocaleString()} 원
-              </Typography>
-            </MonthlyContent>
-            <MonthlyContent>
-              <Typography fs="1.6rem" color="#4d5158">
-                수입
-              </Typography>
-              <Typography fs="2rem" fw="600" color="#8cbff2">
-                {income.toLocaleString()} 원
-              </Typography>
-            </MonthlyContent>
-          </MonthlyContentWrapper>
-        </MonthlyContentContainer>
-        <PageContainer>
-          {amount && amount.length > 0 ? (
-            amount.map((item, idx) => <FinanceList key={idx} item={item} />)
-          ) : (
-            <NoContencContainer>
-              <NoContentMessage>가계부 내역이 없습니다!</NoContentMessage>
-              <NoContentMessage className="small">
-                + 버튼을 눌러 새로운 내용을 추가해보세요
-              </NoContentMessage>
-            </NoContencContainer>
-          )}
-        </PageContainer>
-      </Container>
-    </>
+      <MonthlyContentContainer>
+        <MonthlySection>
+          <div onClick={handleClickPrev}>
+            <Icon mode="fas" icon="caret-left" size="14px" display="flex" />
+          </div>
+          <Typography fs="2.4rem">{month}월</Typography>
+          <div onClick={handleClickNext}>
+            <Icon mode="fas" icon="caret-right" size="14px" display="flex" />
+          </div>
+        </MonthlySection>
+        <MonthlyContentWrapper>
+          <MonthlyContent>
+            <Typography fs="1.6rem" color="#4d5158">
+              지출
+            </Typography>
+            <Typography fs="2rem" fw="600">
+              - {expenditure.toLocaleString()} 원
+            </Typography>
+          </MonthlyContent>
+          <MonthlyContent>
+            <Typography fs="1.6rem" color="#4d5158">
+              수입
+            </Typography>
+            <Typography fs="2rem" fw="600" color="#8cbff2">
+              {income.toLocaleString()} 원
+            </Typography>
+          </MonthlyContent>
+        </MonthlyContentWrapper>
+      </MonthlyContentContainer>
+      <PageContainer>
+        {amount && amount.length > 0 ? (
+          amount.map((item, idx) => <FinanceList key={idx} item={item} />)
+        ) : (
+          <NoContencContainer>
+            <NoContentMessage>가계부 내역이 없습니다!</NoContentMessage>
+            <NoContentMessage className="small">
+              + 버튼을 눌러 새로운 내용을 추가해보세요
+            </NoContentMessage>
+          </NoContencContainer>
+        )}
+      </PageContainer>
+    </Container>
   );
 }
 

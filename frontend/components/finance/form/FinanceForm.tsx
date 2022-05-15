@@ -26,7 +26,7 @@ const FormContainer = styled.form`
 const InputContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
   gap: 2rem;
 `;
 
@@ -80,8 +80,8 @@ const StyledLabel = styled.label`
   font-size: 1.6rem;
   color: #878b93;
   display: inline-block;
-  cursor: pointer;
   min-width: fit-content;
+  padding-right: 2rem;
 `;
 
 const ErrorMessage = styled.p`
@@ -113,7 +113,7 @@ const CheckLabel = styled.label`
 const ButtonContainer = styled.div`
   width: 100%;
   display: flex;
-  gap: 1.6rem;
+  gap: 1rem;
 `;
 
 const CategoryListContainer = styled.div`
@@ -147,7 +147,7 @@ const CategoryImage = styled.label<{ isSelected?: boolean }>`
 
 const PaymentLabel = styled.label<{ isSelected: boolean }>`
   background-color: ${(props) => (props.isSelected ? "#ffd469" : "#f5f6fa")};
-  color: ${(props) => (props.isSelected ? "#3d3d3d" : "#797979")};
+  color: ${(props) => (props.isSelected ? "#3d3d3d" : "#878B93")};
   width: 100%;
   font-size: 1.4rem;
   padding: 0.8rem 0;
