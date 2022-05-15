@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 import styled from "styled-components";
-import kakaoLoginButtonImage from "../../public/assets/img/login/kakao_login_medium_narrow.png";
+import kakaoLoginButtonImage from "../../public/assets/img/login/kakao_login_large_narrow.png";
 
 const kakaoGetAuthCodeURL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&response_type=code`;
 
@@ -13,6 +13,7 @@ const Container = styled.div`
 const ButtonContainer = styled.div`
   position: relative;
   border-radius: 1.2rem;
+  min-height: 45px;
   height: 45px;
   width: 183px;
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);

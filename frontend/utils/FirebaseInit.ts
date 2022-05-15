@@ -19,14 +19,16 @@ export async function getToken() {
       console.log("Message received. ", payload);
       console.log(payload.notification);
 
-      toast.success(
-        payload.notification.title + "\n" + payload.notification.body,
-        {
-          position: toast.POSITION.BOTTOM_CENTER,
-          hideProgressBar: true,
-          autoClose: 5000,
-        }
-      );
+      toast("⏰ " + payload.notification.body, {
+        position: toast.POSITION.BOTTOM_CENTER,
+        hideProgressBar: true,
+        autoClose: 2000,
+        bodyStyle: {
+          color: "black",
+          fontSize: "1.4rem",
+          fontWeight: "bold",
+        },
+      });
     });
 
     if (currentToken) {
