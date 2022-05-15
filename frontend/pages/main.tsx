@@ -8,6 +8,9 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 // import Balloon from 'components/Main/Balloon';
 import { isMobile } from "utils/mobileCheck";
 
+const OnboardingPage0 = React.lazy(
+  () => import("components/onboardingContent/onboarding0")
+);
 const OnboardingPage1 = React.lazy(
   () => import("components/onboardingContent/onboarding1")
 );
@@ -103,6 +106,7 @@ const Main = () => {
 
   return (
     <Wrapper>
+      <OnboardingPage0 />
       <OnboardingPage1 />
       <OnboardingPage2 />
       <OnboardingPage3 />

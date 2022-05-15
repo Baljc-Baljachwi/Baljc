@@ -40,40 +40,16 @@ const Onboarding3 = () => {
             <p>편리하게 즐길 수 있어요!</p>
           </S.Content>
           <ButtonWrapper onClick={onClickButton}>
-            <Button data-id="iOS" isSelected={selectedOS === "iOS"}>
-              iOS
-            </Button>
             <Button data-id="android" isSelected={selectedOS === "android"}>
               Android
+            </Button>
+            <Button data-id="iOS" isSelected={selectedOS === "iOS"}>
+              iOS
             </Button>
           </ButtonWrapper>
         </ContentWrapper>
 
-        {selectedOS === "iOS" ? (
-          <IOSImageContainer>
-            <ImageWrapper>
-              <Caption>1. 하단 공유버튼 클릭</Caption>
-              <Image
-                src={"/assets/img/onboarding/Iosimgrc1.png"}
-                alt="iOS 앱 설치 방법 이미지 1"
-              />
-            </ImageWrapper>
-            <ImageWrapper>
-              <Caption>2. "홈 화면에 추가" 클릭</Caption>
-              <Image
-                src={"/assets/img/onboarding/Iosimgrc2.png"}
-                alt="iOS 앱 설치 방법 이미지 2"
-              />
-            </ImageWrapper>
-            <ImageWrapper>
-              <Caption>3. 추가 버튼 클릭</Caption>
-              <Image
-                src={"/assets/img/onboarding/Iosimgrc3.png"}
-                alt="iOS 앱 설치 방법 이미지 3"
-              />
-            </ImageWrapper>
-          </IOSImageContainer>
-        ) : (
+        {selectedOS === "android" ? (
           <AndroidImageContainer>
             <ImageWrapper>
               <Caption>1. Chrome 앱 실행</Caption>
@@ -97,6 +73,30 @@ const Onboarding3 = () => {
               />
             </ImageWrapper>
           </AndroidImageContainer>
+        ) : (
+          <IOSImageContainer>
+            <ImageWrapper>
+              <Caption>1. 하단 공유버튼 클릭</Caption>
+              <Image
+                src={"/assets/img/onboarding/Iosimgrc1.png"}
+                alt="iOS 앱 설치 방법 이미지 1"
+              />
+            </ImageWrapper>
+            <ImageWrapper>
+              <Caption>2. "홈 화면에 추가" 클릭</Caption>
+              <Image
+                src={"/assets/img/onboarding/Iosimgrc2.png"}
+                alt="iOS 앱 설치 방법 이미지 2"
+              />
+            </ImageWrapper>
+            <ImageWrapper>
+              <Caption>3. 추가 버튼 클릭</Caption>
+              <Image
+                src={"/assets/img/onboarding/Iosimgrc3.png"}
+                alt="iOS 앱 설치 방법 이미지 3"
+              />
+            </ImageWrapper>
+          </IOSImageContainer>
         )}
         {/* <LoginModalButton /> */}
       </Container>
