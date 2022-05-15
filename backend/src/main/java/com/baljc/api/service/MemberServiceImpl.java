@@ -274,7 +274,7 @@ public class MemberServiceImpl implements MemberService {
             aToken = authorization.substring(7);
         }
         if (tokenProvider.validateRefreshToken(aToken)) {
-            throw new NotExpiredTokenException("유효한 토큰입니다.");
+            throw new NotExpiredTokenException("만료된 토큰이 아닙니다.");
         }
 
         //accessToken 파싱
