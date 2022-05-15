@@ -56,7 +56,9 @@ public class PushAlarmScheduler {
         notificationService.sendMessageByTokenList(accountFcmTokenList, Notification.builder()
                 .title("가계부의 발자취 '(^모^)'")
                 .body("가계부에 오늘의 지출을 기록해 보아요 ('v')")
-                .build());
+//                .image()
+                .build(),
+                "https://baljc.com/finance");
 
         // 할 일 푸시 알람
         List<String> todoFcmTokenList = pushAlarmList
@@ -70,6 +72,8 @@ public class PushAlarmScheduler {
         notificationService.sendMessageByTokenList(todoFcmTokenList, Notification.builder()
                 .title("할 일의 발자취 '(^모^)'")
                 .body("할 일 목록에 오늘의 할 일을 기록해 보아요 ('v')")
-                .build());
+//                .image()
+                .build(),
+                "https://baljc.com/work");
     }
 }
