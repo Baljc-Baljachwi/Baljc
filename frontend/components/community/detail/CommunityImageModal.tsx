@@ -27,6 +27,7 @@ const ModalWrapper = styled.div<{ visible: boolean }>`
   position: fixed;
   top: 0;
   bottom: 0;
+  width: 100%;
   max-width: 512px;
   z-index: 1000;
   overflow: auto;
