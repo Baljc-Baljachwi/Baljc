@@ -86,7 +86,7 @@ public class MemberController {
 
     @PostMapping("/refresh")
     public ResponseEntity<BaseResponse> updateToken(@Valid @RequestBody MemberDto.TokenRequest tokenRequest) {
-        MemberDto.SigninInfo signinInfo = memberService.updateToken(tokenRequest.getAuthorization(), tokenRequest.getRefreshToken());
+        MemberDto.SigninInfo signinInfo = memberService.updateToken(tokenRequest.getMemberId(), tokenRequest.getAuthorization(), tokenRequest.getRefreshToken());
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + signinInfo.getJwt());
         httpHeaders.add(JwtFilter.REFRESH_TOKEN_HEADER, "Bearer " + signinInfo.getRefreshToken());

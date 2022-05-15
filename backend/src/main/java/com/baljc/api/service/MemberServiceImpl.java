@@ -267,7 +267,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public MemberDto.SigninInfo updateToken(String authorization, String refreshToken) {
+    public MemberDto.SigninInfo updateToken(UUID memberId, String authorization, String refreshToken) {
         //accessToken 유효기간 확인
         String aToken = "";
         if (StringUtils.hasText(authorization) && authorization.startsWith("Bearer ")) {
@@ -278,7 +278,7 @@ public class MemberServiceImpl implements MemberService {
         }
 
         //accessToken 파싱
-        UUID memberId = UUID.fromString(tokenProvider.getUserPk(authorization));
+//        UUID memberId = UUID.fromString(tokenProvider.getUserPk(authorization));
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NullPointerException("해당 회원이 존재하지 않습니다."));
 
         //refreshToken 유효기간 확인 & 데이터베이스에 저장된 값과 같은지 확인
