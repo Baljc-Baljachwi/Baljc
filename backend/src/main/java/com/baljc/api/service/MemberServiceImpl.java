@@ -287,6 +287,7 @@ public class MemberServiceImpl implements MemberService {
             rToken = refreshToken.substring(7);
         }
         if (!tokenProvider.validateRefreshToken(rToken) || !rToken.equals(member.getRefreshToken())) {
+            signoutMember();
             throw new NotValidRefreshTokenException("유효하지 않은 리프레시 토큰입니다.");
         }
 
