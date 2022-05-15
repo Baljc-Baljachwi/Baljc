@@ -90,12 +90,26 @@ export default function EditModal({
     setOpenConfirm((prev) => !prev);
   };
 
+  const onClickChat = () => {
+    console.log("채팅방으로 연결은 곧");
+  };
+
   return (
     <>
       {open ? (
         <>
           <ModalOverlay visible={open} />
           <ModalWrapper visible={open} tabIndex={-1} onClick={onMaskClick}>
+            <ModalInner tabIndex={0} className="modal-inner">
+              <Typography
+                fs="1.8rem"
+                p="1.2rem"
+                color="#2F2FFF"
+                onClick={onClickChat}
+              >
+                채팅하기
+              </Typography>
+            </ModalInner>
             <ModalInner tabIndex={0} className="modal-inner">
               <Typography
                 fs="1.8rem"
