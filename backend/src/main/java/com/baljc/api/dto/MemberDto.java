@@ -88,6 +88,7 @@ public class MemberDto {
     @Getter
     @NoArgsConstructor
     public static class TokenRequest {
+        private UUID memberId;
         private String authorization;
         private String refreshToken;
     }

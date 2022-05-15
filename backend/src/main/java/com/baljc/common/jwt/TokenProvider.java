@@ -121,13 +121,13 @@ public class TokenProvider implements InitializingBean {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            return false;
+            return true;
         } catch (ExpiredJwtException e) {
             return false;
         } catch (UnsupportedJwtException e) {
-            return false;
+            return true;
         } catch (IllegalArgumentException e) {
-            return false;
+            return true;
         }
     }
 
