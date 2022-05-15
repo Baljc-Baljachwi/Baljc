@@ -21,8 +21,9 @@ const Container = styled.div`
 const ImageWrapper = styled.div`
   display: flex;
   border-radius: 50%;
-  height: 36px;
-  width: 36px;
+  height: 4.2rem;
+  width: 4.2rem;
+  margin-left: 0.5rem;
   overflow: hidden;
 `;
 
