@@ -32,13 +32,24 @@ export default function KakaoAuth() {
       .then((currentToken) => {
         kakaoLogin(code as string, currentToken).then((res) => {
           if (res.data.code === 1000) {
+            console.log(res);
+            console.log(res.headers);
+            console.log(res.headers.refreshtoken);
             const accessToken = res.headers.authorization;
-            // console.log(`accessToken : ${accessToken}`);
+            const refreshToken = res.headers.refreshtoken;
+            console.log(`accessToken : ${accessToken}`);
+            console.log(`refreshToken : ${refreshToken}`);
             // console.log(res.data.data);
 
             const { memberId, surveyedYn, regionYn } = res.data.data;
 
-            setUserInfo({ accessToken, memberId, surveyedYn, regionYn });
+            setUserInfo({
+              accessToken,
+              refreshToken,
+              memberId,
+              surveyedYn,
+              regionYn,
+            });
 
             router.push(
               res.data.data.surveyedYn ? "/calendar" : "/auth/survey"

@@ -20,6 +20,7 @@ const localStorageEffect =
 
 interface IUserInfo {
   accessToken: string;
+  refreshToken: string;
   memberId: string;
   surveyedYn: boolean;
   regionYn: boolean;
@@ -29,6 +30,7 @@ export const userInfoState = atom<IUserInfo>({
   key: "userInfo",
   default: {
     accessToken: "",
+    refreshToken: "",
     memberId: "",
     surveyedYn: false,
     regionYn: false,
