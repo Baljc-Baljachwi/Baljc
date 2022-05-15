@@ -9,22 +9,7 @@ import { getMonthlyCalendar } from "api/calendar";
 import Icon from "../common/Icon";
 import { useRecoilValue } from "recoil";
 import { todosState } from "atoms/atoms";
-
-const StyledHeader = styled.header`
-  width: 100%;
-  max-width: 512px;
-  height: 6.6rem;
-  background-color: #2e437a;
-  font-size: 2rem;
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  padding: 0 2rem;
-  justify-content: space-between;
-  position: fixed;
-  top: 0;
-  z-index: 10000;
-`;
+import Header from "../../components/common/Header";
 
 const Container = styled.div`
   display: flex;
@@ -48,37 +33,32 @@ const MonthlyTotal = styled.div`
   flex-direction: column;
   align-items: flex-start;
   font-size: 2.3rem;
-  padding: 2rem 3rem 0 3rem;
+  padding: 2rem 3rem 1rem 3rem;
   font-weight: 700;
-  .title {
-    font-size: 1.5rem;
-    color: #3d3d3d;
-    padding-bottom: 1rem;
-  }
-  .flex_wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: space-around;
-    padding: 1rem 0;
-  }
-  .label {
-    font-weight: 300;
-    font-size: 1.5rem;
-    padding: 0 2rem 0 0;
-  }
-  .e_content {
-    color: #2e437a;
-  }
 `;
 
-const FlexWrapper = styled.div`
+const FlexContainer = styled.div`
   display: flex;
 `;
 
-const Typography = styled.div`
-  font-size: 2.4rem;
-  padding: 0 1rem;
+const ColumnContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-around;
+  padding: 1rem 0;
+`;
+
+const Typography = styled.div<{
+  fs?: string;
+  fw?: string;
+  color?: string;
+  p?: string;
+}>`
+  color: ${(props) => (props.color ? props.color : "")};
+  font-size: ${(props) => (props.fs ? props.fs : "")};
+  font-weight: ${(props) => (props.fw ? props.fw : "")};
+  padding: ${(props) => (props.p ? props.p : "0")};
 `;
 
 export default function Monthly() {
@@ -146,27 +126,23 @@ export default function Monthly() {
     }
   }, [mark]);
 
-  const callDay = (e: any) => {
-    // console.log(e);
-  };
-
   if (!mounted) return null;
   return (
     <>
       <Container>
-        <StyledHeader>
-          <div className="title">이번 달 요약</div>
-        </StyledHeader>
+        <Header label="이번 달 요약" />
         <MonthlyTotal>
-          <FlexWrapper>
-            <Icon
-              mode="fas"
-              icon="caret-left"
-              size="16px"
-              onClick={handleClickLeft}
-            />
-            <Typography>{month}월</Typography>
-            <div className="padding">
+          <FlexContainer>
+            <div style={{ paddingRight: "1rem" }}>
+              <Icon
+                mode="fas"
+                icon="caret-left"
+                size="16px"
+                onClick={handleClickLeft}
+              />
+            </div>
+            <Typography fs="2.4rem">{month}월</Typography>
+            <div style={{ paddingLeft: "1rem" }}>
               <Icon
                 mode="fas"
                 icon="caret-right"
@@ -174,24 +150,31 @@ export default function Monthly() {
                 onClick={handleClickRight}
               />
             </div>
-          </FlexWrapper>
-          <FlexWrapper>
-            <div className="flex_wrapper">
-              <div className="label">지출</div>
-              <div className="label">수입</div>
-            </div>
-            <div className="flex_wrapper">
-              <div className="e_content">-{expenditure.toLocaleString()}원</div>
-              <div className="i_cotent">{income.toLocaleString()}원</div>
-            </div>
-          </FlexWrapper>
+          </FlexContainer>
+          <FlexContainer>
+            <ColumnContainer>
+              <Typography fs="1.5rem" fw="400" p="0 4rem 0 0" color="#4d5158">
+                지출
+              </Typography>
+              <Typography fs="1.5rem" fw="400" p="0 4rem 0 0" color="#4d5158">
+                수입
+              </Typography>
+            </ColumnContainer>
+            <ColumnContainer>
+              <Typography fs="2rem" fw="600">
+                -{expenditure.toLocaleString()}원
+              </Typography>
+              <Typography fs="2rem" fw="600" color="#8cbff2">
+                {income.toLocaleString()}원
+              </Typography>
+            </ColumnContainer>
+          </FlexContainer>
         </MonthlyTotal>
 
         <CalendarWrapper>
           <Calendar
             activeStartDate={date}
             onChange={setDate}
-            onClickDay={callDay}
             value={date}
             calendarType="US" // 일요일 시작
             formatDay={(locale, date) => dayjs(date).format("D")} // 날짜 표기 방식 변경

@@ -47,7 +47,7 @@ const MonthlyContentWrapper = styled.div`
 const MonthlyContent = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
   padding-bottom: 0.5rem;
 `;
 
@@ -153,19 +153,19 @@ export default function Finance(): JSX.Element {
           </MonthlySection>
           <MonthlyContentWrapper>
             <MonthlyContent>
-              <Typography fs="1.6rem" color="#878B93">
-                수입
-              </Typography>
-              <Typography fs="2rem" fw="600" color="#0075ff">
-                {income.toLocaleString()} 원
-              </Typography>
-            </MonthlyContent>
-            <MonthlyContent>
-              <Typography fs="1.6rem" color="#878B93">
+              <Typography fs="1.6rem" color="#4d5158">
                 지출
               </Typography>
               <Typography fs="2rem" fw="600">
                 - {expenditure.toLocaleString()} 원
+              </Typography>
+            </MonthlyContent>
+            <MonthlyContent>
+              <Typography fs="1.6rem" color="#4d5158">
+                수입
+              </Typography>
+              <Typography fs="2rem" fw="600" color="#8cbff2">
+                {income.toLocaleString()} 원
               </Typography>
             </MonthlyContent>
           </MonthlyContentWrapper>

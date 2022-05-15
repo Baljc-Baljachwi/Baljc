@@ -64,6 +64,7 @@ const FinanceListContainer = styled.div`
 const Hr = styled.div`
   border: 0.1px #ffffff solid;
 `;
+
 interface IDayNumber {
   cntExpenditure: number;
   fixedExpenditure: number;
@@ -130,24 +131,29 @@ export default function FinanceBoard({ item }: any, date: string) {
       <div onClick={handleClick}>
         <TextWrapper>
           {dayNumber?.fixedExpenditure ? (
-            <Typography color="#fffffff" fs="1.5rem">
+            <Typography color="#ffffff" fs="1.6rem" fw="300">
               고정지출비용 {dayNumber?.fixedExpenditure.toLocaleString()}원
             </Typography>
           ) : null}
           <FlexContainer>
-            <Typography color="#fffffff" fs="3.2rem">
+            <Typography color="#ffffff" fs="3.2rem" fw="500" p="1rem 0">
               {dayNumber?.remainingBudget.toLocaleString()}원
             </Typography>
-            <Typography color="#fffffff" fs="1.5rem" p="0 0 0 0.5rem">
+            <Typography
+              color="#ffffff"
+              fs="1.5rem"
+              fw="700"
+              p="0 0 1rem 0.5rem"
+            >
               남았습니다.
             </Typography>
           </FlexContainer>
           <FlexContainer style={{ justifyContent: "space-between" }}>
-            <Typography color="#fffffff" fs="1.5rem" p="0 0 0.5rem 0">
+            <Typography color="#ffffff" fs="1.6rem" fw="300" p="0 0 0.5rem 0">
               오늘 소비 {dayNumber?.totalExpenditure.toLocaleString()}원
             </Typography>
             <FlexContainer>
-              <Typography color="#FFD469" fs="1.2rem">
+              <Typography color="#FFD469" fs="1.6rem" fw="500">
                 {dayString?.word}
               </Typography>
             </FlexContainer>
@@ -160,20 +166,20 @@ export default function FinanceBoard({ item }: any, date: string) {
             <Hr />
             {dayNumber ? (
               <TotalContainer>
-                <Typography color="#fffffff" fs="1.3rem" fw="100">
+                <Typography color="#ffffff" fs="1.3rem" fw="100">
                   총 결제 건수 {dayNumber?.cntExpenditure}건
                 </Typography>
-                <Typography color="#fffffff" fs="1.3rem" fw="100">
+                <Typography color="#ffffff" fs="1.3rem" fw="100">
                   총수입 {dayNumber?.totalIncome.toLocaleString()}원
                 </Typography>
-                <Typography color="#fffffff" fs="1.3rem" fw="100">
+                <Typography color="#ffffff" fs="1.3rem" fw="100">
                   총지출 {dayNumber?.totalExpenditure.toLocaleString()}원
                 </Typography>
               </TotalContainer>
             ) : null}
             <FinanceBoardList item={accountBookList} date={date} />
             <Typography
-              color="#fffffff"
+              color="#ffffff"
               fs="1rem"
               style={{ alignSelf: "center" }}
               onClick={handleClick}
@@ -189,7 +195,7 @@ export default function FinanceBoard({ item }: any, date: string) {
           </>
         ) : (
           <Typography
-            color="#fffffff"
+            color="#ffffff"
             fs="1rem"
             style={{ alignSelf: "center" }}
             onClick={handleClick}

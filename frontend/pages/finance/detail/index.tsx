@@ -12,7 +12,7 @@ const Container = styled.div`
 
 const PageContainer = styled.main`
   font-family: "Noto Sans KR", sans-serif;
-  padding: 0 2rem;
+  padding: 0 2rem 5rem 2rem;
   background-color: #ffffff;
   color: #3d3d3d;
   display: flex;
@@ -51,12 +51,14 @@ const DetailContents = styled.div`
   flex-direction: column;
   font-size: 1.6rem;
   gap: 0.5rem;
+  color: #878b93;
   span {
     font-size: 2rem;
+    color: #3d3d3d;
   }
   .fixedDateTime {
     font-size: 1.6rem;
-    color: #767676;
+    color: #878b93;
   }
 `;
 
