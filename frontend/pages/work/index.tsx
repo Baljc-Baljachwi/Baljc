@@ -162,7 +162,7 @@ export default function Home() {
           </DateDiv>
         </WeeklyDiv>
         <Routine dow={dow}></Routine>
-        <Todo viewOnly={false} date={date}></Todo>
+        <Todo monthlyTodo={false} date={date}></Todo>
       </StyledDiv>
     </>
   );

@@ -12,8 +12,7 @@ import { userInfoState } from "atoms/atoms";
 const Container = styled.div`
   display: grid;
   grid-template-columns: 1fr 5fr;
-  padding-top: 1rem;
-  border-top: 1px solid #e8e8e8;
+  padding-top: 1.5rem;
 `;
 
 const ImageWrapper = styled.div`
@@ -41,10 +40,12 @@ const Typography = styled.div<{
   fs?: string;
   fw?: string;
   p?: string;
+  color?: string;
 }>`
-  font-size: ${(props) => (props.fs ? props.fs : "1rem")};
+  font-size: ${(props) => (props.fs ? props.fs : "")};
   font-weight: ${(props) => (props.fw ? props.fw : "")};
-  padding: ${(props) => (props.p ? props.p : "0")};
+  padding: ${(props) => (props.p ? props.p : "")};
+  color: ${(props) => (props.color ? props.color : "")};
 `;
 
 interface ReplyCardProps {
@@ -122,7 +123,7 @@ export default function ReplyCard({
             </>
           )}
         </FlexContainer>
-        <Typography fs="1.4rem" color="#3D3D3D">
+        <Typography fs="1.4rem" color="#878B93">
           {reply.createdAt}
         </Typography>
         <Typography fs="1.8rem">{reply.content}</Typography>

@@ -28,18 +28,19 @@ const InputDiv = styled.div`
   align-items: center;
 `;
 
-const TodoInput = styled.input<{ isFocus: boolean; viewOnly: boolean }>`
+const TodoInput = styled.input<{ isFocus: boolean; monthlyTodo: boolean }>`
   width: 90%;
   font-family: "Noto Sans KR";
   font-size: 1.8rem;
-  color: ${(props) => (props.viewOnly ? "#ffffff" : "#000000")};
-  background-color: ${(props) => (props.viewOnly ? "#4d5f8f" : "")};
+  font-size: ${(props) => (props.monthlyTodo ? "1.6rem" : "1.8rem")};
+  color: ${(props) => (props.monthlyTodo ? "#ffffff" : "#000000")};
+  background-color: ${(props) => (props.monthlyTodo ? "#4d5f8f" : "")};
   border: none;
   border-bottom: ${(props) => (props.isFocus ? "1px solid #cccccc" : " ")};
   outline: none;
   ::placeholder {
     color: #cccccc;
-    color: ${(props) => (props.viewOnly ? "#ffffff" : "#cccccc")};
+    color: ${(props) => (props.monthlyTodo ? "#ffffff" : "#cccccc")};
   }
 `;
 
@@ -54,7 +55,7 @@ const TodoNone = styled.div`
 `;
 
 interface TodoProps {
-  viewOnly: boolean;
+  monthlyTodo: boolean;
   date: string;
 }
 
@@ -63,7 +64,7 @@ interface TodoForm {
   content: string;
 }
 
-export default function Todo({ viewOnly, date }: TodoProps) {
+export default function Todo({ monthlyTodo, date }: TodoProps) {
   const [todos, setTodos] = useRecoilState<ITodoTypes[]>(todosState);
   const [focus, setFocus] = useState(false);
 
@@ -144,7 +145,7 @@ export default function Todo({ viewOnly, date }: TodoProps) {
                   date={date}
                   content={content}
                   completedYn={completedYn}
-                  viewOnly={viewOnly}
+                  monthlyTodo={monthlyTodo}
                   todos={todos}
                   setTodos={setTodos}
                 ></TodoItem>
@@ -173,7 +174,7 @@ export default function Todo({ viewOnly, date }: TodoProps) {
                 onChange={onInputChange}
                 onKeyPress={onEnter}
                 isFocus={focus}
-                viewOnly={viewOnly}
+                monthlyTodo={monthlyTodo}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
               />

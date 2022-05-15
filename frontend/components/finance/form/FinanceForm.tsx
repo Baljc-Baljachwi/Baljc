@@ -77,8 +77,8 @@ const StyledInput = styled.input`
 `;
 
 const StyledLabel = styled.label`
-  font-size: 2rem;
-  color: #3d3d3d;
+  font-size: 1.6rem;
+  color: #878b93;
   display: inline-block;
   cursor: pointer;
   min-width: fit-content;

@@ -1,5 +1,4 @@
 import { userInfoState } from "atoms/atoms";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
@@ -9,18 +8,14 @@ import Icon from "../common/Icon";
 const Container = styled.nav`
   padding: 1rem;
   background-color: #ffffff;
-  // box-shadow: 0px, -2px rgba(0, 0, 0, 0.1);
-  // filter: drop-shadow(0px -2px -2px rgba(0, 0, 0, 0.1));
-  // offset: 0px, -2px;
-  // box-shadow: 1px #00000014;
-  border-top: 2px solid #dfdede;
+  border-top: 1px solid #00000014;
   position: fixed;
   width: 100%;
   bottom: 0;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   z-index: 10000;
-  height: 5.6rem;
+  height: 8rem;
   max-width: 512px;
   margin: auto;
 `;

@@ -12,12 +12,9 @@ const FinanceCardItem = styled.div<{ backgroundColor: string }>`
   display: flex;
   flex-direction: column;
   background-color: ${(props) => props.backgroundColor};
-
   width: 100%;
-
   font-size: 1.6rem;
   padding: 1.6rem 2rem;
-
   font-family: "Noto Sans KR", sans-serif;
   font-style: normal;
   -webkit-appearance: none;
@@ -25,7 +22,6 @@ const FinanceCardItem = styled.div<{ backgroundColor: string }>`
   appearance: none;
   border: none;
   border-radius: 1rem;
-  cursor: pointer;
 `;
 
 const GridContainer = styled.div`
@@ -56,22 +52,21 @@ const FinanceCardPrice = styled.span<{ color?: string }>`
   padding-bottom: 1rem;
 `;
 
-const FinanceCardDetail = styled.span`
-  color: #696969;
-  font-size: 1.2rem;
-  font-weight: 400;
+const FlexContainer = styled.div`
+  display: flex;
 `;
 
-const titleColor = {
-  light: colors.gray900,
-  dark: colors.gray25,
-};
-
-const subtitleColor = {
-  light: colors.gray400,
-  dark: colors.gray500,
-};
-
+const Typography = styled.div<{
+  fs?: string;
+  fw?: string;
+  color?: string;
+  p?: string;
+}>`
+  color: ${(props) => (props.color ? props.color : "")};
+  font-size: ${(props) => (props.fs ? props.fs : "")};
+  font-weight: ${(props) => (props.fw ? props.fw : "")};
+  padding: ${(props) => (props.p ? props.p : "0")};
+`;
 interface FinanceCardProps {
   accountbookId: string;
   isFixed: boolean;
@@ -147,18 +142,25 @@ export default function FinanceCard({
                 {price.toLocaleString()}원
               </FinanceCardPrice>
             </FinanceCardContent>
-            <FinanceCardDetail>
-              {categoryName} |{" "}
-              {method === "C"
-                ? "카드"
-                : method === "M"
-                ? "현금"
-                : method === "E"
-                ? "기타"
-                : method === "N"
-                ? "-"
-                : "-"}
-            </FinanceCardDetail>
+            <FlexContainer>
+              <Typography fs="1.2rem" fw="400" color="#4d5158" p="0 1rem 0 0">
+                {categoryName}
+              </Typography>
+              <Typography fs="1rem" fw="400" color="#878B93" p="0 1rem 0 0">
+                |
+              </Typography>
+              <Typography fs="1.2rem" fw="400" color="#4d5158" p="0 1rem 0 0">
+                {method === "C"
+                  ? "카드"
+                  : method === "M"
+                  ? "현금"
+                  : method === "E"
+                  ? "기타"
+                  : method === "N"
+                  ? "-"
+                  : "-"}
+              </Typography>
+            </FlexContainer>
           </FlexColumnContainer>
         </GridContainer>
       </FinanceCardItem>

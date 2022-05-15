@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Image from "next/image";
-import { useState, useRef, Fragment } from "react";
+import { useState, Fragment } from "react";
 import Link from "next/link";
 
 import ReplyCard from "./ReplyCard";
@@ -15,6 +15,7 @@ import { useRouter } from "next/router";
 const Container = styled.div`
   display: grid;
   grid-template-columns: 1fr 6fr;
+  padding-top: 1.5rem;
 `;
 
 const ImageWrapper = styled.div`
@@ -41,10 +42,12 @@ const Typography = styled.div<{
   fs?: string;
   fw?: string;
   p?: string;
+  color?: string;
 }>`
-  font-size: ${(props) => (props.fs ? props.fs : "1rem")};
+  font-size: ${(props) => (props.fs ? props.fs : "")};
   font-weight: ${(props) => (props.fw ? props.fw : "")};
-  padding: ${(props) => (props.p ? props.p : "0")};
+  padding: ${(props) => (props.p ? props.p : "")};
+  color: ${(props) => (props.color ? props.color : "")};
 `;
 
 interface CommentCardProps {
@@ -146,12 +149,19 @@ export default function CommentCard({
             </>
           )}
         </FlexContainer>
-        <Typography fs="1.4rem" color="#3D3D3D">
-          {createdAt}
-        </Typography>
-        <Typography fs="1.8rem">
-          {deletedYn === "Y" && list !== [] ? "삭제된 댓글입니다" : content}
-        </Typography>
+
+        {deletedYn === "Y" && list !== [] ? (
+          <Typography fs="1.4rem" color="#878B93" p="0 0 0.5rem 0">
+            삭제된 댓글입니다.
+          </Typography>
+        ) : (
+          <>
+            <Typography fs="1.4rem" color="#878B93">
+              {createdAt}
+            </Typography>
+            <Typography fs="1.8rem">{content}</Typography>
+          </>
+        )}
         <Link
           href={{
             pathname: `/community/detail/${commentId}`,
@@ -165,7 +175,7 @@ export default function CommentCard({
           passHref
         >
           {deletedYn === "N" ? (
-            <Typography fs="1.4rem" p="0 0 1rem 0">
+            <Typography fs="1.4rem" p="0 0 1rem 0" color="#878B93">
               답글 쓰기
             </Typography>
           ) : (
