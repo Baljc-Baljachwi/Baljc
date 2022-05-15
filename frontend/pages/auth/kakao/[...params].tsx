@@ -52,5 +52,13 @@ export default function KakaoAuth() {
       .catch((err) => console.error(err));
   }, [code, router, setUserInfo]);
 
-  return <Spinner />;
+  return (
+    <Spinner
+      color="#cdcdcd"
+      size="30"
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+    />
+  );
 }

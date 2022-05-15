@@ -12,7 +12,7 @@ import { useRecoilState } from "recoil";
 import { userInfoState } from "atoms/atoms";
 
 const Container = styled.div`
-  margin-top: 5.5rem;
+  height: 100vh;
   background-color: #ffffff;
 `;
 
@@ -27,8 +27,8 @@ const UpperContainer = styled.div`
 const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 4rem;
-  padding-bottom: 5rem;
+  gap: 2rem;
+  padding-bottom: 3rem;
 `;
 
 const StyledHeader = styled.header`
@@ -48,7 +48,7 @@ const StyledHeader = styled.header`
 
 const LabelProfileImageContiainer = styled.div`
   width: 100%;
-  padding: 5rem 0 4rem 0;
+  padding: 10rem 0 0 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -81,14 +81,15 @@ const InputDiv = styled.div<{ isError?: boolean }>`
   }
   :focus-within {
     border-bottom: ${(props) =>
-      props.isError ? "1px solid #ff0000" : "1px solid #3d3d3d"};
+      props.isError ? "1px solid #ff0000" : "1px solid #4D5158"};
     span {
-      color: ${(props) => (props.isError ? "#ff0000" : "#3d3d3d")};
+      color: ${(props) => (props.isError ? "#ff0000" : "#4D5158")};
     }
   }
   font-size: 2rem;
   display: flex;
   gap: 1rem;
+  padding-bottom: 0.5rem;
 `;
 
 // 입력 Input 뒤에 단위 나타내는 텍스트
@@ -117,8 +118,8 @@ const DisplayNoneInput = styled.input`
 `;
 
 const StyledLabel = styled.label<{ isRequired: boolean }>`
-  font-size: 2rem;
-  color: #3d3d3d;
+  font-size: 1.6rem;
+  color: #878b93;
   /* font-weight: 500; */
   display: inline-block;
   margin: 1.6rem 0 0.4rem 0;
@@ -541,7 +542,7 @@ export default function Survey() {
 
           <div>
             <StyledLabel htmlFor="budget" isRequired={true}>
-              한 달 예산
+              한 달 예산을 설정해 주세요.
             </StyledLabel>
             <InputDiv isError={!!errors.budget}>
               <StyledInput
@@ -550,17 +551,19 @@ export default function Survey() {
                 {...register("budget", {
                   required: {
                     value: true,
-                    message: "한 달 예산을 입력해주세요",
+                    message: "한 달 예산을 입력해 주세요.",
                   },
                   min: {
                     value: 0,
-                    message: "올바른 범위(0이상 2147483647이하)를 입력해주세요",
+                    message:
+                      "올바른 범위(0이상 2147483647이하)를 입력해 주세요.",
                   },
                   max: {
                     value: 2147483647,
-                    message: "올바른 범위(0이상 2147483647이하)를 입력해주세요",
+                    message:
+                      "올바른 범위(0이상 2147483647이하)를 입력해 주세요.",
                   },
-                  pattern: { value: /[0-9]/, message: "숫자만 입력해주세요" },
+                  pattern: { value: /[0-9]/, message: "숫자만 입력해 주세요." },
                 })}
               />
               <InputUnit>원</InputUnit>

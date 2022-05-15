@@ -3,23 +3,47 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import HashLoader from "react-spinners/HashLoader";
 
-const Spinner = () => {
-  return (
-    <LayoutSpinner>
-      <HashLoader color={"#cdcdcd"} size={30} />
-    </LayoutSpinner>
-  );
-};
-export default Spinner;
-const LayoutSpinner = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const LayoutSpinner = styled.div<{
+  display?: string;
+  justifyContent?: string;
+  alignItems?: string;
+}>`
+  display: ${(props) => (props.display ? props.display : "")};
+  justify-content: ${(props) =>
+    props.justifyContent ? props.justifyContent : ""};
+  align-items: ${(props) => (props.alignItems ? props.alignItems : "")};
   /* height: 100vh; */
   height: 100%;
   /* background-color: white; */
   opacity: 100;
 `;
+
+interface SipnnerProps {
+  color?: string;
+  size?: string;
+  display?: string;
+  justifyContent?: string;
+  alignItems?: string;
+}
+
+export default function Spinner({
+  color,
+  size,
+  display,
+  justifyContent,
+  alignItems,
+}: SipnnerProps) {
+  return (
+    <LayoutSpinner
+      display={display}
+      justifyContent={justifyContent}
+      alignItems={alignItems}
+    >
+      <HashLoader color={color} size={size} />
+    </LayoutSpinner>
+  );
+}
+
 // function Spinner() {
 //   // const [pageLoading, setPageLoading] = useState<boolean>(false);
 //   // useEffect(() => {

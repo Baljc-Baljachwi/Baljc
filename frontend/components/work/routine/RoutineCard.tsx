@@ -10,9 +10,9 @@ const CardDiv = styled.div`
   padding: 1.5rem;
   background: #f4f4f4;
   border-radius: 1rem;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+  filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
   display: flex;
-  align-contents: center;
+  align-items: center;
   gap: 1rem;
   font-size: 1.6rem;
   font-weight: 500;

@@ -53,7 +53,7 @@ const Label = styled.span<{ labelColor?: string }>`
   width: 100%;
   text-align: center;
   border-bottom: 1px solid #b3b3b3;
-  color: ${(props) => props.labelColor || "3d3d3d"};
+  color: ${(props) => props.labelColor || "#3d3d3d"};
 `;
 
 const ModalTitle = styled.div`

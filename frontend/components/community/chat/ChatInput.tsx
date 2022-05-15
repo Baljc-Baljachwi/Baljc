@@ -27,7 +27,7 @@ const InputDiv = styled.input`
   outline: none;
   padding: 1.6rem;
   font-size: 1.6rem;
-  color: #3d3d3d;
+  color: #4d5158;
   font-family: "Noto Sans KR";
   ::placeholder {
     color: #cccccc;
