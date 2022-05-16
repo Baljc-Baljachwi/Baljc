@@ -57,7 +57,7 @@ const ProfileMenuCardTitle = styled.span`
 `;
 
 const ProfileMenuCardDetail = styled.span`
-  color: #696969;
+  color: #4d5158;
   font-size: 1.4rem;
   font-weight: 400;
 `;
@@ -106,7 +106,7 @@ const StyledToastContainer = styled(ToastContainer).attrs({
     background-color: rgba(75, 192, 192, 0.4);
     font-size: 1.4rem;
     font-weight: 600;
-    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25));
+    filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
   }
   .Toastify__toast-container {
     /* width: 320px; */

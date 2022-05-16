@@ -1,19 +1,15 @@
 import styled from "styled-components";
 import { useRouter } from "next/router";
 
-const ProfileMenuCardItem = styled.div`
-  filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
+const ProfileMenuCardItem = styled.div<{ height?: string }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
   background-color: #f4f4f4;
-
   width: 100%;
-  height: 9rem;
-
+  height: ${(props) => (props.height ? props.height : "9rem")};
   font-size: 1.8rem;
   padding: 1.6rem 2rem;
-
   font-family: "Noto Sans KR", sans-serif;
   color: #747373;
   font-style: normal;
@@ -21,8 +17,6 @@ const ProfileMenuCardItem = styled.div`
   -moz-appearance: none;
   appearance: none;
   border: none;
-  border-radius: 1rem;
-  cursor: pointer;
 `;
 
 const ProfileMenuCardContent = styled.div`
@@ -37,20 +31,22 @@ const ProfileMenuCardTitle = styled.span<{ color?: string }>`
 `;
 
 const ProfileMenuCardDetail = styled.span`
-  color: #696969;
+  color: #4d5158;
   font-size: 1.4rem;
   font-weight: 400;
 `;
 
 interface ProfileContentProps {
   title: string;
-  description: string;
+  height?: string;
+  description?: string;
   onClick?: () => void;
   color?: string;
 }
 
 const ProfileContentCard = ({
   title,
+  height,
   description,
   onClick,
   color,
@@ -59,7 +55,7 @@ const ProfileContentCard = ({
 
   return (
     <>
-      <ProfileMenuCardItem onClick={onClick}>
+      <ProfileMenuCardItem height={height} onClick={onClick}>
         <ProfileMenuCardContent>
           <ProfileMenuCardTitle color={color}>{title}</ProfileMenuCardTitle>
         </ProfileMenuCardContent>

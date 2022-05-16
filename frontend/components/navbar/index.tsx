@@ -15,7 +15,7 @@ const Container = styled.nav`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   z-index: 10000;
-  height: 8rem;
+  height: 5.6rem;
   max-width: 512px;
   margin: auto;
 `;
@@ -26,7 +26,7 @@ const Item = styled.div`
   cursor: pointer;
   align-items: center;
   div {
-    color: #3d3d3d;
+    color: #4d5158;
   }
   .active {
     color: #cdcdcd;
@@ -60,7 +60,7 @@ export default function NavBar() {
           mode="fas"
           icon="comments"
           size="2rem"
-          color={rootPathname === "community" ? undefined : "#cdcdcd"}
+          color={rootPathname === "community" ? "#4d5158" : "#cdcdcd"}
         />
         <div className={rootPathname === "community" ? "" : "active"}>
           커뮤니티
@@ -71,7 +71,7 @@ export default function NavBar() {
           mode="fas"
           icon="calendar-days"
           size="2rem"
-          color={rootPathname === "calendar" ? undefined : "#cdcdcd"}
+          color={rootPathname === "calendar" ? "#4d5158" : "#cdcdcd"}
         />
         <div className={rootPathname === "calendar" ? "" : "active"}>
           캘린더
@@ -82,7 +82,7 @@ export default function NavBar() {
           mode="fas"
           icon="sack-dollar"
           size="2rem"
-          color={rootPathname === "finance" ? undefined : "#cdcdcd"}
+          color={rootPathname === "finance" ? "#4d5158" : "#cdcdcd"}
         />
         <div className={rootPathname === "finance" ? "" : "active"}>가계부</div>
       </Item>
@@ -91,7 +91,7 @@ export default function NavBar() {
           mode="fas"
           icon="clipboard-check"
           size="2rem"
-          color={rootPathname === "work" ? undefined : "#cdcdcd"}
+          color={rootPathname === "work" ? "#4d5158" : "#cdcdcd"}
         />
         <div className={rootPathname === "work" ? "" : "active"}>할 일</div>{" "}
       </Item>
@@ -100,7 +100,7 @@ export default function NavBar() {
           mode="fas"
           icon="user"
           size="2rem"
-          color={rootPathname === "mypage" ? undefined : "#cdcdcd"}
+          color={rootPathname === "mypage" ? "#4d5158" : "#cdcdcd"}
         />
         <div className={rootPathname === "mypage" ? "" : "active"}>
           마이페이지

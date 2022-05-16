@@ -38,7 +38,6 @@ const ModalOverlay = styled.div<{ visible: boolean }>`
 const ModalInner = styled.div`
   box-sizing: border-box;
   position: relative;
-  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5);
   background-color: #fff;
   border-radius: 10px;
   width: 90%;

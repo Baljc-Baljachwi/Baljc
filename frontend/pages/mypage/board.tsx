@@ -57,7 +57,13 @@ const Board = () => {
         onClickBackButton={() => router.push("/mypage")}
       ></Header>
       {isLoading ? (
-        <Spinner />
+        <Spinner
+          color="#cdcdcd"
+          size="30"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        />
       ) : (
         <Container>
           <BodyContainer>

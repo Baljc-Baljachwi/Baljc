@@ -222,120 +222,114 @@ const Analysis = () => {
           <ProfileCardContainer>
             <ProfileCard />
           </ProfileCardContainer>
-
           <ProfileContentListContainer>
-            <ProfileMenuCardItem>
-              <ProfileMenuCardContent>
-                <span className="title">목표를 향해서!</span>
-                <span className="description">
-                  내 생활 습관을 분석해보세요.
+            {/* <ProfileMenuCardItem> */}
+            <ProfileMenuCardContent>
+              <span className="title">목표를 향해서!</span>
+              <span className="description">내 생활 습관을 분석해보세요.</span>
+            </ProfileMenuCardContent>
+          </ProfileContentListContainer>
+          <ProfileContentListContainer>
+            <ContentsDiv>
+              <ColumnContainer>
+                <span className="title">이번 달 남은 예산 </span>
+                <span className="highlightedText-primary">
+                  {remainingBudget.toLocaleString()} 원
                 </span>
-              </ProfileMenuCardContent>
-
-              <DivisionLine />
-
-              <ContentsDiv>
-                <span>이번 달 남은 예산 : </span>
-                <span>
-                  <span className="highlightedText-primary">
-                    {remainingBudget.toLocaleString()}
-                  </span>{" "}
-                  원
-                </span>
-                <br />
-                <span>
-                  앞으로는 하루에{" "}
-                  <span className="highlightedText">
-                    {dailyExpenditure.toLocaleString()}
-                  </span>{" "}
-                  원씩 쓸 수 있습니다.
-                </span>
-                <br />
-                <span>
-                  이 속도라면 이번 달에 총{" "}
-                  <span className="highlightedText">
-                    {estimatedExpenditure.toLocaleString()}
-                  </span>{" "}
-                  원을 쓰게 됩니다.
-                </span>
-              </ContentsDiv>
-              <ProgressStaticBar done={`${expenditurePercent}`} />
-              <DivisionLine />
-
-              {/* 고정 지출 */}
-              <ContentsDiv>
-                <div className="charts">
-                  <div className="circle">
-                    <h2>4월</h2>
-                    <div className="fixedEContents">
-                      <div className="fixedEContents-manage">
-                        <span className="primaryText">이번 달 고정 지출</span>
-                        <span>
-                          <span className="highlightedText-primary">
-                            {fixedExpenditure.toLocaleString()}
-                          </span>{" "}
-                          원
-                          <MoveToButton>
-                            <Icon
-                              mode="fas"
-                              icon="chevron-right"
-                              color="#AAAAAA"
-                              size="16px"
-                              onClick={() => router.push("/mypage/fixed")}
-                            />
-                          </MoveToButton>
-                        </span>
-                      </div>
-                      <div className="fixedEContents-totalE">
-                        <span>총 지출</span>
-                        <span>{totalExpenditure.toLocaleString()} 원</span>
-                      </div>
+              </ColumnContainer>
+              <span className="description">
+                앞으로는 하루에{" "}
+                <span className="highlightedText">
+                  {dailyExpenditure.toLocaleString()}
+                </span>{" "}
+                원씩 쓸 수 있습니다.
+              </span>
+              <br />
+              <span className="description">
+                이 속도라면 이번 달에 총{" "}
+                <span className="highlightedText">
+                  {estimatedExpenditure.toLocaleString()}
+                </span>{" "}
+                원을 쓰게 됩니다.
+              </span>
+            </ContentsDiv>
+            <ProgressStaticBar done={`${expenditurePercent}`} />
+          </ProfileContentListContainer>
+          <ProfileContentListContainer>
+            {/* 고정 지출 */}
+            <ContentsDiv>
+              <div className="charts">
+                <div className="circle">
+                  <h2>{month}월</h2>
+                  <div className="fixedEContents">
+                    <div className="fixedEContents-manage">
+                      <span>이번 달 고정 지출</span>
+                      <span>
+                        {fixedExpenditure.toLocaleString()} 원
+                        <MoveToButton>
+                          <Icon
+                            mode="fas"
+                            icon="chevron-right"
+                            color="#AAAAAA"
+                            size="16px"
+                            onClick={() => router.push("/mypage/fixed")}
+                          />
+                        </MoveToButton>
+                      </span>
                     </div>
-                    {/* {categoryValue.length === 0 ? (
+                    <div className="fixedEContents-totalE">
+                      <span>총 지출</span>
+                      <span style={{ paddingRight: "2rem" }}>
+                        {totalExpenditure.toLocaleString()} 원
+                      </span>
+                    </div>
+                  </div>
+                  {/* {categoryValue.length === 0 ? (
                       <NotFoundTransaction />
                     ) : (
                       <Doughnut data={data1} width={400} height={400} />
                     )} */}
-                  </div>
                 </div>
-              </ContentsDiv>
-              <DivisionLine />
-
-              {/* 카테고리 별 통계 - 도넛 차트 */}
-              <ContentsDiv>
-                <div className="charts">
-                  <div className="circle">
-                    <h2>카테고리 별 지출 통계</h2>
-                    {categoryValue.length === 0 ? (
-                      <NotFoundTransaction />
-                    ) : (
-                      <Doughnut data={data1} width={400} height={400} />
-                    )}
-                  </div>
+              </div>
+            </ContentsDiv>
+          </ProfileContentListContainer>
+          <ProfileContentListContainer>
+            {/* 카테고리 별 통계 - 도넛 차트 */}
+            <ContentsDiv>
+              <div className="charts">
+                <div className="circle">
+                  <h2>카테고리 별 지출 통계</h2>
+                  {categoryValue.length === 0 ? (
+                    <NotFoundTransaction />
+                  ) : (
+                    <Doughnut data={data1} width={400} height={400} />
+                  )}
                 </div>
-              </ContentsDiv>
-              <DivisionLine />
-
-              {/* 일 별 통계 - 꺾은선 그래프 */}
-              <ContentsDiv>
-                <div className="charts">
-                  <div className="circle">
-                    <h2>일 별 지출 통계</h2>
-                    <Line
-                      options={options}
-                      data={data2}
-                      width={400}
-                      height={400}
-                    />
-                    {/* {categoryValue.length === 0 ? (
+              </div>
+            </ContentsDiv>
+          </ProfileContentListContainer>
+          <ProfileContentListContainer>
+            {/* 일 별 통계 - 꺾은선 그래프 */}
+            <ContentsDiv>
+              <div className="charts">
+                <div className="circle">
+                  <h2>일 별 지출 통계</h2>
+                  <Line
+                    options={options}
+                    data={data2}
+                    width={400}
+                    height={400}
+                  />
+                  {/* {categoryValue.length === 0 ? (
                       <NotFoundTransaction />
                     ) : (
                       <Doughnut data={data1} width={400} height={400} />
                     )} */}
-                  </div>
                 </div>
-              </ContentsDiv>
-            </ProfileMenuCardItem>
+              </div>
+            </ContentsDiv>
+
+            {/* </ProfileMenuCardItem> */}
           </ProfileContentListContainer>
         </PageContainer>
       </Container>
@@ -355,14 +349,13 @@ const PageContainer = styled.main`
   color: #3d3d3d;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
 `;
 
 const ProfileCardContainer = styled.div`
   display: flex;
   flex-direction: column;
   background: #2e437a;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
   border-radius: 0px 0px 40px 40px;
   height: 30vh;
   color: #ffffff;
@@ -377,72 +370,55 @@ const PageTitle = styled.span`
 `;
 
 const ProfileContentListContainer = styled.div`
-  margin-top: 2rem;
+  margin-top: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   background-color: #ffffff;
   border: none;
-  width: 100%;
-  height: 100%;
-
   font-size: 1.6rem;
-  padding: 1.6rem 2rem;
-  gap: 2rem;
-`;
-
-const ProfileMenuCardItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background-color: #ffffff;
-
-  width: 100%;
-  font-size: 1.6rem;
-  padding: 1.6rem;
-  gap: 2rem;
-
-  font-family: "Noto Sans KR", sans-serif;
-  color: #747373;
-  font-style: normal;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  border: none;
-  border-radius: 1rem;
-  cursor: pointer;
+  padding: 1rem 4rem 3rem 4rem;
+  border-bottom: 1rem solid #f4f4f4;
 `;
 
 const ProfileMenuCardContent = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
+
   .title {
     color: #33487f;
     font-weight: 700;
     font-size: 1.8rem;
+    padding: 1rem 0 0 0;
   }
   .description {
-    color: #696969;
-    font-size: 1.4rem;
+    color: #4d5158;
+    font-size: 1.6rem;
     font-weight: 400;
   }
 `;
 
-const DivisionLine = styled.hr`
-  border-top: 2px solid;
-  border-color: #c8c8c8;
-`;
-
 const ContentsDiv = styled.div`
   font-weight: 600;
-  .highlightedText-primary {
-    color: orange;
+  .title {
+    color: #4d5158;
     font-weight: 700;
-    font-size: 2rem;
+    font-size: 1.8rem;
+    padding: 1rem 0;
+  }
+  .description {
+    color: #4d5158;
+    font-size: 1.6rem;
+    font-weight: 400;
+  }
+  .highlightedText-primary {
+    color: #ffd469;
+    font-weight: 700;
+    font-size: 2.4rem;
+    padding-bottom: 1rem;
   }
   .highlightedText {
-    color: orange;
+    color: #ffd469;
     font-weight: 700;
   }
   .charts {
@@ -450,7 +426,7 @@ const ContentsDiv = styled.div`
     justify-content: center;
     align-items: center;
     margin: auto;
-    padding: 20px;
+
     gap: 40px;
     .bar {
       h2 {
@@ -460,9 +436,10 @@ const ContentsDiv = styled.div`
     }
     .circle {
       h2 {
-        text-align: center;
-        font-size: 22px;
         margin-bottom: 20px;
+        color: #4d5158;
+        font-weight: 700;
+        font-size: 1.8rem;
       }
       .fixedEContents {
         display: flex;
@@ -471,19 +448,31 @@ const ContentsDiv = styled.div`
           display: flex;
           justify-content: space-between;
           align-items: center;
+          color: #4d5158;
+          font-size: 1.8rem;
+          font-weight: 400;
           .primaryText {
-            font-weight: 700;
-            font-size: 2rem;
+            color: #4d5158;
+            font-size: 1.8rem;
+            font-weight: 400;
           }
         }
         .fixedEContents-totalE {
           display: flex;
           justify-content: space-between;
           align-items: center;
+          color: #4d5158;
+          font-size: 1.8rem;
+          font-weight: 400;
         }
       }
     }
   }
+`;
+
+const ColumnContainer = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 const MoveToButton = styled.span`
