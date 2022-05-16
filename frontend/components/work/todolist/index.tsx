@@ -39,6 +39,7 @@ const TodoInput = styled.input<{ isFocus: boolean; monthlyTodo: boolean }>`
   border-bottom: ${(props) => (props.isFocus ? "1px solid #cccccc" : " ")};
   outline: none;
   ::placeholder {
+    font-size: 1.8rem;
     color: #cccccc;
     color: ${(props) => (props.monthlyTodo ? "#ffffff" : "#cccccc")};
   }
