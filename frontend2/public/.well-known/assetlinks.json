@@ -1,0 +1,11 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target" : { "namespace": "android_app", "package_name": "com.baljc",
+                   "sha256_cert_fingerprints": ["58:82:4D:64:D2:31:6C:69:D3:E3:0B:AB:0C:22:AB:5B:34:95:5F:9A:E1:8D:D1:71:82:96:FB:DA:DA:82:74:C9"] }
+    },
+    {
+          "relation": ["delegate_permission/common.handle_all_urls"],
+          "target" : { "namespace": "android_app", "package_name": "com.baljc",
+                       "sha256_cert_fingerprints": ["3B:84:95:D1:A6:58:77:EB:BC:65:99:B4:17:CB:E0:AB:AA:80:AB:E4:38:EE:FA:D6:F7:7F:C8:85:10:A7:F0:95"] }
+        }
+]
