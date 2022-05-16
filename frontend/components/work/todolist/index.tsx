@@ -42,6 +42,7 @@ const TodoInput = styled.input<{ isFocus: boolean; monthlyTodo: boolean }>`
     color: #cccccc;
     color: ${(props) => (props.monthlyTodo ? "#ffffff" : "#cccccc")};
   }
+  margin-bottom: 1.3rem;
 `;
 
 const IconDiv = styled.div<{ isClicked: boolean }>`
@@ -52,6 +53,11 @@ const IconDiv = styled.div<{ isClicked: boolean }>`
 const TodoNone = styled.div`
   width: 100%;
   font-size: 1.6rem;
+`;
+
+const TodoImage = styled.img`
+  width: 3rem;
+  margin-bottom: 1.2rem;
 `;
 
 interface TodoProps {
@@ -158,12 +164,7 @@ export default function Todo({ monthlyTodo, date }: TodoProps) {
         </>
         {
           <TodoInputDiv>
-            <Image
-              src="/assets/img/foot_false.png"
-              alt=""
-              width={35}
-              height={35}
-            />
+            <TodoImage src="/assets/img/foot_false.png" alt="" />
             <InputDiv>
               <TodoInput
                 name="todo"
