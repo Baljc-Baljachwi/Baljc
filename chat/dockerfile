@@ -3,6 +3,7 @@ WORKDIR /app
 COPY . .
 
 RUN npm install
+RUN npm link webpack
 RUN npm run build
 
 FROM node:14-alpine
