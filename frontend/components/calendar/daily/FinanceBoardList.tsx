@@ -9,7 +9,12 @@ const PageContainer = styled.main`
   width: 100%;
 `;
 
-export default function FinanceList({ item }: any, date: string) {
+interface FinanceBoardProps {
+  item: any;
+  date: string;
+}
+
+export default function FinanceList({ item, date }: FinanceBoardProps) {
   return (
     <>
       <PageContainer>

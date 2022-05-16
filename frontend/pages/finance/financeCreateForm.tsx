@@ -32,6 +32,7 @@ const CostIncomeButton = styled.button<{ isSelected: boolean }>`
 
 export default function FinanceCreateForm() {
   const router = useRouter();
+  const { date } = router.query;
   const [accountType, setAccountType] = useState<AccountType>("E");
 
   function handleToggleAccountType(event: any) {
@@ -68,7 +69,7 @@ export default function FinanceCreateForm() {
             수입
           </CostIncomeButton>
         </ToggleCostIncome>
-        <FinanceForm type={accountType} />
+        <FinanceForm type={accountType} date={date} />
         {/* {accountType === "E" ? <CostForm /> : <IncomeForm />} */}
       </PageContainer>
     </>
