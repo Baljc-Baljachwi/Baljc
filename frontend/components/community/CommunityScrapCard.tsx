@@ -193,7 +193,7 @@ const Tag = styled.div`
   width: 6rem;
   height: 2rem;
   font-size: 1rem;
-  background-color: #f0f0f0;
+  background-color: #8cbff2;
   color: #646464;
   padding: 0.1rem 1rem;
   border-radius: 3px;
@@ -242,8 +242,8 @@ const GrayButton = styled.div`
   align-items: center;
   line-height: 1.4rem;
   font-size: 1.4rem;
-  background-color: #f0f0f0;
-  color: #646464;
+  background-color: #8cbff2;
+  color: #ffffff;
   padding: 0.8rem 1.6rem;
   border-radius: 5px;
   gap: 0.5rem;

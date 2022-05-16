@@ -30,8 +30,8 @@ const Container = styled.div`
 const Tag = styled.div`
   display: inline;
   font-size: 1rem;
-  background-color: #f0f0f0;
-  color: #646464;
+  background-color: #8cbff2;
+  color: #ffffff;
   padding: 0.1rem 1rem;
   border-radius: 3px;
 `;
@@ -64,8 +64,8 @@ const GrayButton = styled.div`
   align-items: center;
   line-height: 1.4rem;
   font-size: 1.4rem;
-  background-color: #f0f0f0;
-  color: #646464;
+  background-color: #8cbff2;
+  color: #ffffff;
   padding: 0.8rem 1.6rem;
   border-radius: 5px;
   gap: 0.5rem;
@@ -121,7 +121,7 @@ const InputContainer = styled.div`
   grid-template-columns: 8fr 1fr;
   z-index: 11000;
   height: 5.6rem;
-  margin-bottom: 8rem; // 나중에 없애기
+  margin-bottom: 5.55rem; // 나중에 없애기
 `;
 
 const IconWrapper = styled.div`
