@@ -30,7 +30,7 @@ const RoutineListItem = styled.li<{ isEmpty: boolean }>`
   list-style: none;
   align-items: center;
   margin-top: 0.2rem;
-  gap: 1rem;
+  gap: 1.5rem;
   font-size: 1.6rem;
 `;
 

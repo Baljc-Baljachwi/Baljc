@@ -15,7 +15,7 @@ const Container = styled.div`
 
 const Title = styled.div`
   display: inline;
-  font-size: 1rem;
+  font-size: 1.4rem;
   background-color: #8cbff2;
   color: #ffffff;
   padding: 0.1rem 1rem;
@@ -28,7 +28,7 @@ const Header = styled.div`
 `;
 
 const TextWrapper = styled.div`
-  padding: 1rem 0;
+  padding: 1.6rem 0;
 `;
 
 const Typography = styled.div<{
@@ -131,27 +131,25 @@ export default function FinanceBoard({ item }: any, date: string) {
       </Header>
       <div onClick={handleClick}>
         <TextWrapper>
+          <Typography color="#ffffff" fs="1.6rem">
+            하루 예산이
+          </Typography>
           {dayNumber?.fixedExpenditure ? (
             <Typography color="#ffffff" fs="1.6rem" fw="300">
-              고정지출비용 {dayNumber?.fixedExpenditure.toLocaleString()}원
+              {dayNumber?.fixedExpenditure.toLocaleString()}원
             </Typography>
           ) : null}
           <FlexContainer>
-            <Typography color="#ffffff" fs="3.2rem" fw="500" p="1rem 0">
+            <Typography color="#ffffff" fs="3.2rem" fw="500">
               {dayNumber?.remainingBudget.toLocaleString()}원
             </Typography>
-            <Typography
-              color="#ffffff"
-              fs="1.5rem"
-              fw="700"
-              p="0 0 1rem 0.5rem"
-            >
+            <Typography color="#ffffff" fs="1.5rem" p="0 0 1rem 0.5rem">
               남았습니다.
             </Typography>
           </FlexContainer>
           <FlexContainer style={{ justifyContent: "space-between" }}>
             <Typography color="#ffffff" fs="1.6rem" fw="300" p="0 0 0.5rem 0">
-              오늘 소비 {dayNumber?.totalExpenditure.toLocaleString()}원
+              오늘의 소비 {dayNumber?.totalExpenditure.toLocaleString()}원
             </Typography>
             <FlexContainer>
               <Typography color="#FFD469" fs="1.6rem" fw="500">

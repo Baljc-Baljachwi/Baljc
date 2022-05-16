@@ -12,7 +12,7 @@ import { todosState, ITodoTypes } from "../../../atoms/atoms";
 
 const TodoDiv = styled.div`
   width: 100%;
-  margin: 3rem 0;
+  margin-top: 1.6rem;
 `;
 
 const TodoInputDiv = styled.div`
