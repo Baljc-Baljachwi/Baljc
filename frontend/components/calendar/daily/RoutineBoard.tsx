@@ -14,7 +14,7 @@ const Container = styled.div`
 
 const Title = styled.div`
   display: inline;
-  font-size: 1rem;
+  font-size: 1.4rem;
   background-color: #8cbff2;
   color: #ffffff;
   padding: 0.1rem 1rem;
@@ -22,7 +22,7 @@ const Title = styled.div`
 `;
 
 const RoutineList = styled.div`
-  padding: 1rem 0;
+  padding-top: 1.6rem;
   color: #ffffff;
 `;
 
@@ -30,7 +30,8 @@ const RoutineListItem = styled.li`
   display: flex;
   align-items: center;
   margin-top: 0.2rem;
-  gap: 1rem;
+  margin-bottom: 1rem;
+  gap: 1.5rem;
   font-size: 1.6rem;
 `;
 
