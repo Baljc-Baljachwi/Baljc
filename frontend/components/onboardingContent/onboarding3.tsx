@@ -22,12 +22,12 @@ const Onboarding3 = () => {
   //   },
   //   [selectedOS]
   // );
-  const onClickButton = useCallback(
-    (e: any) => {
-      setSelectedOS(e.target.dataset.id);
-    },
-    [selectedOS]
-  );
+  // const onClickButton = useCallback(
+  //   (e: any) => {
+  //     setSelectedOS(e.target.dataset.id);
+  //   },
+  //   [selectedOS]
+  // );
 
   return (
     <S.Wrapper backgroundColor="linear-gradient(180deg, #DFF2FF 50%, #F8F9FA 50%)">
@@ -39,14 +39,14 @@ const Onboarding3 = () => {
             </p>
             <p>편리하게 즐길 수 있어요!</p>
           </S.Content>
-          <ButtonWrapper onClick={onClickButton}>
+          {/* <ButtonWrapper onClick={onClickButton}>
             <Button data-id="android" isSelected={selectedOS === "android"}>
               Android
             </Button>
             <Button data-id="iOS" isSelected={selectedOS === "iOS"}>
               iOS
             </Button>
-          </ButtonWrapper>
+          </ButtonWrapper> */}
         </ContentWrapper>
 
         {selectedOS === "android" ? (
