@@ -192,8 +192,12 @@ export default function Monthly() {
                       (x) => x === dayjs(date).format("YYYY-MM-DD")
                     ) ? (
                       <div className="img"></div>
-                    ) : null
-                  ) : null}
+                    ) : (
+                      <div className="img-div"></div>
+                    )
+                  ) : (
+                    <div className="img-div"></div>
+                  )}
                   {amount
                     ? amount.map((item, idx) =>
                         item[0] === dayjs(date).format("YYYY-MM-DD") ? (
