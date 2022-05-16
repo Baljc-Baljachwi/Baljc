@@ -22,7 +22,7 @@ const TodoItemDiv = styled.div`
 `;
 
 const TodoImage = styled.img`
-  width: 3.5rem;
+  width: 3em;
   margin-bottom: 1.2rem;
 `;
 
