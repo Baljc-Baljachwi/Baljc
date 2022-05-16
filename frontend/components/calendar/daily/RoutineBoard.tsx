@@ -32,7 +32,7 @@ const RoutineListItem = styled.li`
   margin-top: 0.2rem;
   margin-bottom: 1rem;
   gap: 1.5rem;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
 `;
 
 const Typography = styled.div<{
