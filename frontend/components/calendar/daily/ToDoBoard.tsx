@@ -11,7 +11,7 @@ const Container = styled.div`
 
 const Title = styled.div`
   display: inline;
-  font-size: 1rem;
+  font-size: 1.4rem;
   background-color: #8cbff2;
   color: #ffffff;
   padding: 0.1rem 1rem;

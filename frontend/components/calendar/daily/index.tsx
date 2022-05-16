@@ -16,8 +16,9 @@ const Container = styled.div`
 `;
 
 const Title = styled.div`
-  font-size: 1.5rem;
-  margin: 1rem 0;
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin: 1.2rem 0;
 `;
 
 interface DailyProps {
