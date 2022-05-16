@@ -11,15 +11,15 @@ import { isMobile } from "utils/mobileCheck";
 const OnboardingPage0 = React.lazy(
   () => import("components/onboardingContent/onboarding0")
 );
-const OnboardingPage1 = React.lazy(
-  () => import("components/onboardingContent/onboarding1")
-);
-const OnboardingPage2 = React.lazy(
-  () => import("components/onboardingContent/onboarding2")
-);
-const OnboardingPage3 = React.lazy(
-  () => import("components/onboardingContent/onboarding3")
-);
+// const OnboardingPage1 = React.lazy(
+//   () => import("components/onboardingContent/onboarding1")
+// );
+// const OnboardingPage2 = React.lazy(
+//   () => import("components/onboardingContent/onboarding2")
+// );
+// const OnboardingPage3 = React.lazy(
+//   () => import("components/onboardingContent/onboarding3")
+// );
 
 const Main = () => {
   const [count, setCount] = useState({ user: 0, post: 0 });
@@ -107,9 +107,9 @@ const Main = () => {
   return (
     <Wrapper>
       <OnboardingPage0 />
-      <OnboardingPage1 />
-      <OnboardingPage2 />
-      <OnboardingPage3 />
+      {/* <OnboardingPage1 />
+      <OnboardingPage2 /> */}
+      {/* <OnboardingPage3 /> */}
     </Wrapper>
   );
 };
