@@ -10,6 +10,7 @@ const Container = styled.div`
   padding: 2rem;
   margin-bottom: 1rem;
   filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
+  cursor: pointer;
 `;
 
 const Title = styled.div`
@@ -73,8 +74,8 @@ export default function RoutineBoard({ routines }: any) {
                 onClick={() => router.push({ pathname: "/work/routine" })}
                 style={{ padding: "1rem 0", flexWrap: "wrap" }}
               >
-                <Typography fs="1.6rem">등록된 일과가 없습니다! </Typography>
-                <Typography fs="1.6rem">추가하려면 클릭하세요.</Typography>
+                <Typography fs="1.8rem">등록된 일과가 없습니다! </Typography>
+                <Typography fs="1.8rem">추가하려면 클릭하세요.</Typography>
               </RoutineListItem>
             )
           ) : null}

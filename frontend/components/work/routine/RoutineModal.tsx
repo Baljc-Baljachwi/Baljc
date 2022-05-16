@@ -119,6 +119,8 @@ interface ModalProps {
   title?: string;
   repetition?: number;
   label?: string;
+  setToastMsg?: any;
+  setIsSuccess?: any;
 }
 
 interface RoutineInputForm {
@@ -136,6 +138,8 @@ export default function RoutineModal({
   routineId,
   title,
   repetition,
+  setToastMsg,
+  setIsSuccess,
 }: ModalProps) {
   // 나중에 API 형식으로 받아오기
   const [routineForm, setRoutineForm] = useState<RoutineInputForm>({
@@ -198,13 +202,14 @@ export default function RoutineModal({
       postRoutines(routineForm)
         .then((res) => {
           // console.log(res.data);
+          setToastMsg("📌 일과 등록 완료!");
+          setIsSuccess(true);
           setRoutineList([...routineList, res.data.data]);
-          alert("일과 등록 완료");
           setOpen(false);
         })
         .catch((err) => {
-          // console.log(err);
-          alert("일과 등록 실패");
+          setToastMsg("❎ 일과 등록 실패!");
+          setIsSuccess(false);
         });
     } else {
       if (routineForm.title.length === 0) {
@@ -222,6 +227,8 @@ export default function RoutineModal({
       putRoutines(routinId, routineForm)
         .then((res) => {
           // console.log(res.data);
+          setToastMsg("✅ 일과 수정 완료!");
+          setIsSuccess(true);
           setRoutineList(
             routineList.map((routine: IRoutine) => {
               return routine.routineId === routineId
@@ -238,6 +245,8 @@ export default function RoutineModal({
         })
         .catch((err) => {
           // console.log(err);
+          setToastMsg("❎ 일과 수정 실패!");
+          setIsSuccess(false);
         });
     } else {
       if (routineForm.title.length === 0) {
@@ -254,17 +263,19 @@ export default function RoutineModal({
     deleteRoutines(routinId)
       .then((res) => {
         // console.log(res.data);
+        setToastMsg("✅ 일과 삭제 완료!");
+        setIsSuccess(true);
         setRoutineList(
           routineList.filter(
             (routine: IRoutine) => routine.routineId !== routineId
           )
         );
-        alert("일과 삭제 완료");
         setOpen(false);
       })
       .catch((err) => {
         // console.log(err);
-        alert("일과 삭제 실패");
+        setToastMsg("❎ 일과 삭제 실패!");
+        setIsSuccess(false);
       });
   };
 

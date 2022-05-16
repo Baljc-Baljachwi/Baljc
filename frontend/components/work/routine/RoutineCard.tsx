@@ -40,6 +40,8 @@ interface PropTypes {
   repetition: number;
   routineList: IRoutine[];
   setRoutineList: SetterOrUpdater<IRoutine[]>;
+  setToastMsg?: any;
+  setIsSuccess?: any;
 }
 
 export default function RoutineCard({
@@ -48,9 +50,10 @@ export default function RoutineCard({
   repetition,
   routineList,
   setRoutineList,
+  setToastMsg,
+  setIsSuccess,
 }: PropTypes) {
   const [open, setOpen] = useState(false);
-
   const onClick = () => {
     setOpen((prev) => !prev);
   };
@@ -91,6 +94,8 @@ export default function RoutineCard({
           modalType={1}
           routineList={routineList}
           setRoutineList={setRoutineList}
+          setToastMsg={setToastMsg}
+          setIsSuccess={setIsSuccess}
         />
       ) : (
         ""

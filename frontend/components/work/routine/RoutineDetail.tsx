@@ -9,28 +9,8 @@ import { getRoutines, getAllRoutines } from "../../../api/routine";
 import { IRoutine } from "../../../types/index";
 import { useRecoilState } from "recoil";
 import { routineState } from "../../../atoms/atoms";
-
-const StyledHeader = styled.header`
-  width: 100%;
-  height: 6.6rem;
-  background-color: #2e437a;
-  font-size: 2rem;
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  padding: 0 2rem;
-  justify-content: space-between;
-`;
-
-const BackButton = styled.span`
-  padding-right: 1rem;
-  cursor: pointer;
-`;
-
-const AddorModifyButton = styled.span`
-  /* padding-right: 2rem; */
-  cursor: pointer;
-`;
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const RoutineDiv = styled.div`
   // width: 100%;
@@ -50,14 +30,55 @@ const CardDiv = styled.div`
   cursor: pointer;
 `;
 
+const StyledToastContainer = styled(ToastContainer).attrs({
+  className: "toast-container",
+  toastClassName: "toast",
+  bodyClassName: "body",
+  progressClassName: "progress",
+})`
+  .Toastify__toast {
+    background-color: rgba(75, 192, 192, 0.4);
+    font-size: 1.4rem;
+    font-weight: 600;
+    filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
+  }
+  .Toastify__toast-container {
+    /* width: 320px; */
+    width: 20rem;
+  }
+  .Toastify__toast--default {
+    background: #fff;
+    color: #aaa;
+  }
+  .Toastify__toast--info {
+    background: #3498db;
+  }
+  .Toastify__toast--success {
+    /* background: #07bc0c; */
+    background: rgba(75, 192, 192, 0.4);
+  }
+  .Toastify__toast--warning {
+    /* background: #f1c40f; */
+    background: #ffd469;
+    color: #aaa;
+  }
+  .Toastify__toast--error {
+    background: #e74c3c;
+  }
+`;
+
+interface ToastProp {
+  toastMsg: string;
+}
 export default function RoutineDetail() {
   const router = useRouter();
-  const dow = Number(router.query.dow);
 
   const [open, setOpen] = useState(false);
-  // const [open, setOpen];
   const [routineList, setRoutineList] =
     useRecoilState<IRoutine[]>(routineState);
+
+  const [toastMsg, setToastMsg] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const onClick = () => {
     // console.log(open);
@@ -72,6 +93,28 @@ export default function RoutineDetail() {
       })
       .catch((err) => console.log(err.response));
   };
+
+  useEffect(() => {
+    if (toastMsg.length > 0) {
+      if (isSuccess === true) {
+        toast.success(toastMsg, {
+          theme: "colored",
+          position: toast.POSITION.BOTTOM_CENTER,
+          hideProgressBar: false,
+          autoClose: 2000,
+        });
+        setIsSuccess(false);
+      } else {
+        toast.error(toastMsg, {
+          theme: "colored",
+          position: toast.POSITION.BOTTOM_CENTER,
+          hideProgressBar: false,
+          autoClose: 2000,
+        });
+      }
+      setToastMsg("");
+    }
+  }, [toastMsg]);
 
   useEffect(() => {
     getRoutineList();
@@ -97,12 +140,18 @@ export default function RoutineDetail() {
                 repetition={repetition}
                 routineList={routineList}
                 setRoutineList={setRoutineList}
+                setToastMsg={setToastMsg}
+                setIsSuccess={setIsSuccess}
               ></RoutineCard>
             );
           })
         ) : (
           <CardDiv onClick={onClick}>일과를 등록해보세요 !</CardDiv>
         )}
+        <StyledToastContainer
+          pauseOnFocusLoss={false}
+          style={{ bottom: "10rem" }}
+        />
       </RoutineDiv>
       {open ? (
         <RoutineModal
@@ -112,6 +161,8 @@ export default function RoutineDetail() {
           modalType={0}
           routineList={routineList}
           setRoutineList={setRoutineList}
+          setToastMsg={setToastMsg}
+          setIsSuccess={setIsSuccess}
         />
       ) : (
         ""
