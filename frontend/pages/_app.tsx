@@ -114,7 +114,7 @@ export default function MyApp(props: AppProps) {
         <RecoilRoot>
           {pageLoading ? (
             <LayoutSpinner>
-              <HashLoader color={"#cdcdcd"} size={30} />
+              <HashLoader color={"#cdcdcd"} size="30px" />
             </LayoutSpinner>
           ) : (
             <Layout>
