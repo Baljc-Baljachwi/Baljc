@@ -146,6 +146,11 @@ export default function OnBoarding() {
     setIsEnd(swiper.isEnd);
   }
 
+  function onBoardingEnd() {
+    localStorage.setItem("isNew", "false");
+    router.push("/");
+  }
+
   return (
     <MainContainer>
       <Swiper
@@ -167,10 +172,10 @@ export default function OnBoarding() {
           </SwiperSlide>
         ))}
         <StyledFooter>
-          <span className="skip" onClick={() => router.push("/")}>
+          <span className="skip" onClick={onBoardingEnd}>
             건너뛰기
           </span>
-          <SlideNextButton isEnd={isEnd} />
+          <SlideNextButton isEnd={isEnd} onBoardingEnd={onBoardingEnd} />
         </StyledFooter>
       </Swiper>
     </MainContainer>

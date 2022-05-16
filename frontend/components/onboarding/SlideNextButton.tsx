@@ -4,15 +4,19 @@ import { useSwiper } from "swiper/react";
 
 interface SlideNextButtonProps {
   isEnd: boolean;
+  onBoardingEnd: () => void;
 }
 
-export default function SlideNextButton({ isEnd }: SlideNextButtonProps) {
+export default function SlideNextButton({
+  isEnd,
+  onBoardingEnd,
+}: SlideNextButtonProps) {
   const swiper = useSwiper();
   const router = useRouter();
 
   function onClick() {
     if (isEnd) {
-      router.push("/");
+      onBoardingEnd();
     } else {
       swiper.slideNext();
     }
