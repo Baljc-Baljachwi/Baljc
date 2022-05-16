@@ -266,7 +266,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(noRollbackFor = { Exception.class })
     public MemberDto.SigninInfo updateToken(UUID memberId, String authorization, String refreshToken) {
         //accessToken 유효기간 확인
         String aToken = "";
