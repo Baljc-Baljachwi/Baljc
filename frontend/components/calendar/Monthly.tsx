@@ -215,7 +215,20 @@ export default function Monthly() {
                                   : null}
                               </div>
                             </FinanceWrapper>
-                          ) : null
+                          ) : (
+                            <FinanceWrapper key={idx}>
+                              <div className="cost">
+                                {item[1]["E"]
+                                  ? Number(item[1]["E"]).toLocaleString()
+                                  : null}
+                              </div>
+                              <div className="income">
+                                {item[1]["I"]
+                                  ? Number(item[1]["I"]).toLocaleString()
+                                  : null}
+                              </div>
+                            </FinanceWrapper>
+                          )
                         ) : null
                       )
                     : null}
