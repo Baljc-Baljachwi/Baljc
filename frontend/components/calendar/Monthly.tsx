@@ -3,6 +3,7 @@ import Calendar from "react-calendar";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
 import styled from "styled-components";
+import { useRouter } from "next/router";
 
 import Daily from "./daily/index";
 import { getMonthlyCalendar } from "api/calendar";
@@ -37,8 +38,10 @@ const MonthlyTotal = styled.div`
   font-weight: 700;
 `;
 
-const FlexContainer = styled.div`
+const FlexContainer = styled.div<{ jf?: string; ai?: string }>`
   display: flex;
+  justify-content: ${(props) => (props.jf ? props.jf : "")};
+  align-items: ${(props) => (props.ai ? props.ai : "")};
 `;
 
 const ColumnContainer = styled.div`
@@ -61,7 +64,21 @@ const Typography = styled.div<{
   padding: ${(props) => (props.p ? props.p : "0")};
 `;
 
+const GrayButton = styled.div`
+  display: flex;
+  align-items: center;
+  height: 3rem;
+  font-size: 1.6rem;
+
+  background-color: #f0f0f0;
+  padding: 0.8rem 1.6rem;
+  border-radius: 5px;
+  gap: 0.5rem;
+`;
+
 export default function Monthly() {
+  const router = useRouter();
+
   const [mounted, setMounted] = useState(false);
   const [date, setDate] = useState(new Date());
   const year = dayjs(date).format("YYYY");
@@ -151,23 +168,30 @@ export default function Monthly() {
               />
             </div>
           </FlexContainer>
-          <FlexContainer>
-            <ColumnContainer>
-              <Typography fs="1.5rem" fw="400" p="0 4rem 0 0" color="#4d5158">
-                지출
-              </Typography>
-              <Typography fs="1.5rem" fw="400" p="0 4rem 0 0" color="#4d5158">
-                수입
-              </Typography>
-            </ColumnContainer>
-            <ColumnContainer>
-              <Typography fs="2rem" fw="600">
-                -{expenditure.toLocaleString()}원
-              </Typography>
-              <Typography fs="2rem" fw="600" color="#8cbff2">
-                {income.toLocaleString()}원
-              </Typography>
-            </ColumnContainer>
+          <FlexContainer jf="space-between" style={{ width: "100%" }}>
+            <FlexContainer>
+              <ColumnContainer>
+                <Typography fs="1.5rem" fw="400" p="0 4rem 0 0" color="#4d5158">
+                  지출
+                </Typography>
+                <Typography fs="1.5rem" fw="400" p="0 4rem 0 0" color="#4d5158">
+                  수입
+                </Typography>
+              </ColumnContainer>
+              <ColumnContainer>
+                <Typography fs="2rem" fw="600">
+                  -{expenditure.toLocaleString()}원
+                </Typography>
+                <Typography fs="2rem" fw="600" color="#8cbff2">
+                  {income.toLocaleString()}원
+                </Typography>
+              </ColumnContainer>
+            </FlexContainer>
+            <FlexContainer ai="center">
+              <GrayButton onClick={() => router.push("/finance")}>
+                내역
+              </GrayButton>
+            </FlexContainer>
           </FlexContainer>
         </MonthlyTotal>
 
