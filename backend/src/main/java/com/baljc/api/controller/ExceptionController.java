@@ -122,6 +122,13 @@ public class ExceptionController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse(3701, e.getMessage()));
     }
 
+    @ExceptionHandler(NotExistedMemberException.class)
+    public ResponseEntity<BaseResponse> NotExistedMemberExceptionHandler(NotExistedMemberException e) {
+        log.error("NotExistedMemberException - {}", e.getMessage());
+        // 400
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse(3800, e.getMessage()));
+    }
+
     @ExceptionHandler(NotExpiredTokenException.class)
     public ResponseEntity<BaseResponse> NotExpiredTokenExceptionHandler(NotExpiredTokenException e) {
         log.error("NotExpiredTokenException - {}", e.getMessage());
