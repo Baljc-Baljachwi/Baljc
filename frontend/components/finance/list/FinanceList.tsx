@@ -1,5 +1,10 @@
 import styled from "styled-components";
+import { useRouter } from "next/router";
+import dayjs from "dayjs";
+
 import FinanceCard from "./FinanceCard";
+import FloatingButton from "components/common/FloatingButton";
+import { useEffect } from "react";
 
 const PageContainer = styled.main`
   /* padding: 0 2rem; */
@@ -13,12 +18,16 @@ const Day = styled.div`
   font-size: 1.5rem;
   padding-top: 1.5rem;
 `;
+
 interface FinanceListProps {
   item: any;
+  dayMonthYear: any;
 }
 
-export default function FinanceList({ item }: FinanceListProps) {
+export default function FinanceList({ item, dayMonthYear }: FinanceListProps) {
+  const router = useRouter();
   const data: any = item[1];
+  const date = dayjs(dayMonthYear).format("YYYY-MM-DD");
 
   return (
     <>
@@ -43,6 +52,14 @@ export default function FinanceList({ item }: FinanceListProps) {
             ))
           : null}
       </PageContainer>
+      <FloatingButton
+        onClick={() => {
+          router.push({
+            pathname: "/finance/financeCreateForm",
+            query: { date },
+          });
+        }}
+      />
     </>
   );
 }

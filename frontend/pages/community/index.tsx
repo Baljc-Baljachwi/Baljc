@@ -21,11 +21,7 @@ export default function Community() {
   }
   return (
     <div>
-      <Header
-        label="커뮤니티"
-        icon="plus"
-        onClickRightButton={() => router.push("/community/communityCreateForm")}
-      ></Header>
+      <Header label="커뮤니티" />
       <Container>
         <CommunityList />
       </Container>

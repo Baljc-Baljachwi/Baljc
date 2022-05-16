@@ -1,6 +1,7 @@
 import Header from "../../../components/common/Header";
 import RoutineCard from "./RoutineCard";
 import RoutineModal from "./RoutineModal";
+import FloatingButton from "components/common/FloatingButton";
 
 import styled from "styled-components";
 import { useEffect, useState } from "react";
@@ -81,8 +82,6 @@ export default function RoutineDetail() {
     <>
       <Header
         label="오늘의 일과"
-        icon="plus"
-        onClickRightButton={() => onClick()}
         onClickBackButton={() => router.push("/work")}
       />
       <RoutineDiv>
@@ -104,6 +103,7 @@ export default function RoutineDetail() {
           <CardDiv onClick={onClick}>일과를 등록해보세요 !</CardDiv>
         )}
       </RoutineDiv>
+      <FloatingButton onClick={onClick} />
       {open ? (
         <RoutineModal
           open={open}

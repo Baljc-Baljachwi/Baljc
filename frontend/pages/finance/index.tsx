@@ -135,8 +135,6 @@ export default function Finance(): JSX.Element {
     <Container>
       <Header
         label="가계부 목록"
-        icon="plus"
-        onClickRightButton={() => router.push("/finance/financeCreateForm")}
         onClickBackButton={() => router.push("/calendar")}
       ></Header>
 
@@ -171,7 +169,9 @@ export default function Finance(): JSX.Element {
       </MonthlyContentContainer>
       <PageContainer>
         {amount && amount.length > 0 ? (
-          amount.map((item, idx) => <FinanceList key={idx} item={item} />)
+          amount.map((item, idx) => (
+            <FinanceList key={idx} item={item} dayMonthYear={date} />
+          ))
         ) : (
           <NoContencContainer>
             <NoContentMessage>가계부 내역이 없습니다!</NoContentMessage>
