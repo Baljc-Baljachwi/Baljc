@@ -228,6 +228,7 @@ export default function RoutineModal({
         .then((res) => {
           // console.log(res.data);
           setToastMsg("✅ 일과 수정 완료!");
+          setIsSuccess(true);
           setRoutineList(
             routineList.map((routine: IRoutine) => {
               return routine.routineId === routineId
@@ -263,6 +264,7 @@ export default function RoutineModal({
       .then((res) => {
         // console.log(res.data);
         setToastMsg("✅ 일과 삭제 완료!");
+        setIsSuccess(true);
         setRoutineList(
           routineList.filter(
             (routine: IRoutine) => routine.routineId !== routineId

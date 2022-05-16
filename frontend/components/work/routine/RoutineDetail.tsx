@@ -96,13 +96,14 @@ export default function RoutineDetail() {
 
   useEffect(() => {
     if (toastMsg.length > 0) {
-      if (isSuccess) {
+      if (isSuccess === true) {
         toast.success(toastMsg, {
           theme: "colored",
           position: toast.POSITION.BOTTOM_CENTER,
           hideProgressBar: false,
           autoClose: 2000,
         });
+        setIsSuccess(false);
       } else {
         toast.error(toastMsg, {
           theme: "colored",
@@ -112,7 +113,6 @@ export default function RoutineDetail() {
         });
       }
       setToastMsg("");
-      setIsSuccess(false);
     }
   }, [toastMsg]);
 
@@ -141,7 +141,7 @@ export default function RoutineDetail() {
                 routineList={routineList}
                 setRoutineList={setRoutineList}
                 setToastMsg={setToastMsg}
-                // setIsSuccess={setIsSuccess}
+                setIsSuccess={setIsSuccess}
               ></RoutineCard>
             );
           })

@@ -41,6 +41,7 @@ interface PropTypes {
   routineList: IRoutine[];
   setRoutineList: SetterOrUpdater<IRoutine[]>;
   setToastMsg?: any;
+  setIsSuccess?: any;
 }
 
 export default function RoutineCard({
@@ -50,6 +51,7 @@ export default function RoutineCard({
   routineList,
   setRoutineList,
   setToastMsg,
+  setIsSuccess,
 }: PropTypes) {
   const [open, setOpen] = useState(false);
   const onClick = () => {
@@ -93,6 +95,7 @@ export default function RoutineCard({
           routineList={routineList}
           setRoutineList={setRoutineList}
           setToastMsg={setToastMsg}
+          setIsSuccess={setIsSuccess}
         />
       ) : (
         ""
