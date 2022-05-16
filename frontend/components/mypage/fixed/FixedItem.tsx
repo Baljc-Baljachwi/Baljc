@@ -37,6 +37,14 @@ export default function FixedItem({
   const dateForm = dayjs(date).format("YYYY-MM-DD");
   const [exCategories, setExCategories] = useState<ICategory[]>([]);
   const [categoryImg, setCategoryImg] = useState("");
+
+  const handleClick = () => {
+    router.push({
+      pathname: "/finance/detail",
+      query: { accountbookId },
+    });
+  };
+
   useEffect(() => {
     getCategories("E").then((res) => {
       // console.log(res.data);
@@ -50,7 +58,7 @@ export default function FixedItem({
   }, [exCategories, categoryName]);
   return (
     <>
-      <FixedCardItem backgroundColor={"#F4F4F4"}>
+      <FixedCardItem backgroundColor={"#F4F4F4"} onClick={handleClick}>
         <div className="ImgContainer">
           {categoryImg ? (
             <Image

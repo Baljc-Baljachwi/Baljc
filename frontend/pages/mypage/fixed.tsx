@@ -8,6 +8,8 @@ import "dayjs/locale/ko";
 
 import Header from "components/common/Header";
 import FixedList from "components/mypage/fixed/FixedList";
+import FloatingButton from "components/common/FloatingButton";
+
 interface IExFixed {
   accountbookId: string;
   monthlyPeriod: number;
@@ -35,6 +37,8 @@ const Fixed = () => {
   const [categoryImgUrl, setCategoryImgUrl] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const fixedEList = Object.entries(exFixed);
+  const dayMonthYear = dayjs(date).format("YYYY-MM-DD");
+
   // console.log(exFixed);
   // console.log(fixedEList);
   useEffect(() => {
@@ -83,20 +87,30 @@ const Fixed = () => {
         </span>
       </HeaderCard>
       {/* <ContentsContainer> */}
-      <Container>
-        {fixedEList && fixedEList.length > 0 ? (
-          fixedEList.map((item, idx) => <FixedList key={idx} item={item} />)
-        ) : (
-          <NoContentContainer>
-            고정 지출 내역이 없습니다!
-            <NoContentMessage className="small">
-              고정 지출을 등록해주세요.
-            </NoContentMessage>
-          </NoContentContainer>
-        )}
-        {/* </ContentsContainer> */}
-        {/* </BodyContainer> */}
-      </Container>
+      {fixedEList && fixedEList.length > 0 ? (
+        fixedEList.map((item, idx) => (
+          <Container key={idx}>
+            <FixedList item={item} />
+          </Container>
+        ))
+      ) : (
+        <NoContentContainer>
+          고정 지출 내역이 없습니다!
+          <NoContentMessage className="small">
+            고정 지출을 등록해주세요.
+          </NoContentMessage>
+        </NoContentContainer>
+      )}
+      {/* </ContentsContainer> */}
+      {/* </BodyContainer> */}
+      <FloatingButton
+        onClick={() => {
+          router.push({
+            pathname: "/finance/financeCreateForm",
+            query: { date: dayMonthYear },
+          });
+        }}
+      />
     </>
   );
 };

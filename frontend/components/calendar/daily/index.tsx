@@ -32,6 +32,7 @@ interface DailyProps {
 export default function Daily({ date, dayYoil, day, month, year }: DailyProps) {
   const [result, setResult] = useState<Array<any>>([]);
   const [routines, setRoutines] = useState<IRoutine[]>();
+
   useEffect(() => {
     getDailyCalendar({ year: year, month: month, day: day }).then((res) => {
       setResult(res.data.data);
@@ -39,6 +40,7 @@ export default function Daily({ date, dayYoil, day, month, year }: DailyProps) {
     });
   }, [day, date, month, year]);
 
+  console.log(date);
   return (
     <Container>
       <Title>{dayYoil}</Title>

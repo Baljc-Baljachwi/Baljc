@@ -151,9 +151,13 @@ interface IBoardContent {
 
 interface CommunityFormProps {
   boardContent?: IBoardContent;
+  selectedCategory: any;
 }
 
-export default function CommunityForm({ boardContent }: CommunityFormProps) {
+export default function CommunityForm({
+  boardContent,
+  selectedCategory,
+}: CommunityFormProps) {
   const router = useRouter();
 
   // 새로고침 hydration error 해결

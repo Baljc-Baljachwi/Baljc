@@ -94,7 +94,12 @@ interface IAccountBookList {
   dayOfWeek: string | null;
 }
 
-export default function FinanceBoard({ item }: any, date: string) {
+interface FinanceBoardProps {
+  item: any;
+  date: string;
+}
+
+export default function FinanceBoard({ item, date }: FinanceBoardProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const router = useRouter();
   const [dayNumber, setDayNumber] = useState<IDayNumber>();
@@ -117,7 +122,10 @@ export default function FinanceBoard({ item }: any, date: string) {
         <Title>가계부</Title>
         <div
           onClick={(e: any) => {
-            router.push("/finance/financeCreateForm");
+            router.push({
+              pathname: "/finance/financeCreateForm",
+              query: { date },
+            });
           }}
         >
           <Icon

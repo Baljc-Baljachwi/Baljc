@@ -20,10 +20,12 @@ const CardContent = styled.div`
 const Tag = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   width: 6rem;
   font-size: 1rem;
-  background-color: #f0f0f0;
-  color: #646464;
+  background-color: #8cbff2;
+  /* color: #646464; */
+  color: #ffffff;
   padding: 0.1rem 1rem;
   border-radius: 3px;
   height: 2rem;

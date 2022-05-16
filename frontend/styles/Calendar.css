@@ -117,11 +117,20 @@ abbr[title] {
 }
 
 .img {
-  height: 2rem;
-  width: 2rem;
+  height: 2.5rem;
+  width: 2.5rem;
   object-fit: cover;
   background-image: url("/assets/img/foot_true.png");
   background-size: cover;
+  overflow: visible;
+  margin: -2rem 0 0 0.3rem;
+  opacity: 80%;
+  z-index: -10000;
+}
+
+.img-div {
+  height: 2.5rem;
+  width: 2.5rem;
   margin: -2rem 0 0 0.3rem;
   opacity: 80%;
   z-index: -10000;

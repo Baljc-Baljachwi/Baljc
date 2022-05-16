@@ -6,6 +6,7 @@ import styled from "styled-components";
 import CommunityCard from "./CommunityCard";
 import { getBoardsCategories, getBoardsList } from "api/community";
 import { IPost } from "types";
+import FloatingButton from "components/common/FloatingButton";
 
 const Container = styled.div`
   background-color: #f4f4f4;
@@ -45,23 +46,6 @@ const Typography = styled.div<{
 
 const BodyContainer = styled.div`
   padding: 0 0 1rem 0;
-`;
-
-const ChatButtonDiv = styled.div`
-  width: 100%;
-  max-width: 512px;
-  position: fixed;
-  bottom: 16rem;
-  z-index: 1000;
-`;
-
-const ChatButton = styled.img`
-  width: 7rem;
-  position: absolute;
-  bottom: -5rem;
-  right: 0;
-  margin: 0 1rem;
-  cursor: pointer;
 `;
 
 const NoContentContainer = styled.section`
@@ -239,14 +223,14 @@ export default function CommunityList() {
           </NoContentContainer>
         )}
       </BodyContainer>
-      <ChatButtonDiv>
-        <ChatButton
-          src="/assets/img/community/chat_icon.png"
-          onClick={() =>
-            router.push(`/community/chat/`).then(() => window.scrollTo(0, 0))
-          }
-        ></ChatButton>
-      </ChatButtonDiv>
+      <FloatingButton
+        onClick={() => {
+          router.push({
+            pathname: "/community/communityCreateForm",
+            query: { selectedCategory },
+          });
+        }}
+      />
     </Container>
   );
 }

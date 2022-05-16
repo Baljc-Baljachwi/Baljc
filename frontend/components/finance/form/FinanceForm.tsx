@@ -172,6 +172,7 @@ interface IAccountbookForm extends IAccountbook {
 interface FinanceFormProps {
   type: "E" | "I";
   initForm?: IAccountbookForm;
+  date: any;
 }
 
 interface Category {
@@ -181,18 +182,24 @@ interface Category {
   imgUrl: string;
 }
 
-export default function FinanceForm({ type, initForm }: FinanceFormProps) {
+export default function FinanceForm({
+  type,
+  initForm,
+  date,
+}: FinanceFormProps) {
   // console.log("render");
   const router = useRouter();
   const today = new Date();
   const year = today.getFullYear();
   const month = ("0" + (today.getMonth() + 1)).slice(-2);
   const day = ("0" + today.getDate()).slice(-2);
-  const date = year + "-" + month + "-" + day;
+  // const date = year + "-" + month + "-" + day;
   const time =
     ("0" + today.getHours()).slice(-2) +
     ":" +
     ("0" + today.getMinutes()).slice(-2);
+
+  console.log(2, date);
 
   const {
     register,
