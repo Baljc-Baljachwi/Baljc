@@ -27,6 +27,8 @@ public class ChatDto {
     @AllArgsConstructor
     public static class ChatResponse {
         private UUID chatId;
+        private UUID memberId;
+        private String nickname;
         private String content;
         private String imgUrl;
         private LocalDateTime createdAt;
