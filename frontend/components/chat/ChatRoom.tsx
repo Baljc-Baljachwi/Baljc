@@ -76,15 +76,6 @@ export default function ChatRoom({ roomId, nickname }: ChatProps) {
   const [content, setContent] = useState("");
   const [chatList, setChatList] = useState<IChatList[]>([]);
 
-  useEffect(() => {
-    getChatList(roomId)
-      .then((res) => {
-        // console.log(res.data.data);
-        setChatList(res.data.data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
   // console.log(roomId);
   useEffect(() => {
     // 소켓 연결 응답
@@ -126,6 +117,20 @@ export default function ChatRoom({ roomId, nickname }: ChatProps) {
     }
   };
 
+  useEffect(() => {
+    getChatList(roomId)
+      .then((res) => {
+        // console.log(res.data.data);
+        setChatList(res.data.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  const onEnter = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      send();
+    }
+  };
   return (
     <>
       <Header label={nickname} onClickBackButton={() => router.push("/chat")} />
@@ -145,6 +150,7 @@ export default function ChatRoom({ roomId, nickname }: ChatProps) {
         <InputDiv
           placeholder="내용을 입력해주세요."
           onChange={handleInput}
+          onKeyPress={onEnter}
           value={content}
         />
         <Icon
