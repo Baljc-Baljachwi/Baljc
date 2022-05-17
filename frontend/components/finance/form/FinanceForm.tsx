@@ -172,7 +172,7 @@ interface IAccountbookForm extends IAccountbook {
 interface FinanceFormProps {
   type: "E" | "I";
   initForm?: IAccountbookForm;
-  date: any;
+  date?: any;
 }
 
 interface Category {
@@ -223,7 +223,7 @@ export default function FinanceForm({
       monthlyPeriod: initForm?.monthlyPeriod || (day < "28" ? day : "28"),
       startDate: initForm?.startDate || year + "-" + month,
       endDate: initForm?.endDate || year + "-" + month,
-      date: initForm?.date || date,
+      date: initForm?.date || date || year + "-" + month + "-" + day,
       time: initForm?.time || time,
     },
   });
