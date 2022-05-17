@@ -3,6 +3,8 @@ import { useState } from "react";
 
 import ConfirmModal from "./ConfirmModal";
 
+import { postChatRoom } from "../../../api/chat";
+
 const ModalWrapper = styled.div<{ visible: boolean }>`
   box-sizing: border-box;
   display: ${(props) => (props.visible ? "block" : "hidden")};
@@ -65,6 +67,8 @@ interface EditProps {
   open: boolean;
   setOpen: any;
   isMe: boolean;
+  myId: string;
+  otherId: string;
 }
 
 export default function EditModal({
@@ -75,6 +79,8 @@ export default function EditModal({
   open,
   setOpen,
   isMe,
+  myId,
+  otherId,
 }: EditProps) {
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -93,10 +99,13 @@ export default function EditModal({
   };
 
   const onClickChat = () => {
+    console.log(otherId);
     console.log("채팅방으로 연결은 곧");
+    postChatRoom(myId, otherId)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
   };
 
-  // console.log(isMe);
   return (
     <>
       {open ? (
