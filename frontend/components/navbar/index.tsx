@@ -66,6 +66,15 @@ export default function NavBar() {
           커뮤니티
         </div>
       </Item>
+      <Item onClick={() => router.push("/community/chat")}>
+        <Icon
+          mode="fas"
+          icon="comment-dots"
+          size="2rem"
+          color={rootPathname === "finance" ? "#4d5158" : "#cdcdcd"}
+        />
+        <div className={rootPathname === "finance" ? "" : "active"}>채팅</div>
+      </Item>
       <Item onClick={() => router.push("/calendar")}>
         <Icon
           mode="fas"
@@ -77,7 +86,7 @@ export default function NavBar() {
           캘린더
         </div>
       </Item>
-      <Item onClick={() => router.push("/finance")}>
+      {/* <Item onClick={() => router.push("/finance")}>
         <Icon
           mode="fas"
           icon="sack-dollar"
@@ -85,7 +94,7 @@ export default function NavBar() {
           color={rootPathname === "finance" ? "#4d5158" : "#cdcdcd"}
         />
         <div className={rootPathname === "finance" ? "" : "active"}>가계부</div>
-      </Item>
+      </Item> */}
       <Item onClick={() => router.push("/work")}>
         <Icon
           mode="fas"
