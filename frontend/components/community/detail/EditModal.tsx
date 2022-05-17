@@ -37,6 +37,7 @@ const ModalInner = styled.div`
   background-color: #fff;
   border-radius: 10px;
   width: 90%;
+  max-width: 512px;
   bottom: -75%;
   margin: 0.5rem auto;
   display: flex;
