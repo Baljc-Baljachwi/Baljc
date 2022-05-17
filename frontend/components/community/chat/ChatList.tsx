@@ -33,7 +33,6 @@ export default function ChatList() {
     getChatRoomList()
       .then((res) => {
         setChatList(res.data.data);
-        console.log(res.data.data[0]);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -42,7 +41,6 @@ export default function ChatList() {
     getChatist();
   }, [getChatist]);
 
-  console.log(chatList);
   return (
     <>
       <ChatContainer>

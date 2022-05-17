@@ -58,7 +58,6 @@ interface chatProps {
 export default function ChatListItem({ chatItem }: chatProps) {
   const router = useRouter();
 
-  console.log(chatItem.other);
   return (
     <ChatContainer
       onClick={() =>
