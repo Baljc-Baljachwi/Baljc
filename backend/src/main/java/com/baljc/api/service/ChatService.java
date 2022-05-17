@@ -7,6 +7,6 @@ import java.util.UUID;
 
 public interface ChatService {
     ChatDto.RoomResponse insertRoom(ChatDto.Request request);
-    List<ChatDto.RoomResponse> getRoomList();
+    List<ChatDto.RoomContentResponse> getRoomList();
     List<ChatDto.ChatResponse> getChatList(UUID roomId);
 }

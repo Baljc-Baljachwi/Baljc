@@ -5,7 +5,6 @@ import com.baljc.api.dto.MemberDto;
 import com.baljc.db.entity.Chat;
 import com.baljc.db.entity.Member;
 import com.baljc.db.entity.Room;
-import com.baljc.db.repository.ChatRepository;
 import com.baljc.db.repository.MemberRepository;
 import com.baljc.db.repository.RoomRepository;
 import com.baljc.exception.NotExistedMemberException;
@@ -28,13 +27,11 @@ public class ChatServiceImpl implements ChatService{
     private final MemberService memberService;
     private final MemberRepository memberRepository;
     private final RoomRepository roomRepository;
-    private final ChatRepository chatRepository;
 
-    public ChatServiceImpl(MemberService memberService, MemberRepository memberRepository, RoomRepository roomRepository, ChatRepository chatRepository) {
+    public ChatServiceImpl(MemberService memberService, MemberRepository memberRepository, RoomRepository roomRepository) {
         this.memberService = memberService;
         this.memberRepository = memberRepository;
         this.roomRepository = roomRepository;
-        this.chatRepository = chatRepository;
     }
 
     @Override
@@ -77,7 +74,7 @@ public class ChatServiceImpl implements ChatService{
     }
 
     @Override
-    public List<ChatDto.RoomResponse> getRoomList() {
+    public List<ChatDto.RoomContentResponse> getRoomList() {
         Member member = memberService.getMemberByAuthentication();
         List<Room> roomList1 = member.getRoomList1();
         List<Room> roomList2 = member.getRoomList2();
@@ -87,10 +84,16 @@ public class ChatServiceImpl implements ChatService{
 
         return roomList
                 .stream()
+                .filter(room -> !room.getChatList().isEmpty())
                 .sorted(Comparator.comparing(Room::getUpdatedAt).reversed())
                 .map(room -> {
+                    Chat chat = room.getChatList()
+                            .stream()
+                            .max(Comparator.comparing(Chat::getCreatedAt))
+                            .orElseGet(() -> Chat.builder().build());
+
                     LocalDateTime now = LocalDateTime.now();
-                    LocalDateTime dateTime = room.getUpdatedAt();
+                    LocalDateTime dateTime = chat.getCreatedAt();
                     String updatedAt = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                     long diff = ChronoUnit.DAYS.between(dateTime, now);
 
@@ -110,7 +113,7 @@ public class ChatServiceImpl implements ChatService{
                     Member other = room.getMember1();
                     if (other.getMemberId().equals(member.getMemberId())) other = room.getMember2();
 
-                    return new ChatDto.RoomResponse(room.getRoomId(), updatedAt,
+                    return new ChatDto.RoomContentResponse(room.getRoomId(), updatedAt, chat.getContent(),
                             new MemberDto.Other(other.getNickname(), other.getProfileUrl(),
                                     other.getDepth1(), other.getDepth2(), other.getDepth3()));
                 })
