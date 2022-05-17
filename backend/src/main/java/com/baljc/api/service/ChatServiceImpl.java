@@ -124,7 +124,10 @@ public class ChatServiceImpl implements ChatService{
                 .getChatList()
                 .stream()
                 .sorted(Comparator.comparing(Chat::getCreatedAt))
-                .map(chat -> new ChatDto.ChatResponse(chat.getChatId(),
+                .map(chat -> new ChatDto.ChatResponse(
+                        chat.getChatId(),
+                        chat.getMember().getMemberId(),
+                        chat.getMember().getNickname(),
                         chat.getContent(),
                         chat.getImgUrl(),
                         chat.getCreatedAt()))
