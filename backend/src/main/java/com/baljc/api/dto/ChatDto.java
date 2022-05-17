@@ -10,9 +10,16 @@ import java.util.UUID;
 public class ChatDto {
     @Getter
     @NoArgsConstructor
-    public static class Request {
+    public static class RoomRequest {
         private UUID memberId1;
         private UUID memberId2;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class ChatRequest {
+        private UUID memberId;
+        private String content;
     }
 
     @Getter
