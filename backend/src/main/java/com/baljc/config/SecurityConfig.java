@@ -2,6 +2,7 @@ package com.baljc.config;
 
 import com.baljc.common.jwt.*;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -67,6 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() // Preflight 요청에 대해 인증 처리X
                 .antMatchers("/members/login/kakao").permitAll() // 해당 URL은 인증 처리X
                 .antMatchers("/members/refresh").permitAll()
+                .antMatchers(HttpMethod.POST, "/chat/room/?*").permitAll()
                 .anyRequest()
                 .authenticated()
 

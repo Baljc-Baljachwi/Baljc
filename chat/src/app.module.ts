@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
 import { ConfigModule } from '@nestjs/config';
 // import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
@@ -7,6 +8,7 @@ import { EventsGateway } from './events/events.gateway';
 
 @Module({
   imports: [
+    HttpModule,
     ConfigModule.forRoot(),
     // TypeOrmModule.forRoot({
     //   type: 'mysql',

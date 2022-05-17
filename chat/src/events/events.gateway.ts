@@ -8,6 +8,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { Logger } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
 
 @WebSocketGateway({
   cors: {
@@ -17,6 +18,8 @@ import { Logger } from '@nestjs/common';
 export class EventsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
+  constructor(private httpService: HttpService) {}
+
   @WebSocketServer()
   public server: Server;
 
@@ -53,6 +56,16 @@ export class EventsGateway
         ', message: ' +
         payload.message,
     );
+
+    this.httpService
+      .post(process.env.HOST + '/api/chat/room/' + payload.roomId, {
+        memberId: payload.memberId,
+        content: payload.message,
+      })
+      .toPromise()
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err));
+
     client.broadcast.to(payload.roomId).emit('message', payload.message);
   }
 }
