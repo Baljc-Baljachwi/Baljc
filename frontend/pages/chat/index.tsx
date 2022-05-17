@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import Header from "components/common/Header";
-import ChatList from "../../../components/community/chat/ChatList";
+import ChatList from "../../components/chat/ChatList";
 
 export default function Chat() {
   const router = useRouter();
@@ -19,7 +19,7 @@ export default function Chat() {
     <div>
       <Header
         label="채팅"
-        onClickBackButton={() => router.push("/community")}
+        // onClickBackButton={() => router.push("/community")}
       />
       <ChatList />
     </div>

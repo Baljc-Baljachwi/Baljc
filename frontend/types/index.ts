@@ -103,3 +103,24 @@ export interface IMyBoard {
   heartCnt: number;
   commentCnt: number;
 }
+
+export interface IChatRoomList {
+  roomId: string;
+  updatedAt: string;
+  other: {
+    nickname: string;
+    profileUrl: string;
+    depth1: string;
+    depth2: string;
+    depth3: string;
+  };
+}
+
+export interface IChatList {
+  chatId: string;
+  memberId: string;
+  nickname: string;
+  content: string;
+  createdAt: string;
+  imgUrl?: string;
+}

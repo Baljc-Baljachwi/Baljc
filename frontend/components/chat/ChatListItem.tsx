@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import styled from "styled-components";
+import { IChatRoomList } from "../../types/index";
 
 const ChatContainer = styled.div`
   width: 100%;
@@ -15,6 +16,8 @@ const ChatItemDiv = styled.div`
 `;
 
 const ProfileImage = styled.img`
+  border-radius: 50%;
+  width: 6.2rem;
   height: 6.2rem;
 `;
 
@@ -48,13 +51,11 @@ const ChatDate = styled.div`
   font-size: 1.2rem;
 `;
 
-interface ChatProps {
-  roomId: number;
-  nickname: string;
-  content: string;
+interface chatProps {
+  chatItem: IChatRoomList;
 }
 
-export default function ChatListItem({ roomId, nickname, content }: ChatProps) {
+export default function ChatListItem({ chatItem }: chatProps) {
   const router = useRouter();
 
   return (
@@ -62,21 +63,25 @@ export default function ChatListItem({ roomId, nickname, content }: ChatProps) {
       onClick={() =>
         router.push(
           {
-            pathname: `/community/chat/${roomId}`,
-            query: { nickname: nickname },
+            pathname: `/chat/${chatItem.roomId}`,
+            query: {
+              roomId: chatItem.roomId || "",
+              nickname: chatItem.other.nickname || "",
+            },
           },
-          `/community/chat/${roomId}`
+          `/chat/${chatItem.roomId}`
         )
       }
     >
       <ChatItemDiv>
-        <ProfileImage src="/assets/img/mypage/avatar/default_profile.png"></ProfileImage>
+        <ProfileImage src={chatItem.other.profileUrl}></ProfileImage>
         <ChatDetailDiv>
           <ChatHeader>
-            <ChatNickname>{nickname}</ChatNickname>|<ChatDong>역북동</ChatDong>
+            <ChatNickname>{chatItem.other.nickname}</ChatNickname>|
+            <ChatDong>{chatItem.other.depth3}</ChatDong>
           </ChatHeader>
-          <ChatContent>{content}</ChatContent>
-          <ChatDate>1분전</ChatDate>
+          <ChatContent>최근 대화 내용 들어가야해</ChatContent>
+          <ChatDate>{chatItem.updatedAt}</ChatDate>
         </ChatDetailDiv>
       </ChatItemDiv>
     </ChatContainer>

@@ -150,6 +150,8 @@ export default function CommentCard({
                   setOpen={setOpen}
                   commentId={commentId}
                   isMe={true}
+                  myId={userInfo.memberId}
+                  otherId={memberId}
                 />
               ) : (
                 <EditModal
@@ -160,6 +162,8 @@ export default function CommentCard({
                   setOpen={setOpen}
                   commentId={commentId}
                   isMe={false}
+                  myId={userInfo.memberId}
+                  otherId={memberId}
                 />
               )}
             </>

@@ -122,6 +122,8 @@ export default function ReplyCard({
                   commentId={commentId}
                   setIsChanged={setIsChanged}
                   isMe={true}
+                  myId={userInfo.memberId}
+                  otherId={reply.memberId}
                 />
               ) : (
                 <EditModal
@@ -132,6 +134,8 @@ export default function ReplyCard({
                   commentId={commentId}
                   setIsChanged={setIsChanged}
                   isMe={false}
+                  myId={userInfo.memberId}
+                  otherId={reply.memberId}
                 />
               )}
             </>
