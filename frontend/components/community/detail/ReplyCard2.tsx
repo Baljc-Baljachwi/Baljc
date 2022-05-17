@@ -6,6 +6,7 @@ import { IComment } from "types";
 import defaultProfileImage from "public/assets/img/mypage/avatar/default_profile.png";
 import { useRecoilValue } from "recoil";
 import { userInfoState } from "atoms/atoms";
+import EditModal from "./EditModal";
 
 const Container = styled.div`
   display: grid;
@@ -54,9 +55,20 @@ interface ReplyCardProps {
 export default function ReplyCard({ reply, boardCreatorId }: ReplyCardProps) {
   const userInfo = useRecoilValue(userInfoState);
   const [open, setOpen] = useState(false); // 댓글 삭제 확인 모달
+  const [chatOpen, setChatOpen] = useState(false); // 프로필 누르면 채팅하기 뜨도록 모달
+
   const onClickEdit = () => {
     setOpen((prev) => !prev);
   };
+
+  const goChatModal = () => {
+    console.log(reply);
+    // 내 게시글일 땐, 채팅하기 안보이게
+    if (reply.memberId !== userInfo.memberId) {
+      setChatOpen((prev) => !prev);
+    }
+  };
+
   return (
     <Container>
       <ImageWrapper>
@@ -65,6 +77,15 @@ export default function ReplyCard({ reply, boardCreatorId }: ReplyCardProps) {
           alt={reply.nickname}
           width="100%"
           height="100%"
+          onClick={goChatModal}
+        />
+        <EditModal
+          open={chatOpen}
+          setOpen={setChatOpen}
+          commentId=""
+          isMe={userInfo.memberId === reply.memberId}
+          myId={userInfo.memberId}
+          otherId={reply.memberId}
         />
       </ImageWrapper>
       <TextContainer>

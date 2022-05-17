@@ -62,9 +62,9 @@ const Typography = styled.div<{
 `;
 
 interface EditProps {
-  commentList: any;
-  setCommentList: any;
-  setIsChanged: any;
+  commentList?: any;
+  setCommentList?: any;
+  setIsChanged?: any;
   commentId: string;
   open: boolean;
   setOpen: any;
