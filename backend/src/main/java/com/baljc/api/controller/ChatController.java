@@ -31,7 +31,7 @@ public class ChatController {
     }
 
     @GetMapping("/room")
-    public ResponseEntity<BaseDataResponse<List<ChatDto.RoomResponse>>> getRooms() {
+    public ResponseEntity<BaseDataResponse<List<ChatDto.RoomContentResponse>>> getRooms() {
 
         return ResponseEntity.status(HttpStatus.OK).body(new BaseDataResponse<>(1801,
                 "채팅 방 목록 조회에 성공했습니다.", chatService.getRoomList()));
