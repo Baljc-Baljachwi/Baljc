@@ -10,6 +10,8 @@ import { useRouter } from "next/router";
 import { getChatList } from "../../api/chat";
 import { IChatList } from "../../types/index";
 import Header from "components/common/Header";
+import { useRecoilValue } from "recoil";
+import { userInfoState } from "atoms/atoms";
 
 const ChatRoomContainer = styled.div``;
 
@@ -73,6 +75,7 @@ const socket = io("https://baljc.com");
 export default function ChatRoom({ roomId, nickname }: ChatProps) {
   const router = useRouter();
 
+  const userInfo = useRecoilValue(userInfoState);
   const [content, setContent] = useState("");
   const [chatList, setChatList] = useState<IChatList[]>([]);
 
@@ -109,7 +112,8 @@ export default function ChatRoom({ roomId, nickname }: ChatProps) {
     if (content.length > 0) {
       socket.emit("message", {
         roomId: roomId,
-        memberId: "031f",
+        // memberId 본인 꺼 보내면 될까 흠
+        memberId: userInfo.memberId,
         message: content,
       });
       console.log("send: ", content);
