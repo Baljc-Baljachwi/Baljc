@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -26,7 +27,7 @@ public class ChatController {
             @RequestBody ChatDto.Request request) {
 
         return ResponseEntity.status(HttpStatus.OK).body(new BaseDataResponse<>(1800,
-                "채팅 방 생성에 성공했습니다.", chatService.insertRoom(request)));
+                "채팅 방 생성 또는 조회에 성공했습니다.", chatService.insertRoom(request)));
     }
 
     @GetMapping("/room")
@@ -34,5 +35,12 @@ public class ChatController {
 
         return ResponseEntity.status(HttpStatus.OK).body(new BaseDataResponse<>(1801,
                 "채팅 방 목록 조회에 성공했습니다.", chatService.getRoomList()));
+    }
+
+    @GetMapping("/room/{roomId}")
+    public ResponseEntity<BaseDataResponse<List<ChatDto.ChatResponse>>> getChat(@PathVariable("roomId") UUID roomId) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(new BaseDataResponse<>(1802,
+                "채팅 내역 조회에 성공했습니다.", chatService.getChatList(roomId)));
     }
 }

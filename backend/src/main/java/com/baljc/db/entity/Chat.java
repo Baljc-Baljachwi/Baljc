@@ -1,6 +1,7 @@
 package com.baljc.db.entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
@@ -33,6 +34,7 @@ public class Chat {
     @JoinColumn(name = "room_id")
     private Room room;
 
+    @Builder
     public Chat(String content, String imgUrl, Member member, Room room) {
         this.content = content;
         this.imgUrl = imgUrl;

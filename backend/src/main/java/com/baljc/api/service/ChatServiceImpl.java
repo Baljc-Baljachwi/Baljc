@@ -2,11 +2,14 @@ package com.baljc.api.service;
 
 import com.baljc.api.dto.ChatDto;
 import com.baljc.api.dto.MemberDto;
+import com.baljc.db.entity.Chat;
 import com.baljc.db.entity.Member;
 import com.baljc.db.entity.Room;
+import com.baljc.db.repository.ChatRepository;
 import com.baljc.db.repository.MemberRepository;
 import com.baljc.db.repository.RoomRepository;
 import com.baljc.exception.NotExistedMemberException;
+import com.baljc.exception.NotExistedRoomException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,10 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -28,11 +28,13 @@ public class ChatServiceImpl implements ChatService{
     private final MemberService memberService;
     private final MemberRepository memberRepository;
     private final RoomRepository roomRepository;
+    private final ChatRepository chatRepository;
 
-    public ChatServiceImpl(MemberService memberService, MemberRepository memberRepository, RoomRepository roomRepository) {
+    public ChatServiceImpl(MemberService memberService, MemberRepository memberRepository, RoomRepository roomRepository, ChatRepository chatRepository) {
         this.memberService = memberService;
         this.memberRepository = memberRepository;
         this.roomRepository = roomRepository;
+        this.chatRepository = chatRepository;
     }
 
     @Override
@@ -112,6 +114,20 @@ public class ChatServiceImpl implements ChatService{
                             new MemberDto.Other(other.getNickname(), other.getProfileUrl(),
                                     other.getDepth1(), other.getDepth2(), other.getDepth3()));
                 })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ChatDto.ChatResponse> getChatList(UUID roomId) {
+        return roomRepository.findById(roomId)
+                .orElseThrow(() -> new NotExistedRoomException("아이디로 조회되는 채팅 방이 존재하지 않습니다."))
+                .getChatList()
+                .stream()
+                .sorted(Comparator.comparing(Chat::getCreatedAt))
+                .map(chat -> new ChatDto.ChatResponse(chat.getChatId(),
+                        chat.getContent(),
+                        chat.getImgUrl(),
+                        chat.getCreatedAt()))
                 .collect(Collectors.toList());
     }
 }

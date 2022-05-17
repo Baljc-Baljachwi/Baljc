@@ -129,6 +129,13 @@ public class ExceptionController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse(3800, e.getMessage()));
     }
 
+    @ExceptionHandler(NotExistedRoomException.class)
+    public ResponseEntity<BaseResponse> NotExistedRoomExceptionHandler(NotExistedRoomException e) {
+        log.error("NotExistedRoomException - {}", e.getMessage());
+        // 400
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse(3801, e.getMessage()));
+    }
+
     @ExceptionHandler(NotExpiredTokenException.class)
     public ResponseEntity<BaseResponse> NotExpiredTokenExceptionHandler(NotExpiredTokenException e) {
         log.error("NotExpiredTokenException - {}", e.getMessage());
