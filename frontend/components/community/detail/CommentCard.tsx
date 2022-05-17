@@ -87,8 +87,18 @@ export default function CommentCard({
   const userInfo = useRecoilValue(userInfoState);
   const router = useRouter();
   const boardId = router.query.boardId;
+  const [chatOpen, setChatOpen] = useState(false); // 프로필 누르면 채팅하기 뜨도록 모달
+
   const onClickEdit = () => {
     setOpen((prev) => !prev);
+  };
+
+  const goChatModal = () => {
+    // console.log(reply);
+    // 내 게시글일 땐, 채팅하기 안보이게
+    if (memberId !== userInfo.memberId) {
+      setChatOpen((prev) => !prev);
+    }
   };
 
   return (
@@ -97,12 +107,23 @@ export default function CommentCard({
         {deletedYn === "Y" && list !== [] ? (
           <Image src={defaultProfileImage} alt="" width="100%" height="100%" />
         ) : (
-          <Image
-            src={profileUrl || defaultProfileImage}
-            alt=""
-            width="100%"
-            height="100%"
-          />
+          <>
+            <Image
+              src={profileUrl || defaultProfileImage}
+              alt=""
+              width="100%"
+              height="100%"
+              onClick={goChatModal}
+            />
+            <EditModal
+              open={chatOpen}
+              setOpen={setChatOpen}
+              commentId=""
+              isMe={userInfo.memberId === memberId}
+              myId={userInfo.memberId}
+              otherId={memberId}
+            />
+          </>
         )}
       </ImageWrapper>
 

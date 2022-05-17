@@ -18,7 +18,7 @@ const ModalOverlay = styled.div<{ visible: boolean }>`
   bottom: 0;
   right: 0;
   background-color: #00000086;
-  z-index: 999;
+  z-index: 100000;
 `;
 
 const ModalWrapper = styled.div<{ visible: boolean }>`
@@ -29,7 +29,7 @@ const ModalWrapper = styled.div<{ visible: boolean }>`
   bottom: 0;
   width: 100%;
   max-width: 512px;
-  z-index: 1000;
+  z-index: 100000;
   overflow: auto;
   outline: 0;
 `;

@@ -19,6 +19,7 @@ import defaultProfileImage from "public/assets/img/mypage/avatar/default_profile
 import { IPost, IComment } from "types";
 import { userInfoState } from "atoms/atoms";
 import ButtonModal from "components/common/ButtonModal";
+import EditModal from "components/community/detail/EditModal";
 
 const Container = styled.div`
   display: flex;
@@ -204,6 +205,7 @@ export default function CommunityDetail() {
   const [isChanged, setIsChanged] = useState(false); // 변경 감지할 변수
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState<boolean>(false);
+  const [open, setOpen] = useState(false);
 
   const modalChildren = [
     {
@@ -313,7 +315,7 @@ export default function CommunityDetail() {
         .then((res) => {
           const { data } = res.data;
           const { imgUrlList } = data;
-
+          console.log(res.data.data);
           setBoardDetail({
             ...data,
             imgUrlList: imgUrlList.map((obj: any) => obj.imgUrl),
@@ -331,6 +333,13 @@ export default function CommunityDetail() {
         .catch((err) => console.error(err));
     }
   }, [router.query.boardId, isChanged]);
+
+  const goChatModal = () => {
+    // 내 게시글일 땐, 채팅하기 안보이게
+    if (boardDetail.memberId !== userInfo.memberId) {
+      setOpen((prev) => !prev);
+    }
+  };
 
   return (
     <>
@@ -352,6 +361,15 @@ export default function CommunityDetail() {
               width={60}
               height={60}
               style={{ borderRadius: "50%" }}
+              onClick={goChatModal}
+            />
+            <EditModal
+              open={open}
+              setOpen={setOpen}
+              commentId=""
+              isMe={userInfo.memberId === boardDetail.memberId}
+              myId={userInfo.memberId}
+              otherId={boardDetail.memberId}
             />
             <InfoWrapper>
               <Typography fs="1.6rem" fw="600">
