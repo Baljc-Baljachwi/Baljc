@@ -58,7 +58,7 @@ export class EventsGateway
     );
 
     this.httpService
-      .post(process.env.HOST + '/api/chat/room/' + payload.roomId, {
+      .post(process.env.BASE_URL + '/api/chat/room/' + payload.roomId, {
         memberId: payload.memberId,
         content: payload.message,
       })
