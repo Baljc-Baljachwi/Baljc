@@ -43,6 +43,7 @@ export default function NavBar() {
     setRootPathname(root);
   }, [router]);
 
+  console.log(rootPathname);
   return (
     <Container>
       <Item
@@ -66,14 +67,14 @@ export default function NavBar() {
           커뮤니티
         </div>
       </Item>
-      <Item onClick={() => router.push("/community/chat")}>
+      <Item onClick={() => router.push("/chat")}>
         <Icon
           mode="fas"
           icon="comment-dots"
           size="2rem"
-          color={rootPathname === "finance" ? "#4d5158" : "#cdcdcd"}
+          color={rootPathname === "chat" ? "#4d5158" : "#cdcdcd"}
         />
-        <div className={rootPathname === "finance" ? "" : "active"}>채팅</div>
+        <div className={rootPathname === "chat" ? "" : "active"}>채팅</div>
       </Item>
       <Item onClick={() => router.push("/calendar")}>
         <Icon
