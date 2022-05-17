@@ -1,6 +1,10 @@
 import styled from "styled-components";
 
 import ChatListItem from "./ChatListItem";
+import { IChatRoomList } from "../../../types/index";
+import { useCallback, useEffect, useState } from "react";
+
+import { getChatRoomList } from "../../../api/chat";
 
 const ChatContainer = styled.div``;
 
@@ -23,27 +27,28 @@ const NoChatContent = styled.p`
 `;
 
 export default function ChatList() {
-  // 대충 일단 넣어
-  const chatList = [
-    { roomId: 1, nickname: "줌줌따리", content: "아농" },
-    { roomId: 2, nickname: "멋지희", content: "하이하이" },
-    { roomId: 3, nickname: "갓성재", content: "안녕하세요" },
-  ];
+  const [chatList, setChatList] = useState<IChatRoomList[]>([]);
 
+  const getChatist = useCallback(() => {
+    getChatRoomList()
+      .then((res) => {
+        setChatList(res.data.data);
+        console.log(res.data.data[0]);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  useEffect(() => {
+    getChatist();
+  }, [getChatist]);
+
+  console.log(chatList);
   return (
     <>
       <ChatContainer>
         {chatList.length > 0 ? (
           chatList.map((chatItem, idx) => {
-            const { roomId, nickname, content } = chatItem;
-            return (
-              <ChatListItem
-                key={idx}
-                roomId={roomId}
-                nickname={nickname}
-                content={content}
-              ></ChatListItem>
-            );
+            return <ChatListItem key={idx} chatItem={chatItem}></ChatListItem>;
           })
         ) : (
           <NoChatDiv>
