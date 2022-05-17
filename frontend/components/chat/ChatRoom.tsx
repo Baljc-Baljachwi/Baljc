@@ -45,6 +45,24 @@ const InputDiv = styled.input`
   }
 `;
 
+const NoChatDiv = styled.div`
+  width: 100%;
+  height: calc(100vh - 50rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+`;
+
+const NoChatTitle = styled.p`
+  font-size: 1.8rem;
+`;
+
+const NoChatContent = styled.p`
+  font-size: 1.6rem;
+`;
+
 interface ChatProps {
   roomId: string;
   nickname: string;
@@ -61,7 +79,8 @@ export default function ChatRoom({ roomId, nickname }: ChatProps) {
   useEffect(() => {
     getChatList(roomId)
       .then((res) => {
-        console.log(res);
+        // console.log(res.data.data);
+        setChatList(res.data.data);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -96,21 +115,31 @@ export default function ChatRoom({ roomId, nickname }: ChatProps) {
   const send = () => {
     // 메시지 전송
     // room id는 join 이벤트에 사용한 room id와 동일해야함, member id와 message 포함하여 전송
-    socket.emit("message", {
-      roomId: roomId,
-      memberId: "031f",
-      message: content,
-    });
-    console.log("send: ", content);
-    setContent("");
+    if (content.length > 0) {
+      socket.emit("message", {
+        roomId: roomId,
+        memberId: "031f",
+        message: content,
+      });
+      console.log("send: ", content);
+      setContent("");
+    }
   };
 
   return (
     <>
       <Header label={nickname} onClickBackButton={() => router.push("/chat")} />
-      {/* <ChatRoomContainer></ChatRoomContainer> */}
-      <ChatMessage></ChatMessage>
-      {/* <ChatInput></ChatInput> */}
+      {chatList.length > 0 ? (
+        chatList.map((chatItem, idx) => (
+          <ChatMessage key={idx} chatItem={chatItem}></ChatMessage>
+        ))
+      ) : (
+        <NoChatDiv>
+          <NoChatTitle>채팅 기록이 없습니다.</NoChatTitle>
+          <NoChatContent>친구와 대화를 시작해보세요!</NoChatContent>
+        </NoChatDiv>
+      )}
+
       <ChatInputDiv>
         <Icon icon="image" mode="fas" color="#cccccc" size="2.5rem" />
         <InputDiv

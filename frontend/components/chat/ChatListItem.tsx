@@ -65,7 +65,7 @@ export default function ChatListItem({ chatItem }: chatProps) {
           {
             pathname: `/chat/${chatItem.roomId}`,
             query: {
-              // roomId: chatItem.roomId,
+              roomId: chatItem.roomId || "",
               nickname: chatItem.other.nickname || "",
             },
           },

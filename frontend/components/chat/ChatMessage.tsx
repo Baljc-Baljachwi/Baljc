@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { IChatList } from "../../types/index";
 
 const MessageDiv = styled.div`
   width: 100%;
@@ -45,10 +46,13 @@ const MessageTime = styled.div`
   white-space: nowrap;
 `;
 
-export default function ChatMessage() {
+interface ChatProp {
+  chatItem: IChatList;
+}
+export default function ChatMessage({ chatItem }: ChatProp) {
   return (
     <MessageDiv>
-      <MyMessageDiv>
+      {/* <MyMessageDiv>
         <MessageTime>오후 3:45</MessageTime>
         <MyMessage>안녕하세요 ~!</MyMessage>
       </MyMessageDiv>
@@ -56,7 +60,7 @@ export default function ChatMessage() {
         <OtherProfile src="/assets/img/mypage/avatar/default_profile.png" />
         <OtherMessage>안녕하세요안녕하세요안녕하세요안녕하세요</OtherMessage>
         <MessageTime>오후 3:46</MessageTime>
-      </OtherMessageDiv>
+      </OtherMessageDiv> */}
     </MessageDiv>
   );
 }
