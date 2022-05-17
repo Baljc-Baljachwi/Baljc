@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import Header from "components/common/Header";
-import ChatRoom from "components/community/chat/ChatRoom";
+import ChatRoom from "../../components/chat/ChatRoom";
 
 export default function Chat() {
   const router = useRouter();
@@ -22,10 +22,7 @@ export default function Chat() {
 
   return (
     <>
-      <Header
-        label={nickname}
-        onClickBackButton={() => router.push("/community/chat")}
-      />
+      <Header label={nickname} onClickBackButton={() => router.push("/chat")} />
       <ChatRoom />
     </>
   );

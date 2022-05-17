@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import { IChatRoomList } from "../../../types/index";
+import { IChatRoomList } from "../../types/index";
 
 const ChatContainer = styled.div`
   width: 100%;
@@ -63,10 +63,10 @@ export default function ChatListItem({ chatItem }: chatProps) {
       onClick={() =>
         router.push(
           {
-            pathname: `/community/chat/${chatItem.roomId}`,
+            pathname: `/chat/${chatItem.roomId}`,
             query: { nickname: chatItem.other.nickname },
           },
-          `/community/chat/${chatItem.roomId}`
+          `/chat/${chatItem.roomId}`
         )
       }
     >

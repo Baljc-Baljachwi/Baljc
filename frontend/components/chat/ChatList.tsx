@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
 import ChatListItem from "./ChatListItem";
-import { IChatRoomList } from "../../../types/index";
+import { IChatRoomList } from "../../types/index";
 import { useCallback, useEffect, useState } from "react";
 
-import { getChatRoomList } from "../../../api/chat";
+import { getChatRoomList } from "../../api/chat";
 
 const ChatContainer = styled.div``;
 
