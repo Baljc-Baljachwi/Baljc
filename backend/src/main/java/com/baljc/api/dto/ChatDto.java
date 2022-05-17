@@ -25,6 +25,15 @@ public class ChatDto {
 
     @Getter
     @AllArgsConstructor
+    public static class RoomContentResponse {
+        private UUID roomId;
+        private String updatedAt;
+        private String content;
+        private MemberDto.Other other;
+    }
+
+    @Getter
+    @AllArgsConstructor
     public static class ChatResponse {
         private UUID chatId;
         private UUID memberId;
