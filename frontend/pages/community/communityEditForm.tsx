@@ -11,6 +11,7 @@ import { userInfoState } from "atoms/atoms";
 type ImageInfo = { imgUrl: string; boardImgId: string };
 
 interface IBoardContent {
+  categoryName: string;
   content: string;
   imgInfoList: ImageInfo[];
 }
@@ -23,6 +24,7 @@ export default function CommunityEditForm() {
   const [ready, setReady] = useState(false);
 
   const [boardContent, setBoardDetail] = useState<IBoardContent>({
+    categoryName: "",
     content: "",
     imgInfoList: [],
   });
@@ -41,10 +43,8 @@ export default function CommunityEditForm() {
             });
             return;
           } else {
-            setBoardDetail({
-              content: data.data.content,
-              imgInfoList: data.data.imgUrlList,
-            });
+            const { categoryName, content, imgUrlList } = data.data;
+            setBoardDetail({ categoryName, content, imgInfoList: imgUrlList });
           }
         }
       } catch (err) {

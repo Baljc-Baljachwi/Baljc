@@ -111,6 +111,7 @@ const ErrorMessage = styled.p`
   text-align: end;
   line-height: 1.6rem;
   height: 1.6rem;
+  margin: 0.4rem 0;
 `;
 
 const ButtonContainer = styled.div`
@@ -145,19 +146,16 @@ interface IBoardCategory {
 }
 
 interface IBoardContent {
+  categoryName: string;
   content: string;
   imgInfoList: ImageInfo[];
 }
 
 interface CommunityFormProps {
   boardContent?: IBoardContent;
-  selectedCategory: any;
 }
 
-export default function CommunityForm({
-  boardContent,
-  selectedCategory,
-}: CommunityFormProps) {
+export default function CommunityForm({ boardContent }: CommunityFormProps) {
   const router = useRouter();
 
   // 새로고침 hydration error 해결
@@ -238,7 +236,7 @@ export default function CommunityForm({
     };
 
     // console.log("data: ", data);
-    // console.log("boardInfo: ", boardInfo);
+    console.log("boardInfo: ", boardInfo);
 
     const formData = new FormData();
     imageFileList.forEach((file) => {
@@ -252,7 +250,7 @@ export default function CommunityForm({
     if (boardContent) {
       putBoard(router.query.boardId as string, formData)
         .then((res) => {
-          // console.log(res.data);
+          console.log(res.data);
           if (res.data.code === 1704) {
             // console.log(res.data.message);
             router.push({
@@ -260,7 +258,7 @@ export default function CommunityForm({
               query: { boardId: router.query.boardId },
             });
           } else {
-            // console.log(res.data.message);
+            console.log(res.data.message);
           }
         })
         .catch((err) => console.error(err));
@@ -283,29 +281,51 @@ export default function CommunityForm({
     setReady(true);
     // 카테고리 가져오기
     getBoardsCategories().then((res) => {
-      // console.log(res.data);
       if (res.data.code === 1700) {
         const { data } = res.data;
         const withOutAll = data.filter(
           (category: IBoardCategory) => category.name !== "전체보기"
         );
         setBoardCategories(withOutAll);
-        setValue("category", withOutAll[0].boardCategoryId);
-      } else {
-        // console.log(res.data.message);
+        // 생성 페이지인 경우
+        if (!boardContent) {
+          const { selectedCategory } = router.query;
+          // 전체보기는 제외
+          if (
+            withOutAll.some(
+              (category: any) => category.boardCategoryId === selectedCategory
+            )
+          ) {
+            setValue(
+              "category",
+              selectedCategory || withOutAll[0].boardCategoryId
+            );
+          } else {
+            setValue("category", withOutAll[0].boardCategoryId);
+          }
+        } else {
+          setValue("content", boardContent.content);
+          setImagePreviewList(boardContent.imgInfoList);
+          setValue(
+            "category",
+            withOutAll.filter(
+              (category: any) => category.name === boardContent.categoryName
+            )[0].boardCategoryId
+          );
+        }
       }
     });
     if (boardContent) {
-      setValue("content", boardContent.content);
-      setImagePreviewList(boardContent.imgInfoList);
     }
-  }, [setValue, boardContent]);
+  }, [setValue, boardContent, router.query]);
 
   if (!ready) {
     return null;
   }
   return (
-    <FormContainer onSubmit={handleSubmit(onClickSubmitButton)}>
+    <FormContainer
+      onSubmit={handleSubmit(onClickSubmitButton, (err) => console.log(err))}
+    >
       <FlexContainer>
         <Typography fs="1.6rem" fw="500">
           카테고리
@@ -334,8 +354,21 @@ export default function CommunityForm({
           ))}
         </CategoryLabelContainer>
       </FlexContainer>
+      <ErrorMessage>{errors.category?.message}</ErrorMessage>
+      <InputDiv isError={!!errors.content}>
+        <StyledTextarea
+          {...register("content", {
+            maxLength: {
+              value: 10000,
+              message: "10,000자를 넘을 수 없습니다",
+            },
+          })}
+          placeholder="내용을 입력해주세요."
+        />
+      </InputDiv>
+      <ErrorMessage>{errors.content?.message}</ErrorMessage>
       <ImageContainer>
-        {imagePreviewList.map((imageInfo, index) => (
+        {imagePreviewList?.map((imageInfo, index) => (
           <ImageWrapper key={index}>
             <Image
               className="image"
@@ -357,21 +390,9 @@ export default function CommunityForm({
       </ImageContainer>
       <MutedText>
         10MB 이하의 사진 최대 3개까지 업로드 가능합니다. (
-        {imagePreviewList.length}
+        {imagePreviewList?.length || 0}
         /3)
       </MutedText>
-      <InputDiv isError={!!errors.content}>
-        <StyledTextarea
-          {...register("content", {
-            maxLength: {
-              value: 10000,
-              message: "10,000자를 넘을 수 없습니다",
-            },
-          })}
-          placeholder="내용을 입력해주세요."
-        />
-      </InputDiv>
-      <ErrorMessage>{errors.content?.message}</ErrorMessage>
 
       <ButtonContainer>
         <ImageButtonLabel htmlFor="image">
