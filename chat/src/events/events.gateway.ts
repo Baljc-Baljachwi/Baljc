@@ -43,11 +43,13 @@ export class EventsGateway
   @SubscribeMessage('message')
   public handleMessage(
     client: Socket,
-    payload: { roomId: string; message: string },
+    payload: { roomId: string; memberId: string; message: string },
   ): void {
     this.logger.log(
       'handleMessage - roomId: ' +
         payload.roomId +
+        ', memberId: ' +
+        payload.memberId +
         ', message: ' +
         payload.message,
     );
