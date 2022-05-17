@@ -5,6 +5,7 @@ import com.baljc.api.dto.MemberDto;
 import com.baljc.db.entity.Chat;
 import com.baljc.db.entity.Member;
 import com.baljc.db.entity.Room;
+import com.baljc.db.repository.ChatRepository;
 import com.baljc.db.repository.MemberRepository;
 import com.baljc.db.repository.RoomRepository;
 import com.baljc.exception.NotExistedMemberException;
@@ -27,24 +28,27 @@ public class ChatServiceImpl implements ChatService{
     private final MemberService memberService;
     private final MemberRepository memberRepository;
     private final RoomRepository roomRepository;
+    private final ChatRepository chatRepository;
 
-    public ChatServiceImpl(MemberService memberService, MemberRepository memberRepository, RoomRepository roomRepository) {
+    public ChatServiceImpl(MemberService memberService, MemberRepository memberRepository,
+                           RoomRepository roomRepository, ChatRepository chatRepository) {
         this.memberService = memberService;
         this.memberRepository = memberRepository;
         this.roomRepository = roomRepository;
+        this.chatRepository = chatRepository;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ChatDto.RoomResponse insertRoom(ChatDto.Request request) {
-        if (!(memberRepository.findById(request.getMemberId1()).isPresent()
-                && memberRepository.findById(request.getMemberId2()).isPresent()))
+    public ChatDto.RoomResponse insertRoom(ChatDto.RoomRequest roomRequest) {
+        if (!(memberRepository.findById(roomRequest.getMemberId1()).isPresent()
+                && memberRepository.findById(roomRequest.getMemberId2()).isPresent()))
             throw new NotExistedMemberException("아이디로 조회되는 회원이 존재하지 않습니다.");
 
-        Room room = roomRepository.findByMembers(request.getMemberId1(), request.getMemberId2()).orElseGet(
+        Room room = roomRepository.findByMembers(roomRequest.getMemberId1(), roomRequest.getMemberId2()).orElseGet(
                 () -> roomRepository.save(Room.builder()
-                        .member1(memberRepository.getById(request.getMemberId1()))
-                        .member2(memberRepository.getById(request.getMemberId2()))
+                        .member1(memberRepository.getById(roomRequest.getMemberId1()))
+                        .member2(memberRepository.getById(roomRequest.getMemberId2()))
                         .build())
         );
 
@@ -135,5 +139,15 @@ public class ChatServiceImpl implements ChatService{
                         chat.getImgUrl(),
                         chat.getCreatedAt()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void insertChat(UUID roomId, ChatDto.ChatRequest chatRequest) {
+        chatRepository.save(Chat.builder()
+                        .room(roomRepository.getById(roomId))
+                        .member(memberRepository.getById(chatRequest.getMemberId()))
+                        .content(chatRequest.getContent())
+                .build());
     }
 }
