@@ -25,7 +25,7 @@ export default function CommunityCreateForm() {
         label="게시글 작성"
         onClickBackButton={() => router.push("/community")}
       />
-      <CommunityForm selectedCategory={selectedCategory} />
+      <CommunityForm />
     </>
   );
 }
