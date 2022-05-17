@@ -7,8 +7,8 @@ import ChatRoom from "../../components/chat/ChatRoom";
 
 export default function Chat() {
   const router = useRouter();
-  const roomId = router.query.params || [];
-  const nickname = router.query.nickname || "";
+  const roomId = router.query.param?.toString() || "";
+  const nickname = router.query.nickname?.toString() || "";
 
   const [ready, setReady] = useState(false);
 
@@ -22,8 +22,8 @@ export default function Chat() {
 
   return (
     <>
-      <Header label={nickname} onClickBackButton={() => router.push("/chat")} />
-      <ChatRoom />
+      {/* <Header label={nickname} onClickBackButton={() => router.push("/chat")} /> */}
+      <ChatRoom roomId={roomId} nickname={nickname} />
     </>
   );
 }

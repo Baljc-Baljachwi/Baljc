@@ -5,6 +5,11 @@ import io from "socket.io-client";
 import ChatInput from "./ChatInput";
 import ChatMessage from "./ChatMessage";
 import Icon from "components/common/Icon";
+import { useRouter } from "next/router";
+
+import { getChatList } from "../../api/chat";
+import { IChatList } from "../../types/index";
+import Header from "components/common/Header";
 
 const ChatRoomContainer = styled.div``;
 
@@ -40,18 +45,35 @@ const InputDiv = styled.input`
   }
 `;
 
+interface ChatProps {
+  roomId: string;
+  nickname: string;
+}
+
 const socket = io("https://baljc.com");
 
-export default function ChatRoom() {
-  const [content, setContent] = useState("");
+export default function ChatRoom({ roomId, nickname }: ChatProps) {
+  const router = useRouter();
 
+  const [content, setContent] = useState("");
+  const [chatList, setChatList] = useState<IChatList[]>([]);
+
+  useEffect(() => {
+    getChatList(roomId)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  // console.log(roomId);
   useEffect(() => {
     // 소켓 연결 응답
     socket.on("connect", () => {
       console.log("connected: ", socket.id);
 
       // room id로 join 이벤트 요청
-      socket.emit("join", "3k52");
+      socket.emit("join", roomId);
       console.log(socket);
 
       // 메시지 응답
@@ -71,21 +93,22 @@ export default function ChatRoom() {
     setContent(e.target.value);
   };
 
-  const send = useCallback(() => {
+  const send = () => {
     // 메시지 전송
     // room id는 join 이벤트에 사용한 room id와 동일해야함, member id와 message 포함하여 전송
     socket.emit("message", {
-      roomId: "3k52",
+      roomId: roomId,
       memberId: "031f",
       message: content,
     });
     console.log("send: ", content);
     setContent("");
-  }, [content]);
+  };
 
   return (
     <>
-      <ChatRoomContainer></ChatRoomContainer>
+      <Header label={nickname} onClickBackButton={() => router.push("/chat")} />
+      {/* <ChatRoomContainer></ChatRoomContainer> */}
       <ChatMessage></ChatMessage>
       {/* <ChatInput></ChatInput> */}
       <ChatInputDiv>

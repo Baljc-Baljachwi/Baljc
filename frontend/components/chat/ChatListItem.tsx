@@ -64,7 +64,10 @@ export default function ChatListItem({ chatItem }: chatProps) {
         router.push(
           {
             pathname: `/chat/${chatItem.roomId}`,
-            query: { nickname: chatItem.other.nickname },
+            query: {
+              // roomId: chatItem.roomId,
+              nickname: chatItem.other.nickname || "",
+            },
           },
           `/chat/${chatItem.roomId}`
         )

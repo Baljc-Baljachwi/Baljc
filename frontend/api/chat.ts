@@ -16,3 +16,8 @@ export const getChatRoomList = async () => {
   console.log("채팅방 조회 얍");
   return await api.get(`/api/chat/room`);
 };
+
+// 채팅 내용 조회 API
+export const getChatList = async (roomId: string) => {
+  return await api.get(`/api/chat/room/${roomId}`);
+};
