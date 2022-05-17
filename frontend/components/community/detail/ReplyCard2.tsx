@@ -62,7 +62,6 @@ export default function ReplyCard({ reply, boardCreatorId }: ReplyCardProps) {
   };
 
   const goChatModal = () => {
-    console.log(reply);
     // 내 게시글일 땐, 채팅하기 안보이게
     if (reply.memberId !== userInfo.memberId) {
       setChatOpen((prev) => !prev);
