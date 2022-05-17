@@ -4,6 +4,7 @@ import { useState } from "react";
 import ConfirmModal from "./ConfirmModal";
 
 import { postChatRoom } from "../../../api/chat";
+import { useRouter } from "next/router";
 
 const ModalWrapper = styled.div<{ visible: boolean }>`
   box-sizing: border-box;
@@ -83,6 +84,7 @@ export default function EditModal({
   otherId,
 }: EditProps) {
   const [openConfirm, setOpenConfirm] = useState(false);
+  const router = useRouter();
 
   const onClose = () => {
     setOpen(false);
@@ -102,7 +104,21 @@ export default function EditModal({
     console.log(otherId);
     console.log("채팅방으로 연결은 곧");
     postChatRoom(myId, otherId)
-      .then((res) => console.log(res))
+      .then((res) => {
+        console.log(res);
+        const roomId = res.data.data.roomId;
+        const nickname = res.data.data.other.nickname;
+        router.push(
+          {
+            pathname: `/chat/${roomId}`,
+            query: {
+              roomId: roomId || "",
+              nickname: nickname || "",
+            },
+          },
+          `/chat/${roomId}`
+        );
+      })
       .catch((err) => console.log(err));
   };
 
