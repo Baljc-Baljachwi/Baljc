@@ -136,7 +136,7 @@ public class ChatServiceImpl implements ChatService{
                         chat.getMember().getMemberId(),
                         chat.getMember().getNickname(),
                         chat.getContent(),
-                        chat.getImgUrl(),
+                        chat.getProfileUrl(),
                         chat.getCreatedAt()))
                 .collect(Collectors.toList());
     }
@@ -145,9 +145,11 @@ public class ChatServiceImpl implements ChatService{
     @Transactional(rollbackFor = Exception.class)
     public void insertChat(UUID roomId, ChatDto.ChatRequest chatRequest) {
         Room room = roomRepository.getById(roomId);
+        Member member = memberRepository.getById(chatRequest.getMemberId());
         Chat chat = chatRepository.save(Chat.builder()
                         .room(room)
-                        .member(memberRepository.getById(chatRequest.getMemberId()))
+                        .member(member)
+                        .profileUrl(member.getProfileUrl())
                         .content(chatRequest.getContent())
                 .build());
         room.updateDateTime(chat.getCreatedAt());

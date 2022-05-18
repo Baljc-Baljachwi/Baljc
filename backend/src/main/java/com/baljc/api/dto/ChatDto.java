@@ -46,7 +46,7 @@ public class ChatDto {
         private UUID memberId;
         private String nickname;
         private String content;
-        private String imgUrl;
+        private String profileUrl;
         private LocalDateTime createdAt;
     }
 }
