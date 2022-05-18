@@ -27,6 +27,7 @@ const CalendarWrapper = styled.div`
 const FinanceWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
 `;
 
 const MonthlyTotal = styled.div`
