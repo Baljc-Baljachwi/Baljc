@@ -50,8 +50,7 @@ export class EventsGateway
       roomId: string;
       memberId: string;
       message: string;
-      nickname: string;
-      imgUrl: string;
+      profileUrl: string;
     },
   ): void {
     this.logger.log(
@@ -74,9 +73,8 @@ export class EventsGateway
 
     client.broadcast.to(payload.roomId).emit('message', {
       memberId: payload.memberId,
-      nickname: payload.nickname,
       content: payload.message,
-      imgUrl: payload.imgUrl,
+      profileUrl: payload.profileUrl,
     });
   }
 }

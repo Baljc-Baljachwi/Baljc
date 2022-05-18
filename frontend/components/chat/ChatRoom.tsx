@@ -69,22 +69,22 @@ const NoChatContent = styled.p`
 interface ChatProps {
   roomId: string;
   nickname: string;
-  imgUrl: string;
+  profileUrl: string;
 }
 
 const CHAT_URL = process.env.NEXT_PUBLIC_CHAT_URL || "";
+console.log(CHAT_URL);
 const socket = io(CHAT_URL);
 
-export default function ChatRoom({ roomId, nickname, imgUrl }: ChatProps) {
+export default function ChatRoom({ roomId, nickname, profileUrl }: ChatProps) {
   const router = useRouter();
 
   const userInfo = useRecoilValue(userInfoState);
   const [content, setContent] = useState("");
   // 기존 채팅 내용 리스트
   const [chatList, setChatList] = useState<IChatList[]>([]);
-  // 새로 추가된 채팅
-  const [recentChat, setRecentChat] = useState();
 
+  // console.log(profileUrl);
   useEffect(() => {
     // 소켓 연결 응답
     socket.on("connect", () => {
@@ -105,14 +105,14 @@ export default function ChatRoom({ roomId, nickname, imgUrl }: ChatProps) {
   useEffect(() => {
     // 메시지 응답
     socket.on("message", (data) => {
+      console.log(data);
       // console.log("receive: ", data.message);
       setChatList([
         ...chatList,
         {
           memberId: data.memberId,
-          nickname: data.nickname,
           content: data.content,
-          imgUrl: data.imgUrl,
+          profileUrl: data.profileUrl,
           createdAt: dayjs(new Date()).toString(),
         },
       ]);
@@ -124,6 +124,11 @@ export default function ChatRoom({ roomId, nickname, imgUrl }: ChatProps) {
   };
 
   const send = () => {
+    const myImgUrl = chatList.find(
+      (chat) => userInfo.memberId === chat.memberId
+    )?.profileUrl;
+    // console.log(myImgUrl);
+
     // 메시지 전송
     // room id는 join 이벤트에 사용한 room id와 동일해야함, member id와 message 포함하여 전송
     if (content.length > 0) {
@@ -131,8 +136,7 @@ export default function ChatRoom({ roomId, nickname, imgUrl }: ChatProps) {
         roomId: roomId,
         memberId: userInfo.memberId,
         message: content,
-        nickname: nickname,
-        imgUrl: imgUrl,
+        profileUrl: myImgUrl,
       });
       console.log("send: ", content);
       setChatList([
@@ -141,11 +145,12 @@ export default function ChatRoom({ roomId, nickname, imgUrl }: ChatProps) {
           memberId: userInfo.memberId,
           nickname: nickname,
           content: content,
-          imgUrl: imgUrl,
+          profileUrl: profileUrl,
           createdAt: dayjs(new Date()).toString(),
         },
       ]);
       setContent("");
+      scrollToBottom();
     }
   };
 
