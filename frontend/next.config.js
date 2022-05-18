@@ -17,6 +17,6 @@ module.exports = withPWA({
     KAKAO_REDIRECT_URI,
   },
   images: {
-    domains: ["baljc.s3.ap-northeast-2.amazonaws.com"],
+    domains: ["baljc.s3.ap-northeast-2.amazonaws.com", "drf5juj9r1n4w.cloudfront.net"],
   },
 });
