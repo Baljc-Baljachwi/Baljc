@@ -164,7 +164,13 @@ export default function CommunityList() {
             onClick={() => setSelectedCategory(item.boardCategoryId)}
             isSelected={selectedCategory === item.boardCategoryId}
           >
-            <Image src={item.imgUrl} alt={item.name} width="40%" height="40%" />
+            <Image
+              src={item.imgUrl}
+              alt={item.name}
+              width="40%"
+              height="40%"
+              priority={true}
+            />
             <Typography
               fs="1.2rem"
               m="0.5rem 0 0 0"

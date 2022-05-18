@@ -120,6 +120,7 @@ const ProfileCard = ({}) => {
                 src={memberInfo?.profileUrl || defaultProfileImage}
                 alt={memberInfo?.nickname}
                 layout="fill"
+                priority={true}
               />
             )}
           </ProfileImage>
