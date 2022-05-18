@@ -24,13 +24,16 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
 
     private final AmazonS3Client amazonS3Client;
     private final String bucket;
+    private final String cdnDomain;
 
     public AmazonS3ServiceImpl(@Value("${cloud.aws.s3.bucket}") String bucket,
+                               @Value("${cloud.aws.cloudFront.domain}") String cdnDomain,
                                @Value("${cloud.aws.credentials.accessKey}") String accessKey,
                                @Value("${cloud.aws.credentials.secretKey}") String secretKey,
                                @Value("${cloud.aws.region.static}") String region
     ) {
         this.bucket = bucket;
+        this.cdnDomain = cdnDomain;
         this.amazonS3Client = (AmazonS3Client) AmazonS3ClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
                 .withRegion(region)
@@ -61,7 +64,8 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
 
     @Override
     public String getFileUrl(String filePath) {
-        return amazonS3Client.getUrl(bucket, filePath).toString();
+//        return amazonS3Client.getUrl(bucket, filePath).toString();
+        return cdnDomain + "/" + getFilePath(amazonS3Client.getUrl(bucket, filePath).toString());
     }
 
     @Override
