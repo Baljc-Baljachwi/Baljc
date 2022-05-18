@@ -44,4 +44,8 @@ public class Room {
         this.member1 = member1;
         this.member2 = member2;
     }
+
+    public void updateDateTime(LocalDateTime dateTime) {
+        this.updatedAt = dateTime;
+    }
 }
