@@ -23,7 +23,6 @@ public class Chat {
     @Column(columnDefinition = "BINARY(16)")
     private UUID chatId;
     private String content;
-    private String profileUrl;
     @CreatedDate
     private LocalDateTime createdAt;
 
@@ -35,9 +34,8 @@ public class Chat {
     private Room room;
 
     @Builder
-    public Chat(String content, String profileUrl, Member member, Room room) {
+    public Chat(String content, Member member, Room room) {
         this.content = content;
-        this.profileUrl = profileUrl;
         this.member = member;
         this.room = room;
     }
