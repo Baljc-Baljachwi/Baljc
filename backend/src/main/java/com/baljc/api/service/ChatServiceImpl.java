@@ -136,7 +136,7 @@ public class ChatServiceImpl implements ChatService{
                         chat.getMember().getMemberId(),
                         chat.getMember().getNickname(),
                         chat.getContent(),
-                        chat.getProfileUrl(),
+                        chat.getMember().getProfileUrl(),
                         chat.getCreatedAt()))
                 .collect(Collectors.toList());
     }
@@ -149,7 +149,6 @@ public class ChatServiceImpl implements ChatService{
         Chat chat = chatRepository.save(Chat.builder()
                         .room(room)
                         .member(member)
-                        .profileUrl(member.getProfileUrl())
                         .content(chatRequest.getContent())
                 .build());
         room.updateDateTime(chat.getCreatedAt());
