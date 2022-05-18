@@ -52,16 +52,18 @@ const MessageTime = styled.div`
 
 const DayDiv = styled.div`
   display: flex;
-  flex-basis: 100%;
+  justify-content: center;
   align-items: center;
+  text-align: center;
   color: rgba(0, 0, 0, 0.35);
-  font-size: 12px;
-  margin: 8px 0px;
+  font-size: 1.2rem;
+  margin: 1rem 0;
+  flex-basis: 100%;
   ::before,
   ::after {
     content: "";
     flex-grow: 1;
-    background: rgba(0, 0, 0, 0.35);
+    background: #cccccc;
     height: 1px;
     font-size: 0px;
     line-height: 0px;
@@ -70,20 +72,18 @@ const DayDiv = styled.div`
 `;
 interface ChatProp {
   chatItem: IChatList;
+  isDate: boolean;
 }
-export default function ChatMessage({ chatItem }: ChatProp) {
+export default function ChatMessage({ chatItem, isDate }: ChatProp) {
   const userInfo = useRecoilValue(userInfoState);
-
-  // console.log(chatItem);
 
   dayjs.locale("ko");
   const date = dayjs(chatItem.createdAt).format("YYYY-MM-DD dddd");
-  // console.log(date);
-
   const chatDate = dayjs(chatItem.createdAt).format("A HH:mm");
+
   return (
     <MessageDiv>
-      {/* <DayDiv>{date}</DayDiv> */}
+      {isDate && <DayDiv>{date}</DayDiv>}
       {chatItem.memberId == userInfo.memberId ? (
         <MyMessageDiv>
           <MessageTime>{chatDate}</MessageTime>

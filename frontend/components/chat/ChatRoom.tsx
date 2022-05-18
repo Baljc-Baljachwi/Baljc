@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import styled from "styled-components";
 import io from "socket.io-client";
 
@@ -14,7 +14,10 @@ import { useRecoilValue } from "recoil";
 import { userInfoState } from "atoms/atoms";
 import dayjs from "dayjs";
 
-const ChatRoomContainer = styled.div``;
+const ChatRoomContainer = styled.div`
+  // height: calc(100vh-5.6rem);
+  overflowy: "scroll";
+`;
 
 const ChatInputDiv = styled.div`
   width: 100%;
@@ -66,28 +69,44 @@ const NoChatContent = styled.p`
   font-size: 1.6rem;
 `;
 
+const DayDiv = styled.div`
+  display: flex;
+  flex-basis: 100%;
+  align-items: center;
+  color: rgba(0, 0, 0, 0.35);
+  font-size: 12px;
+  margin: 8px 0px;
+  ::before,
+  ::after {
+    content: "";
+    flex-grow: 1;
+    background: rgba(0, 0, 0, 0.35);
+    height: 1px;
+    font-size: 0px;
+    line-height: 0px;
+    margin: 0px 16px;
+  }
+`;
+
 interface ChatProps {
   roomId: string;
   nickname: string;
-  imgUrl: string;
+  profileUrl: string;
 }
 
-console.log(process.env.NEXT_PUBLIC_CHAT_URL);
 const CHAT_URL = process.env.NEXT_PUBLIC_CHAT_URL || "";
+console.log(CHAT_URL);
 const socket = io(CHAT_URL);
-// const socket = io("http://localhost:5000");
-// const socket = io("https://baljc.com");
 
-export default function ChatRoom({ roomId, nickname, imgUrl }: ChatProps) {
+export default function ChatRoom({ roomId, nickname, profileUrl }: ChatProps) {
   const router = useRouter();
 
   const userInfo = useRecoilValue(userInfoState);
   const [content, setContent] = useState("");
   // 기존 채팅 내용 리스트
   const [chatList, setChatList] = useState<IChatList[]>([]);
-  // 새로 추가된 채팅
-  const [recentChat, setRecentChat] = useState();
 
+  // console.log(profileUrl);
   useEffect(() => {
     // 소켓 연결 응답
     socket.on("connect", () => {
@@ -107,20 +126,19 @@ export default function ChatRoom({ roomId, nickname, imgUrl }: ChatProps) {
 
   useEffect(() => {
     // 메시지 응답
-    // 어떻게 받징
     socket.on("message", (data) => {
-      console.log(data.nickname);
-      console.log("receive: ", data.message);
+      console.log(data);
+      // console.log("receive: ", data.message);
       setChatList([
         ...chatList,
         {
           memberId: data.memberId,
-          nickname: data.nickname,
           content: data.content,
-          imgUrl: data.imgUrl,
+          profileUrl: data.profileUrl,
           createdAt: dayjs(new Date()).toString(),
         },
       ]);
+      handleScrollToBottom();
     });
   }, [chatList]);
 
@@ -129,6 +147,11 @@ export default function ChatRoom({ roomId, nickname, imgUrl }: ChatProps) {
   };
 
   const send = () => {
+    const myImgUrl = chatList.find(
+      (chat) => userInfo.memberId === chat.memberId
+    )?.profileUrl;
+    // console.log(myImgUrl);
+
     // 메시지 전송
     // room id는 join 이벤트에 사용한 room id와 동일해야함, member id와 message 포함하여 전송
     if (content.length > 0) {
@@ -136,8 +159,7 @@ export default function ChatRoom({ roomId, nickname, imgUrl }: ChatProps) {
         roomId: roomId,
         memberId: userInfo.memberId,
         message: content,
-        nickname: nickname,
-        imgUrl: imgUrl,
+        profileUrl: myImgUrl,
       });
       console.log("send: ", content);
       setChatList([
@@ -146,11 +168,25 @@ export default function ChatRoom({ roomId, nickname, imgUrl }: ChatProps) {
           memberId: userInfo.memberId,
           nickname: nickname,
           content: content,
-          imgUrl: imgUrl,
+          profileUrl: profileUrl,
           createdAt: dayjs(new Date()).toString(),
         },
       ]);
       setContent("");
+      handleScrollToBottom();
+    }
+  };
+
+  const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
+  const handleScrollToBottom = () => {
+    if (scrollRef.current !== null) {
+      setTimeout(() => {
+        scrollRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "end",
+          inline: "nearest",
+        });
+      }, 100);
     }
   };
 
@@ -161,6 +197,15 @@ export default function ChatRoom({ roomId, nickname, imgUrl }: ChatProps) {
         setChatList(res.data.data);
       })
       .catch((err) => console.log(err));
+    if (scrollRef.current !== null) {
+      setTimeout(() => {
+        scrollRef.current.scrollIntoView({
+          behavior: "auto",
+          block: "end",
+          inline: "nearest",
+        });
+      }, 100);
+    }
   }, []);
 
   const onEnter = (e: React.KeyboardEvent) => {
@@ -172,19 +217,30 @@ export default function ChatRoom({ roomId, nickname, imgUrl }: ChatProps) {
   return (
     <>
       <Header label={nickname} onClickBackButton={() => router.push("/chat")} />
-      {chatList.length > 0 ? (
-        chatList.map((chatItem, idx) => (
-          <ChatMessage key={idx} chatItem={chatItem}></ChatMessage>
-        ))
-      ) : (
-        <NoChatDiv>
-          <NoChatTitle>채팅 기록이 없습니다.</NoChatTitle>
-          <NoChatContent>친구와 대화를 시작해보세요!</NoChatContent>
-        </NoChatDiv>
-      )}
+      <ChatRoomContainer>
+        {chatList.length > 0 ? (
+          chatList.map((chatItem, idx) => (
+            <ChatMessage
+              key={idx}
+              chatItem={chatItem}
+              isDate={
+                idx === 0 ||
+                dayjs(chatList[idx - 1].createdAt).format("YYYY-MM-DD") !==
+                  dayjs(chatItem.createdAt).format("YYYY-MM-DD")
+              }
+            />
+          ))
+        ) : (
+          <NoChatDiv>
+            <NoChatTitle>채팅 기록이 없습니다.</NoChatTitle>
+            <NoChatContent>친구와 대화를 시작해보세요!</NoChatContent>
+          </NoChatDiv>
+        )}
+        <div ref={scrollRef} />
+      </ChatRoomContainer>
 
       <ChatInputDiv>
-        <Icon icon="image" mode="fas" color="#cccccc" size="2.5rem" />
+        {/* <Icon icon="image" mode="fas" color="#cccccc" size="2.5rem" /> */}
         <InputDiv
           placeholder="내용을 입력해주세요."
           onChange={handleInput}
