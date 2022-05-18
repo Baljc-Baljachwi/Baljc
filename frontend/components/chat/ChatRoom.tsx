@@ -129,15 +129,15 @@ export default function ChatRoom({ roomId, nickname, profileUrl }: ChatProps) {
     socket.on("message", (data) => {
       console.log(data);
       // console.log("receive: ", data.message);
-      setChatList([
-        ...chatList,
-        {
-          memberId: data.memberId,
-          content: data.content,
-          profileUrl: data.profileUrl,
-          createdAt: dayjs(new Date()).toString(),
-        },
-      ]);
+      // setChatList([
+      //   ...chatList,
+      //   {
+      //     memberId: data.memberId,
+      //     content: data.content,
+      //     profileUrl: data.profileUrl,
+      //     createdAt: dayjs(new Date()).toString(),
+      //   },
+      // ]);
       handleScrollToBottom();
     });
   }, [chatList]);
@@ -191,6 +191,7 @@ export default function ChatRoom({ roomId, nickname, profileUrl }: ChatProps) {
   };
 
   useEffect(() => {
+    setChatList([]);
     getChatList(roomId)
       .then((res) => {
         // console.log(res.data.data);

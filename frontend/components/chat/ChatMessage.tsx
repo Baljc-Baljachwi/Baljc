@@ -91,7 +91,11 @@ export default function ChatMessage({ chatItem, isDate }: ChatProp) {
         </MyMessageDiv>
       ) : (
         <OtherMessageDiv>
-          <OtherProfile src="/assets/img/mypage/avatar/default_profile.png" />
+          {chatItem.profileUrl ? (
+            <OtherProfile src={chatItem.profileUrl} />
+          ) : (
+            <OtherProfile src="/assets/img/mypage/avatar/default_profile.png" />
+          )}
           <OtherMessage>{chatItem.content}</OtherMessage>
           <MessageTime>{chatDate}</MessageTime>
         </OtherMessageDiv>
