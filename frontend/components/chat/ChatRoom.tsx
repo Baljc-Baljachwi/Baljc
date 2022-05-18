@@ -179,7 +179,7 @@ export default function ChatRoom({ roomId, nickname, imgUrl }: ChatProps) {
       )}
 
       <ChatInputDiv>
-        <Icon icon="image" mode="fas" color="#cccccc" size="2.5rem" />
+        {/* <Icon icon="image" mode="fas" color="#cccccc" size="2.5rem" /> */}
         <InputDiv
           placeholder="내용을 입력해주세요."
           onChange={handleInput}
