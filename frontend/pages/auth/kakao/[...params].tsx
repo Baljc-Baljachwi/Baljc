@@ -35,13 +35,13 @@ export default function KakaoAuth() {
       .then((currentToken) => {
         kakaoLogin(code as string, currentToken).then((res) => {
           if (res.data.code === 1000) {
-            console.log(res);
-            console.log(res.headers);
-            console.log(res.headers.refreshtoken);
+            // console.log(res);
+            // console.log(res.headers);
+            // console.log(res.headers.refreshtoken);
             const accessToken = res.headers.authorization;
             const refreshToken = res.headers.refreshtoken;
-            console.log(`accessToken : ${accessToken}`);
-            console.log(`refreshToken : ${refreshToken}`);
+            // console.log(`accessToken : ${accessToken}`);
+            // console.log(`refreshToken : ${refreshToken}`);
             // console.log(res.data.data);
 
             const { memberId, surveyedYn, regionYn } = res.data.data;
@@ -66,7 +66,7 @@ export default function KakaoAuth() {
   return (
     <Spinner
       color="#cdcdcd"
-      size="30"
+      size="30px"
       display="flex"
       justifyContent="center"
       alignItems="center"
