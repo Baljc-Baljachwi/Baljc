@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import styled from "styled-components";
 import io from "socket.io-client";
 
@@ -14,7 +14,14 @@ import { useRecoilValue } from "recoil";
 import { userInfoState } from "atoms/atoms";
 import dayjs from "dayjs";
 
-const ChatRoomContainer = styled.div``;
+const ChatRoomContainer = styled.div`
+  // height: calc(100vh-5.6rem);
+  overflowY: "scroll"
+  ::-webkit-scrollbar {
+    width: 2rem;
+    background-color: black;
+  }
+`;
 
 const ChatInputDiv = styled.div`
   width: 100%;
@@ -116,6 +123,7 @@ export default function ChatRoom({ roomId, nickname, profileUrl }: ChatProps) {
           createdAt: dayjs(new Date()).toString(),
         },
       ]);
+      handleScrollToBottom();
     });
   }, [chatList]);
 
@@ -150,7 +158,20 @@ export default function ChatRoom({ roomId, nickname, profileUrl }: ChatProps) {
         },
       ]);
       setContent("");
-      scrollToBottom();
+      handleScrollToBottom();
+    }
+  };
+
+  const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
+  const handleScrollToBottom = () => {
+    if (scrollRef.current !== null) {
+      setTimeout(() => {
+        scrollRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "end",
+          inline: "nearest",
+        });
+      }, 100);
     }
   };
 
@@ -161,6 +182,7 @@ export default function ChatRoom({ roomId, nickname, profileUrl }: ChatProps) {
         setChatList(res.data.data);
       })
       .catch((err) => console.log(err));
+    handleScrollToBottom();
   }, []);
 
   const onEnter = (e: React.KeyboardEvent) => {
@@ -172,16 +194,19 @@ export default function ChatRoom({ roomId, nickname, profileUrl }: ChatProps) {
   return (
     <>
       <Header label={nickname} onClickBackButton={() => router.push("/chat")} />
-      {chatList.length > 0 ? (
-        chatList.map((chatItem, idx) => (
-          <ChatMessage key={idx} chatItem={chatItem}></ChatMessage>
-        ))
-      ) : (
-        <NoChatDiv>
-          <NoChatTitle>채팅 기록이 없습니다.</NoChatTitle>
-          <NoChatContent>친구와 대화를 시작해보세요!</NoChatContent>
-        </NoChatDiv>
-      )}
+      <ChatRoomContainer>
+        {chatList.length > 0 ? (
+          chatList.map((chatItem, idx) => (
+            <ChatMessage key={idx} chatItem={chatItem}></ChatMessage>
+          ))
+        ) : (
+          <NoChatDiv>
+            <NoChatTitle>채팅 기록이 없습니다.</NoChatTitle>
+            <NoChatContent>친구와 대화를 시작해보세요!</NoChatContent>
+          </NoChatDiv>
+        )}
+        <div ref={scrollRef} />
+      </ChatRoomContainer>
 
       <ChatInputDiv>
         {/* <Icon icon="image" mode="fas" color="#cccccc" size="2.5rem" /> */}
