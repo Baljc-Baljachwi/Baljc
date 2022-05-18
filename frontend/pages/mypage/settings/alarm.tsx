@@ -168,7 +168,7 @@ const Alarm = () => {
         setTodoAlarmTime(res.data.data.todoAlarmTime);
       })
       .catch((err) => {
-        console.log(err.response);
+        // console.log(err.response);
         console.log("😥🙀 알림 조회 실패");
       });
   }, []);
@@ -199,12 +199,12 @@ const Alarm = () => {
     putAlarms(alarmInfo)
       .then((res) => {
         notify();
-        console.log(res.data);
-        console.log("알림 변경사항 저장 성공! 🤸‍♀️🔥");
+        // console.log(res.data);
+        // console.log("알림 변경사항 저장 성공! 🤸‍♀️🔥");
       })
       .catch((err) => {
         notifyFail();
-        console.log(err.response);
+        // console.log(err.response);
         console.log("😥🙀 알림 변경사항 저장 실패!");
       });
   };

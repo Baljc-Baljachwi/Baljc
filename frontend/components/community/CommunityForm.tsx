@@ -236,7 +236,7 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
     };
 
     // console.log("data: ", data);
-    console.log("boardInfo: ", boardInfo);
+    // console.log("boardInfo: ", boardInfo);
 
     const formData = new FormData();
     imageFileList.forEach((file) => {
@@ -250,7 +250,7 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
     if (boardContent) {
       putBoard(router.query.boardId as string, formData)
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           if (res.data.code === 1704) {
             // console.log(res.data.message);
             router.push({
@@ -258,10 +258,12 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
               query: { boardId: router.query.boardId },
             });
           } else {
-            console.log(res.data.message);
+            // console.log(res.data.message);
           }
         })
-        .catch((err) => console.error(err));
+        .catch((err) => {
+          // console.error(err);
+        });
     } else {
       postBoards(formData)
         .then((res) => {
@@ -273,7 +275,9 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
             // console.log(res.data.message);
           }
         })
-        .catch((err) => console.error(err));
+        .catch((err) => {
+          // console.error(err);
+        });
     }
   }
 
@@ -324,7 +328,9 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
   }
   return (
     <FormContainer
-      onSubmit={handleSubmit(onClickSubmitButton, (err) => console.log(err))}
+      onSubmit={handleSubmit(onClickSubmitButton, (err) => {
+        // console.log(err);
+      })}
     >
       <FlexContainer>
         <Typography fs="1.6rem" fw="500">

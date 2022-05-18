@@ -39,12 +39,12 @@ const Board = () => {
     if (isLoading) {
       getMyBoardList()
         .then((res) => {
-          console.log(res.data.data);
+          // console.log(res.data.data);
           setMyBoardList(res.data.data);
         })
         .then(() => setIsLoading(false))
         .catch((err) => {
-          console.log(err.data.message);
+          // console.log(err.data.message);
         });
     }
   }, [isLoading]);

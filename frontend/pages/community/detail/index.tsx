@@ -315,7 +315,7 @@ export default function CommunityDetail() {
         .then((res) => {
           const { data } = res.data;
           const { imgUrlList } = data;
-          console.log(res.data.data);
+          // console.log(res.data.data);
           setBoardDetail({
             ...data,
             imgUrlList: imgUrlList.map((obj: any) => obj.imgUrl),

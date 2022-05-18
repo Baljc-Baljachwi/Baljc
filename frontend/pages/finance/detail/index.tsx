@@ -130,11 +130,11 @@ const FinanceDetail = () => {
     );
   }, [categoryList, setCategoryImageUrl, financeDetailInfo]);
 
-  console.log(
-    categoryList.find(
-      (category) => category.categoryId === financeDetailInfo?.categoryId
-    )?.imgUrl
-  );
+  // console.log(
+  //   categoryList.find(
+  //     (category) => category.categoryId === financeDetailInfo?.categoryId
+  //   )?.imgUrl
+  // );
 
   // YYYY-MM-DDTHH:MM:SS => YYYY년 MM월 DD일 HH시 MM분
   function datetimeParsing(datetime: string) {

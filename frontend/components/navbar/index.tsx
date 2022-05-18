@@ -43,7 +43,7 @@ export default function NavBar() {
     setRootPathname(root);
   }, [router]);
 
-  console.log(rootPathname);
+  // console.log(rootPathname);
   return (
     <Container>
       <Item

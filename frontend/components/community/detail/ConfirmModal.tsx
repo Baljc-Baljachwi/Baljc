@@ -124,7 +124,9 @@ export default function ConfirmModal({
           onClose();
         }
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        // console.log(err);
+      });
   };
 
   return (
