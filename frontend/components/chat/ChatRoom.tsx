@@ -72,11 +72,8 @@ interface ChatProps {
   imgUrl: string;
 }
 
-console.log(process.env.NEXT_PUBLIC_CHAT_URL);
 const CHAT_URL = process.env.NEXT_PUBLIC_CHAT_URL || "";
 const socket = io(CHAT_URL);
-// const socket = io("http://localhost:5000");
-// const socket = io("https://baljc.com");
 
 export default function ChatRoom({ roomId, nickname, imgUrl }: ChatProps) {
   const router = useRouter();
@@ -107,10 +104,8 @@ export default function ChatRoom({ roomId, nickname, imgUrl }: ChatProps) {
 
   useEffect(() => {
     // 메시지 응답
-    // 어떻게 받징
     socket.on("message", (data) => {
-      console.log(data.nickname);
-      console.log("receive: ", data.message);
+      // console.log("receive: ", data.message);
       setChatList([
         ...chatList,
         {
