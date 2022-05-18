@@ -46,7 +46,13 @@ export class EventsGateway
   @SubscribeMessage('message')
   public handleMessage(
     client: Socket,
-    payload: { roomId: string; memberId: string; message: string },
+    payload: {
+      roomId: string;
+      memberId: string;
+      message: string;
+      nickname: string;
+      imgUrl: string;
+    },
   ): void {
     this.logger.log(
       'handleMessage - roomId: ' +
@@ -66,6 +72,11 @@ export class EventsGateway
       .then((res) => console.log(res.data))
       .catch((err) => console.log(err));
 
-    client.broadcast.to(payload.roomId).emit('message', payload.message);
+    client.broadcast.to(payload.roomId).emit('message', {
+      memberId: payload.memberId,
+      nickname: payload.nickname,
+      content: payload.message,
+      imgUrl: payload.imgUrl,
+    });
   }
 }
