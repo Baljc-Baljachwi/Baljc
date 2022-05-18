@@ -80,7 +80,7 @@ export default function ChatListItem({ chatItem }: chatProps) {
             <ChatNickname>{chatItem.other.nickname}</ChatNickname>|
             <ChatDong>{chatItem.other.depth3}</ChatDong>
           </ChatHeader>
-          <ChatContent>최근 대화 내용 들어가야해</ChatContent>
+          <ChatContent>{chatItem.content}</ChatContent>
           <ChatDate>{chatItem.updatedAt}</ChatDate>
         </ChatDetailDiv>
       </ChatItemDiv>
