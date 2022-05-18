@@ -3,8 +3,8 @@ import { api } from "api";
 // 채팅방 생성 API
 export const postChatRoom = async (memberId1: string, memberId2: string) => {
   // memberId 가 본인, memberId2가 상대방
-  console.log("memberId1 : ", memberId1);
-  console.log("memberId2 : ", memberId2);
+  // console.log("memberId1 : ", memberId1);
+  // console.log("memberId2 : ", memberId2);
   return await api.post(`/api/chat/room`, {
     memberId1: memberId1,
     memberId2: memberId2,

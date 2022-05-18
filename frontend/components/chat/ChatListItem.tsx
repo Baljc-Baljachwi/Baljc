@@ -67,6 +67,7 @@ export default function ChatListItem({ chatItem }: chatProps) {
             query: {
               roomId: chatItem.roomId || "",
               nickname: chatItem.other.nickname || "",
+              profileUrl: chatItem.other.profileUrl || "",
             },
           },
           `/chat/${chatItem.roomId}`
@@ -74,7 +75,12 @@ export default function ChatListItem({ chatItem }: chatProps) {
       }
     >
       <ChatItemDiv>
-        <ProfileImage src={chatItem.other.profileUrl}></ProfileImage>
+        {chatItem.other.profileUrl === null ? (
+          <ProfileImage src="/assets/img/mypage/avatar/default_profile.png"></ProfileImage>
+        ) : (
+          <ProfileImage src={chatItem.other.profileUrl}></ProfileImage>
+        )}
+
         <ChatDetailDiv>
           <ChatHeader>
             <ChatNickname>{chatItem.other.nickname}</ChatNickname>|
