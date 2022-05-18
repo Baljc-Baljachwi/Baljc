@@ -26,13 +26,16 @@ const MainContainer = styled.main`
     align-items: center;
     @media (max-width: 376px) {
       height: calc(100vh - 4.6rem);
+    }
+    @media (max-height: 825px) {
       gap: 4rem;
     }
   }
   .swiper-pagination-bullets {
+    /* position: absolute; */
     bottom: calc(100% - 5.6rem);
-    @media (max-width: 376px) {
-      bottom: calc(100% - 4rem);
+    @media (max-height: 825px) {
+      bottom: calc(100% - 3rem);
     }
   }
   .swiper-pagination-bullet {
@@ -40,7 +43,7 @@ const MainContainer = styled.main`
     height: 1rem;
     background-color: #ffffff;
     opacity: 1;
-    @media (max-width: 376px) {
+    @media (max-height: 700px) {
       width: 0.8rem;
       height: 0.8rem;
     }
@@ -78,7 +81,7 @@ const ImageContainer = styled.div`
   position: relative;
   width: 36rem;
   height: 48rem;
-  @media (max-width: 376px) {
+  @media (max-height: 700px) {
     width: 30rem;
     height: 40rem;
   }
