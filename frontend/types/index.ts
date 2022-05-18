@@ -123,5 +123,5 @@ export interface IChatList {
   nickname?: string;
   content: string;
   createdAt: string;
-  imgUrl?: string;
+  profileUrl?: string;
 }
