@@ -53,7 +53,7 @@ export default function RoutineBoard({ routines }: any) {
   return (
     <Container>
       <Title>일과</Title>
-      <RoutineList>
+      <RoutineList onClick={() => router.push({ pathname: "/work/routine" })}>
         <ul>
           {routines ? (
             routines.length !== 0 ? (
