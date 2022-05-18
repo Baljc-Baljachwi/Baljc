@@ -139,14 +139,9 @@ export default function FinanceBoard({ item, date }: FinanceBoardProps) {
       </Header>
       <div onClick={handleClick}>
         <TextWrapper>
-          <Typography color="#ffffff" fs="1.6rem">
-            하루 예산이
+          <Typography color="#ffffff" fs="1.6rem" fw="300">
+            오늘 쓸 수 있는 돈이
           </Typography>
-          {dayNumber?.fixedExpenditure ? (
-            <Typography color="#ffffff" fs="1.6rem" fw="300">
-              {dayNumber?.fixedExpenditure.toLocaleString()}원
-            </Typography>
-          ) : null}
           <FlexContainer>
             <Typography color="#ffffff" fs="3.2rem" fw="500">
               {dayNumber?.remainingBudget.toLocaleString()}원
@@ -155,6 +150,12 @@ export default function FinanceBoard({ item, date }: FinanceBoardProps) {
               남았습니다.
             </Typography>
           </FlexContainer>
+
+          {dayNumber?.fixedExpenditure ? (
+            <Typography color="#ffffff" fs="1.6rem" fw="300" p="0 0 0.5rem 0">
+              고정 지출 {dayNumber?.fixedExpenditure.toLocaleString()}원
+            </Typography>
+          ) : null}
           <FlexContainer style={{ justifyContent: "space-between" }}>
             <Typography color="#ffffff" fs="1.6rem" fw="300" p="0 0 0.5rem 0">
               오늘의 소비 {dayNumber?.totalExpenditure.toLocaleString()}원

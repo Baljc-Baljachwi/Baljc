@@ -21,5 +21,5 @@ export default function SlideNextButton({
       swiper.slideNext();
     }
   }
-  return <span onClick={onClick}>{isEnd ? "계속" : "다음"}</span>;
+  return <span onClick={onClick}>{isEnd ? "시작하기" : "다음"}</span>;
 }

@@ -125,10 +125,7 @@ export default function RoutineDetail() {
 
   return (
     <>
-      <Header
-        label="오늘의 일과"
-        onClickBackButton={() => router.push("/work")}
-      />
+      <Header label="일과" onClickBackButton={() => router.push("/work")} />
       <RoutineDiv>
         {routineList.length != 0 ? (
           routineList.map((routine, index) => {
