@@ -24,7 +24,7 @@ export default function Chat() {
   return (
     <>
       {/* <Header label={nickname} onClickBackButton={() => router.push("/chat")} /> */}
-      <ChatRoom roomId={roomId} nickname={nickname} imgUrl={profileUrl} />
+      <ChatRoom roomId={roomId} nickname={nickname} profileUrl={profileUrl} />
     </>
   );
 }
