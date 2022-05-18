@@ -108,16 +108,16 @@ export default function ChatRoom({ roomId, nickname, imgUrl }: ChatProps) {
   useEffect(() => {
     // 메시지 응답
     // 어떻게 받징
-    socket.on("message", ({ roomId, memberId, message, nickname, imgUrl }) => {
-      console.log(nickname);
-      console.log("receive: ", message);
+    socket.on("message", (data) => {
+      console.log(data.nickname);
+      console.log("receive: ", data.message);
       setChatList([
         ...chatList,
         {
-          memberId: memberId,
-          nickname: nickname,
-          content: content,
-          imgUrl: imgUrl,
+          memberId: data.memberId,
+          nickname: data.nickname,
+          content: data.content,
+          imgUrl: data.imgUrl,
           createdAt: dayjs(new Date()).toString(),
         },
       ]);
