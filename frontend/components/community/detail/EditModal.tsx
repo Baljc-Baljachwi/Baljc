@@ -102,11 +102,9 @@ export default function EditModal({
   };
 
   const onClickChat = () => {
-    console.log(otherId);
-    console.log("채팅방으로 연결은 곧");
     postChatRoom(myId, otherId)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         const roomId = res.data.data.roomId;
         const nickname = res.data.data.other.nickname;
         router.push(

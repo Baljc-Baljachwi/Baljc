@@ -9,6 +9,7 @@ export default function Chat() {
   const router = useRouter();
   const roomId = router.query.roomId?.toString() || "";
   const nickname = router.query.nickname?.toString() || "";
+  const profileUrl = router.query.profileUrl?.toString() || "";
 
   const [ready, setReady] = useState(false);
 
@@ -23,7 +24,7 @@ export default function Chat() {
   return (
     <>
       {/* <Header label={nickname} onClickBackButton={() => router.push("/chat")} /> */}
-      <ChatRoom roomId={roomId} nickname={nickname} />
+      <ChatRoom roomId={roomId} nickname={nickname} imgUrl={profileUrl} />
     </>
   );
 }

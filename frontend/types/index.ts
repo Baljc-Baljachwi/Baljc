@@ -107,6 +107,7 @@ export interface IMyBoard {
 export interface IChatRoomList {
   roomId: string;
   updatedAt: string;
+  content: string;
   other: {
     nickname: string;
     profileUrl: string;
@@ -117,9 +118,9 @@ export interface IChatRoomList {
 }
 
 export interface IChatList {
-  chatId: string;
+  chatId?: string;
   memberId: string;
-  nickname: string;
+  nickname?: string;
   content: string;
   createdAt: string;
   imgUrl?: string;
