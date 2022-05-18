@@ -33,7 +33,9 @@ const OtherMessageDiv = styled.div`
 `;
 
 const OtherProfile = styled.img`
+  weight: 5.5rem;
   height: 5.5rem;
+  border-radius: 50%;
 `;
 
 const OtherMessage = styled.div`

@@ -69,25 +69,6 @@ const NoChatContent = styled.p`
   font-size: 1.6rem;
 `;
 
-const DayDiv = styled.div`
-  display: flex;
-  flex-basis: 100%;
-  align-items: center;
-  color: rgba(0, 0, 0, 0.35);
-  font-size: 12px;
-  margin: 8px 0px;
-  ::before,
-  ::after {
-    content: "";
-    flex-grow: 1;
-    background: rgba(0, 0, 0, 0.35);
-    height: 1px;
-    font-size: 0px;
-    line-height: 0px;
-    margin: 0px 16px;
-  }
-`;
-
 interface ChatProps {
   roomId: string;
   nickname: string;
@@ -128,13 +109,14 @@ export default function ChatRoom({ roomId, nickname, profileUrl }: ChatProps) {
     // 메시지 응답
     socket.on("message", (data) => {
       // console.log(data);
-      // console.log("receive: ", data.message);
+      console.log("receive: ", data.message);
+      console.log("profileUrl: ", data.profileUrl);
       setChatList([
         ...chatList,
         {
           memberId: data.memberId,
           content: data.content,
-          profileUrl: data.profileUrl,
+          profileUrl: profileUrl,
           createdAt: dayjs(new Date()).toString(),
         },
       ]);
