@@ -106,7 +106,9 @@ export default function CommunityList() {
       .then((res) => {
         setBoardCategories(res.data.data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        // console.log(err);
+      });
   }, []);
 
   // API호출하는 함수
@@ -115,7 +117,9 @@ export default function CommunityList() {
       .then((res) => {
         setPosts(posts.concat(res.data.data)); // state에 추가
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        // console.log(err);
+      });
   };
 
   // IntersectionObserver 설정
@@ -133,7 +137,7 @@ export default function CommunityList() {
     });
   };
   useEffect(() => {
-    console.log("page ? ", idx);
+    // console.log("page ? ", idx);
     getInfo();
   }, [idx, isChanged]); // idx 바뀔 때마다 함수 실행
 
@@ -164,7 +168,13 @@ export default function CommunityList() {
             onClick={() => setSelectedCategory(item.boardCategoryId)}
             isSelected={selectedCategory === item.boardCategoryId}
           >
-            <Image src={item.imgUrl} alt={item.name} width="40%" height="40%" />
+            <Image
+              src={item.imgUrl}
+              alt={item.name}
+              width="40%"
+              height="40%"
+              priority={true}
+            />
             <Typography
               fs="1.2rem"
               m="0.5rem 0 0 0"

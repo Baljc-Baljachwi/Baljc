@@ -235,7 +235,7 @@ export default function ProfileModify() {
 
   const resetSurveyForm = useCallback(async () => {
     const result = await (await getMemberInfo()).data;
-    console.log(result);
+    // console.log(result);
     if (result.code === 1001) {
       const { data } = result;
       reset({ ...data, profileUpdated: false });
@@ -330,10 +330,10 @@ export default function ProfileModify() {
       "memberInfo",
       new Blob([JSON.stringify(memberInfo)], { type: "application/json" })
     );
-    console.log(memberInfo);
+    // console.log(memberInfo);
 
     putMembers(formData).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       if (res.data.code === 1002) {
         router.push("/mypage");
         setUserInfo((prev) => ({ ...prev, regionYn: !!memberInfo.depth3 }));
@@ -344,7 +344,7 @@ export default function ProfileModify() {
   }
 
   function onClickGeoButton() {
-    console.log(navigator);
+    // console.log(navigator);
     if ("geolocation" in navigator) {
       // 현재 위도, 경도
       navigator.geolocation.getCurrentPosition(
@@ -358,7 +358,7 @@ export default function ProfileModify() {
           // 카카오 로컬 API coord => region
           kakaoCoord2Region(pos.coords.longitude, pos.coords.latitude)
             .then((res) => {
-              console.log(res.data.documents);
+              // console.log(res.data.documents);
               setLocation((prev) => ({
                 ...prev,
                 addressName: res.data.documents[0].address_name,
@@ -371,7 +371,7 @@ export default function ProfileModify() {
             .catch((err) => console.error(err));
         },
         (err: GeolocationPositionError) => {
-          console.log(err.message);
+          // console.log(err.message);
           if (err.code === 1) {
             confirm("위치 액세스를 허용해주세요");
           }
@@ -406,6 +406,7 @@ export default function ProfileModify() {
             src={imagePreview || defaultProfileImage}
             alt={getValues("nickname")}
             layout="fill"
+            priority={true}
           />
         </ProfileImage>
         <DefaultImageButton onClick={onClickDefaultImageButton}>

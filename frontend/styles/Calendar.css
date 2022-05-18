@@ -148,6 +148,8 @@ abbr[title] {
   color: #4d5158;
   font-weight: 300;
   text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .income {
@@ -156,4 +158,6 @@ abbr[title] {
   color: #8cbff2;
   font-weight: 300;
   text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

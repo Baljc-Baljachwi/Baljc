@@ -81,7 +81,9 @@ const ProfileSettingsList = () => {
           // console.log(res.data.message);
         }
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        // console.log(err);
+      });
   }
   return (
     <>

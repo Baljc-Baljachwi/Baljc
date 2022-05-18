@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 
 import styled from "styled-components";
 import kakaoLoginButtonImage from "../../public/assets/img/login/kakao_login_large_narrow.png";
+import kakaoLoginSVG from "../../public/assets/img/login/kakao_login_svg.svg";
 
 const kakaoGetAuthCodeURL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&response_type=code`;
 

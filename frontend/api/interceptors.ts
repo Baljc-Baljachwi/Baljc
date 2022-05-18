@@ -34,7 +34,7 @@ function setInterceptors(instance: any) {
     async (error: AxiosError) => {
       const { config, response } = error;
       const originalRequest = config;
-      console.log("message: ", response?.data.message);
+      // console.log("message: ", response?.data.message);
 
       // 액세스 토큰 만료시
       if (response?.data.code === 2004) {
@@ -51,7 +51,7 @@ function setInterceptors(instance: any) {
               { authorization: accessToken, refreshToken, memberId }
             );
 
-            console.log(res);
+            // console.log(res);
             const { headers } = res;
             const newAccessToken = headers.authorization;
             const newRefreshToken = headers.refreshToken;
@@ -66,8 +66,8 @@ function setInterceptors(instance: any) {
             isTokenRefreshing = false;
             onTokenRefreshed(newAccessToken);
           } catch (err: any) {
-            console.error(err);
-            console.log(err.response.data);
+            // console.error(err);
+            // console.log(err.response.data);
             // 유효하지 않은 리프레시 토큰
             if (err.response.data.code === 3002) {
               LocalStorage.removeItem("userInfo");

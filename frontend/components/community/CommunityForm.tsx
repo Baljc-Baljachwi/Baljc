@@ -185,33 +185,48 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
       return false;
     }
     const extensions = ["png", "jpeg", "jpg", "bmp"];
-    const fileExt = file.name.split(".").at(-1);
+    const fileExt = file.name.split(".").at(-1).toLowerCase();
     return extensions.includes(fileExt);
   }
 
   function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
-    // console.log("image upload");
-    // console.log(event.target.files);
     const files = event.target.files;
     if (files && files.length > 0) {
-      const file = files[0];
-      if (!validFile(file)) {
-        confirm("10MB 이하의 이미지만 업로드 가능합니다.");
-        return;
+      let newFiles: File[] = [];
+      let flag = true; // 알림 보낼지
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (!validFile(file)) {
+          if (flag) {
+            confirm("10MB 이하의 이미지만 업로드 가능합니다.");
+            flag = false;
+          }
+          continue;
+        } else {
+          newFiles.push(file);
+        }
       }
-      if (imagePreviewList.length < 3) {
-        setImageFileList((prev) => [...prev, file]);
-        setImagePreviewList((prev) => [
-          ...prev,
-          { boardImgId: "", imgUrl: URL.createObjectURL(file) },
-        ]);
-      } else {
+      // 총 이미지 개수 체크
+      let n = imagePreviewList.length + newFiles.length;
+      if (n > 3) {
         confirm("사진은 3개까지만 업로드 가능합니다.");
+        newFiles = newFiles.slice(0, 3 - imagePreviewList.length);
       }
+
+      setImageFileList((prev) => [...prev, ...newFiles]);
+
+      const newImagePreviewList = newFiles.map((file) => ({
+        boardImgId: "",
+        imgUrl: URL.createObjectURL(file),
+      }));
+      setImagePreviewList((prev) => [...prev, ...newImagePreviewList]);
     }
   }
 
   function onClickImageDeleteButton(index: number) {
+    let n = imagePreviewList.length - imageFileList.length;
+
+    // 서버에서 받아온 이미지면 deleted image에 추가
     if (imagePreviewList[index].boardImgId) {
       setDeletedImageIdList((prev) => [
         ...prev,
@@ -222,9 +237,12 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
       ...prev.slice(0, index),
       ...prev.slice(index + 1, prev.length),
     ]);
+
+    // imagePreviewList와 imageFileList의 인덱스는 서로 다름.
+    const fileIndex = index - n;
     setImageFileList((prev) => [
-      ...prev.slice(0, index),
-      ...prev.slice(index + 1, prev.length),
+      ...prev.slice(0, fileIndex),
+      ...prev.slice(fileIndex + 1, prev.length),
     ]);
   }
 
@@ -235,10 +253,8 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
       deleteBoardImgIdList: deletedImageIdList,
     };
 
-    // console.log("data: ", data);
-    console.log("boardInfo: ", boardInfo);
-
     const formData = new FormData();
+    console.log(imageFileList);
     imageFileList.forEach((file) => {
       formData.append("boardImg", file);
     });
@@ -250,7 +266,7 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
     if (boardContent) {
       putBoard(router.query.boardId as string, formData)
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           if (res.data.code === 1704) {
             // console.log(res.data.message);
             router.push({
@@ -258,22 +274,22 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
               query: { boardId: router.query.boardId },
             });
           } else {
-            console.log(res.data.message);
+            // console.log(res.data.message);
           }
         })
-        .catch((err) => console.error(err));
+        .catch((err) => {
+          // console.error(err);
+        });
     } else {
       postBoards(formData)
         .then((res) => {
-          // console.log(res.data);
           if (res.data.code === 1701) {
-            // console.log(res.data.message);
             router.push("/community");
-          } else {
-            // console.log(res.data.message);
           }
         })
-        .catch((err) => console.error(err));
+        .catch((err) => {
+          // console.error(err);
+        });
     }
   }
 
@@ -287,7 +303,7 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
           (category: IBoardCategory) => category.name !== "전체보기"
         );
         setBoardCategories(withOutAll);
-        // 생성 페이지인 경우
+
         if (!boardContent) {
           const { selectedCategory } = router.query;
           // 전체보기는 제외
@@ -306,17 +322,18 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
         } else {
           setValue("content", boardContent.content);
           setImagePreviewList(boardContent.imgInfoList);
-          setValue(
-            "category",
-            withOutAll.filter(
-              (category: any) => category.name === boardContent.categoryName
-            )[0].boardCategoryId
-          );
+
+          if (boardContent.categoryName) {
+            setValue(
+              "category",
+              withOutAll.filter(
+                (category: any) => category.name === boardContent.categoryName
+              )[0].boardCategoryId
+            );
+          }
         }
       }
     });
-    if (boardContent) {
-    }
   }, [setValue, boardContent, router.query]);
 
   if (!ready) {
@@ -324,7 +341,9 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
   }
   return (
     <FormContainer
-      onSubmit={handleSubmit(onClickSubmitButton, (err) => console.log(err))}
+      onSubmit={handleSubmit(onClickSubmitButton, (err) => {
+        // console.log(err);
+      })}
     >
       <FlexContainer>
         <Typography fs="1.6rem" fw="500">
@@ -404,6 +423,7 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
           id="image"
           accept="image/png, image/jpeg, image/bmp"
           name="image"
+          multiple
         />
         <ButtonBottom label="완료" type="submit" />
       </ButtonContainer>
