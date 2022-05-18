@@ -406,6 +406,7 @@ export default function ProfileModify() {
             src={imagePreview || defaultProfileImage}
             alt={getValues("nickname")}
             layout="fill"
+            priority={true}
           />
         </ProfileImage>
         <DefaultImageButton onClick={onClickDefaultImageButton}>
