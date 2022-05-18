@@ -1,5 +1,9 @@
+import { userInfoState } from "atoms/atoms";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { IChatList } from "../../types/index";
+import dayjs from "dayjs";
+import "dayjs/locale/ko";
 
 const MessageDiv = styled.div`
   width: 100%;
@@ -46,21 +50,52 @@ const MessageTime = styled.div`
   white-space: nowrap;
 `;
 
+const DayDiv = styled.div`
+  display: flex;
+  flex-basis: 100%;
+  align-items: center;
+  color: rgba(0, 0, 0, 0.35);
+  font-size: 12px;
+  margin: 8px 0px;
+  ::before,
+  ::after {
+    content: "";
+    flex-grow: 1;
+    background: rgba(0, 0, 0, 0.35);
+    height: 1px;
+    font-size: 0px;
+    line-height: 0px;
+    margin: 0px 16px;
+  }
+`;
 interface ChatProp {
   chatItem: IChatList;
 }
 export default function ChatMessage({ chatItem }: ChatProp) {
+  const userInfo = useRecoilValue(userInfoState);
+
+  // console.log(chatItem);
+
+  dayjs.locale("ko");
+  const date = dayjs(chatItem.createdAt).format("YYYY-MM-DD dddd");
+  // console.log(date);
+
+  const chatDate = dayjs(chatItem.createdAt).format("A HH:mm");
   return (
     <MessageDiv>
-      {/* <MyMessageDiv>
-        <MessageTime>오후 3:45</MessageTime>
-        <MyMessage>안녕하세요 ~!</MyMessage>
-      </MyMessageDiv>
-      <OtherMessageDiv>
-        <OtherProfile src="/assets/img/mypage/avatar/default_profile.png" />
-        <OtherMessage>안녕하세요안녕하세요안녕하세요안녕하세요</OtherMessage>
-        <MessageTime>오후 3:46</MessageTime>
-      </OtherMessageDiv> */}
+      {/* <DayDiv>{date}</DayDiv> */}
+      {chatItem.memberId == userInfo.memberId ? (
+        <MyMessageDiv>
+          <MessageTime>{chatDate}</MessageTime>
+          <MyMessage>{chatItem.content}</MyMessage>
+        </MyMessageDiv>
+      ) : (
+        <OtherMessageDiv>
+          <OtherProfile src="/assets/img/mypage/avatar/default_profile.png" />
+          <OtherMessage>{chatItem.content}</OtherMessage>
+          <MessageTime>{chatDate}</MessageTime>
+        </OtherMessageDiv>
+      )}
     </MessageDiv>
   );
 }
