@@ -16,11 +16,7 @@ import dayjs from "dayjs";
 
 const ChatRoomContainer = styled.div`
   // height: calc(100vh-5.6rem);
-  overflowY: "scroll"
-  ::-webkit-scrollbar {
-    width: 2rem;
-    background-color: black;
-  }
+  overflowy: "scroll";
 `;
 
 const ChatInputDiv = styled.div`
@@ -71,6 +67,25 @@ const NoChatTitle = styled.p`
 
 const NoChatContent = styled.p`
   font-size: 1.6rem;
+`;
+
+const DayDiv = styled.div`
+  display: flex;
+  flex-basis: 100%;
+  align-items: center;
+  color: rgba(0, 0, 0, 0.35);
+  font-size: 12px;
+  margin: 8px 0px;
+  ::before,
+  ::after {
+    content: "";
+    flex-grow: 1;
+    background: rgba(0, 0, 0, 0.35);
+    height: 1px;
+    font-size: 0px;
+    line-height: 0px;
+    margin: 0px 16px;
+  }
 `;
 
 interface ChatProps {
@@ -182,7 +197,15 @@ export default function ChatRoom({ roomId, nickname, profileUrl }: ChatProps) {
         setChatList(res.data.data);
       })
       .catch((err) => console.log(err));
-    handleScrollToBottom();
+    if (scrollRef.current !== null) {
+      setTimeout(() => {
+        scrollRef.current.scrollIntoView({
+          behavior: "auto",
+          block: "end",
+          inline: "nearest",
+        });
+      }, 100);
+    }
   }, []);
 
   const onEnter = (e: React.KeyboardEvent) => {
@@ -197,7 +220,15 @@ export default function ChatRoom({ roomId, nickname, profileUrl }: ChatProps) {
       <ChatRoomContainer>
         {chatList.length > 0 ? (
           chatList.map((chatItem, idx) => (
-            <ChatMessage key={idx} chatItem={chatItem}></ChatMessage>
+            <ChatMessage
+              key={idx}
+              chatItem={chatItem}
+              isDate={
+                idx === 0 ||
+                dayjs(chatList[idx - 1].createdAt).format("YYYY-MM-DD") !==
+                  dayjs(chatItem.createdAt).format("YYYY-MM-DD")
+              }
+            />
           ))
         ) : (
           <NoChatDiv>
