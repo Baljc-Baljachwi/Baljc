@@ -3,10 +3,12 @@ import styled from "styled-components";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
 import { useRouter } from "next/router";
+
 import { getAccountbooksList } from "api/accountbook";
 import Header from "../../components/common/Header";
 import FinanceList from "../../components/finance/list/FinanceList";
 import Icon from "../../components/common/Icon";
+import FloatingButton from "components/common/FloatingButton";
 
 const Container = styled.div`
   padding-bottom: 5rem;
@@ -96,7 +98,13 @@ export default function Finance(): JSX.Element {
   const [monthlyLog, setMonthlyLog] = useState([]);
   const amount = Object.entries(monthlyLog); // ['1', [{…}, {…}] ]
 
+  const dayMonthYear = dayjs(date).format("YYYY-MM-DD");
+
   const handleClickPrev = () => {
+    const y = date.getFullYear();
+    const m = date.getMonth();
+    const lastDay = new Date(y, m - 1, 1);
+    setDate(lastDay);
     if (month > 1) {
       setMonth(month - 1);
     } else {
@@ -106,6 +114,10 @@ export default function Finance(): JSX.Element {
   };
 
   const handleClickNext = () => {
+    const y = date.getFullYear();
+    const m = date.getMonth();
+    const firstDay = new Date(y, m + 1, 1);
+    setDate(firstDay);
     if (month < 11) {
       setMonth(month + 1);
     } else {
@@ -181,6 +193,14 @@ export default function Finance(): JSX.Element {
           </NoContencContainer>
         )}
       </PageContainer>
+      <FloatingButton
+        onClick={() => {
+          router.push({
+            pathname: "/finance/financeCreateForm",
+            query: { date: dayMonthYear },
+          });
+        }}
+      />
     </Container>
   );
 }

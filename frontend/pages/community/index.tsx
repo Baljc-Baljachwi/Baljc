@@ -5,9 +5,7 @@ import Header from "components/common/Header";
 import CommunityList from "../../components/community/CommunityList";
 import { useRouter } from "next/router";
 
-const Container = styled.div`
-  padding-bottom: 7rem;
-`;
+const Container = styled.div``;
 
 export default function Community() {
   const router = useRouter();

@@ -87,7 +87,6 @@ export default function CommunityScrapCard({
   };
   return (
     <CardContainer onClick={handleClick}>
-      {/* <CardContainer> */}
       <CardContent>
         <div className="topContent">
           <Tag>{categoryName}</Tag>
@@ -112,13 +111,33 @@ export default function CommunityScrapCard({
           <Typography fs="1.6rem" p="1rem 0">
             {content}
           </Typography>
-          <ImageContainer>
-            {imgUrlList?.map((item: string, idx: number) => (
-              <div className="item" key={idx}>
-                <Image src={item} alt="" layout="fill" />
-              </div>
-            ))}
-          </ImageContainer>
+          {imgUrlList.length === 1 ? (
+            <ImageContainer>
+              {imgUrlList?.map((item: string, idx: number) => (
+                <div className="item_1" key={idx}>
+                  <Image src={item} alt="" layout="fill" />
+                </div>
+              ))}
+            </ImageContainer>
+          ) : imgUrlList.length === 2 ? (
+            <ImageContainer2>
+              {imgUrlList?.map((item: string, idx: number) => (
+                <div className="item" key={idx}>
+                  <Image src={item} alt="" layout="fill" />
+                </div>
+              ))}
+            </ImageContainer2>
+          ) : imgUrlList.length === 3 ? (
+            <ImageContainer3>
+              {imgUrlList?.map((item: string, idx: number) => (
+                <div className="item" key={idx}>
+                  <Image src={item} alt="" layout="fill" />
+                </div>
+              ))}
+            </ImageContainer3>
+          ) : (
+            <></>
+          )}
           <FlexContainer>
             <Typography fs="1.2rem" color="#878B93">
               {createdAt} | {creator} | {dong}{" "}
@@ -217,9 +236,29 @@ const Typography = styled.div<{
 
 const ImageContainer = styled.div`
   display: grid;
+  padding-bottom: 2rem;
+  .item_1 {
+    height: 20rem;
+    position: relative;
+  }
+`;
+
+const ImageContainer2 = styled.div`
+  display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  padding-bottom: 1rem;
+  padding-bottom: 2rem;
+  .item {
+    height: 20rem;
+    position: relative;
+  }
+`;
+
+const ImageContainer3 = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding-bottom: 2rem;
   .item {
     height: 10rem;
     position: relative;
