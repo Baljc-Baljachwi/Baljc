@@ -109,8 +109,8 @@ export default function ChatRoom({ roomId, nickname, profileUrl }: ChatProps) {
     // 메시지 응답
     socket.on("message", (data) => {
       // console.log(data);
-      console.log("receive: ", data.message);
-      console.log("profileUrl: ", data.profileUrl);
+      // console.log("receive: ", data.message);
+      // console.log("profileUrl: ", data.profileUrl);
       setChatList([
         ...chatList,
         {
