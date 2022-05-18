@@ -116,28 +116,28 @@ export default function OnBoarding() {
       title: "충동적인 지출로\n 예산이 빠듯하신가요?",
       subtitle: "수입/지출을 기록하고 관리해보세요",
       image:
-        "https://baljc.s3.ap-northeast-2.amazonaws.com/snapshot/onboarding_accountboard.png",
+        "https://drf5juj9r1n4w.cloudfront.net/snapshot/onboarding_accountboard.png",
     },
     {
       pageName: "일과",
       title: "집안일을 까먹고\n밀리진 않았나요?",
       subtitle: "일과와 할 일을 기록하고\n알림을 받아보세요",
       image:
-        "https://baljc.s3.ap-northeast-2.amazonaws.com/snapshot/onboarding_work.png",
+        "https://drf5juj9r1n4w.cloudfront.net/snapshot/onboarding_work.png",
     },
     {
       pageName: "커뮤니티",
       title: "혼자 사는데\n신선 식품이 너무 많이 남나요?",
       subtitle: "동네 사람들과 커뮤니티를 이용해보세요",
       image:
-        "https://baljc.s3.ap-northeast-2.amazonaws.com/snapshot/onboarding_community.png",
+        "https://drf5juj9r1n4w.cloudfront.net/snapshot/onboarding_community.png",
     },
     {
       pageName: "지출 통계",
       title: "지출 내역을\n시각화해서 보고 싶으신가요?",
       subtitle: "통계 분석 리포트를 제공해드려요",
       image:
-        "https://baljc.s3.ap-northeast-2.amazonaws.com/snapshot/onboarding_graph.png",
+        "https://drf5juj9r1n4w.cloudfront.net/snapshot/onboarding_graph.png",
     },
     {
       pageName: "캘린더",
@@ -145,7 +145,7 @@ export default function OnBoarding() {
       subtitle:
         "캘린더에 찍히는 귀여운 발바닥으로\n할 일을 재미있게 관리해보세요",
       image:
-        "https://baljc.s3.ap-northeast-2.amazonaws.com/snapshot/onboarding_calendar.png",
+        "https://drf5juj9r1n4w.cloudfront.net/snapshot/onboarding_calendar.png",
     },
   ];
 
