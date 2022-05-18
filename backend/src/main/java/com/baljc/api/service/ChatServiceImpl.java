@@ -144,10 +144,12 @@ public class ChatServiceImpl implements ChatService{
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void insertChat(UUID roomId, ChatDto.ChatRequest chatRequest) {
-        chatRepository.save(Chat.builder()
-                        .room(roomRepository.getById(roomId))
+        Room room = roomRepository.getById(roomId);
+        Chat chat = chatRepository.save(Chat.builder()
+                        .room(room)
                         .member(memberRepository.getById(chatRequest.getMemberId()))
                         .content(chatRequest.getContent())
                 .build());
+        room.updateDateTime(chat.getCreatedAt());
     }
 }
