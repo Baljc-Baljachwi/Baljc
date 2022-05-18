@@ -71,7 +71,9 @@ export default function CommunityScrapCard({
           setIsChanged((prev) => !prev);
           setIsScrap(!isScrap);
         })
-        .catch((err) => console.log(err.message));
+        .catch((err) => {
+          // console.log(err);
+        });
     } else {
       const data = {
         scrapYn: "N",
@@ -82,7 +84,9 @@ export default function CommunityScrapCard({
           setIsChanged((prev) => !prev);
           setIsScrap(!isScrap);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          // console.log(err);
+        });
     }
   };
   return (

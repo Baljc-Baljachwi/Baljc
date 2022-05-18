@@ -49,11 +49,11 @@ const Fixed = () => {
       })
       .catch((err) => {
         console.log("😥🙀 고정 지출 조회 실패");
-        console.log(err.response);
+        // console.log(err.response);
       });
     getFixedEList(year, month)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setExFixed(res.data.data);
         // setAccountbookId(res.data.data.accountbookId);
         // setMonthlyPeriod(res.data.data.monthlyPeriod);
@@ -66,7 +66,7 @@ const Fixed = () => {
       })
       .catch((err) => {
         console.log("😥🙀 고정 지출 조회 실패");
-        console.log(err.response);
+        // console.log(err.response);
       });
   }, []);
   // console.log(exFixed);

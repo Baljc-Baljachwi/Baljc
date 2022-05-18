@@ -92,7 +92,9 @@ export default function RoutineDetail() {
         // console.log(res.data.data);
         setRoutineList(res.data.data);
       })
-      .catch((err) => console.log(err.response));
+      .catch((err) => {
+        // console.log(err);
+      });
   };
 
   useEffect(() => {

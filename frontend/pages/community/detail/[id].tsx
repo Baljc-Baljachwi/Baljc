@@ -123,7 +123,7 @@ export default function Reply() {
 
   useEffect(() => {
     getComment(boardId as string, commentId as string).then((res) => {
-      console.log(res.data.data);
+      // console.log(res.data.data);
       setComment(res.data.data);
     });
   }, [isChanged]);

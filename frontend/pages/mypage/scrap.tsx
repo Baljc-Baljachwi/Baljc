@@ -56,12 +56,12 @@ const Scrap = () => {
   useEffect(() => {
     getMyScrapList()
       .then((res) => {
-        console.log(res.data.data);
+        // console.log(res.data.data);
         setMyScrapList(res.data.data);
         setBoardId(res.data.data.boardId);
       })
       .catch((err) => {
-        console.log(err.data.message);
+        // console.log(err.data.message);
       });
   }, []);
   const handleScrapBoard = () => {

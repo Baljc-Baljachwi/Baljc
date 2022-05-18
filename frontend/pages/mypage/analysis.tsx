@@ -69,8 +69,8 @@ const Analysis = () => {
   });
 
   useEffect(() => {
-    console.log(year);
-    console.log(month);
+    // console.log(year);
+    // console.log(month);
     getFixedExpenditure(year, month)
       .then((res) => {
         // console.log(res.data.data);
@@ -79,7 +79,7 @@ const Analysis = () => {
       })
       .catch((err) => {
         console.log("😥🙀 고정 지출 조회 실패");
-        console.log(err.response);
+        // console.log(err.response);
       });
     getPieChartValue(year, month)
       .then((res) => {
@@ -87,7 +87,7 @@ const Analysis = () => {
       })
       .catch((err) => {
         console.log("😥🙀 도넛 차트 조회 실패");
-        console.log(err.response);
+        // console.log(err.response);
       });
     getLineGraphValue(year, month)
       .then((res) => {
@@ -96,8 +96,8 @@ const Analysis = () => {
         // console.log(xdays);
       })
       .catch((err) => {
-        console.log("😥🙀 라인 차트 조회 실패");
-        console.log(err.response);
+        // console.log("😥🙀 라인 차트 조회 실패");
+        // console.log(err.response);
       });
     // console.log("xdaysLabel");
     // console.log(xdaysLabel);
@@ -106,7 +106,7 @@ const Analysis = () => {
     getBudget(dateForm)
       .then((res) => {
         // console.log(res.data);
-        console.log("예산 조회 성공! 🤸‍♀️🔥");
+        // console.log("예산 조회 성공! 🤸‍♀️🔥");
         // console.log(expenditurePercent);
         // console.log("퍼센트 toString");
         // console.log(expenditurePercent.toString());
