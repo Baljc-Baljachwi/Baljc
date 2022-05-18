@@ -64,7 +64,7 @@ const InputContainer = styled.div`
   grid-template-columns: 8fr 1fr;
   z-index: 11000;
   height: 5.6rem;
-  margin-bottom: 8rem; // 나중에 없애기
+  margin-bottom: 5.55rem; // 나중에 없애기
 `;
 
 const IconWrapper = styled.div`
