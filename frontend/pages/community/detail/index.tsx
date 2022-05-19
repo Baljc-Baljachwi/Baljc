@@ -407,7 +407,7 @@ export default function CommunityDetail() {
           )}
         </Profile>
         <Content>
-          <Typography fs="1.8rem" p="0 0 1rem 0">
+          <Typography fs="1.6rem" p="0 0 1rem 0">
             {boardDetail.content}
           </Typography>
           {/* image 개수별로 layout 다름*/}

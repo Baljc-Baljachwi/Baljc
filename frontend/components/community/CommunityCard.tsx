@@ -116,7 +116,7 @@ export default function CommunityCard({
           <Tag>{categoryName}</Tag>
         </div>
         <Content>
-          <Typography fs="1.6rem" p="1rem 0">
+          <Typography fs="1.6rem" p="1rem 0" style={{ whiteSpace: "pre-wrap" }}>
             {content}
           </Typography>
           {imgUrlList.length === 1 ? (
