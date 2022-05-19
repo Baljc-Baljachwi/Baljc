@@ -124,7 +124,7 @@ const ImageButtonLabel = styled.label`
   color: #ffffff;
   display: flex;
   padding: 1rem 1.2rem;
-  border: 1px solid #8e8e8e;
+  border: 1px solid #0000002c;
   border-radius: 0.8rem;
   background-color: #ffffff;
   cursor: pointer;
@@ -415,7 +415,7 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
 
       <ButtonContainer>
         <ImageButtonLabel htmlFor="image">
-          <Icon mode="fas" icon="image" size="3rem" color="#8E8E8E" />
+          <Icon mode="fas" icon="image" size="3rem" color="#cdcdcd" />
         </ImageButtonLabel>
         <DisplayNoneInput
           onChange={handleImageUpload}
