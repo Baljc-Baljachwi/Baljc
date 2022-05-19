@@ -70,7 +70,6 @@ export default function ChatListItem({ chatItem }: chatProps) {
               profileUrl: chatItem.other.profileUrl || "",
             },
           },
-          `/chat/${chatItem.roomId}`
         )
       }
     >
