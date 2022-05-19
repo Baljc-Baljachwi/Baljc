@@ -56,3 +56,9 @@ export const routineState = atom<IRoutine[]>({
   key: "routines",
   default: [],
 });
+
+// 임시로 항상 온보딩 뜨도록 하는 상태변수
+export const newUserState = atom({
+  key: "newUser",
+  default: true,
+});
