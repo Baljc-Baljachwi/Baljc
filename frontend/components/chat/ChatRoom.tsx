@@ -180,18 +180,19 @@ export default function ChatRoom({
       .then((res) => {
         // console.log(res.data.data);
         setChatList(res.data.data);
+
+        if (scrollRef.current !== null) {
+          setTimeout(() => {
+            scrollRef.current?.scrollIntoView({
+              behavior: "auto",
+              block: "end",
+              inline: "nearest",
+            });
+          }, 100);
+        }
       })
       .catch((err) => console.log(err));
-    if (scrollRef.current !== null) {
-      setTimeout(() => {
-        scrollRef.current?.scrollIntoView({
-          behavior: "auto",
-          block: "end",
-          inline: "nearest",
-        });
-      }, 100);
-    }
-  }, []);
+  }, [roomId]);
 
   const onEnter = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
