@@ -65,11 +65,11 @@ export default function ChatListItem({ chatItem }: chatProps) {
           {
             pathname: `/chat/${chatItem.roomId}`,
             query: {
-              roomId: chatItem.roomId || "",
               nickname: chatItem.other.nickname || "",
               profileUrl: chatItem.other.profileUrl || "",
             },
-          },
+          }
+          // `/chat/${chatItem.roomId}`
         )
       }
     >

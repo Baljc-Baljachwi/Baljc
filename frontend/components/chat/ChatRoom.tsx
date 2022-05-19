@@ -76,7 +76,12 @@ interface ChatProps {
   socket: Socket;
 }
 
-export default function ChatRoom({ roomId, nickname, profileUrl, socket }: ChatProps) {
+export default function ChatRoom({
+  roomId,
+  nickname,
+  profileUrl,
+  socket,
+}: ChatProps) {
   const router = useRouter();
 
   const userInfo = useRecoilValue(userInfoState);
@@ -175,18 +180,19 @@ export default function ChatRoom({ roomId, nickname, profileUrl, socket }: ChatP
       .then((res) => {
         // console.log(res.data.data);
         setChatList(res.data.data);
+
+        if (scrollRef.current !== null) {
+          setTimeout(() => {
+            scrollRef.current?.scrollIntoView({
+              behavior: "auto",
+              block: "end",
+              inline: "nearest",
+            });
+          }, 100);
+        }
       })
       .catch((err) => console.log(err));
-    if (scrollRef.current !== null) {
-      setTimeout(() => {
-        scrollRef.current?.scrollIntoView({
-          behavior: "auto",
-          block: "end",
-          inline: "nearest",
-        });
-      }, 100);
-    }
-  }, []);
+  }, [roomId]);
 
   const onEnter = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
