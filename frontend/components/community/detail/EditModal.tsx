@@ -104,19 +104,17 @@ export default function EditModal({
   const onClickChat = () => {
     postChatRoom(myId, otherId)
       .then((res) => {
-        // console.log(res);
+        // console.log(res.data.data.other);
         const roomId = res.data.data.roomId;
         const nickname = res.data.data.other.nickname;
-        router.push(
-          {
-            pathname: `/chat/${roomId}`,
-            query: {
-              roomId: roomId || "",
-              nickname: nickname || "",
-            },
+        const profileUrl = res.data.data.other.profileUrl;
+        router.push({
+          pathname: `/chat/${roomId}`,
+          query: {
+            nickname: nickname || "",
+            profileUrl: profileUrl || "",
           },
-          `/chat/${roomId}`
-        );
+        });
       })
       .catch((err) => console.log(err));
   };
