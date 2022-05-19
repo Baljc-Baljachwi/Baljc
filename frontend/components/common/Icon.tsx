@@ -16,7 +16,7 @@ interface IconProps {
   color?: string;
   size?: string;
   display?: string;
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: () => void;
 }
 
 const StyledIcon = styled.span<{

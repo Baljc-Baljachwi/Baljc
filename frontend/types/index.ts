@@ -64,6 +64,64 @@ export interface ICalendar {
   year: number | string;
   month: number | string;
 }
+
 export interface IDaily extends ICalendar {
   day: number | string;
+}
+
+export interface IPost {
+  boardId: string;
+  categoryName: string;
+  content: string;
+  createdAt: string;
+  creator?: string;
+  dong?: string;
+  imgUrlList: Array<string>;
+  heartCnt: number;
+  commentCnt: number;
+}
+
+export interface IComment {
+  commentId: string;
+  memberId: string;
+  profileUrl: string | null;
+  nickname: string;
+  content: string;
+  createdAt: string;
+  deletedYn: YNType;
+  list: IComment[] | null | any;
+}
+
+export interface IMyBoard {
+  boardId: string;
+  categoryName: string;
+  content: string;
+  createdAt: string;
+  creator: string;
+  dong?: string;
+  imgUrlList: Array<string>;
+  heartCnt: number;
+  commentCnt: number;
+}
+
+export interface IChatRoomList {
+  roomId: string;
+  updatedAt: string;
+  content: string;
+  other: {
+    nickname: string;
+    profileUrl: string;
+    depth1: string;
+    depth2: string;
+    depth3: string;
+  };
+}
+
+export interface IChatList {
+  chatId?: string;
+  memberId: string;
+  nickname?: string;
+  content: string;
+  createdAt: string;
+  profileUrl?: string;
 }

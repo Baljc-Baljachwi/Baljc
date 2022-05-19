@@ -3,14 +3,18 @@ import styled from "styled-components";
 import FinanceCard from "../../../components/finance/list/FinanceCard";
 
 const PageContainer = styled.main`
-  /* padding: 0 2rem; */
   display: flex;
   flex-direction: column;
   gap: 1rem;
   width: 100%;
 `;
 
-export default function FinanceList({ item }: any, date: string) {
+interface FinanceBoardProps {
+  item: any;
+  date: string;
+}
+
+export default function FinanceList({ item, date }: FinanceBoardProps) {
   return (
     <>
       <PageContainer>

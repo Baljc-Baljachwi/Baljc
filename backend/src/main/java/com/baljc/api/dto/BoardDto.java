@@ -19,7 +19,6 @@ public class BoardDto {
         private UUID categoryId;
         @Size(min = 1, max = 2000, message = "올바른 내용 형식(1자이상 2000자이하)이 아닙니다.")
         private String content;
-        private String place;
     }
 
     @Getter
@@ -60,10 +59,12 @@ public class BoardDto {
     @Getter
     @Setter
     public static class BoardImgURLDto {
+        private UUID boardImgId;
         private String imgUrl;
 
         @QueryProjection
-        public BoardImgURLDto(String imgUrl) {
+        public BoardImgURLDto(UUID boardImgId, String imgUrl) {
+            this.boardImgId = boardImgId;
             this.imgUrl = imgUrl;
         }
     }
@@ -126,6 +127,15 @@ public class BoardDto {
     }
 
     @Getter
+    @NoArgsConstructor
+    public static class BoardUpdateRequest {
+        private UUID categoryId;
+        @Size(min = 1, max = 2000, message = "올바른 내용 형식(1자이상 2000자이하)이 아닙니다.")
+        private String content;
+        private List<UUID> deleteBoardImgIdList;
+    }
+
+    @Getter
     @Setter
     public static class CommentListDto {
         private UUID commentId;
@@ -164,7 +174,7 @@ public class BoardDto {
         private Long commentCnt;
         private Long isHeart;
         private Long isScrap;
-        private List<String> imgUrlList;
+        private List<BoardImgURLDto> imgUrlList;
         private List<BoardDetailCommentResponse> commentList;
     }
 
@@ -194,12 +204,14 @@ public class BoardDto {
     @Getter
     @NoArgsConstructor
     public static class HeartRequest {
+        @Pattern(regexp = "^[YN]$", message = "올바른 형식(Y/N)이 아닙니다.")
         private String heartYn;
     }
 
     @Getter
     @NoArgsConstructor
     public static class ScrapRequest {
+        @Pattern(regexp = "^[YN]$", message = "올바른 형식(Y/N)이 아닙니다.")
         private String scrapYn;
     }
 }

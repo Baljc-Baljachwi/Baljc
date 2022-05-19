@@ -62,8 +62,8 @@ export default function FixedList({ item }: FixedListProps) {
         // setPaymentMethod(res.data.data.paymentMethod);
       })
       .catch((err) => {
-        console.log("😥🙀 고정 지출 조회 실패");
-        console.log(err.response);
+        // // console.log("😥🙀 고정 지출 조회 실패");
+        // console.log(err.response);
       });
   }, []);
 
@@ -106,7 +106,5 @@ const PageContainer = styled.main`
 
 const Day = styled.div`
   font-size: 1.6rem;
-  padding-top: 1.5rem;
-  padding-left: 1rem;
   color: #33487f;
 `;

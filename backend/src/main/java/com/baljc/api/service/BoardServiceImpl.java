@@ -3,7 +3,9 @@ package com.baljc.api.service;
 import com.baljc.api.dto.BoardDto;
 import com.baljc.db.entity.*;
 import com.baljc.db.repository.*;
+import com.baljc.exception.HeartAlreadyExistException;
 import com.baljc.exception.NotExistedAccountBookException;
+import com.baljc.exception.ScrapAlreadyExistException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -78,7 +80,6 @@ public class BoardServiceImpl implements BoardService {
         Board board = Board.builder()
                     .content(boardRequest.getContent())
                     .member(member)
-                    .place(boardRequest.getPlace())
                     .boardCategory(category)
                     .latitude(member.getLatitude())
                     .longitude(member.getLongitude())
@@ -97,6 +98,46 @@ public class BoardServiceImpl implements BoardService {
                         .deletedYn('N')
                         .build());
             }
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateBoard(UUID boardId, BoardDto.BoardUpdateRequest boardUpdateRequest, List<MultipartFile> files) {
+        BoardCategory category = boardCategoryRepository.getById(boardUpdateRequest.getCategoryId());
+
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new NullPointerException("해당 게시글이 존재하지 않습니다."));
+        board.updateBoard(boardUpdateRequest, category);
+
+        for (UUID uuid : boardUpdateRequest.getDeleteBoardImgIdList()) {
+            BoardImg boardImg = boardImgRepository.findById(uuid).orElseThrow(() -> new NullPointerException("해당 이미지가 존재하지 않습니다."));
+            boardImg.deleteBoardImg();
+            fileService.deleteImage(boardImg.getImgUrl());
+        }
+
+        if (files != null) {
+            for (MultipartFile multipartFile : files) {
+                String imgUrl = fileService.uploadImage(multipartFile, boardImagePath);
+
+                boardImgRepository.save(BoardImg.builder()
+                        .board(board)
+                        .imgUrl(imgUrl)
+                        .deletedYn('N')
+                        .build());
+            }
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteBoard(UUID boardId) {
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new NullPointerException("해당 게시글이 존재하지 않습니다."));
+        board.deleteBoard();
+
+        List<BoardImg> boardImgList = boardRepositorySupport.getDeleteImgList(boardId);
+        for (BoardImg bi : boardImgList) {
+            bi.deleteBoardImg();
+            fileService.deleteImage(bi.getImgUrl());
         }
     }
 
@@ -133,6 +174,9 @@ public class BoardServiceImpl implements BoardService {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new NullPointerException("해당 게시글이 존재하지 않습니다."));
 
         if (heartRequest.getHeartYn().charAt(0) == 'Y') {
+            Heart heart = heartRepository.findByMemberAndBoard(member, board).orElse(null);
+            if (heart != null) throw new HeartAlreadyExistException("이미 좋아요가 되어 있는 상태입니다.");
+
             heartRepository.save(Heart.builder()
                     .member(member)
                     .board(board)
@@ -150,6 +194,9 @@ public class BoardServiceImpl implements BoardService {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new NullPointerException("해당 게시글이 존재하지 않습니다."));
 
         if (scrapRequest.getScrapYn().charAt(0) == 'Y') {
+            Scrap scrap = scrapRepository.findByMemberAndBoard(member, board).orElse(null);
+            if (scrap != null) throw new ScrapAlreadyExistException("이미 스크랩이 되어 있는 상태입니다.");
+
             scrapRepository.save(Scrap.builder()
                     .member(member)
                     .board(board)
@@ -165,7 +212,7 @@ public class BoardServiceImpl implements BoardService {
         Member member = memberService.getMemberByAuthentication();
 
         List<BoardDto.BoardListInterface> list = null;
-        if (categoryId.toString().equals("271105c2-f94c-47bc-8af4-dc156dcad3eb")) {
+        if (categoryId.toString().equals("38383037-3665-3162-6433-356534303833")) {
             list = boardRepository.getBoardListAll(member.getLatitude(), member.getLongitude(), index);
         } else {
             ByteBuffer bb = ByteBuffer.wrap(new byte[16]);
@@ -176,22 +223,20 @@ public class BoardServiceImpl implements BoardService {
 
         List<BoardDto.BoardListResponse> response = list.stream()
                 .map(board -> {
-                    String date = "";
-
                     Long minutes = ChronoUnit.MINUTES.between(board.getCreatedAt(), LocalDateTime.now());
                     Long hours = ChronoUnit.HOURS.between(board.getCreatedAt(), LocalDateTime.now());
                     Long days = ChronoUnit.DAYS.between(board.getCreatedAt(), LocalDateTime.now());
 
-                    String dayFormat = board.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    String date = board.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-                    if (minutes < 60) {
-                        date = minutes + "분전";
-                    } else if (hours < 24) {
-                        date = hours + "시간전";
-                    } else if (days < 7) {
+                    if (days >= 1 && days < 7) {
                         date = days + "일전";
-                    } else {
-                        date = dayFormat;
+                    } else if (hours >= 1 && hours < 24) {
+                        date = hours + "시간전";
+                    } else if (minutes >= 1 && minutes < 60) {
+                        date = minutes + "분전";
+                    } else if (minutes < 1) {
+                        date = "방금전";
                     }
 
                     ByteBuffer byteBuffer = ByteBuffer.wrap(board.getBoardId());
@@ -223,22 +268,20 @@ public class BoardServiceImpl implements BoardService {
         List<BoardDto.CommentListDto> commentList = boardRepositorySupport.getCommentList(boardId);
         List<BoardDto.BoardDetailCommentResponse> commentResponse = new ArrayList<>();
         for (BoardDto.CommentListDto commentListDto : commentList) {
-            String date = "";
-
             Long minutes = ChronoUnit.MINUTES.between(commentListDto.getCreatedAt(), LocalDateTime.now());
             Long hours = ChronoUnit.HOURS.between(commentListDto.getCreatedAt(), LocalDateTime.now());
             Long days = ChronoUnit.DAYS.between(commentListDto.getCreatedAt(), LocalDateTime.now());
 
-            String dayFormat = commentListDto.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            String date = commentListDto.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-            if (minutes < 60) {
-                date = minutes + "분전";
-            } else if (hours < 24) {
-                date = hours + "시간전";
-            } else if (days < 7) {
+            if (days >= 1 && days < 7) {
                 date = days + "일전";
-            } else {
-                date = dayFormat;
+            } else if (hours >= 1 && hours < 24) {
+                date = hours + "시간전";
+            } else if (minutes >= 1 && minutes < 60) {
+                date = minutes + "분전";
+            } else if (minutes < 1) {
+                date = "방금전";
             }
 
             if (commentListDto.getParentId() == null) {
@@ -273,25 +316,23 @@ public class BoardServiceImpl implements BoardService {
             }
         }
 
-        String date = "";
-
         Long minutes = ChronoUnit.MINUTES.between(boardDetail.getCreatedAt(), LocalDateTime.now());
         Long hours = ChronoUnit.HOURS.between(boardDetail.getCreatedAt(), LocalDateTime.now());
         Long days = ChronoUnit.DAYS.between(boardDetail.getCreatedAt(), LocalDateTime.now());
 
-        String dayFormat = boardDetail.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String date = boardDetail.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-        if (minutes < 60) {
-            date = minutes + "분전";
-        } else if (hours < 24) {
-            date = hours + "시간전";
-        } else if (days < 7) {
+        if (days >= 1 && days < 7) {
             date = days + "일전";
-        } else {
-            date = dayFormat;
+        } else if (hours >= 1 && hours < 24) {
+            date = hours + "시간전";
+        } else if (minutes >= 1 && minutes < 60) {
+            date = minutes + "분전";
+        } else if (minutes < 1) {
+            date = "방금전";
         }
 
-        List<String> imgList = boardRepositorySupport.getImgURLList(boardId);
+        List<BoardDto.BoardImgURLDto> imgList = boardRepositorySupport.getBoardDetailImgURLList(boardId);
 
         BoardDto.BoardDetailResponse response = new BoardDto.BoardDetailResponse(
                     boardDetail.getBoardId(),
@@ -308,6 +349,72 @@ public class BoardServiceImpl implements BoardService {
                     imgList,
                     commentResponse
                 );
+
+        return response;
+    }
+
+    @Override
+    public BoardDto.BoardDetailCommentResponse getComment(UUID commentId) {
+        BoardDto.CommentListDto commentDto = boardRepositorySupport.getComment(commentId);
+        List<BoardDto.CommentListDto> subCommentList = boardRepositorySupport.getSubCommentList(commentId);
+
+        List<BoardDto.BoardDetailCommentResponse> commentResponse = new ArrayList<>();
+        for (BoardDto.CommentListDto commentListDto : subCommentList) {
+            Long minutes = ChronoUnit.MINUTES.between(commentListDto.getCreatedAt(), LocalDateTime.now());
+            Long hours = ChronoUnit.HOURS.between(commentListDto.getCreatedAt(), LocalDateTime.now());
+            Long days = ChronoUnit.DAYS.between(commentListDto.getCreatedAt(), LocalDateTime.now());
+
+            String date = commentListDto.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+            if (days >= 1 && days < 7) {
+                date = days + "일전";
+            } else if (hours >= 1 && hours < 24) {
+                date = hours + "시간전";
+            } else if (minutes >= 1 && minutes < 60) {
+                date = minutes + "분전";
+            } else if (minutes < 1) {
+                date = "방금전";
+            }
+
+            commentResponse.add(
+                    new BoardDto.BoardDetailCommentResponse(
+                            commentListDto.getCommentId(),
+                            commentListDto.getMemberId(),
+                            commentListDto.getProfileUrl(),
+                            commentListDto.getNickname(),
+                            commentListDto.getContent(),
+                            date,
+                            commentListDto.getDeletedYn(),
+                            null
+                    ));
+        }
+
+        Long minutes = ChronoUnit.MINUTES.between(commentDto.getCreatedAt(), LocalDateTime.now());
+        Long hours = ChronoUnit.HOURS.between(commentDto.getCreatedAt(), LocalDateTime.now());
+        Long days = ChronoUnit.DAYS.between(commentDto.getCreatedAt(), LocalDateTime.now());
+
+        String date = commentDto.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+        if (days >= 1 && days < 7) {
+            date = days + "일전";
+        } else if (hours >= 1 && hours < 24) {
+            date = hours + "시간전";
+        } else if (minutes >= 1 && minutes < 60) {
+            date = minutes + "분전";
+        } else if (minutes < 1) {
+            date = "방금전";
+        }
+
+        BoardDto.BoardDetailCommentResponse response = new BoardDto.BoardDetailCommentResponse(
+                commentDto.getCommentId(),
+                commentDto.getMemberId(),
+                commentDto.getProfileUrl(),
+                commentDto.getNickname(),
+                commentDto.getContent(),
+                date,
+                commentDto.getDeletedYn(),
+                commentResponse
+        );
 
         return response;
     }

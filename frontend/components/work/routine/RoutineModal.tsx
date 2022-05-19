@@ -18,7 +18,7 @@ const ModalWrapper = styled.div<{ visible: boolean }>`
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 1000;
+  z-index: 100000;
   overflow: auto;
   outline: 0;
 `;
@@ -32,16 +32,16 @@ const ModalOverlay = styled.div<{ visible: boolean }>`
   bottom: 0;
   right: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 999;
+  z-index: 100000;
 `;
 
 const ModalInner = styled.div`
   box-sizing: border-box;
   position: relative;
-  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5);
   background-color: #fff;
   border-radius: 10px;
   width: 90%;
+  max-width: 460px;
   top: 50%;
   transform: translateY(-50%);
   margin: 0 auto;
@@ -73,18 +73,35 @@ const ModalLable = styled.p`
   margin: 1rem 0;
 `;
 
-const ModalInput = styled.input`
+const ModalInput = styled.input<{ titleValidation: boolean }>`
   width: 100%;
   font-family: "Noto Sans KR";
   font-size: 1.6rem;
   color: #3d3d3d;
   border: none;
-  border-bottom: 1px solid #cccccc;
+  border-bottom: ${(props) =>
+    props.titleValidation ? "1px solid #ff0000" : "1px solid #cccccc"};
   outline: none;
-  margin-bottom: 1rem;
+  // margin-bottom: 1rem;
   ::placeholder {
     color: #cccccc;
   }
+`;
+
+const TitleErrorMessage = styled.p<{ titleValidation: boolean }>`
+  visibility: ${(props) => (props.titleValidation ? "visible" : "hidden")};
+  color: #ff0000;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  text-align: right;
+`;
+
+const RepetitionErrorMessage = styled.p<{ repetitionValidation: boolean }>`
+  visibility: ${(props) => (props.repetitionValidation ? "visible" : "hidden")};
+  color: #ff0000;
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  text-align: right;
 `;
 
 const ModalFooter = styled.div`
@@ -102,6 +119,8 @@ interface ModalProps {
   title?: string;
   repetition?: number;
   label?: string;
+  setToastMsg?: any;
+  setIsSuccess?: any;
 }
 
 interface RoutineInputForm {
@@ -119,12 +138,17 @@ export default function RoutineModal({
   routineId,
   title,
   repetition,
+  setToastMsg,
+  setIsSuccess,
 }: ModalProps) {
   // 나중에 API 형식으로 받아오기
   const [routineForm, setRoutineForm] = useState<RoutineInputForm>({
     title: title || "",
     repetition: repetition || 0,
   });
+
+  const [titleValidation, setTitleValidation] = useState(false);
+  const [repetitionValidation, setRepetitionValidation] = useState(false);
 
   const onClose = () => {
     setOpen(false);
@@ -147,13 +171,26 @@ export default function RoutineModal({
       // 새로 선택한 경우
       newValue = routineForm.repetition + (1 << value);
     }
+
     setRoutineForm((prev) => ({
       ...prev,
       repetition: newValue,
     }));
+
+    if (newValue === 0) {
+      setRepetitionValidation(true);
+    } else {
+      setRepetitionValidation(false);
+    }
   }
 
   function onChange(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.value.length === 0) {
+      setTitleValidation(true);
+    } else {
+      setTitleValidation(false);
+    }
+
     setRoutineForm((prev) => ({
       ...prev,
       title: e.target.value,
@@ -161,62 +198,84 @@ export default function RoutineModal({
   }
 
   const addRoutine = () => {
-    console.log(routineForm);
-    postRoutines(routineForm)
-      .then((res) => {
-        console.log(res.data);
-        setRoutineList([...routineList, res.data.data]);
-        alert("일과 등록 완료");
-        setOpen(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        alert("일과 등록 실패");
-      });
+    if (routineForm.title.length > 0 && routineForm.repetition !== 0) {
+      postRoutines(routineForm)
+        .then((res) => {
+          // console.log(res.data);
+          setToastMsg("📌 일과 등록 완료!");
+          setIsSuccess(true);
+          setRoutineList([...routineList, res.data.data]);
+          setOpen(false);
+        })
+        .catch((err) => {
+          setToastMsg("❎ 일과 등록 실패!");
+          setIsSuccess(false);
+        });
+    } else {
+      if (routineForm.title.length === 0) {
+        setTitleValidation(true);
+      }
+      if (routineForm.repetition === 0) {
+        setRepetitionValidation(true);
+      }
+    }
   };
 
   const editRoutine = () => {
     const routinId = routineId || "";
-    putRoutines(routinId, routineForm)
-      .then((res) => {
-        console.log(res.data);
-        setRoutineList(
-          routineList.map((routine: IRoutine) => {
-            return routine.routineId === routineId
-              ? {
-                  ...routine,
-                  routineId: routineId,
-                  title: routineForm.title,
-                  repetition: routineForm.repetition,
-                }
-              : routine;
-          })
-        );
-        alert("일과 수정 완료");
-        setOpen(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        alert("일과 수정 실패");
-      });
+    if (routineForm.title.length > 0 && routineForm.repetition !== 0) {
+      putRoutines(routinId, routineForm)
+        .then((res) => {
+          // console.log(res.data);
+          setToastMsg("✅ 일과 수정 완료!");
+          setIsSuccess(true);
+          setRoutineList(
+            routineList.map((routine: IRoutine) => {
+              return routine.routineId === routineId
+                ? {
+                    ...routine,
+                    routineId: routineId,
+                    title: routineForm.title,
+                    repetition: routineForm.repetition,
+                  }
+                : routine;
+            })
+          );
+          setOpen(false);
+        })
+        .catch((err) => {
+          // console.log(err);
+          setToastMsg("❎ 일과 수정 실패!");
+          setIsSuccess(false);
+        });
+    } else {
+      if (routineForm.title.length === 0) {
+        setTitleValidation(true);
+      }
+      if (routineForm.repetition === 0) {
+        setRepetitionValidation(true);
+      }
+    }
   };
 
   const deleteRoutine = () => {
     const routinId = routineId || "";
     deleteRoutines(routinId)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
+        setToastMsg("✅ 일과 삭제 완료!");
+        setIsSuccess(true);
         setRoutineList(
           routineList.filter(
             (routine: IRoutine) => routine.routineId !== routineId
           )
         );
-        alert("일과 삭제 완료");
         setOpen(false);
       })
       .catch((err) => {
-        console.log(err);
-        alert("일과 삭제 실패");
+        // console.log(err);
+        setToastMsg("❎ 일과 삭제 실패!");
+        setIsSuccess(false);
       });
   };
 
@@ -239,12 +298,21 @@ export default function RoutineModal({
                 value={routineForm.title}
                 onChange={onChange}
                 placeholder="일과를 입력해주세요."
+                titleValidation={titleValidation}
               />
+              <TitleErrorMessage titleValidation={titleValidation}>
+                1자 이상 입력해주세요.
+              </TitleErrorMessage>
               <ModalLable>반복</ModalLable>
               <RoutineDaySelect
                 selectedDays={routineForm.repetition}
                 handleWeeklyDayUpdate={handleWeeklyDayUpdate}
               ></RoutineDaySelect>
+              <RepetitionErrorMessage
+                repetitionValidation={repetitionValidation}
+              >
+                반복 요일을 선택해주세요.
+              </RepetitionErrorMessage>
               <ModalFooter>
                 {modalType === 0 ? (
                   <>

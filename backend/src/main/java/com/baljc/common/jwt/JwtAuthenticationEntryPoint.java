@@ -1,5 +1,7 @@
 package com.baljc.common.jwt;
 
+import com.baljc.common.response.BaseResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -18,6 +20,15 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
                          HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
         log.debug("commence - request: {}, response: {}", request, response);
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+        BaseResponse exception = (BaseResponse) request.getAttribute("exception");
+
+        if (exception != null) setResponse(response, exception);
+        else setResponse(response, new BaseResponse(9999, "알 수 없는 오류입니다."));
+    }
+
+    private void setResponse(HttpServletResponse response, BaseResponse baseResponse) throws IOException {
+        response.setContentType("application/json;charset=UTF-8");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.getWriter().write(new ObjectMapper().writeValueAsString(baseResponse));
     }
 }

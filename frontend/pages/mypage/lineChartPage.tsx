@@ -53,37 +53,36 @@ const LineChartPage = () => {
   useEffect(() => {
     getPieChartValue(year, month)
       .then((res) => {
-        console.log(res.data.data);
+        // console.log(res.data.data);
         setCategories(res.data.data);
       })
       .catch((err) => {
-        console.log(err.response);
+        // console.log(err.response);
         console.log("😥🙀 도넛 차트 조회 실패");
       });
-    console.log(year);
-    console.log(month);
+    // console.log(year);
+    // console.log(month);
     getLineGraphValue(year, month)
       .then((res) => {
-        console.log(res.data.data);
+        // console.log(res.data.data);
         setXdays(res.data.data);
-        console.log("하이");
-        console.log(xdays);
+        // console.log(xdays);
       })
       .catch((err) => {
-        console.log(err.response);
+        // console.log(err.response);
         console.log("😥🙀 도넛 차트 조회 실패");
       });
-    console.log("xdaysName");
-    console.log(xdaysName);
-    console.log("xdaysValue");
-    console.log(xdaysValue);
+    // console.log("xdaysName");
+    // console.log(xdaysName);
+    // console.log("xdaysValue");
+    // console.log(xdaysValue);
     getBudget(dateForm)
       .then((res) => {
-        console.log(res.data);
-        console.log("예산 조회 성공! 🤸‍♀️🔥");
-        console.log(expenditurePercent);
-        console.log("퍼센트 toString");
-        console.log(expenditurePercent.toString());
+        // console.log(res.data);
+        // console.log("예산 조회 성공! 🤸‍♀️🔥");
+        // console.log(expenditurePercent);
+        // console.log("퍼센트 toString");
+        // console.log(expenditurePercent.toString());
         setRemainingBudget(res.data.data.remainingBudget);
         setDailyExpenditure(res.data.data.dailyExpenditure);
         setEstimatedExpenditure(res.data.data.estimatedExpenditure);
@@ -92,8 +91,8 @@ const LineChartPage = () => {
         setRemainingBudgetPercent(res.data.data.remainingBudgetPercent);
       })
       .catch((err) => {
-        console.log(err.response);
-        console.log("😥🙀 예산 조회 실팩ㄱ");
+        // console.log(err.response);
+        console.log("😥🙀 예산 조회 실패");
       });
   }, [month, year]);
 

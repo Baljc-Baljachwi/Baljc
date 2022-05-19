@@ -10,6 +10,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -34,9 +36,16 @@ public class Room {
     @JoinColumn(name = "member_id2")
     private Member member2;
 
+    @OneToMany(mappedBy = "room")
+    List<Chat> chatList = new ArrayList<>();
+
     @Builder
     public Room(Member member1, Member member2) {
         this.member1 = member1;
         this.member2 = member2;
+    }
+
+    public void updateDateTime(LocalDateTime dateTime) {
+        this.updatedAt = dateTime;
     }
 }

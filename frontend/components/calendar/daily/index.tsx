@@ -11,12 +11,14 @@ import { IRoutine } from "types";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 1rem 2rem;
+  padding: 1rem 2rem 2rem 2rem;
+  border-top: 1rem solid #f4f4f4;
 `;
 
 const Title = styled.div`
-  font-size: 1.5rem;
-  margin: 1rem 0;
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin: 1.2rem 0;
 `;
 
 interface DailyProps {
@@ -30,6 +32,7 @@ interface DailyProps {
 export default function Daily({ date, dayYoil, day, month, year }: DailyProps) {
   const [result, setResult] = useState<Array<any>>([]);
   const [routines, setRoutines] = useState<IRoutine[]>();
+
   useEffect(() => {
     getDailyCalendar({ year: year, month: month, day: day }).then((res) => {
       setResult(res.data.data);
@@ -37,6 +40,7 @@ export default function Daily({ date, dayYoil, day, month, year }: DailyProps) {
     });
   }, [day, date, month, year]);
 
+  // console.log(date);
   return (
     <Container>
       <Title>{dayYoil}</Title>

@@ -11,7 +11,7 @@ const RoutineDiv = styled.div`
   width: 100%;
   margin: 2rem 0;
   padding: 1.5rem 2rem;
-  filter: drop-shadow(0 0.2rem 0.4rem rgba(0, 0, 0, 0.25));
+  filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
   cursor: pointer;
 `;
 
@@ -30,8 +30,8 @@ const RoutineListItem = styled.li<{ isEmpty: boolean }>`
   list-style: none;
   align-items: center;
   margin-top: 0.2rem;
-  gap: 1rem;
-  font-size: 1.6rem;
+  gap: 1.5rem;
+  font-size: 1.8rem;
 `;
 
 interface RoutineProps {
@@ -50,7 +50,7 @@ export default function Routine({ dow }: RoutineProps) {
         setRoutineList(res.data.data);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   };
 

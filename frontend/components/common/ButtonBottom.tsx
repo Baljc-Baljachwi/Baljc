@@ -5,7 +5,7 @@ const StyledButton = styled.button`
   background-color: #2e437a;
   color: #ffffff;
   font-size: 1.6rem;
-  padding: 1.6rem 0;
+  padding: 1.4rem 0;
   font-weight: 700;
   font-family: "Noto Sans KR", sans-serif;
   font-style: normal;
@@ -15,6 +15,9 @@ const StyledButton = styled.button`
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
+  :active {
+    background-color: #29375c;
+  }
 `;
 
 interface ButtonBottomProps {

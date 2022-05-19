@@ -57,7 +57,7 @@ const ProfileMenuCardTitle = styled.span`
 `;
 
 const ProfileMenuCardDetail = styled.span`
-  color: #696969;
+  color: #4d5158;
   font-size: 1.4rem;
   font-weight: 400;
 `;
@@ -106,7 +106,7 @@ const StyledToastContainer = styled(ToastContainer).attrs({
     background-color: rgba(75, 192, 192, 0.4);
     font-size: 1.4rem;
     font-weight: 600;
-    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25));
+    filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
   }
   .Toastify__toast-container {
     /* width: 320px; */
@@ -168,7 +168,7 @@ const Alarm = () => {
         setTodoAlarmTime(res.data.data.todoAlarmTime);
       })
       .catch((err) => {
-        console.log(err.response);
+        // console.log(err.response);
         console.log("😥🙀 알림 조회 실패");
       });
   }, []);
@@ -199,12 +199,12 @@ const Alarm = () => {
     putAlarms(alarmInfo)
       .then((res) => {
         notify();
-        console.log(res.data);
-        console.log("알림 변경사항 저장 성공! 🤸‍♀️🔥");
+        // console.log(res.data);
+        // console.log("알림 변경사항 저장 성공! 🤸‍♀️🔥");
       })
       .catch((err) => {
         notifyFail();
-        console.log(err.response);
+        // console.log(err.response);
         console.log("😥🙀 알림 변경사항 저장 실패!");
       });
   };
@@ -236,7 +236,7 @@ const Alarm = () => {
             <ProfileMenuCardContent>
               <ProfileMenuCardTitle>푸쉬 알림 설정</ProfileMenuCardTitle>
               <ProfileMenuCardDetail>
-                정해진 시간에 푸쉬 알림을 받습니다.
+                받고 싶은 알림과 시각을 선택해주세요
               </ProfileMenuCardDetail>
             </ProfileMenuCardContent>
             <DivisionLine />

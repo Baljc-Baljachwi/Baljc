@@ -12,7 +12,7 @@ const Container = styled.div`
 
 const PageContainer = styled.main`
   font-family: "Noto Sans KR", sans-serif;
-  padding: 0 2rem;
+  padding: 0 2rem 5rem 2rem;
   background-color: #ffffff;
   color: #3d3d3d;
   display: flex;
@@ -51,12 +51,14 @@ const DetailContents = styled.div`
   flex-direction: column;
   font-size: 1.6rem;
   gap: 0.5rem;
+  color: #878b93;
   span {
     font-size: 2rem;
+    color: #3d3d3d;
   }
   .fixedDateTime {
     font-size: 1.6rem;
-    color: #767676;
+    color: #878b93;
   }
 `;
 
@@ -99,21 +101,21 @@ const FinanceDetail = () => {
     const accountbookId = router.query.accountbookId;
     if (accountbookId && typeof accountbookId === "string") {
       getAccountbooks(accountbookId).then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         if (res.data.code === 1302) {
           setFinanceDetailInfo(res.data.data);
           getCategories(res.data.data.type).then((res) => {
-            console.log(res.data);
+            // console.log(res.data);
             if (res.data.code === 1300) {
-              console.log(res.data.data);
+              // console.log(res.data.data);
               setCategoryList(res.data.data);
             } else {
-              console.log(res.data.message);
+              // console.log(res.data.message);
               confirm("카테고리 조회 실패");
             }
           });
         } else {
-          console.log(res.data.message);
+          // console.log(res.data.message);
           confirm("가계부 상세 조회 실패!");
         }
       });
@@ -128,11 +130,11 @@ const FinanceDetail = () => {
     );
   }, [categoryList, setCategoryImageUrl, financeDetailInfo]);
 
-  console.log(
-    categoryList.find(
-      (category) => category.categoryId === financeDetailInfo?.categoryId
-    )?.imgUrl
-  );
+  // console.log(
+  //   categoryList.find(
+  //     (category) => category.categoryId === financeDetailInfo?.categoryId
+  //   )?.imgUrl
+  // );
 
   // YYYY-MM-DDTHH:MM:SS => YYYY년 MM월 DD일 HH시 MM분
   function datetimeParsing(datetime: string) {
@@ -159,7 +161,6 @@ const FinanceDetail = () => {
   }
 
   function onClickEditButton() {
-    console.log("Edit Button Clicked !!");
     if (!financeDetailInfo) {
       return;
     }
@@ -201,7 +202,7 @@ const FinanceDetail = () => {
             </DetailContents>
             <DetailContents>
               금액
-              <span>{financeDetailInfo?.price || "0"} 원</span>
+              <span>{financeDetailInfo?.price.toLocaleString() || "0"} 원</span>
             </DetailContents>
             <DetailContents>
               날짜
@@ -247,7 +248,7 @@ const FinanceDetail = () => {
                 <span>{financeDetailInfo?.categoryName}</span>
               </CategoryContent>
             </DetailContents>
-            <DetailContents>
+            <DetailContents style={{ paddingBottom: "4rem" }}>
               메모
               <span>{financeDetailInfo?.memo}</span>
             </DetailContents>

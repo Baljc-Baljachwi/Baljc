@@ -683,12 +683,6 @@
       "purpose": "any"
     },
     {
-      "src": "blob:https://www.pwabuilder.com/9206c8eb-e02c-4f08-96a9-9afbc05178b8",
-      "type": "image/png",
-      "sizes": "144x144",
-      "purpose": "any"
-    },
-    {
       "src": "blob:https://www.pwabuilder.com/7f55f9e9-ecb0-4a00-8a19-d892ea64694f",
       "type": "image/png",
       "sizes": "96x96",
@@ -812,12 +806,6 @@
       "src": "blob:https://www.pwabuilder.com/c748bb25-fa34-4841-8c1f-f10ebce2eccb",
       "type": "image/png",
       "sizes": "128x128",
-      "purpose": "any"
-    },
-    {
-      "src": "blob:https://www.pwabuilder.com/6448b6f7-abf4-45bb-ada1-42aa297fcfc0",
-      "type": "image/png",
-      "sizes": "144x144",
       "purpose": "any"
     },
     {

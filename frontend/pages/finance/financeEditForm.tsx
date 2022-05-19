@@ -14,7 +14,7 @@ const PageContainer = styled.main`
 const CostIncomeTitle = styled.div`
   font-size: 2.4rem;
   font-weight: 500;
-  margin: 3rem 0;
+  margin: 2rem 0;
 `;
 
 interface FinanceEditFormProps {
@@ -33,11 +33,11 @@ export default function FinanceEditForm({ accountbook }: FinanceEditFormProps) {
 
   useEffect(() => {
     const accountbookId = router.query.accountbookId;
-    console.log("accountbookId :", accountbookId);
+    // console.log("accountbookId :", accountbookId);
 
     if (accountbookId && typeof accountbookId === "string") {
       getAccountbooks(accountbookId).then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         if (res.data.code === 1302) {
           const data = res.data.data;
 
@@ -48,7 +48,7 @@ export default function FinanceEditForm({ accountbook }: FinanceEditFormProps) {
 
           setInitForm({ ...data, date, time, startDate, endDate });
         } else {
-          console.log(res.data.message);
+          // console.log(res.data.message);
         }
       });
     }

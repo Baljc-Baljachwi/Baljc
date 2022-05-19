@@ -1,9 +1,6 @@
 package com.baljc.config;
 
-import com.baljc.common.jwt.JwtAccessDeniedHandler;
-import com.baljc.common.jwt.JwtAuthenticationEntryPoint;
-import com.baljc.common.jwt.JwtSecurityConfig;
-import com.baljc.common.jwt.TokenProvider;
+import com.baljc.common.jwt.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -23,15 +20,21 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final TokenProvider tokenProvider;
+    private final JwtFilter jwtFilter;
+    private final JwtExceptionFilter jwtExceptionFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     public SecurityConfig(
             TokenProvider tokenProvider,
+            JwtFilter jwtFilter,
+            JwtExceptionFilter jwtExceptionFilter,
             JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
             JwtAccessDeniedHandler jwtAccessDeniedHandler
     ) {
         this.tokenProvider = tokenProvider;
+        this.jwtFilter = jwtFilter;
+        this.jwtExceptionFilter = jwtExceptionFilter;
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
         this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
     }
@@ -64,12 +67,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeHttpRequests()    // HttpServletRequest를 사용하는 요청들에 대한 접근을 제한(인증 요청)
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() // Preflight 요청에 대해 인증 처리X
                 .antMatchers("/members/login/kakao").permitAll() // 해당 URL은 인증 처리X
-                .antMatchers("/**").permitAll()
+                .antMatchers("/members/refresh").permitAll()
+                .antMatchers(HttpMethod.POST, "/chat/room/?*").permitAll()
                 .anyRequest()
                 .authenticated()
 
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider));
+
     }
 
     @Bean
@@ -81,6 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.addAllowedOrigin("https://www.baljc.com");
         configuration.addAllowedOrigin("https://baljc.com");
         configuration.addExposedHeader("authorization");
+        configuration.addExposedHeader("refreshtoken");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);

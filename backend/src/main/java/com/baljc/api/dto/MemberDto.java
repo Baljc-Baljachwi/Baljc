@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
+import java.util.UUID;
 
 public class MemberDto {
     @Getter
@@ -44,7 +45,18 @@ public class MemberDto {
     @AllArgsConstructor
     public static class SigninInfo {
         private String jwt;
+        private String refreshToken;
+        private UUID memberId;
         private Boolean surveyedYn;
+        private Boolean regionYn;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class SigninResponse {
+        private UUID memberId;
+        private Boolean surveyedYn;
+        private Boolean regionYn;
     }
 
     @Getter
@@ -61,5 +73,23 @@ public class MemberDto {
         private String depth1;
         private String depth2;
         private String depth3;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class Other {
+        private String nickname;
+        private String profileUrl;
+        private String depth1;
+        private String depth2;
+        private String depth3;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class TokenRequest {
+        private UUID memberId;
+        private String authorization;
+        private String refreshToken;
     }
 }

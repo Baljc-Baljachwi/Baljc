@@ -5,7 +5,6 @@ import Image from "next/image";
 
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
-import { accessTokenState } from "atoms/atoms";
 import { getMemberInfo } from "../../api/member";
 import { SalaryType } from "../../types";
 import defaultProfileImg from "@/assets/img/mypage/avatar/avatar_tr1.png";
@@ -41,7 +40,6 @@ const ProfileCardContainer = styled.div`
 
 const ProfileImage = styled.div`
   border: 3px solid #fafafe;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.5));
   border-radius: 50%;
   width: 10rem;
   height: 10rem;
@@ -100,13 +98,13 @@ const ProfileCard = ({}) => {
   useEffect(() => {
     getMemberInfo().then((res) => {
       // console.log(res.data);
-      console.log(res.data.data);
+      // console.log(res.data.data);
       if (res.data.code === 1001) {
         // console.log("1001도 넘어왔음!");
         // console.log(res.data.data);
         setMemberInfo(res.data.data);
       } else {
-        console.log(res.data.message);
+        // console.log(res.data.message);
       }
     });
   }, []);
@@ -122,6 +120,7 @@ const ProfileCard = ({}) => {
                 src={memberInfo?.profileUrl || defaultProfileImage}
                 alt={memberInfo?.nickname}
                 layout="fill"
+                priority={true}
               />
             )}
           </ProfileImage>
@@ -140,7 +139,7 @@ const ProfileCard = ({}) => {
                 : null}
               {/* .toLocaleString() */}
             </span>
-            <span>한 달 예산 | {memberInfo?.budget.toLocaleString()} 원</span>
+            <span>이번 달 예산 | {memberInfo?.budget.toLocaleString()} 원</span>
           </ProfileInfo>
         </ProfileCardContainer>
       </Container>

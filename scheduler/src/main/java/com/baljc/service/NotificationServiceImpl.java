@@ -58,7 +58,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void sendMessageByTokenList(List<String> tokenList, Notification notification) throws FirebaseMessagingException {
+    public void sendMessageByTokenList(List<String> tokenList, Notification notification, String url) throws FirebaseMessagingException {
         int N = (int)Math.ceil((double)tokenList.size() / MAX_REGISTRATION_TOKENS);
         int from = 0, to = 0;
         List<String> tokenSubList;
@@ -67,6 +67,8 @@ public class NotificationServiceImpl implements NotificationService {
             from = MAX_REGISTRATION_TOKENS * i;
             to = Math.min(from + MAX_REGISTRATION_TOKENS, tokenList.size());
             tokenSubList = new ArrayList<>(tokenList.subList(from, to));
+            for (String t:tokenList)
+                log.debug("sendMessageByTokenList - t: {}", t);
 
             // 여러 기기에 메시지 전송
             MulticastMessage message = MulticastMessage.builder()
@@ -78,6 +80,11 @@ public class NotificationServiceImpl implements NotificationService {
                             .setImage(notification.getImage())
                             .build())
                     .addAllTokens(tokenSubList)
+                    .setWebpushConfig(WebpushConfig.builder()
+                            .setFcmOptions(WebpushFcmOptions.builder()
+                                    .setLink(url)
+                                    .build())
+                            .build())
                     .build();
 
             // 메시지 응답 목록

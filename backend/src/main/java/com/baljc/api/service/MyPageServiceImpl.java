@@ -1,13 +1,16 @@
 package com.baljc.api.service;
 
+import com.baljc.api.dto.BoardDto;
 import com.baljc.api.dto.MyPageDto;
-import com.baljc.db.entity.AccountBook;
-import com.baljc.db.entity.Routine;
+import com.baljc.db.entity.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -107,6 +110,89 @@ public class MyPageServiceImpl implements MyPageService {
                 });
 
         return Arrays.stream(dailyExp).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BoardDto.BoardListResponse> getMyBoardList() {
+        return memberService.getMemberByAuthentication().getBoardList()
+                .stream()
+                .filter(board -> board.getDeletedYn() == 'N')
+                .sorted(Comparator.comparing(Board::getCreatedAt).reversed())
+                .map(board -> {
+                    LocalDateTime now = LocalDateTime.now();
+                    LocalDateTime dateTime = board.getCreatedAt();
+                    String createdAt = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    long diff = ChronoUnit.DAYS.between(dateTime, now);
+
+                    if (diff < 7) {
+                        if (diff >= 1) createdAt = diff + "일전";
+                        else {
+                            diff = ChronoUnit.HOURS.between(dateTime, now);
+                            if (diff >= 1) createdAt = diff + "시간전";
+                            else {
+                                diff = ChronoUnit.MINUTES.between(dateTime, now);
+                                if (diff >= 1) createdAt = diff + "분전";
+                                else createdAt = "방금전";
+                            }
+                        }
+                    }
+
+                    return new BoardDto.BoardListResponse(board.getBoardId(),
+                            board.getBoardCategory().getName(),
+                            board.getContent(),
+                            createdAt,
+                            board.getMember().getNickname(),
+                            board.getDong(),
+                            board.getBoardImgList()
+                                    .stream()
+                                    .map(BoardImg::getImgUrl)
+                                    .collect(Collectors.toList()),
+                            board.getHeartList().size(),
+                            board.getCommentList().size());
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BoardDto.BoardListResponse> getScrapBoardList() {
+        return memberService.getMemberByAuthentication().getScrapList()
+                .stream()
+                .map(Scrap::getBoard)
+                .filter(board -> board.getDeletedYn() == 'N')
+                .sorted(Comparator.comparing(Board::getCreatedAt).reversed())
+                .map(board -> {
+                    LocalDateTime now = LocalDateTime.now();
+                    LocalDateTime dateTime = board.getCreatedAt();
+                    String createdAt = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    long diff = ChronoUnit.DAYS.between(dateTime, now);
+
+                    if (diff < 7) {
+                        if (diff >= 1) createdAt = diff + "일전";
+                        else {
+                            diff = ChronoUnit.HOURS.between(dateTime, now);
+                            if (diff >= 1) createdAt = diff + "시간전";
+                            else {
+                                diff = ChronoUnit.MINUTES.between(dateTime, now);
+                                if (diff >= 1) createdAt = diff + "분전";
+                                else createdAt = "방금전";
+                            }
+                        }
+                    }
+
+                    return new BoardDto.BoardListResponse(board.getBoardId(),
+                            board.getBoardCategory().getName(),
+                            board.getContent(),
+                            createdAt,
+                            board.getMember().getNickname(),
+                            board.getDong(),
+                            board.getBoardImgList()
+                                    .stream()
+                                    .map(BoardImg::getImgUrl)
+                                    .collect(Collectors.toList()),
+                            board.getHeartList().size(),
+                            board.getCommentList().size());
+                })
+                .collect(Collectors.toList());
     }
 
     public Stream<AccountBook> getMonthlySteam(Integer year, Integer month) {

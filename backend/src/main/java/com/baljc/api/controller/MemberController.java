@@ -1,5 +1,6 @@
 package com.baljc.api.controller;
 
+import com.baljc.api.dto.BoardDto;
 import com.baljc.api.dto.MemberDto;
 import com.baljc.api.service.MemberService;
 import com.baljc.common.jwt.JwtFilter;
@@ -13,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -42,7 +41,7 @@ public class MemberController {
 //    }
 
     @GetMapping("/login/kakao")
-    public ResponseEntity<BaseDataResponse<Map<String, Boolean>>> signinMember(
+    public ResponseEntity<BaseDataResponse<MemberDto.SigninResponse>> signinMember(
             @RequestParam(value = "code") String code, @RequestParam(value = "token", required = false) String fcmToken
     ) {
         log.debug("signinMember - code: {}", code);
@@ -50,11 +49,11 @@ public class MemberController {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + signinInfo.getJwt());
-        Map<String, Boolean> map = new HashMap<>();
-        map.put("surveyedYn", signinInfo.getSurveyedYn());
+        httpHeaders.add(JwtFilter.REFRESH_TOKEN_HEADER, "Bearer " + signinInfo.getRefreshToken());
 
         return ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(new BaseDataResponse<>(1000,
-                "소셜로그인에 성공하였습니다.", map));
+                "소셜로그인에 성공하였습니다.", new MemberDto.SigninResponse(signinInfo.getMemberId(),
+                signinInfo.getSurveyedYn(), signinInfo.getRegionYn())));
     }
 
     @GetMapping
@@ -83,5 +82,14 @@ public class MemberController {
     public ResponseEntity<BaseResponse> signoutMember() {
         memberService.signoutMember();
         return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse(1004, "로그아웃이 완료되었습니다."));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<BaseResponse> updateToken(@Valid @RequestBody MemberDto.TokenRequest tokenRequest) {
+        MemberDto.SigninInfo signinInfo = memberService.updateToken(tokenRequest.getMemberId(), tokenRequest.getAuthorization(), tokenRequest.getRefreshToken());
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + signinInfo.getJwt());
+        httpHeaders.add(JwtFilter.REFRESH_TOKEN_HEADER, "Bearer " + signinInfo.getRefreshToken());
+        return ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(new BaseResponse(1005, "토큰이 재발급되었습니다."));
     }
 }

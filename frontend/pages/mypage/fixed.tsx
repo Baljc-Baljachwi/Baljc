@@ -8,6 +8,8 @@ import "dayjs/locale/ko";
 
 import Header from "components/common/Header";
 import FixedList from "components/mypage/fixed/FixedList";
+import FloatingButton from "components/common/FloatingButton";
+
 interface IExFixed {
   accountbookId: string;
   monthlyPeriod: number;
@@ -35,6 +37,8 @@ const Fixed = () => {
   const [categoryImgUrl, setCategoryImgUrl] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const fixedEList = Object.entries(exFixed);
+  const dayMonthYear = dayjs(date).format("YYYY-MM-DD");
+
   // console.log(exFixed);
   // console.log(fixedEList);
   useEffect(() => {
@@ -45,11 +49,11 @@ const Fixed = () => {
       })
       .catch((err) => {
         console.log("😥🙀 고정 지출 조회 실패");
-        console.log(err.response);
+        // console.log(err.response);
       });
     getFixedEList(year, month)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setExFixed(res.data.data);
         // setAccountbookId(res.data.data.accountbookId);
         // setMonthlyPeriod(res.data.data.monthlyPeriod);
@@ -62,7 +66,7 @@ const Fixed = () => {
       })
       .catch((err) => {
         console.log("😥🙀 고정 지출 조회 실패");
-        console.log(err.response);
+        // console.log(err.response);
       });
   }, []);
   // console.log(exFixed);
@@ -72,6 +76,8 @@ const Fixed = () => {
         label="고정 지출 조회"
         onClickBackButton={() => router.push("/mypage")}
       />
+
+      {/* <BodyContainer> */}
       <HeaderCard>
         <span>이번 달 고정 지출</span>
         <span>
@@ -80,15 +86,31 @@ const Fixed = () => {
           <span>원</span>
         </span>
       </HeaderCard>
-      <ContentsContainer>
-        {fixedEList && fixedEList.length > 0 ? (
-          fixedEList.map((item, idx) => <FixedList key={idx} item={item} />)
-        ) : (
-          <NoContentContainer>
-            <p>고정 지출 내역이 없습니다!</p>
-          </NoContentContainer>
-        )}
-      </ContentsContainer>
+      {/* <ContentsContainer> */}
+      {fixedEList && fixedEList.length > 0 ? (
+        fixedEList.map((item, idx) => (
+          <Container key={idx}>
+            <FixedList item={item} />
+          </Container>
+        ))
+      ) : (
+        <NoContentContainer>
+          고정 지출 내역이 없습니다!
+          <NoContentMessage className="small">
+            고정 지출을 등록해주세요.
+          </NoContentMessage>
+        </NoContentContainer>
+      )}
+      {/* </ContentsContainer> */}
+      {/* </BodyContainer> */}
+      <FloatingButton
+        onClick={() => {
+          router.push({
+            pathname: "/finance/financeCreateForm",
+            query: { date: dayMonthYear },
+          });
+        }}
+      />
     </>
   );
 };
@@ -104,7 +126,8 @@ const HeaderCard = styled.div`
   flex-wrap: nowrap;
 
   background-color: #2e437a;
-  height: 20vh;
+  // height: 20vh;
+  height: 20rem;
   padding: 0 4rem;
 
   color: #ffffff;
@@ -126,23 +149,55 @@ const ContentsContainer = styled.div`
 `;
 
 const NoContentContainer = styled.section`
+  background-color: #f4f4f4;
   width: 100%;
-  height: calc(100vh - 50rem);
+  // height: calc(100vh - 50rem);
+  // height: calc(100vh - 33.2rem);
+  height: calc(100vh - 32.2rem);
+  // height: calc(100vh - 13.2rem);
   top: 0;
   left: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  p {
-    text-align: center;
-    font-size: 2.4rem;
-    font-weight: 700;
-    padding: 1rem;
-    color: #cccccc;
-    &.small {
-      font-size: 1.8rem;
-      font-weight: 500;
+  color: #cccccc;
+  font-size: 2.4rem;
+  font-weight: 700;
+  // p {
+  //   text-align: center;
+  //   font-size: 2.4rem;
+  //   font-weight: 700;
+  //   padding: 1rem;
+  //   color: #cccccc;
+  //   &.small {
+  //     font-size: 1.8rem;
+  //     font-weight: 500;
+  //   }
+  // }
+`;
+
+const NoContentMessage = styled.p`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 2.4rem;
+  font-weight: 700;
+  padding: 1rem;
+  color: #cccccc;
+  &.small {
+    font-size: 1.8rem;
+    font-weight: 500;
+    .btn_MoveTo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
+`;
+
+const Container = styled.div`
+  padding: 2rem;
 `;

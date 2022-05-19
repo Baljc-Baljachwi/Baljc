@@ -7,6 +7,8 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper";
 
+import Icon from "components/common/Icon";
+
 const ModalOverlay = styled.div<{ visible: boolean }>`
   box-sizing: border-box;
   display: ${(props) => (props.visible ? "block" : "none")};
@@ -16,7 +18,7 @@ const ModalOverlay = styled.div<{ visible: boolean }>`
   bottom: 0;
   right: 0;
   background-color: #00000086;
-  z-index: 999;
+  z-index: 100000;
 `;
 
 const ModalWrapper = styled.div<{ visible: boolean }>`
@@ -24,10 +26,10 @@ const ModalWrapper = styled.div<{ visible: boolean }>`
   display: ${(props) => (props.visible ? "block" : "hidden")};
   position: fixed;
   top: 0;
-  right: 0;
   bottom: 0;
-  left: 0;
-  z-index: 1000;
+  width: 100%;
+  max-width: 512px;
+  z-index: 100000;
   overflow: auto;
   outline: 0;
 `;
@@ -74,6 +76,10 @@ const ModalInner = styled.div`
     -webkit-align-items: center;
     align-items: center;
   }
+
+  .image {
+    object-fit: contain;
+  }
 `;
 
 interface ImageProps {
@@ -102,9 +108,9 @@ export default function CommunityImageModal({
         <>
           <ModalOverlay visible={open} />
           <ModalWrapper visible={open} tabIndex={-1} onClick={onMaskClick}>
-            {/* <IconWrapper tabIndex={1} onClick={onClose}>
+            <IconWrapper tabIndex={1} onClick={onClose}>
               <Icon mode="fas" icon="xmark" color="#ffffff" size="3rem" />
-            </IconWrapper> */}
+            </IconWrapper>
             <ModalInner
               tabIndex={0}
               className="modal-inner"
@@ -117,8 +123,16 @@ export default function CommunityImageModal({
                 className="mySwiper"
               >
                 {imageList?.map((image, idx) => (
-                  <SwiperSlide key={idx} style={{ width: "100%" }}>
-                    <Image src={image} alt="" width={400} height={300} />
+                  <SwiperSlide
+                    key={idx}
+                    style={{
+                      width: "100%",
+                      height: "30rem",
+                      position: "relative",
+                    }}
+                  >
+                    {/* <Image src={image} alt="" width={400} height={300} /> */}
+                    <Image src={image} alt="" layout="fill" className="image" />
                   </SwiperSlide>
                 ))}
               </Swiper>

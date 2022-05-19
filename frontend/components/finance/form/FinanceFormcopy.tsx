@@ -179,11 +179,11 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
   const [categoryList, setCategoryList] = useState<Category[]>([]);
 
   useEffect(() => {
-    console.log(type);
+    // console.log(type);
     getCategories(type).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       if (res.data.code === 1300) {
-        console.log(res.data.data);
+        // console.log(res.data.data);
         setCategoryList(res.data.data);
       }
     });
@@ -253,7 +253,7 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
   }
 
   function onClickConfirmButton() {
-    console.log("Confirm!!");
+    // console.log("Confirm!!");
     const params = {
       ...financeForm,
       startDate: financeForm.startDate ? financeForm.startDate + "-01" : null,
@@ -262,39 +262,39 @@ export default function FinanceForm({ type, initForm }: FinanceFormProps) {
     delete params.accountbookId;
 
     postAccountbooks(params).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
     });
-    console.log(params);
+    // console.log(params);
   }
 
   function onClickEditButton() {
     if (!financeForm.accountbookId) {
       return;
     }
-    console.log("Edit!!");
-    console.log(financeForm);
+    // console.log("Edit!!");
+    // console.log(financeForm);
     const params = {
       ...financeForm,
       startDate: financeForm.startDate ? financeForm.startDate + "-01" : null,
       endDate: financeForm.endDate ? financeForm.endDate + "-28" : null,
     };
     putAccountbooks(financeForm.accountbookId, params).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
     });
   }
 
   function onClickDeleteButton() {
-    console.log("Delete!");
+    // console.log("Delete!");
     if (!financeForm.accountbookId) {
       return;
     }
     deleteAccountbooks(financeForm.accountbookId).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
     });
   }
 
   function onClickCategoryButton(categoryId: string) {
-    console.log(categoryId);
+    // console.log(categoryId);
     setFinanceForm((prev) => ({ ...prev, categoryId }));
   }
 

@@ -5,6 +5,8 @@ import com.baljc.common.jwt.TokenProvider;
 import com.baljc.common.util.SecurityUtil;
 import com.baljc.db.entity.*;
 import com.baljc.db.repository.*;
+import com.baljc.exception.NotExpiredTokenException;
+import com.baljc.exception.NotValidRefreshTokenException;
 import com.baljc.exception.UnauthenticatedMemberException;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -183,13 +186,18 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public MemberDto.SigninInfo authenticateMember(Member member) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(member.getMemberId(), member.getKakaoId());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         log.debug("authenticateMember - surveyedYn: {}",  member.getSurveyedYn());
-        return new MemberDto.SigninInfo(tokenProvider.createToken(authentication), member.getSurveyedYn() == 'Y');
+        boolean surveyedYn = member.getSurveyedYn() == 'Y';
+        String refreshToken = tokenProvider.createRefreshToken();
+        member.updateRefreshToken(refreshToken);
+        return new MemberDto.SigninInfo(tokenProvider.createToken(authentication), refreshToken, member.getMemberId(),
+                surveyedYn, surveyedYn && member.getLatitude() != null && member.getLongitude() != null);
     }
 
     @Override
@@ -255,5 +263,42 @@ public class MemberServiceImpl implements MemberService {
     public void signoutMember() {
         getMemberByAuthentication().updateFcmToken(null);
         SecurityContextHolder.clearContext();
+    }
+
+    @Override
+    @Transactional(noRollbackFor = { Exception.class })
+    public MemberDto.SigninInfo updateToken(UUID memberId, String authorization, String refreshToken) {
+        //accessToken 유효기간 확인
+        String aToken = "";
+        if (StringUtils.hasText(authorization) && authorization.startsWith("Bearer ")) {
+            aToken = authorization.substring(7);
+        }
+        if (tokenProvider.validateRefreshToken(aToken)) {
+            throw new NotExpiredTokenException("만료된 토큰이 아닙니다.");
+        }
+
+        //accessToken 파싱
+//        UUID memberId = UUID.fromString(tokenProvider.getUserPk(authorization));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NullPointerException("해당 회원이 존재하지 않습니다."));
+
+        //refreshToken 유효기간 확인 & 데이터베이스에 저장된 값과 같은지 확인
+        String rToken = "";
+        if (StringUtils.hasText(refreshToken) && refreshToken.startsWith("Bearer ")) {
+            rToken = refreshToken.substring(7);
+        }
+        if (!tokenProvider.validateRefreshToken(rToken) || !rToken.equals(member.getRefreshToken())) {
+            member.updateFcmToken(null);
+            SecurityContextHolder.clearContext();
+            throw new NotValidRefreshTokenException("유효하지 않은 리프레시 토큰입니다.");
+        }
+
+        //accessToken & refreshToken 재발급
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(member.getMemberId(), member.getKakaoId());
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        String refresh = tokenProvider.createRefreshToken();
+        member.updateRefreshToken(refresh);
+        MemberDto.SigninInfo signinInfo = new MemberDto.SigninInfo(tokenProvider.createToken(authentication), refresh, null, null, null);
+        return signinInfo;
     }
 }

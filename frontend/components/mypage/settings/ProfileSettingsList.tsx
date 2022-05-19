@@ -1,31 +1,55 @@
 import styled from "styled-components";
 import ProfileContentCard from "../ProfileContentCard";
 
+import { useState } from "react";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
-import { accessTokenState } from "atoms/atoms";
+import { userInfoState } from "atoms/atoms";
 import { deleteMembers, logout } from "../../../api/member";
 import { getAlarms } from "../../../api/alarm";
+import ButtonModal from "components/common/ButtonModal";
 
 const PageContainer = styled.main`
   display: flex;
   flex-direction: column;
-  gap: 1.8rem;
   width: 100%;
+  background-color: #f4f4f4;
+  border-radius: 1rem;
+  filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
+  overflow: hidden;
+`;
+
+const Hr = styled.div`
+  border-bottom: 0.1px solid rgba(0, 0, 0, 0.25);
 `;
 
 const ProfileSettingsList = () => {
-  const [_, setAccessToken] = useRecoilState(accessTokenState);
+  const [_, setUserInfoState] = useRecoilState(userInfoState);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const modalChildren = [
+    {
+      label: "탈퇴하기",
+      labelColor: "#ff0000",
+      onClick: () => handleDeleteMember(),
+    },
+    { label: "취소" },
+  ];
   const router = useRouter();
   const { code } = router.query;
 
   const handleDeleteMember = () => {
-    console.log("탈퇴하기 안녀엉...");
+    // console.log("탈퇴하기 안녀엉...");
     deleteMembers().then((res) => {
       // console.log(res.data);
-      console.log("메세지 찍어본다!" + res.data.message);
+      // console.log("메세지 찍어본다!" + res.data.message);
       router.push(res.data.code === 1003 ? "/" : "/mypage/settings");
-      setAccessToken("");
+      setUserInfoState({
+        accessToken: "",
+        refreshToken: "",
+        memberId: "",
+        surveyedYn: false,
+        regionYn: false,
+      });
     });
   };
 
@@ -45,13 +69,21 @@ const ProfileSettingsList = () => {
     logout()
       .then((res) => {
         if (res.data.code === 1004) {
-          setAccessToken("");
+          setUserInfoState({
+            accessToken: "",
+            refreshToken: "",
+            memberId: "",
+            surveyedYn: false,
+            regionYn: false,
+          });
           router.push("/");
         } else {
-          console.log(res.data.message);
+          // console.log(res.data.message);
         }
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        // console.log(err);
+      });
   }
   return (
     <>
@@ -59,19 +91,30 @@ const ProfileSettingsList = () => {
         <ProfileContentCard
           onClick={handleClickToAlarmPage}
           title="푸쉬 알림 설정"
-          description="푸쉬 알림을 받습니다."
+          height="7rem"
         />
+        <Hr />
         <ProfileContentCard
           title="로그아웃"
-          description="로그아웃"
           onClick={onClickLogout}
+          height="7rem"
         />
+        <Hr />
+      </PageContainer>
+      <PageContainer>
         <ProfileContentCard
-          onClick={handleDeleteMember}
+          color="#747373"
+          onClick={() => setIsModalOpen(true)}
           title="탈퇴하기"
-          description="안녀엉..."
+          height="7rem"
         />
       </PageContainer>
+      <ButtonModal
+        open={isModalOpen}
+        setOpen={setIsModalOpen}
+        modalTitle="정말 탈퇴하시겠습니까?"
+        modalChildren={modalChildren}
+      />
     </>
   );
 };

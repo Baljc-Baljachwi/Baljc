@@ -6,7 +6,6 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
-import { type } from "os";
 
 const StyledDiv = styled.div`
   padding: 2rem;
@@ -39,10 +38,22 @@ const DateItem = styled.p<{ isToday: boolean }>`
   width: 4rem;
   text-align: center;
   line-height: 4rem;
-  color: ${(props) => (props.isToday ? "white" : "#a3a3a3")};
+  color: ${(props) => (props.isToday ? "white" : "#878B93")};
   background: ${(props) => (props.isToday ? "#FFD469" : "")};
   border-radius: ${(props) => (props.isToday ? "50%" : "")};
   cursor: pointer;
+`;
+
+const Typography = styled.div<{
+  fs?: string;
+  fw?: string;
+  color?: string;
+  p?: string;
+}>`
+  color: ${(props) => (props.color ? props.color : "")};
+  font-size: ${(props) => (props.fs ? props.fs : "")};
+  font-weight: ${(props) => (props.fw ? props.fw : "")};
+  padding: ${(props) => (props.p ? props.p : "0")};
 `;
 
 interface WeekState {
@@ -112,7 +123,7 @@ export default function Home() {
     setWeek([]);
     getWeekly();
     getClickedDow(new Date().getDay());
-    console.log(today);
+    // console.log(today);
     getClickedDay(today);
   }, []);
 
@@ -133,13 +144,13 @@ export default function Home() {
       <StyledDiv>
         <WeeklyDiv>
           <WeeklyHeader>
-            <h1>
+            <Typography fs="2.4rem" fw="700">
               {today.slice(0, 4)}년{" "}
               {today.slice(5, 6) === "0"
                 ? today.slice(6, 7)
                 : today.slice(5, 7)}
               월
-            </h1>
+            </Typography>
           </WeeklyHeader>
           <YoilDiv>
             {yoil.map((item, key) => (
@@ -161,8 +172,9 @@ export default function Home() {
               })}
           </DateDiv>
         </WeeklyDiv>
+
         <Routine dow={dow}></Routine>
-        <Todo viewOnly={false} date={date}></Todo>
+        <Todo monthlyTodo={false} date={date}></Todo>
       </StyledDiv>
     </>
   );

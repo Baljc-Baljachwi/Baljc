@@ -1,12 +1,8 @@
 package com.baljc.api.controller;
 
 import com.baljc.common.response.BaseResponse;
-import com.baljc.exception.NotExistedAccountBookException;
-import com.baljc.exception.UnauthenticatedMemberException;
+import com.baljc.exception.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -44,26 +40,26 @@ public class ExceptionController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse(2002, e.getMessage()));
     }
 
-    @ExceptionHandler(MalformedJwtException.class)
-    public ResponseEntity<BaseResponse> MalformedJwtExceptionHandler(MalformedJwtException e) {
-        log.error("MalformedJwtException - {}", e.getMessage());
-        // 401
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new BaseResponse(2003, e.getMessage()));
-    }
-
-    @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<BaseResponse> ExpiredJwtExceptionHandler(ExpiredJwtException e) {
-        log.error("ExpiredJwtException - {}", e.getMessage());
-        // 401
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new BaseResponse(2004, e.getMessage()));
-    }
-
-    @ExceptionHandler(UnsupportedJwtException.class)
-    public ResponseEntity<BaseResponse> UnsupportedJwtExceptionHandler(UnsupportedJwtException e) {
-        log.error("UnsupportedJwtException - {}", e.getMessage());
-        // 401
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new BaseResponse(2005, e.getMessage()));
-    }
+//    @ExceptionHandler(MalformedJwtException.class)
+//    public ResponseEntity<BaseResponse> MalformedJwtExceptionHandler(MalformedJwtException e) {
+//        log.error("MalformedJwtException - {}", e.getMessage());
+//        // 401
+//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new BaseResponse(2003, e.getMessage()));
+//    }
+//
+//    @ExceptionHandler(ExpiredJwtException.class)
+//    public ResponseEntity<BaseResponse> ExpiredJwtExceptionHandler(ExpiredJwtException e) {
+//        log.error("ExpiredJwtException - {}", e.getMessage());
+//        // 401
+//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new BaseResponse(2004, e.getMessage()));
+//    }
+//
+//    @ExceptionHandler(UnsupportedJwtException.class)
+//    public ResponseEntity<BaseResponse> UnsupportedJwtExceptionHandler(UnsupportedJwtException e) {
+//        log.error("UnsupportedJwtException - {}", e.getMessage());
+//        // 401
+//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new BaseResponse(2005, e.getMessage()));
+//    }
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<BaseResponse> BadCredentialsExceptionHandler(BadCredentialsException e) {
@@ -110,5 +106,47 @@ public class ExceptionController {
         log.error("NotExistedAccountBookException - {}", e.getMessage());
         // 400
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse(3300, e.getMessage()));
+    }
+
+    @ExceptionHandler(HeartAlreadyExistException.class)
+    public ResponseEntity<BaseResponse> HeartAlreadyExistExceptionHandler(HeartAlreadyExistException e) {
+        log.error("HeartAlreadyExistException - {}", e.getMessage());
+        // 400
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse(3700, e.getMessage()));
+    }
+
+    @ExceptionHandler(ScrapAlreadyExistException.class)
+    public ResponseEntity<BaseResponse> ScrapAlreadyExistExceptionHandler(ScrapAlreadyExistException e) {
+        log.error("ScrapAlreadyExistException - {}", e.getMessage());
+        // 400
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse(3701, e.getMessage()));
+    }
+
+    @ExceptionHandler(NotExistedMemberException.class)
+    public ResponseEntity<BaseResponse> NotExistedMemberExceptionHandler(NotExistedMemberException e) {
+        log.error("NotExistedMemberException - {}", e.getMessage());
+        // 400
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse(3800, e.getMessage()));
+    }
+
+    @ExceptionHandler(NotExistedRoomException.class)
+    public ResponseEntity<BaseResponse> NotExistedRoomExceptionHandler(NotExistedRoomException e) {
+        log.error("NotExistedRoomException - {}", e.getMessage());
+        // 400
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse(3801, e.getMessage()));
+    }
+
+    @ExceptionHandler(NotExpiredTokenException.class)
+    public ResponseEntity<BaseResponse> NotExpiredTokenExceptionHandler(NotExpiredTokenException e) {
+        log.error("NotExpiredTokenException - {}", e.getMessage());
+        // 400
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse(3001, e.getMessage()));
+    }
+
+    @ExceptionHandler(NotValidRefreshTokenException.class)
+    public ResponseEntity<BaseResponse> NotValidRefreshTokenExceptionHandler(NotValidRefreshTokenException e) {
+        log.error("NotValidRefreshTokenException - {}", e.getMessage());
+        // 401
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new BaseResponse(3002, e.getMessage()));
     }
 }

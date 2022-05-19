@@ -13,7 +13,11 @@ export default function Layout({ children }: React.PropsWithChildren<unknown>) {
   const router = useRouter();
 
   function isLogin(pathname: string): boolean {
-    if (pathname === "/" || pathname.split("/")[1] === "auth") {
+    if (
+      pathname === "/" ||
+      pathname === "/onboarding" ||
+      pathname.split("/")[1] === "auth"
+    ) {
       return true;
     }
     return false;

@@ -17,6 +17,7 @@ const StyledHeader = styled.header`
   position: fixed;
   top: 0;
   z-index: 10000;
+  max-width: 512px;
 `;
 
 const BackButton = styled.span`
@@ -27,6 +28,9 @@ const BackButton = styled.span`
 const AddorModifyButton = styled.span`
   /* padding-right: 2rem; */
   cursor: pointer;
+  :active svg {
+    color: #cccccc;
+  }
 `;
 
 interface HeaderProps {

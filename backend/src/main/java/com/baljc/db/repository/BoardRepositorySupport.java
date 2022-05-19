@@ -70,7 +70,19 @@ public class BoardRepositorySupport {
         List<String> response = jpaQueryFactory.select(qBoardImg.imgUrl)
                 .from(qBoardImg)
                 .leftJoin(qBoard).on(qBoardImg.board.eq(qBoard))
-                .where(qBoard.boardId.eq(boardId))
+                .where(qBoard.boardId.eq(boardId).and(qBoardImg.deletedYn.eq('N')))
+                .orderBy(qBoardImg.createdAt.asc())
+                .fetch();
+
+        return response;
+    }
+
+    public List<BoardDto.BoardImgURLDto> getBoardDetailImgURLList(UUID boardId) {
+        List<BoardDto.BoardImgURLDto> response = jpaQueryFactory.select(new QBoardDto_BoardImgURLDto(qBoardImg.boardImgId, qBoardImg.imgUrl))
+                .from(qBoardImg)
+                .leftJoin(qBoard).on(qBoardImg.board.eq(qBoard))
+                .where(qBoard.boardId.eq(boardId).and(qBoardImg.deletedYn.eq('N')))
+                .orderBy(qBoardImg.createdAt.asc())
                 .fetch();
 
         return response;
@@ -79,7 +91,7 @@ public class BoardRepositorySupport {
     public BoardDto.BoardDetailDto getBoardDetail(UUID boardId, Member member) {
         BoardDto.BoardDetailDto response = jpaQueryFactory.select(
                         new QBoardDto_BoardDetailDto(qBoard.boardId, qMember.memberId, qMember.profileUrl, qMember.nickname,
-                                qBoardCategory.name, qBoard.content, qBoard.createdAt, qHeart.count(), qComment.count(),
+                                qBoardCategory.name, qBoard.content, qBoard.createdAt, qHeart.countDistinct(), qComment.countDistinct(),
                                 ExpressionUtils.as(
                                         JPAExpressions.select(count(qHeart.heartId))
                                                 .from(qHeart)
@@ -95,10 +107,21 @@ public class BoardRepositorySupport {
                 .leftJoin(qBoardCategory).on(qBoard.boardCategory.eq(qBoardCategory))
                 .leftJoin(qMember).on(qBoard.member.eq(qMember))
                 .leftJoin(qHeart).on(qHeart.board.eq(qBoard))
-                .leftJoin(qComment).on(qComment.board.eq(qBoard))
+                .leftJoin(qComment).on(qComment.board.eq(qBoard).and(qComment.deletedYn.eq('N')))
                 .groupBy(qBoard.boardId)
-                .where(qBoard.boardId.eq(boardId))
+                .where(qBoard.boardId.eq(boardId).and(qBoard.deletedYn.eq('N')))
                 .fetchOne();
+
+        return response;
+    }
+
+    public List<BoardImg> getDeleteImgList(UUID boardId) {
+        List<BoardImg> response = jpaQueryFactory.select(qBoardImg)
+                .from(qBoardImg)
+                .leftJoin(qBoard).on(qBoardImg.board.eq(qBoard))
+                .where(qBoard.boardId.eq(boardId).and(qBoardImg.deletedYn.eq('N')))
+                .orderBy(qBoardImg.createdAt.asc())
+                .fetch();
 
         return response;
     }
@@ -112,6 +135,36 @@ public class BoardRepositorySupport {
                 .from(qComment)
                 .leftJoin(qMember).on(qComment.member.eq(qMember))
                 .where(qComment.board.boardId.eq(boardId))
+                .orderBy(qComment.createdAt.asc())
+                .fetch();
+
+        return response;
+    }
+
+    public BoardDto.CommentListDto getComment(UUID commentId) {
+        BoardDto.CommentListDto response = jpaQueryFactory.select(
+                        new QBoardDto_CommentListDto(
+                                qComment.commentId, qMember.memberId, qMember.profileUrl, qMember.nickname,
+                                qComment.content, qComment.createdAt, qComment.comment.commentId, qComment.deletedYn
+                        ))
+                .from(qComment)
+                .leftJoin(qMember).on(qComment.member.eq(qMember))
+                .where(qComment.commentId.eq(commentId))
+                .fetchOne();
+
+        return response;
+    }
+
+    public List<BoardDto.CommentListDto> getSubCommentList(UUID commentId) {
+        List<BoardDto.CommentListDto> response = jpaQueryFactory.select(
+                        new QBoardDto_CommentListDto(
+                                qComment.commentId, qMember.memberId, qMember.profileUrl, qMember.nickname,
+                                qComment.content, qComment.createdAt, qComment.comment.commentId, qComment.deletedYn
+                        ))
+                .from(qComment)
+                .leftJoin(qMember).on(qComment.member.eq(qMember))
+                .where(qComment.comment.commentId.eq(commentId))
+                .orderBy(qComment.createdAt.asc())
                 .fetch();
 
         return response;

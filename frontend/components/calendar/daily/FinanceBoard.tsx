@@ -8,13 +8,14 @@ import Icon from "../../common/Icon";
 const Container = styled.div`
   background-color: #4d5f8f;
   border-radius: 10px;
-  padding: 1rem 2rem;
+  padding: 2rem;
   margin-bottom: 1rem;
+  filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
 `;
 
 const Title = styled.div`
   display: inline;
-  font-size: 1rem;
+  font-size: 1.4rem;
   background-color: #8cbff2;
   color: #ffffff;
   padding: 0.1rem 1rem;
@@ -27,7 +28,7 @@ const Header = styled.div`
 `;
 
 const TextWrapper = styled.div`
-  padding: 1rem 0;
+  padding: 1.6rem 0;
 `;
 
 const Typography = styled.div<{
@@ -35,13 +36,11 @@ const Typography = styled.div<{
   fw?: string;
   color?: string;
   p?: string;
-  cursor?: string;
 }>`
-  color: ${(props) => (props.color ? props.color : "#ffffff")};
-  font-size: ${(props) => (props.fs ? props.fs : "1rem")};
+  color: ${(props) => (props.color ? props.color : "")};
+  font-size: ${(props) => (props.fs ? props.fs : "")};
   font-weight: ${(props) => (props.fw ? props.fw : "")};
   padding: ${(props) => (props.p ? props.p : "0")};
-  cursor: ${(props) => (props.cursor ? props.cursor : "")};
 `;
 
 const FlexContainer = styled.div<{ jc?: string }>`
@@ -66,6 +65,7 @@ const FinanceListContainer = styled.div`
 const Hr = styled.div`
   border: 0.1px #ffffff solid;
 `;
+
 interface IDayNumber {
   cntExpenditure: number;
   fixedExpenditure: number;
@@ -94,7 +94,12 @@ interface IAccountBookList {
   dayOfWeek: string | null;
 }
 
-export default function FinanceBoard({ item }: any, date: string) {
+interface FinanceBoardProps {
+  item: any;
+  date: string;
+}
+
+export default function FinanceBoard({ item, date }: FinanceBoardProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const router = useRouter();
   const [dayNumber, setDayNumber] = useState<IDayNumber>();
@@ -117,7 +122,10 @@ export default function FinanceBoard({ item }: any, date: string) {
         <Title>가계부</Title>
         <div
           onClick={(e: any) => {
-            router.push("/finance/financeCreateForm");
+            router.push({
+              pathname: "/finance/financeCreateForm",
+              query: { date },
+            });
           }}
         >
           <Icon
@@ -131,25 +139,29 @@ export default function FinanceBoard({ item }: any, date: string) {
       </Header>
       <div onClick={handleClick}>
         <TextWrapper>
-          {dayNumber?.fixedExpenditure ? (
-            <Typography fs="1.5rem">
-              고정지출비용 {dayNumber?.fixedExpenditure.toLocaleString()}원
-            </Typography>
-          ) : null}
+          <Typography color="#ffffff" fs="1.6rem" fw="300">
+            오늘 쓸 수 있는 돈이
+          </Typography>
           <FlexContainer>
-            <Typography fs="3.2rem">
+            <Typography color="#ffffff" fs="3.2rem" fw="500">
               {dayNumber?.remainingBudget.toLocaleString()}원
             </Typography>
-            <Typography fs="1.5rem" p="0 0 0 0.5rem">
+            <Typography color="#ffffff" fs="1.5rem" p="0 0 1rem 0.5rem">
               남았습니다.
             </Typography>
           </FlexContainer>
+
+          {dayNumber?.fixedExpenditure ? (
+            <Typography color="#ffffff" fs="1.6rem" fw="300" p="0 0 0.5rem 0">
+              고정 지출 {dayNumber?.fixedExpenditure.toLocaleString()}원
+            </Typography>
+          ) : null}
           <FlexContainer style={{ justifyContent: "space-between" }}>
-            <Typography fs="1.5rem" p="0 0 0.5rem 0">
-              오늘 소비 {dayNumber?.totalExpenditure.toLocaleString()}원
+            <Typography color="#ffffff" fs="1.6rem" fw="300" p="0 0 0.5rem 0">
+              오늘의 소비 {dayNumber?.totalExpenditure.toLocaleString()}원
             </Typography>
             <FlexContainer>
-              <Typography color="#FFD469" fs="1.2rem">
+              <Typography color="#FFD469" fs="1.6rem" fw="500">
                 {dayString?.word}
               </Typography>
             </FlexContainer>
@@ -162,19 +174,20 @@ export default function FinanceBoard({ item }: any, date: string) {
             <Hr />
             {dayNumber ? (
               <TotalContainer>
-                <Typography fs="1.3rem" fw="100">
+                <Typography color="#ffffff" fs="1.3rem" fw="100">
                   총 결제 건수 {dayNumber?.cntExpenditure}건
                 </Typography>
-                <Typography fs="1.3rem" fw="100">
+                <Typography color="#ffffff" fs="1.3rem" fw="100">
                   총수입 {dayNumber?.totalIncome.toLocaleString()}원
                 </Typography>
-                <Typography fs="1.3rem" fw="100">
+                <Typography color="#ffffff" fs="1.3rem" fw="100">
                   총지출 {dayNumber?.totalExpenditure.toLocaleString()}원
                 </Typography>
               </TotalContainer>
             ) : null}
             <FinanceBoardList item={accountBookList} date={date} />
             <Typography
+              color="#ffffff"
               fs="1rem"
               style={{ alignSelf: "center" }}
               onClick={handleClick}
@@ -190,6 +203,7 @@ export default function FinanceBoard({ item }: any, date: string) {
           </>
         ) : (
           <Typography
+            color="#ffffff"
             fs="1rem"
             style={{ alignSelf: "center" }}
             onClick={handleClick}

@@ -22,15 +22,15 @@ const TodoItemDiv = styled.div`
 `;
 
 const TodoImage = styled.img`
-  width: 3.5rem;
+  width: 3em;
   margin-bottom: 1.2rem;
 `;
 
-const TodoText = styled.span<{ viewOnly: boolean }>`
+const TodoText = styled.span<{ monthlyTodo: boolean }>`
   width: 100%;
   font-size: 1.8rem;
 
-  color: ${(props) => (props.viewOnly ? "#ffffff" : "")};
+  color: ${(props) => (props.monthlyTodo ? "#ffffff" : "")};
   display: flex;
   justify-content: space-between;
 `;
@@ -40,15 +40,15 @@ const TodoNErrorDiv = styled.div``;
 const TodoInput = styled.input<{
   isClicked: boolean;
   isEdit: boolean;
-  viewOnly: boolean;
+  monthlyTodo: boolean;
   isError: boolean;
   isCompleted: string;
 }>`
   width: 90%;
   font-family: "Noto Sans KR";
   font-size: 1.8rem;
-  color: ${(props) => (props.viewOnly ? "#ffffff" : "#000000")};
-  background-color: ${(props) => (props.viewOnly ? "#4d5f8f" : "")};
+  color: ${(props) => (props.monthlyTodo ? "#ffffff" : "#000000")};
+  background-color: ${(props) => (props.monthlyTodo ? "#4d5f8f" : "")};
   border: none;
   border-bottom: ${(props) =>
     props.isEdit
@@ -82,7 +82,7 @@ interface PropTypes {
   date: string;
   content: string;
   completedYn: string;
-  viewOnly: boolean;
+  monthlyTodo: boolean;
 
   todos: ITodoTypes[];
   setTodos: SetterOrUpdater<ITodoTypes[]>;
@@ -93,7 +93,7 @@ export default function TodoItem({
   date,
   content,
   completedYn,
-  viewOnly,
+  monthlyTodo,
   todos,
   setTodos,
 }: PropTypes) {
@@ -108,7 +108,7 @@ export default function TodoItem({
     if (completedYn === "N") {
       completedTodos(todoId, { completedYn: "Y" })
         .then((res) => {
-          console.log(res.data.data);
+          // console.log(res.data.data);
           // 객체 업데이트
           setTodos(
             todos.map((todo: ITodoTypes) => {
@@ -122,7 +122,7 @@ export default function TodoItem({
     } else {
       completedTodos(todoId, { completedYn: "N" })
         .then((res) => {
-          console.log(res.data.data);
+          // console.log(res.data.data);
           setTodos(
             todos.map((todo: ITodoTypes) => {
               return todo.todoId === todoId
@@ -140,7 +140,7 @@ export default function TodoItem({
       if (!isError) {
         editTodos(e.target.id, contentForm)
           .then((res) => {
-            console.log(res);
+            // console.log(res);
             setTodos(
               todos.map((todo: ITodoTypes) => {
                 return todo.todoId === todoId
@@ -170,13 +170,13 @@ export default function TodoItem({
         content: e.target.value,
       }));
     }
-    console.log(isError);
+    // console.log(isError);
   };
 
   const deleteTodo = () => {
     deleteTodos(todoId)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setTodos(todos.filter((todo: ITodoTypes) => todo.todoId !== todoId));
       })
       .catch((err) => console.log(err));
@@ -191,7 +191,7 @@ export default function TodoItem({
     if (!isError) {
       editTodos(e.target.id, contentForm)
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           setTodos(
             todos.map((todo: ITodoTypes) => {
               return todo.todoId === todoId
@@ -230,7 +230,7 @@ export default function TodoItem({
           />
         )}
         <TodoItemDiv>
-          <TodoText viewOnly={viewOnly} ref={todoRef}>
+          <TodoText monthlyTodo={monthlyTodo} ref={todoRef}>
             <TodoNErrorDiv>
               <TodoInput
                 id={todoId}
@@ -243,7 +243,7 @@ export default function TodoItem({
                 onKeyPress={onEnter}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
-                viewOnly={viewOnly}
+                monthlyTodo={monthlyTodo}
               />
               <ErrorMessage isError={isError}>
                 1자 이상 입력해주세요 !

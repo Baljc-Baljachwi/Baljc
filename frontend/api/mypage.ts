@@ -1,5 +1,4 @@
 import { api } from "api";
-import { IMember, ICategory, IAccountbook } from "types";
 
 // 이번 달 남은 예산/하루 예산/예상 지출 조회
 export const getBudget = async (date: string) => {
@@ -42,4 +41,13 @@ export const getFixedEList = async (
   return await api.get(
     `/api/mypages/fixed-exp/list?year=${year}&month=${month}`
   );
+};
+
+export const getMyBoardList = async () => {
+  return await api.get(`/api/mypages/my/boards`);
+};
+
+// getMyClippedList
+export const getMyScrapList = async () => {
+  return await api.get(`/api/mypages/scrap/boards`);
 };

@@ -10,9 +10,9 @@ const CardDiv = styled.div`
   padding: 1.5rem;
   background: #f4f4f4;
   border-radius: 1rem;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+  filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
   display: flex;
-  align-contents: center;
+  align-items: center;
   gap: 1rem;
   font-size: 1.6rem;
   font-weight: 500;
@@ -40,6 +40,8 @@ interface PropTypes {
   repetition: number;
   routineList: IRoutine[];
   setRoutineList: SetterOrUpdater<IRoutine[]>;
+  setToastMsg?: any;
+  setIsSuccess?: any;
 }
 
 export default function RoutineCard({
@@ -48,9 +50,10 @@ export default function RoutineCard({
   repetition,
   routineList,
   setRoutineList,
+  setToastMsg,
+  setIsSuccess,
 }: PropTypes) {
   const [open, setOpen] = useState(false);
-
   const onClick = () => {
     setOpen((prev) => !prev);
   };
@@ -91,6 +94,8 @@ export default function RoutineCard({
           modalType={1}
           routineList={routineList}
           setRoutineList={setRoutineList}
+          setToastMsg={setToastMsg}
+          setIsSuccess={setIsSuccess}
         />
       ) : (
         ""

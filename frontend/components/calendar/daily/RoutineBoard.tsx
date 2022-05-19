@@ -7,13 +7,15 @@ import Icon from "../../common/Icon";
 const Container = styled.div`
   background-color: #4d5f8f;
   border-radius: 10px;
-  padding: 1rem 2rem;
+  padding: 2rem;
   margin-bottom: 1rem;
+  filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
+  cursor: pointer;
 `;
 
 const Title = styled.div`
   display: inline;
-  font-size: 1rem;
+  font-size: 1.4rem;
   background-color: #8cbff2;
   color: #ffffff;
   padding: 0.1rem 1rem;
@@ -21,7 +23,7 @@ const Title = styled.div`
 `;
 
 const RoutineList = styled.div`
-  padding: 1rem 0;
+  padding-top: 1.6rem;
   color: #ffffff;
 `;
 
@@ -29,8 +31,21 @@ const RoutineListItem = styled.li`
   display: flex;
   align-items: center;
   margin-top: 0.2rem;
-  gap: 1rem;
-  font-size: 1.6rem;
+  margin-bottom: 1rem;
+  gap: 1.5rem;
+  font-size: 1.8rem;
+`;
+
+const Typography = styled.div<{
+  fs?: string;
+  fw?: string;
+  p?: string;
+  color?: string;
+}>`
+  font-size: ${(props) => (props.fs ? props.fs : "")};
+  font-weight: ${(props) => (props.fw ? props.fw : "")};
+  padding: ${(props) => (props.p ? props.p : "")};
+  color: ${(props) => (props.color ? props.color : "")};
 `;
 
 export default function RoutineBoard({ routines }: any) {
@@ -38,7 +53,7 @@ export default function RoutineBoard({ routines }: any) {
   return (
     <Container>
       <Title>일과</Title>
-      <RoutineList>
+      <RoutineList onClick={() => router.push({ pathname: "/work/routine" })}>
         <ul>
           {routines ? (
             routines.length !== 0 ? (
@@ -59,8 +74,8 @@ export default function RoutineBoard({ routines }: any) {
                 onClick={() => router.push({ pathname: "/work/routine" })}
                 style={{ padding: "1rem 0", flexWrap: "wrap" }}
               >
-                <p>등록된 일과가 없습니다! </p>
-                <p>추가하려면 클릭하세요.</p>
+                <Typography fs="1.8rem">등록된 일과가 없습니다! </Typography>
+                <Typography fs="1.8rem">추가하려면 클릭하세요.</Typography>
               </RoutineListItem>
             )
           ) : null}

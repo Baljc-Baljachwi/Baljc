@@ -1,15 +1,18 @@
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 
-import { accessTokenState } from "atoms/atoms";
+import { userInfoState } from "atoms/atoms";
 import { kakaoLogin } from "../../../api/member";
 import { getToken } from "utils/FirebaseInit";
 
+import Spinner from "components/common/Spinner";
+
 export default function KakaoAuth() {
-  const [_, setAccessToken] = useRecoilState(accessTokenState);
+  const [_, setUserInfo] = useRecoilState(userInfoState);
   const router = useRouter();
   const { code } = router.query;
+  const [isLoading, setIsLoading] = useState(true);
 
   const firebaseMessageToken = async () => {
     try {
@@ -26,17 +29,30 @@ export default function KakaoAuth() {
 
     firebaseMessageToken()
       .then((currentToken) => {
-        console.log("FCM token: ", currentToken);
+        // console.log("FCM token: ", currentToken);
         return currentToken;
       })
       .then((currentToken) => {
         kakaoLogin(code as string, currentToken).then((res) => {
-          console.log(res.data);
           if (res.data.code === 1000) {
+            // console.log(res);
+            // console.log(res.headers);
+            // console.log(res.headers.refreshtoken);
             const accessToken = res.headers.authorization;
-            console.log(`accessToken : ${accessToken}`);
-            setAccessToken(accessToken);
-            console.log(res.data.data);
+            const refreshToken = res.headers.refreshtoken;
+            // console.log(`accessToken : ${accessToken}`);
+            // console.log(`refreshToken : ${refreshToken}`);
+            // console.log(res.data.data);
+
+            const { memberId, surveyedYn, regionYn } = res.data.data;
+
+            setUserInfo({
+              accessToken,
+              refreshToken,
+              memberId,
+              surveyedYn,
+              regionYn,
+            });
 
             router.push(
               res.data.data.surveyedYn ? "/calendar" : "/auth/survey"
@@ -45,7 +61,15 @@ export default function KakaoAuth() {
         });
       })
       .catch((err) => console.error(err));
-  }, [code, router, setAccessToken]);
+  }, [code, router, setUserInfo]);
 
-  return null;
+  return (
+    <Spinner
+      color="#cdcdcd"
+      size="30px"
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+    />
+  );
 }

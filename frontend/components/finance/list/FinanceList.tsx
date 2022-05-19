@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import dayjs from "dayjs";
 
 import FinanceCard from "./FinanceCard";
 
@@ -15,11 +16,14 @@ const Day = styled.div`
   font-size: 1.5rem;
   padding-top: 1.5rem;
 `;
+
 interface FinanceListProps {
   item: any;
+  dayMonthYear: any;
 }
 
-export default function FinanceList({ item }: FinanceListProps) {
+export default function FinanceList({ item, dayMonthYear }: FinanceListProps) {
+  const router = useRouter();
   const data: any = item[1];
 
   return (

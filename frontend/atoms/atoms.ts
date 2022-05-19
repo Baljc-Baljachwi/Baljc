@@ -18,10 +18,24 @@ const localStorageEffect =
     });
   };
 
-export const accessTokenState = atom<string>({
-  key: "accessToken",
-  default: "",
-  effects: [localStorageEffect("accessToken")],
+interface IUserInfo {
+  accessToken: string;
+  refreshToken: string;
+  memberId: string;
+  surveyedYn: boolean;
+  regionYn: boolean;
+}
+
+export const userInfoState = atom<IUserInfo>({
+  key: "userInfo",
+  default: {
+    accessToken: "",
+    refreshToken: "",
+    memberId: "",
+    surveyedYn: false,
+    regionYn: false,
+  },
+  effects: [localStorageEffect("userInfo")],
 });
 
 export interface ITodoTypes {
