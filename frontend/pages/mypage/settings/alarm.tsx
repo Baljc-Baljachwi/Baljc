@@ -236,7 +236,7 @@ const Alarm = () => {
             <ProfileMenuCardContent>
               <ProfileMenuCardTitle>푸쉬 알림 설정</ProfileMenuCardTitle>
               <ProfileMenuCardDetail>
-                정해진 시간에 푸쉬 알림을 받습니다.
+                받고 싶은 알림과 시각을 선택해주세요
               </ProfileMenuCardDetail>
             </ProfileMenuCardContent>
             <DivisionLine />

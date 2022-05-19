@@ -226,7 +226,7 @@ const Analysis = () => {
             {/* <ProfileMenuCardItem> */}
             <ProfileMenuCardContent>
               <span className="title">목표를 향해서!</span>
-              <span className="description">내 생활 습관을 분석해보세요.</span>
+              <span className="description">내 소비 습관을 분석해보세요.</span>
             </ProfileMenuCardContent>
           </ProfileContentListContainer>
           <ProfileContentListContainer>
