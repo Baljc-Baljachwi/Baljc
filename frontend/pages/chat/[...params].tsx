@@ -8,7 +8,9 @@ import ChatRoom from "../../components/chat/ChatRoom";
 
 export default function Chat() {
   const router = useRouter();
-  const roomId = router.query.roomId?.toString() || "";
+
+  // console.log(router.query.params);
+  const roomId = router.query.params?.toString() || "";
   const nickname = router.query.nickname?.toString() || "";
   const profileUrl = router.query.profileUrl?.toString() || "";
 

@@ -76,7 +76,12 @@ interface ChatProps {
   socket: Socket;
 }
 
-export default function ChatRoom({ roomId, nickname, profileUrl, socket }: ChatProps) {
+export default function ChatRoom({
+  roomId,
+  nickname,
+  profileUrl,
+  socket,
+}: ChatProps) {
   const router = useRouter();
 
   const userInfo = useRecoilValue(userInfoState);
