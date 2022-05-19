@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import styled from "styled-components";
-import io from "socket.io-client";
+import { Socket } from "socket.io-client";
 
 import ChatInput from "./ChatInput";
 import ChatMessage from "./ChatMessage";
@@ -73,13 +73,10 @@ interface ChatProps {
   roomId: string;
   nickname: string;
   profileUrl: string;
+  socket: Socket;
 }
 
-const CHAT_URL = process.env.NEXT_PUBLIC_CHAT_URL || "";
-console.log(CHAT_URL);
-const socket = io(CHAT_URL);
-
-export default function ChatRoom({ roomId, nickname, profileUrl }: ChatProps) {
+export default function ChatRoom({ roomId, nickname, profileUrl, socket }: ChatProps) {
   const router = useRouter();
 
   const userInfo = useRecoilValue(userInfoState);
@@ -163,7 +160,7 @@ export default function ChatRoom({ roomId, nickname, profileUrl }: ChatProps) {
   const handleScrollToBottom = () => {
     if (scrollRef.current !== null) {
       setTimeout(() => {
-        scrollRef.current.scrollIntoView({
+        scrollRef.current?.scrollIntoView({
           behavior: "smooth",
           block: "end",
           inline: "nearest",
@@ -182,7 +179,7 @@ export default function ChatRoom({ roomId, nickname, profileUrl }: ChatProps) {
       .catch((err) => console.log(err));
     if (scrollRef.current !== null) {
       setTimeout(() => {
-        scrollRef.current.scrollIntoView({
+        scrollRef.current?.scrollIntoView({
           behavior: "auto",
           block: "end",
           inline: "nearest",
