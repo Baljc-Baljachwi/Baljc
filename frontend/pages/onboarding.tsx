@@ -13,6 +13,8 @@ import onboarding_work from "public/assets/img/onboarding/snapshot/onboarding_wo
 import onboarding_community from "public/assets/img/onboarding/snapshot/onboarding_community.png";
 import SlideNextButton from "components/onboarding/SlideNextButton";
 import { useRouter } from "next/router";
+import { useRecoilState } from "recoil";
+import { newUserState } from "atoms/atoms";
 
 const MainContainer = styled.main`
   background-color: #ffd469;
@@ -109,6 +111,7 @@ const StyledFooter = styled.footer`
 
 export default function OnBoarding() {
   const [isEnd, setIsEnd] = useState<boolean>(false);
+  const [newUser, setNewUser] = useRecoilState(newUserState);
   const router = useRouter();
   const InfoContents = [
     {
@@ -154,7 +157,8 @@ export default function OnBoarding() {
   }
 
   function onBoardingEnd() {
-    localStorage.setItem("isNew", "false");
+    // localStorage.setItem("isNew", "false");
+    setNewUser(false);
     router.push("/");
   }
 
