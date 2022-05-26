@@ -16,17 +16,11 @@ public class PushAlarmDto {
         @NotBlank(message = "가계부 알람여부는 필수입니다.")
         @Pattern(regexp = "^[YN]$", message = "올바른 형식(Y/N)이 아닙니다.")
         private String accountAlarmYn;
-//        @NotBlank(message = "가계부 알람시간은 필수입니다.")
-//        @Pattern(regexp = "^([01][0-9]|2[0-3]):([0-5][0-9])$", message = "올바른 형식(HH:mm)이 아닙니다.")
-//        private String accountAlarmTime;
         @NotNull(message = "시간 입력은 필수입니다.")
         private LocalTime accountAlarmTime;
         @NotBlank(message = "할일 알람여부는 필수입니다.")
         @Pattern(regexp = "^[YN]$", message = "올바른 형식(Y/N)이 아닙니다.")
         private String todoAlarmYn;
-//        @NotBlank(message = "할일 알람시간은 필수입니다.")
-//        @Pattern(regexp = "^([01][0-9]|2[0-3]):([0-5][0-9])$", message = "올바른 형식(HH:mm)이 아닙니다.")
-//        private String todoAlarmTime;
         @NotNull(message = "시간 입력은 필수입니다.")
         private LocalTime todoAlarmTime;
     }

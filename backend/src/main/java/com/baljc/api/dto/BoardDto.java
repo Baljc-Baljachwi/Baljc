@@ -41,19 +41,6 @@ public class BoardDto {
         private Integer heartCnt;
         private Integer commentCnt;
         private Double distance;
-
-//        @QueryProjection
-//        public BoardListDto(UUID boardId, String categoryName, String content, LocalDateTime createdAt, String creator, String dong, Long heartCnt, Long commentCnt, Double distance) {
-//            this.boardId = boardId;
-//            this.categoryName = categoryName;
-//            this.content = content;
-//            this.createdAt = createdAt;
-//            this.creator = creator;
-//            this.dong = dong;
-//            this.heartCnt = heartCnt;
-//            this.commentCnt = commentCnt;
-//            this.distance = distance;
-//        }
     }
 
     @Getter

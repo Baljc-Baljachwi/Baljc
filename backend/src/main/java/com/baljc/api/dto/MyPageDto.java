@@ -36,16 +36,4 @@ public class MyPageDto {
         private String categoryImgUrl;
         private Character paymentMethod;
     }
-
-//    @Getter
-//    @AllArgsConstructor
-//    public static class ResponseByCategory {
-//        private List<Integer> expenditureCategory;
-//    }
-//
-//    @Getter
-//    @AllArgsConstructor
-//    public static class ResponseByDay {
-//        private List<Integer> dailyExpenditure;
-//    }
 }
