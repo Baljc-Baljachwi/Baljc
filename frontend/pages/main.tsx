@@ -1,34 +1,15 @@
-import React, { Suspense } from "react";
-// import LoginModalButton from 'components/Main/LoginModalButton';
+import React from "react";
 import styled from "styled-components";
-import { useState, memo, useEffect, useRef } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-// import Description from 'components/Main/Description';
-// import Navbar from 'components/common/Navbar';
-// import Balloon from 'components/Main/Balloon';
+import { useState, memo, useRef } from "react";
 import { isMobile } from "utils/mobileCheck";
 
 const OnboardingPage0 = React.lazy(
   () => import("components/onboardingContent/onboarding0")
 );
-// const OnboardingPage1 = React.lazy(
-//   () => import("components/onboardingContent/onboarding1")
-// );
-// const OnboardingPage2 = React.lazy(
-//   () => import("components/onboardingContent/onboarding2")
-// );
-// const OnboardingPage3 = React.lazy(
-//   () => import("components/onboardingContent/onboarding3")
-// );
 
 const Main = () => {
   const [count, setCount] = useState({ user: 0, post: 0 });
   const [isLoading, setIsLoading] = useState(true);
-  //   const loginUser = useRecoilValue(loginUserState) as LoginUserType;
-  //   const { onLoginStepReset, onLoginStepNext, setLoginStep } = useLoginStep();
-  //   const setLoginUser = useSetRecoilState(loginUserState);
-
-  //   const history = useHistory();
 
   const heightRef = useRef<HTMLDivElement>(null);
   const screenHeight = heightRef.current?.clientHeight as number;
@@ -107,9 +88,6 @@ const Main = () => {
   return (
     <Wrapper>
       <OnboardingPage0 />
-      {/* <OnboardingPage1 />
-      <OnboardingPage2 /> */}
-      {/* <OnboardingPage3 /> */}
     </Wrapper>
   );
 };

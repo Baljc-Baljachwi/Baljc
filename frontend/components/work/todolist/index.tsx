@@ -1,13 +1,11 @@
 import styled from "styled-components";
 import React, { useCallback, useEffect, useState } from "react";
-import Image from "next/image";
 
 import TodoItem from "./TodoItem";
 import Icon from "../../common/Icon";
 
 import { getTodos, postTodos } from "../../../api/todo";
-import { ITodo } from "../../../types";
-import { atom, useRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { todosState, ITodoTypes } from "../../../atoms/atoms";
 
 const TodoDiv = styled.div`
@@ -51,11 +49,6 @@ const IconDiv = styled.div<{ isClicked: boolean }>`
   display: ${(props) => (props.isClicked ? "flex" : "none")};
 `;
 
-const TodoNone = styled.div`
-  width: 100%;
-  font-size: 1.6rem;
-`;
-
 const TodoImage = styled.img`
   width: 3rem;
   margin-bottom: 1.2rem;
@@ -86,7 +79,7 @@ export default function Todo({ monthlyTodo, date }: TodoProps) {
         setTodos(res.data.data);
       })
       .catch((err) => {
-        // console.log(err);
+        console.log(err);
       });
   }, [date, setTodos]);
 
@@ -102,8 +95,6 @@ export default function Todo({ monthlyTodo, date }: TodoProps) {
     if (inputForm.content.length !== 0) {
       postTodos(inputForm)
         .then((res) => {
-          // console.log(res.data.data);
-          // alert("todo 등록 완료!");
           setInputForm((prev) => ({
             ...prev,
             content: "",
@@ -111,12 +102,9 @@ export default function Todo({ monthlyTodo, date }: TodoProps) {
           getTodoList();
         })
         .catch((err) => {
-          // console.log(err);
+          console.log(err);
         });
     }
-    // else {
-    // document.getElementById("todo")?.focus();
-    // }
   };
 
   const onEnter = (e: React.KeyboardEvent) => {
@@ -159,7 +147,6 @@ export default function Todo({ monthlyTodo, date }: TodoProps) {
               );
             })
           ) : (
-            // <TodoNone>todo list를 채워주세요 !</TodoNone>
             <></>
           )}
         </>
@@ -181,13 +168,6 @@ export default function Todo({ monthlyTodo, date }: TodoProps) {
                 onBlur={handleBlur}
               />
               <IconDiv isClicked={focus}>
-                {/* <Icon
-                mode="fas"
-                icon="pen"
-                color="#cccccc"
-                size="1.8rem"
-                onClick={() => editTodo()}
-              /> */}
                 <Icon
                   mode="fas"
                   icon="check"

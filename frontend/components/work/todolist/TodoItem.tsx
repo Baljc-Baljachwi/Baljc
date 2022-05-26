@@ -1,11 +1,9 @@
-import Image from "next/image";
-import React, { RefObject, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 import Icon from "../../common/Icon";
-import { ITodo } from "../../../types";
 import { completedTodos, editTodos, deleteTodos } from "../../../api/todo";
-import { ITodoTypes, todosState } from "../../../atoms/atoms";
+import { ITodoTypes } from "../../../atoms/atoms";
 import { SetterOrUpdater } from "recoil";
 
 const TodoListItem = styled.div`
@@ -108,7 +106,6 @@ export default function TodoItem({
     if (completedYn === "N") {
       completedTodos(todoId, { completedYn: "Y" })
         .then((res) => {
-          // console.log(res.data.data);
           // 객체 업데이트
           setTodos(
             todos.map((todo: ITodoTypes) => {
@@ -122,7 +119,6 @@ export default function TodoItem({
     } else {
       completedTodos(todoId, { completedYn: "N" })
         .then((res) => {
-          // console.log(res.data.data);
           setTodos(
             todos.map((todo: ITodoTypes) => {
               return todo.todoId === todoId
@@ -140,7 +136,6 @@ export default function TodoItem({
       if (!isError) {
         editTodos(e.target.id, contentForm)
           .then((res) => {
-            // console.log(res);
             setTodos(
               todos.map((todo: ITodoTypes) => {
                 return todo.todoId === todoId
@@ -170,13 +165,11 @@ export default function TodoItem({
         content: e.target.value,
       }));
     }
-    // console.log(isError);
   };
 
   const deleteTodo = () => {
     deleteTodos(todoId)
       .then((res) => {
-        // console.log(res);
         setTodos(todos.filter((todo: ITodoTypes) => todo.todoId !== todoId));
       })
       .catch((err) => console.log(err));
@@ -191,7 +184,6 @@ export default function TodoItem({
     if (!isError) {
       editTodos(e.target.id, contentForm)
         .then((res) => {
-          // console.log(res);
           setTodos(
             todos.map((todo: ITodoTypes) => {
               return todo.todoId === todoId
@@ -250,13 +242,6 @@ export default function TodoItem({
               </ErrorMessage>
             </TodoNErrorDiv>
             <IconDiv isClicked={todoClicked}>
-              {/* <Icon
-                mode="fas"
-                icon="pen"
-                color="#cccccc"
-                size="1.8rem"
-                onClick={() => editTodo()}
-              /> */}
               <Icon
                 mode="fas"
                 icon="trash-can"

@@ -91,21 +91,11 @@ interface IMemberInfoProps {
 }
 
 const ProfileCard = ({}) => {
-  const router = useRouter();
   const [memberInfo, setMemberInfo] = useState<IMemberInfoProps>();
-  // const UserInfo = useRecoilValue(userInfoState);
 
   useEffect(() => {
     getMemberInfo().then((res) => {
-      // console.log(res.data);
-      // console.log(res.data.data);
-      if (res.data.code === 1001) {
-        // console.log("1001도 넘어왔음!");
-        // console.log(res.data.data);
-        setMemberInfo(res.data.data);
-      } else {
-        // console.log(res.data.message);
-      }
+      setMemberInfo(res.data.data);
     });
   }, []);
 
@@ -148,35 +138,3 @@ const ProfileCard = ({}) => {
 };
 
 export default ProfileCard;
-
-// const [nickname, setNickname] = useState();
-// const [profileUrl, setProfileUrl] = useState();
-// const [salaryType, setSalaryType] = useState();
-// const [salary, setSalary] = useState();
-// const [workingHours, setWorkingHours] = useState();
-// const [budget, setBudget] = useState();
-
-// setNickname(res.data.data.nickname);
-// setProfileUrl(res.data.data.profileUrl);
-// setBudget(res.data.data.budget);
-// setSalaryType(res.data.data.salaryType);
-// setSalary(res.data.data.salary);
-// setWorkingHours(res.data.data.workingHours);
-
-/* <div className="salaryInfo">
-    <div className="eachSalaryInfo">
-      <span>급여 </span>
-      <span>
-        {memberInfo?.salaryType === "M"
-          ? "월급"
-          : memberInfo?.salaryType === "H"
-          ? "시급"
-          : ""}{" "}
-        {memberInfo?.salary} 원
-      </span>
-    </div>
-    <div className="eachSalaryInfo">
-      <span>한 달 예산 </span>
-      <span> {memberInfo?.budget} 원</span>
-    </div>
-  </div> */

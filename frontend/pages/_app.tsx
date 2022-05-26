@@ -1,6 +1,5 @@
 import { NextPage } from "next";
 import Head from "next/head";
-// import "../styles/globals.css";
 import { ThemeProvider } from "styled-components";
 import type { AppProps } from "next/app";
 import { config } from "@fortawesome/fontawesome-svg-core";
@@ -23,7 +22,6 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import NextNProgress from "nextjs-progressbar";
 import HashLoader from "react-spinners/HashLoader";
 
 const firebaseConfig = {
@@ -141,28 +139,3 @@ const LayoutSpinner = styled.div`
   background-color: white;
   opacity: 100;
 `;
-
-/* <NextNProgress
-            color="#4338C9"
-            startPosition={0.3}
-            stopDelayMs={200}
-            height={6}
-            options={{ easing: "ease", speed: 500, showSpinner: false }}
-          /> */
-/* <NextNProgress
-            color="#29D"
-            showOnShallow={false}
-            height={6}
-            startPosition={0.3}
-            options={{ easing: "ease", speed: 500, showSpinner: true }}
-          /> */
-
-/* <Layout>
-            {Component.requireAuth ? (
-              <AuthGuard>
-                <Component {...pageProps} />
-              </AuthGuard>
-            ) : (
-              <Component {...pageProps} />
-            )}
-          </Layout> */

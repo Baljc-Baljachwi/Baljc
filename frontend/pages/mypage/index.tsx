@@ -1,10 +1,10 @@
 import styled from "styled-components";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 import Header from "components/common/Header";
 import ProfileCard from "components/mypage/ProfileCard";
 import ProfileContentList from "components/mypage/ProfileContentList";
-import { useState, useEffect } from "react";
 
 const Container = styled.main`
   font-family: "Noto Sans KR", sans-serif;
@@ -33,7 +33,6 @@ const ProfileContentListContainer = styled.div`
   width: 100%;
   height: 100%;
   background-color: #ffffff;
-  // margin-top: 2rem;
   font-size: 1.6rem;
   padding: 2rem 2rem;
   gap: 2rem;

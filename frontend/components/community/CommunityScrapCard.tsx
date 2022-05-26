@@ -1,30 +1,13 @@
 import styled from "styled-components";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
-import { useRecoilValue } from "recoil";
 import Image from "next/image";
-import {
-  HeartIcon,
-  BookmarkIcon,
-  DotsVerticalIcon,
-  ChatIcon,
-  ShareIcon,
-} from "@heroicons/react/outline";
-import {
-  HeartIcon as HeartIconFilled,
-  ChatIcon as ChatIconFilled,
-  BookmarkIcon as BookmarkIconFilled,
-} from "@heroicons/react/solid";
+import { BookmarkIcon } from "@heroicons/react/outline";
+import { BookmarkIcon as BookmarkIconFilled } from "@heroicons/react/solid";
 
-import {
-  getBoardsDetail,
-  postLikeBoards,
-  postScrapBoards,
-  postComment,
-} from "api/community";
+import { postScrapBoards } from "api/community";
 import Icon from "../common/Icon";
 import { IPost } from "types";
-import { userInfoState } from "atoms/atoms";
 
 interface IPostDetail extends IPost {
   memberId: string;
@@ -45,7 +28,6 @@ export default function CommunityScrapCard({
   commentCnt,
 }: IPost) {
   const router = useRouter();
-  const userInfo = useRecoilValue(userInfoState);
   const [boardDetail, setBoardDetail] = useState<IPostDetail>(
     {} as IPostDetail
   );
@@ -64,28 +46,25 @@ export default function CommunityScrapCard({
       const data = {
         scrapYn: "Y",
       };
-      // setIsScrap(!isScrap);
       await postScrapBoards(boardId as string, data as object)
-        // .then((res) => setIsChanged((prev) => !prev))
         .then((res) => {
           setIsChanged((prev) => !prev);
           setIsScrap(!isScrap);
         })
         .catch((err) => {
-          // console.log(err);
+          console.log(err);
         });
     } else {
       const data = {
         scrapYn: "N",
       };
-      // setIsScrap(!isScrap);
       await postScrapBoards(boardId as string, data as object)
         .then((res) => {
           setIsChanged((prev) => !prev);
           setIsScrap(!isScrap);
         })
         .catch((err) => {
-          // console.log(err);
+          console.log(err);
         });
     }
   };
@@ -102,14 +81,6 @@ export default function CommunityScrapCard({
           ) : (
             <BookmarkIcon onClick={handleScrapBoard} className="toggleIcon" />
           )}
-          {/* <Icon
-            mode={isScrap ? "fas" : "far"}
-            icon="bookmark"
-            color={isScrap ? "#FFB800" : "#646464"}
-            display="flex"
-            size="2rem"
-            onClick={handleScrapBoard}
-          /> */}
         </div>
         <Content>
           <Typography fs="1.6rem" p="1rem 0">
@@ -278,16 +249,4 @@ const FlexContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-`;
-
-const GrayButton = styled.div`
-  display: flex;
-  align-items: center;
-  line-height: 1.4rem;
-  font-size: 1.4rem;
-  background-color: #8cbff2;
-  color: #ffffff;
-  padding: 0.8rem 1.6rem;
-  border-radius: 5px;
-  gap: 0.5rem;
 `;

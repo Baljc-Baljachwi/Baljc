@@ -3,14 +3,14 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import Image from "next/image";
+import { useRecoilState } from "recoil";
 
+import { userInfoState } from "atoms/atoms";
 import Header from "../../components/common/Header";
 import ButtonBottom from "../../components/common/ButtonBottom";
-import { getMemberInfo, putMembers, kakaoCoord2Region } from "api/member";
-import defaultProfileImage from "public/assets/img/mypage/avatar/default_profile.png";
 import Icon from "components/common/Icon";
-import { useRecoilState } from "recoil";
-import { userInfoState } from "atoms/atoms";
+import defaultProfileImage from "public/assets/img/mypage/avatar/default_profile.png";
+import { getMemberInfo, putMembers, kakaoCoord2Region } from "api/member";
 
 const PageContainer = styled.main`
   padding: 0 2rem 2rem 2rem;
@@ -235,7 +235,6 @@ export default function ProfileModify() {
 
   const resetSurveyForm = useCallback(async () => {
     const result = await (await getMemberInfo()).data;
-    // console.log(result);
     if (result.code === 1001) {
       const { data } = result;
       reset({ ...data, profileUpdated: false });
@@ -330,21 +329,16 @@ export default function ProfileModify() {
       "memberInfo",
       new Blob([JSON.stringify(memberInfo)], { type: "application/json" })
     );
-    // console.log(memberInfo);
 
-    putMembers(formData).then((res) => {
-      // console.log(res.data);
-      if (res.data.code === 1002) {
+    putMembers(formData)
+      .then((res) => {
         router.push("/mypage");
         setUserInfo((prev) => ({ ...prev, regionYn: !!memberInfo.depth3 }));
-      } else {
-        confirm("설문조사 생성 실패!");
-      }
-    });
+      })
+      .catch((err) => console.log(err));
   }
 
   function onClickGeoButton() {
-    // console.log(navigator);
     if ("geolocation" in navigator) {
       // 현재 위도, 경도
       navigator.geolocation.getCurrentPosition(
@@ -358,7 +352,6 @@ export default function ProfileModify() {
           // 카카오 로컬 API coord => region
           kakaoCoord2Region(pos.coords.longitude, pos.coords.latitude)
             .then((res) => {
-              // console.log(res.data.documents);
               setLocation((prev) => ({
                 ...prev,
                 addressName: res.data.documents[0].address_name,
@@ -368,10 +361,9 @@ export default function ProfileModify() {
                 isUpdated: true,
               }));
             })
-            .catch((err) => console.error(err));
+            .catch((err) => console.log(err));
         },
         (err: GeolocationPositionError) => {
-          // console.log(err.message);
           if (err.code === 1) {
             confirm("위치 액세스를 허용해주세요");
           }
@@ -399,7 +391,6 @@ export default function ProfileModify() {
         onClickBackButton={() => router.push("/mypage")}
       />
       <LabelProfileImageContiainer>
-        {/* <LabelProfileImage image={imagePreview} htmlFor="profileImage" /> */}
         <ProfileImage htmlFor="profileImage">
           <Image
             className="profileImg"

@@ -131,7 +131,6 @@ export default function CommunityImageModal({
                       position: "relative",
                     }}
                   >
-                    {/* <Image src={image} alt="" width={400} height={300} /> */}
                     <Image src={image} alt="" layout="fill" className="image" />
                   </SwiperSlide>
                 ))}

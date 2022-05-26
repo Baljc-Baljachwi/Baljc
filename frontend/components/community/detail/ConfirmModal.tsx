@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { useState } from "react";
 import { useRouter } from "next/router";
 import { deleteComment } from "api/community";
 
@@ -16,18 +15,6 @@ const ModalWrapper = styled.div<{ visible: boolean }>`
   outline: 0;
 `;
 
-const ModalOverlay = styled.div<{ visible: boolean }>`
-  box-sizing: border-box;
-  display: ${(props) => (props.visible ? "block" : "none")};
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 100000;
-`;
-
 const ModalInner = styled.div`
   box-sizing: border-box;
   position: relative;
@@ -40,25 +27,6 @@ const ModalInner = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`;
-
-const ModalHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-`;
-
-const ModalTitle = styled.p`
-  font-weight: 700;
-  font-size: 2rem;
-`;
-
-const ModalCloseBtn = styled.button`
-  border: none;
-  background-color: white;
-  font-size: 2rem;
-  cursor: pointer;
-  transition: all 0.4s ease;
 `;
 
 const Typography = styled.div<{
@@ -125,7 +93,7 @@ export default function ConfirmModal({
         }
       })
       .catch((err) => {
-        // console.log(err);
+        console.log(err);
       });
   };
 

@@ -70,7 +70,6 @@ export default function FinanceCreateForm() {
           </CostIncomeButton>
         </ToggleCostIncome>
         <FinanceForm type={accountType} date={date} />
-        {/* {accountType === "E" ? <CostForm /> : <IncomeForm />} */}
       </PageContainer>
     </>
   );

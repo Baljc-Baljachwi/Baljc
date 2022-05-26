@@ -7,7 +7,6 @@ export function AuthGuard({ children }: { children: JSX.Element }) {
   const userInfo = useRecoilValue(userInfoState);
   const router = useRouter();
   useEffect(() => {
-    // console.log(router.pathname.split("/")[1]);
     if (!userInfo || !userInfo.accessToken) {
       router.push("/");
     } else if (!userInfo.surveyedYn) {

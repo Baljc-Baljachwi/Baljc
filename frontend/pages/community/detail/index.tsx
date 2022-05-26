@@ -237,9 +237,8 @@ export default function CommunityDetail() {
     deleteBoards(boardId as string)
       .then((res) => {
         router.push("/community");
-        // console.log(res.data);
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.log(err));
   };
 
   const handleLikeBoard = () => {
@@ -315,7 +314,6 @@ export default function CommunityDetail() {
         .then((res) => {
           const { data } = res.data;
           const { imgUrlList } = data;
-          // console.log(res.data.data);
           setBoardDetail({
             ...data,
             imgUrlList: imgUrlList.map((obj: any) => obj.imgUrl),
@@ -330,7 +328,7 @@ export default function CommunityDetail() {
             }
           });
         })
-        .catch((err) => console.error(err));
+        .catch((err) => console.log(err));
     }
   }, [router.query.boardId, isChanged]);
 

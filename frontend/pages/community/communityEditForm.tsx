@@ -5,7 +5,6 @@ import { useRecoilValue } from "recoil";
 import Header from "../../components/common/Header";
 import CommunityForm from "components/community/CommunityForm";
 import { getBoardsDetail } from "api/community";
-import { IPost, IComment } from "types";
 import { userInfoState } from "atoms/atoms";
 
 type ImageInfo = { imgUrl: string; boardImgId: string };
@@ -36,7 +35,6 @@ export default function CommunityEditForm() {
         if (data.code === 1703) {
           // 창작자 아니면 인가 거부
           if (data.data.memberId !== userInfo.memberId) {
-            // console.log("저리가", userInfo.memberId, data.data);
             router.push({
               pathname: "/community/detail",
               query: { boardId },
@@ -48,7 +46,7 @@ export default function CommunityEditForm() {
           }
         }
       } catch (err) {
-        console.error(err);
+        console.log(err);
       }
     },
     [router, userInfo.memberId]

@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 
 import { userInfoState } from "atoms/atoms";
@@ -12,7 +12,6 @@ export default function KakaoAuth() {
   const [_, setUserInfo] = useRecoilState(userInfoState);
   const router = useRouter();
   const { code } = router.query;
-  const [isLoading, setIsLoading] = useState(true);
 
   const firebaseMessageToken = async () => {
     try {
@@ -29,21 +28,13 @@ export default function KakaoAuth() {
 
     firebaseMessageToken()
       .then((currentToken) => {
-        // console.log("FCM token: ", currentToken);
         return currentToken;
       })
       .then((currentToken) => {
         kakaoLogin(code as string, currentToken).then((res) => {
           if (res.data.code === 1000) {
-            // console.log(res);
-            // console.log(res.headers);
-            // console.log(res.headers.refreshtoken);
             const accessToken = res.headers.authorization;
             const refreshToken = res.headers.refreshtoken;
-            // console.log(`accessToken : ${accessToken}`);
-            // console.log(`refreshToken : ${refreshToken}`);
-            // console.log(res.data.data);
-
             const { memberId, surveyedYn, regionYn } = res.data.data;
 
             setUserInfo({
@@ -60,7 +51,7 @@ export default function KakaoAuth() {
           }
         });
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.log(err));
   }, [code, router, setUserInfo]);
 
   return (

@@ -1,21 +1,19 @@
+import styled from "styled-components";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useRecoilState } from "recoil";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import Header from "../../../components/common/Header";
 import RoutineCard from "./RoutineCard";
 import RoutineModal from "./RoutineModal";
 import FloatingButton from "components/common/FloatingButton";
-
-import styled from "styled-components";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { getRoutines, getAllRoutines } from "../../../api/routine";
-import { IRoutine } from "../../../types/index";
-import { useRecoilState } from "recoil";
 import { routineState } from "../../../atoms/atoms";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { getAllRoutines } from "../../../api/routine";
+import { IRoutine } from "../../../types/index";
 
-const RoutineDiv = styled.div`
-  // width: 100%;
-`;
+const RoutineDiv = styled.div``;
 
 const CardDiv = styled.div`
   margin: 2rem;
@@ -44,7 +42,6 @@ const StyledToastContainer = styled(ToastContainer).attrs({
     filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
   }
   .Toastify__toast-container {
-    /* width: 320px; */
     width: 20rem;
   }
   .Toastify__toast--default {
@@ -55,11 +52,9 @@ const StyledToastContainer = styled(ToastContainer).attrs({
     background: #3498db;
   }
   .Toastify__toast--success {
-    /* background: #07bc0c; */
     background: rgba(75, 192, 192, 0.4);
   }
   .Toastify__toast--warning {
-    /* background: #f1c40f; */
     background: #ffd469;
     color: #aaa;
   }
@@ -82,18 +77,16 @@ export default function RoutineDetail() {
   const [isSuccess, setIsSuccess] = useState(false);
 
   const onClick = () => {
-    // console.log(open);
     setOpen((prev) => !prev);
   };
 
   const getRoutineList = () => {
     getAllRoutines()
       .then((res) => {
-        // console.log(res.data.data);
         setRoutineList(res.data.data);
       })
       .catch((err) => {
-        // console.log(err);
+        console.log(err);
       });
   };
 

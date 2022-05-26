@@ -6,11 +6,6 @@ import "swiper/css/pagination";
 import { Pagination } from "swiper";
 import Image from "next/image";
 
-import onboarding_accountboard from "public/assets/img/onboarding/snapshot/onboarding_accountboard.png";
-import onboarding_calendar from "public/assets/img/onboarding/snapshot/onboarding_calendar.png";
-import onboarding_graph from "public/assets/img/onboarding/snapshot/onboarding_graph.png";
-import onboarding_work from "public/assets/img/onboarding/snapshot/onboarding_work.png";
-import onboarding_community from "public/assets/img/onboarding/snapshot/onboarding_community.png";
 import SlideNextButton from "components/onboarding/SlideNextButton";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";

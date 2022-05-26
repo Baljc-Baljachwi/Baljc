@@ -10,7 +10,6 @@ import LocalStorage from "utils/localStorage";
 const Home: NextPage = () => {
   const router = useRouter();
   const userInfo = useRecoilValue(userInfoState);
-  // const [isNewUser, setIsNewUser] = useState<boolean>(true);
   const [newUser, setNewUser] = useRecoilState(newUserState);
 
   useEffect(() => {

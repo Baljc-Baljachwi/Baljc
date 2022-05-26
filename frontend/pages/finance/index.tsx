@@ -134,7 +134,6 @@ export default function Finance(): JSX.Element {
     });
   }, [month, year]);
 
-  // console.log(amount);
   const [ready, setReady] = useState(false);
   useEffect(() => {
     setReady(true);

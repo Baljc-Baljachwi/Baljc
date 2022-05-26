@@ -17,10 +17,7 @@ export default function Chat() {
 
   return (
     <div>
-      <Header
-        label="채팅"
-        // onClickBackButton={() => router.push("/community")}
-      />
+      <Header label="채팅" />
       <ChatList />
     </div>
   );
