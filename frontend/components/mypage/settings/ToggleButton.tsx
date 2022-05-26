@@ -1,4 +1,3 @@
-import { useState } from "react";
 import styled from "styled-components";
 import { YNType } from "types";
 
@@ -33,11 +32,6 @@ interface IToggleProps {
   onClick?: () => void;
 }
 export default function ToggleButton({ isOn, onClick }: IToggleProps) {
-  // const [isOn, setIsOn] = useState<boolean>(false);
-
-  // function handleToggleButton(event: any) {
-  //   setIsOn((prev) => !prev);
-  // }
   return (
     <ToggleButtonContainer onClick={onClick}>
       <ToggleButtonBackGround isOn={isOn === "Y"} />

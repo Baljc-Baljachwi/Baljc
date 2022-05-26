@@ -3,7 +3,6 @@ import { toast } from "react-toastify";
 
 export async function getToken() {
   if (firebase.messaging.isSupported() === false) {
-    // console.log("isSupported: ", firebase.messaging.isSupported());
     return null;
   }
 
@@ -16,9 +15,6 @@ export async function getToken() {
     });
 
     await messaging.onMessage((payload) => {
-      // console.log("Message received. ", payload);
-      // console.log(payload.notification);
-
       toast("⏰ " + payload.notification.body, {
         position: toast.POSITION.BOTTOM_CENTER,
         hideProgressBar: true,
@@ -32,7 +28,6 @@ export async function getToken() {
     });
 
     if (currentToken) {
-      // console.log(currentToken);
       return currentToken;
     } else {
       console.log(

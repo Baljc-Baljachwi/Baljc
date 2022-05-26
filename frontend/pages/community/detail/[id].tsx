@@ -82,7 +82,6 @@ const Input = styled.input`
   padding: 0 2rem;
   font-size: 1.6rem;
   ::placeholder {
-    /* outline: none; */
     color: #aeb1b9;
   }
 `;
@@ -123,7 +122,6 @@ export default function Reply() {
 
   useEffect(() => {
     getComment(boardId as string, commentId as string).then((res) => {
-      // console.log(res.data.data);
       setComment(res.data.data);
     });
   }, [isChanged]);

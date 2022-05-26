@@ -33,23 +33,17 @@ export default function FinanceEditForm({ accountbook }: FinanceEditFormProps) {
 
   useEffect(() => {
     const accountbookId = router.query.accountbookId;
-    // console.log("accountbookId :", accountbookId);
 
     if (accountbookId && typeof accountbookId === "string") {
       getAccountbooks(accountbookId).then((res) => {
-        // console.log(res.data);
-        if (res.data.code === 1302) {
-          const data = res.data.data;
+        const data = res.data.data;
 
-          // 데이터 형식 파싱
-          const [date, time] = data.date ? data.date.split("T") : [null, null];
-          const startDate = data.startDate ? data.startDate.slice(0, 7) : null;
-          const endDate = data.endDate ? data.endDate.slice(0, 7) : null;
+        // 데이터 형식 파싱
+        const [date, time] = data.date ? data.date.split("T") : [null, null];
+        const startDate = data.startDate ? data.startDate.slice(0, 7) : null;
+        const endDate = data.endDate ? data.endDate.slice(0, 7) : null;
 
-          setInitForm({ ...data, date, time, startDate, endDate });
-        } else {
-          // console.log(res.data.message);
-        }
+        setInitForm({ ...data, date, time, startDate, endDate });
       });
     }
   }, [router.query.accountbookId]);

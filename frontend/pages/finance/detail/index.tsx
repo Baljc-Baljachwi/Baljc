@@ -6,9 +6,7 @@ import styled from "styled-components";
 import { IAccountbook } from "types";
 import Header from "../../../components/common/Header";
 
-const Container = styled.div`
-  /* height: 100%; */
-`;
+const Container = styled.div``;
 
 const PageContainer = styled.main`
   font-family: "Noto Sans KR", sans-serif;
@@ -27,10 +25,6 @@ const PageTitle = styled.span`
   padding: 1rem 0;
   margin-top: 1rem;
 `;
-
-// const DivisionLine = styled.hr`
-//   border-top: 2px solid lightgray;
-// `;
 
 const ExpenditureDetailContainer = styled.div`
   display: flex;
@@ -101,21 +95,16 @@ const FinanceDetail = () => {
     const accountbookId = router.query.accountbookId;
     if (accountbookId && typeof accountbookId === "string") {
       getAccountbooks(accountbookId).then((res) => {
-        // console.log(res.data);
         if (res.data.code === 1302) {
           setFinanceDetailInfo(res.data.data);
           getCategories(res.data.data.type).then((res) => {
-            // console.log(res.data);
             if (res.data.code === 1300) {
-              // console.log(res.data.data);
               setCategoryList(res.data.data);
             } else {
-              // console.log(res.data.message);
               confirm("카테고리 조회 실패");
             }
           });
         } else {
-          // console.log(res.data.message);
           confirm("가계부 상세 조회 실패!");
         }
       });
@@ -129,12 +118,6 @@ const FinanceDetail = () => {
       )?.imgUrl
     );
   }, [categoryList, setCategoryImageUrl, financeDetailInfo]);
-
-  // console.log(
-  //   categoryList.find(
-  //     (category) => category.categoryId === financeDetailInfo?.categoryId
-  //   )?.imgUrl
-  // );
 
   // YYYY-MM-DDTHH:MM:SS => YYYY년 MM월 DD일 HH시 MM분
   function datetimeParsing(datetime: string) {
@@ -188,13 +171,10 @@ const FinanceDetail = () => {
           onClickBackButton={() => router.push("/finance")}
         />
         <PageContainer>
-          {/* <PageTitle
-            color={isExpenditure ? TypeTitle === "지출" : TypeTitle === "수입"}
-          > */}
           <PageTitle>
             {financeDetailInfo?.type === "E" ? "지출" : "수입"}
           </PageTitle>
-          {/* <DivisionLine /> */}
+
           <ExpenditureDetailContainer>
             <DetailContents>
               제목

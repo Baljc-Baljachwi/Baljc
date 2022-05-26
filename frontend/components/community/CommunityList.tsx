@@ -107,7 +107,7 @@ export default function CommunityList() {
         setBoardCategories(res.data.data);
       })
       .catch((err) => {
-        // console.log(err);
+        console.log(err);
       });
   }, []);
 
@@ -118,7 +118,7 @@ export default function CommunityList() {
         setPosts(posts.concat(res.data.data)); // state에 추가
       })
       .catch((err) => {
-        // console.log(err);
+        console.log(err);
       });
   };
 
@@ -137,7 +137,6 @@ export default function CommunityList() {
     });
   };
   useEffect(() => {
-    // console.log("page ? ", idx);
     getInfo();
   }, [idx, isChanged]); // idx 바뀔 때마다 함수 실행
 

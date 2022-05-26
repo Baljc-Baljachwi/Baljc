@@ -1,5 +1,3 @@
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
 import { useSwiper } from "swiper/react";
 
 interface SlideNextButtonProps {
@@ -12,7 +10,6 @@ export default function SlideNextButton({
   onBoardingEnd,
 }: SlideNextButtonProps) {
   const swiper = useSwiper();
-  const router = useRouter();
 
   function onClick() {
     if (isEnd) {

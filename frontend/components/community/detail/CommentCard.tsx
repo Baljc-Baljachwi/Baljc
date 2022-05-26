@@ -94,7 +94,6 @@ export default function CommentCard({
   };
 
   const goChatModal = () => {
-    // console.log(reply);
     // 내 게시글일 땐, 채팅하기 안보이게
     if (memberId !== userInfo.memberId) {
       setChatOpen((prev) => !prev);

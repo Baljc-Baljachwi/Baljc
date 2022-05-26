@@ -6,7 +6,6 @@ import Image from "next/image";
 
 import Icon from "../../components/common/Icon";
 import ButtonBottom from "components/common/ButtonBottom";
-import ButtonTrashCan from "components/common/ButtonTrashCan";
 import { getBoardsCategories, postBoards, putBoard } from "api/community";
 
 const FormContainer = styled.form`
@@ -254,7 +253,6 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
     };
 
     const formData = new FormData();
-    console.log(imageFileList);
     imageFileList.forEach((file) => {
       formData.append("boardImg", file);
     });
@@ -266,20 +264,14 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
     if (boardContent) {
       putBoard(router.query.boardId as string, formData)
         .then((res) => {
-          // console.log(res.data);
           if (res.data.code === 1704) {
-            // console.log(res.data.message);
             router.push({
               pathname: "/community/detail",
               query: { boardId: router.query.boardId },
             });
-          } else {
-            // console.log(res.data.message);
           }
         })
-        .catch((err) => {
-          // console.error(err);
-        });
+        .catch((err) => {});
     } else {
       postBoards(formData)
         .then((res) => {
@@ -287,9 +279,7 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
             router.push("/community");
           }
         })
-        .catch((err) => {
-          // console.error(err);
-        });
+        .catch((err) => {});
     }
   }
 
@@ -342,7 +332,7 @@ export default function CommunityForm({ boardContent }: CommunityFormProps) {
   return (
     <FormContainer
       onSubmit={handleSubmit(onClickSubmitButton, (err) => {
-        // console.log(err);
+        console.log(err);
       })}
     >
       <FlexContainer>

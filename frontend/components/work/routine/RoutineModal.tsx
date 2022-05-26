@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 
 import Icon from "../../common/Icon";
@@ -82,7 +82,6 @@ const ModalInput = styled.input<{ titleValidation: boolean }>`
   border-bottom: ${(props) =>
     props.titleValidation ? "1px solid #ff0000" : "1px solid #cccccc"};
   outline: none;
-  // margin-bottom: 1rem;
   ::placeholder {
     color: #cccccc;
   }
@@ -201,7 +200,6 @@ export default function RoutineModal({
     if (routineForm.title.length > 0 && routineForm.repetition !== 0) {
       postRoutines(routineForm)
         .then((res) => {
-          // console.log(res.data);
           setToastMsg("📌 일과 등록 완료!");
           setIsSuccess(true);
           setRoutineList([...routineList, res.data.data]);
@@ -226,7 +224,6 @@ export default function RoutineModal({
     if (routineForm.title.length > 0 && routineForm.repetition !== 0) {
       putRoutines(routinId, routineForm)
         .then((res) => {
-          // console.log(res.data);
           setToastMsg("✅ 일과 수정 완료!");
           setIsSuccess(true);
           setRoutineList(
@@ -244,7 +241,6 @@ export default function RoutineModal({
           setOpen(false);
         })
         .catch((err) => {
-          // console.log(err);
           setToastMsg("❎ 일과 수정 실패!");
           setIsSuccess(false);
         });
@@ -262,7 +258,6 @@ export default function RoutineModal({
     const routinId = routineId || "";
     deleteRoutines(routinId)
       .then((res) => {
-        // console.log(res.data);
         setToastMsg("✅ 일과 삭제 완료!");
         setIsSuccess(true);
         setRoutineList(
@@ -273,7 +268,6 @@ export default function RoutineModal({
         setOpen(false);
       })
       .catch((err) => {
-        // console.log(err);
         setToastMsg("❎ 일과 삭제 실패!");
         setIsSuccess(false);
       });

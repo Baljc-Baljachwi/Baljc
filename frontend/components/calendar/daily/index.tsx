@@ -40,7 +40,6 @@ export default function Daily({ date, dayYoil, day, month, year }: DailyProps) {
     });
   }, [day, date, month, year]);
 
-  // console.log(date);
   return (
     <Container>
       <Title>{dayYoil}</Title>

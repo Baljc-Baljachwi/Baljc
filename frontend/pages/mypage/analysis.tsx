@@ -1,20 +1,5 @@
-import React, { useState, useEffect, useCallback } from "react";
-
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-
-import Header from "../../components/common/Header";
-import ProfileCard from "../../components/mypage/ProfileCard";
-import NotFoundTransaction from "components/common/not-found-transaction/NotFoundTransaction";
-import ProgressStaticBar from "components/common/ProgressStaticBar";
-import Icon from "components/common/Icon";
-
-import {
-  getBudget,
-  getPieChartValue,
-  getFixedExpenditure,
-  getLineGraphValue,
-} from "../../api/mypage";
-
 import dayjs from "dayjs";
 import {
   //   Chart as ChartJS,
@@ -29,6 +14,19 @@ import { Doughnut, Line } from "react-chartjs-2";
 import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js";
 import { useRouter } from "next/router";
+
+import Header from "../../components/common/Header";
+import ProfileCard from "../../components/mypage/ProfileCard";
+import NotFoundTransaction from "components/common/not-found-transaction/NotFoundTransaction";
+import ProgressStaticBar from "components/common/ProgressStaticBar";
+import Icon from "components/common/Icon";
+import {
+  getBudget,
+  getPieChartValue,
+  getFixedExpenditure,
+  getLineGraphValue,
+} from "../../api/mypage";
+
 Chart.register(
   CategoryScale,
   LinearScale,
@@ -58,9 +56,7 @@ const Analysis = () => {
 
   const categoryName = Object.keys(categories);
   const categoryValue = Object.values(categories);
-  const categoryContents = Object.entries(categories).map((entrie, idx) => {
-    return console.log(entrie, idx);
-  });
+
   const xdaysLabel = Object.keys(xdays).map((x, idx) => {
     return Number(x) + 1;
   });
@@ -69,47 +65,30 @@ const Analysis = () => {
   });
 
   useEffect(() => {
-    // console.log(year);
-    // console.log(month);
     getFixedExpenditure(year, month)
       .then((res) => {
-        // console.log(res.data.data);
         setFixedExpenditure(res.data.data.fixedExpenditure);
         setTotalExpenditure(res.data.data.totalExpenditure);
       })
       .catch((err) => {
-        console.log("😥🙀 고정 지출 조회 실패");
-        // console.log(err.response);
+        console.log(err);
       });
     getPieChartValue(year, month)
       .then((res) => {
         setCategories(res.data.data);
       })
       .catch((err) => {
-        console.log("😥🙀 도넛 차트 조회 실패");
-        // console.log(err.response);
+        console.log(err);
       });
     getLineGraphValue(year, month)
       .then((res) => {
-        // console.log(res.data.data);
         setXdays(res.data.data);
-        // console.log(xdays);
       })
       .catch((err) => {
-        // console.log("😥🙀 라인 차트 조회 실패");
-        // console.log(err.response);
+        console.log(err);
       });
-    // console.log("xdaysLabel");
-    // console.log(xdaysLabel);
-    // console.log("xdaysValue");
-    // console.log(xdaysValue);
     getBudget(dateForm)
       .then((res) => {
-        // console.log(res.data);
-        // console.log("예산 조회 성공! 🤸‍♀️🔥");
-        // console.log(expenditurePercent);
-        // console.log("퍼센트 toString");
-        // console.log(expenditurePercent.toString());
         setRemainingBudget(res.data.data.remainingBudget);
         setDailyExpenditure(res.data.data.dailyExpenditure);
         setEstimatedExpenditure(res.data.data.estimatedExpenditure);
@@ -118,8 +97,7 @@ const Analysis = () => {
         setRemainingBudgetPercent(res.data.data.remainingBudgetPercent);
       })
       .catch((err) => {
-        console.log("😥🙀 예산 조회 실패");
-        console.log(err.response);
+        console.log(err);
       });
   }, [month, year]);
 
@@ -127,9 +105,6 @@ const Analysis = () => {
     labels: categoryName,
     datasets: [
       {
-        // data: [
-        //   30000, 15000, 35000, 20000, 20000, 45000, 15000, 15000, 15000, 330000,
-        // ],
         data: categoryValue,
         backgroundColor: [
           "#ff9aa2",
@@ -173,30 +148,19 @@ const Analysis = () => {
     datasets: [
       {
         label: "일 별 지출 추이 (단위: 만 원)",
-        // data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-        // data: [65, 59, 80, 81, 56, 55, 40],
         data: xdaysValue,
-        // data: xdays,
         fill: true,
         lineTension: 0.3,
         backgroundColor: "rgba(75,192,192,0.4)",
         borderColor: "rgba(75,192,192,1)",
-        // borderCapStyle: "butt",
         borderDash: [],
         borderDashOffset: 0.0,
-        // borderJoinStyle: "miter",
         pointBorderColor: "rgba(75,192,192,1)",
-        // pointBackgroundColor: "rgba(75,192,192,1)",
         pointBackgroundColor: "#fff",
-        // pointBorderWidth: 1,
-        // pointHoverRadius: 5,
         pointBorderWidth: 0,
         pointHoverRadius: 0,
         pointHoverBackgroundColor: "rgba(75,192,192,1)",
         pointHoverBorderColor: "rgba(220,220,220,1)",
-        // pointHoverBorderWidth: 2,
-        // pointRadius: 1,
-        // pointHitRadius: 10,
         pointHoverBorderWidth: 0,
         pointRadius: 0,
         pointHitRadius: 0,
@@ -223,7 +187,6 @@ const Analysis = () => {
             <ProfileCard />
           </ProfileCardContainer>
           <ProfileContentListContainer>
-            {/* <ProfileMenuCardItem> */}
             <ProfileMenuCardContent>
               <span className="title">목표를 향해서!</span>
               <span className="description">내 소비 습관을 분석해보세요.</span>
@@ -284,11 +247,6 @@ const Analysis = () => {
                       </span>
                     </div>
                   </div>
-                  {/* {categoryValue.length === 0 ? (
-                      <NotFoundTransaction />
-                    ) : (
-                      <Doughnut data={data1} width={400} height={400} />
-                    )} */}
                 </div>
               </div>
             </ContentsDiv>
@@ -320,16 +278,9 @@ const Analysis = () => {
                     width={400}
                     height={400}
                   />
-                  {/* {categoryValue.length === 0 ? (
-                      <NotFoundTransaction />
-                    ) : (
-                      <Doughnut data={data1} width={400} height={400} />
-                    )} */}
                 </div>
               </div>
             </ContentsDiv>
-
-            {/* </ProfileMenuCardItem> */}
           </ProfileContentListContainer>
         </PageContainer>
       </Container>

@@ -26,7 +26,6 @@ const StyledButton = styled.button`
 
 interface ButtonImageProps {
   label?: string;
-  // onClick?: () => void;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 

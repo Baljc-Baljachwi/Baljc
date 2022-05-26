@@ -34,16 +34,12 @@ export interface IRoutine {
 }
 
 export interface IMember {
-  // memberId: number;
-  // kakaoId: string;
-  // email: string;
   nickname: string;
   profileUrl: string | null;
   salaryType: SalaryType;
   salary: number | null;
   workingHours: number | null;
   budget: number;
-  // surveyedYn: YNType;
 }
 
 export interface ITodo {
