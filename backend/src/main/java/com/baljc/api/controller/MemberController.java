@@ -26,20 +26,6 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-//    @GetMapping("/login/kakao")
-//    public ResponseEntity<BaseDataResponse<Map<String, Boolean>>> signinMember(@RequestParam(value = "code") String code) {
-//        log.debug("signinMember - code: {}", code);
-//        MemberDto.SigninInfo signinInfo = memberService.authenticateMember(memberService.signinByKakao(code));
-//
-//        HttpHeaders httpHeaders = new HttpHeaders();
-//        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + signinInfo.getJwt());
-//        Map<String, Boolean> map = new HashMap<>();
-//        map.put("surveyedYn", signinInfo.getSurveyedYn());
-//
-//        return ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(new BaseDataResponse<>(1000,
-//                "소셜로그인에 성공하였습니다.", map));
-//    }
-
     @GetMapping("/login/kakao")
     public ResponseEntity<BaseDataResponse<MemberDto.SigninResponse>> signinMember(
             @RequestParam(value = "code") String code, @RequestParam(value = "token", required = false) String fcmToken

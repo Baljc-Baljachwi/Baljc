@@ -31,7 +31,6 @@ public class MyPageServiceImpl implements MyPageService {
 
     @Override
     public MyPageDto.NowExpResponse getNowExpenditure(LocalDate date) {
-//        log.debug("getNowExpenditure - LocalDateTime.now(): {}", LocalDateTime.now());
         int budget = memberService.getMemberByAuthentication().getBudget();
         MyPageDto.FixedExpResponse response = getFixedExpenditure(date.getYear(), date.getMonthValue());
         int fixedExpenditure = response.getFixedExpenditure();
