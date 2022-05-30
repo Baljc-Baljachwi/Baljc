@@ -25,7 +25,6 @@ const ProfileMenuCardContent = styled.div`
 `;
 
 const ProfileMenuCardTitle = styled.span<{ color?: string }>`
-  // color: #33487f;
   color: ${(props) => (props.color ? props.color : "#33487f")};
   font-weight: 700;
 `;

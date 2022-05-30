@@ -123,7 +123,6 @@ export default function Home() {
     setWeek([]);
     getWeekly();
     getClickedDow(new Date().getDay());
-    // console.log(today);
     getClickedDay(today);
   }, []);
 

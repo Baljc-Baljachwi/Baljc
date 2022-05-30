@@ -42,13 +42,6 @@ public class TodoDto {
         private String completedYn;
     }
 
-//    @Getter
-//    @AllArgsConstructor
-//    public static class ResponseByDate {
-//        private List<RoutineDto.Response> routines;
-//        private List<Response> todos;
-//    }
-
     @Getter
     @AllArgsConstructor
     public static class Response {

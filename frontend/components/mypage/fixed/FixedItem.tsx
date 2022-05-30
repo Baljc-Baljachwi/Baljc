@@ -2,11 +2,8 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import dayjs from "dayjs";
 
-import { colors } from "../../../styles/colors";
 import { getCategories } from "api/accountbook";
-import { getFixedEList } from "api/mypage";
 import { ICategory } from "types";
 
 interface FixedItemProps {
@@ -31,10 +28,6 @@ export default function FixedItem({
   paymentMethod,
 }: FixedItemProps) {
   const router = useRouter();
-  const [date, setDate] = useState(new Date());
-  const year = Number(dayjs(date).format("YYYY"));
-  const month = Number(dayjs(date).format("M"));
-  const dateForm = dayjs(date).format("YYYY-MM-DD");
   const [exCategories, setExCategories] = useState<ICategory[]>([]);
   const [categoryImg, setCategoryImg] = useState("");
 
@@ -47,7 +40,6 @@ export default function FixedItem({
 
   useEffect(() => {
     getCategories("E").then((res) => {
-      // console.log(res.data);
       setExCategories(res.data.data);
     });
   }, []);
@@ -138,11 +130,4 @@ const FixedCardItem = styled.div<{ backgroundColor: string }>`
       font-size: 1.2rem;
     }
   }
-`;
-
-const FinanceCardPrice = styled.span<{ color?: string }>`
-  color: ${(props) => props.color};
-  font-weight: 500;
-  font-style: medium;
-  padding-bottom: 1rem;
 `;

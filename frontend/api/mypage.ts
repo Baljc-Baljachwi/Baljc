@@ -2,7 +2,6 @@ import { api } from "api";
 
 // 이번 달 남은 예산/하루 예산/예상 지출 조회
 export const getBudget = async (date: string) => {
-  // console.log(date);
   return await api.get(`/api/mypages/now-exp?date=${date}`);
 };
 

@@ -39,37 +39,22 @@ const Fixed = () => {
   const fixedEList = Object.entries(exFixed);
   const dayMonthYear = dayjs(date).format("YYYY-MM-DD");
 
-  // console.log(exFixed);
-  // console.log(fixedEList);
   useEffect(() => {
     getFixedExpenditure(year, month)
       .then((res) => {
-        // console.log(res.data.data);
         setFixedExpenditure(res.data.data.fixedExpenditure);
       })
       .catch((err) => {
         console.log("😥🙀 고정 지출 조회 실패");
-        // console.log(err.response);
       });
     getFixedEList(year, month)
       .then((res) => {
-        // console.log(res);
         setExFixed(res.data.data);
-        // setAccountbookId(res.data.data.accountbookId);
-        // setMonthlyPeriod(res.data.data.monthlyPeriod);
-        // setDayOfWeek(res.data.data.dayOfWeek);
-        // setTitle(res.data.data.title);
-        // setPrice(res.data.data.price);
-        // setCategoryName(res.data.data.categoryName);
-        // setCategoryImgUrl(res.data.data.categoryImgUrl);
-        // setPaymentMethod(res.data.data.paymentMethod);
       })
       .catch((err) => {
         console.log("😥🙀 고정 지출 조회 실패");
-        // console.log(err.response);
       });
   }, []);
-  // console.log(exFixed);
   return (
     <>
       <Header
@@ -77,7 +62,6 @@ const Fixed = () => {
         onClickBackButton={() => router.push("/mypage")}
       />
 
-      {/* <BodyContainer> */}
       <HeaderCard>
         <span>이번 달 고정 지출</span>
         <span>
@@ -86,7 +70,6 @@ const Fixed = () => {
           <span>원</span>
         </span>
       </HeaderCard>
-      {/* <ContentsContainer> */}
       {fixedEList && fixedEList.length > 0 ? (
         fixedEList.map((item, idx) => (
           <Container key={idx}>
@@ -101,8 +84,6 @@ const Fixed = () => {
           </NoContentMessage>
         </NoContentContainer>
       )}
-      {/* </ContentsContainer> */}
-      {/* </BodyContainer> */}
       <FloatingButton
         onClick={() => {
           router.push({

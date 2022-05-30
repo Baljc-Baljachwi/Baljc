@@ -19,10 +19,8 @@ public class AccountBookDto {
     @NoArgsConstructor
     public static class AccountBookRequest {
         private UUID categoryId;
-//        @NotBlank(message = "타입은 필수입니다.")
         @Pattern(regexp = "^[EI]$", message = "올바른 타입 형식(E/I)이 아닙니다.")
         private String type;
-//        @NotBlank(message = "제목은 필수입니다.")
         @Size(min = 1, max = 18, message = "올바른 제목 형식(1자이상 18자이하)이 아닙니다.")
         private String title;
         @PositiveOrZero(message = "올바른 금액의 범위(0이상 2147483647이하)이 아닙니다.")

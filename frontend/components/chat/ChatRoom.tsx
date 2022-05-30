@@ -89,30 +89,22 @@ export default function ChatRoom({
   // 기존 채팅 내용 리스트
   const [chatList, setChatList] = useState<IChatList[]>([]);
 
-  // console.log(profileUrl);
   useEffect(() => {
     // 소켓 연결 응답
     socket.on("connect", () => {
-      console.log("connected: ", socket.id);
-
       // room id로 join 이벤트 요청
       socket.emit("join", roomId);
-      console.log(socket);
     });
 
     // 페이지 이동 또는 브라우저 닫을 시 disconnect
     return () => {
       socket.disconnect();
-      console.log("disconnect");
     };
   }, []);
 
   useEffect(() => {
     // 메시지 응답
-    socket.on("message", (data) => {
-      // console.log(data);
-      // console.log("receive: ", data.message);
-      // console.log("profileUrl: ", data.profileUrl);
+    socket.on("message", (data: any) => {
       setChatList([
         ...chatList,
         {
@@ -134,7 +126,6 @@ export default function ChatRoom({
     const myImgUrl = chatList.find(
       (chat) => userInfo.memberId === chat.memberId
     )?.profileUrl;
-    // console.log(myImgUrl);
 
     // 메시지 전송
     // room id는 join 이벤트에 사용한 room id와 동일해야함, member id와 message 포함하여 전송
@@ -178,7 +169,6 @@ export default function ChatRoom({
     setChatList([]);
     getChatList(roomId)
       .then((res) => {
-        // console.log(res.data.data);
         setChatList(res.data.data);
 
         if (scrollRef.current !== null) {
@@ -226,7 +216,6 @@ export default function ChatRoom({
       </ChatRoomContainer>
 
       <ChatInputDiv>
-        {/* <Icon icon="image" mode="fas" color="#cccccc" size="2.5rem" /> */}
         <InputDiv
           placeholder="내용을 입력해주세요."
           onChange={handleInput}

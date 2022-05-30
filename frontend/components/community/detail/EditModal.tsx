@@ -104,7 +104,6 @@ export default function EditModal({
   const onClickChat = () => {
     postChatRoom(myId, otherId)
       .then((res) => {
-        // console.log(res.data.data.other);
         const roomId = res.data.data.roomId;
         const nickname = res.data.data.other.nickname;
         const profileUrl = res.data.data.other.profileUrl;

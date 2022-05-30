@@ -1,13 +1,12 @@
 import styled from "styled-components";
-import Header from "components/common/Header";
-import ProfileCard from "components/mypage/ProfileCard";
-import ProfileSettingsList from "components/mypage/settings/ProfileSettingsList";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
-const Container = styled.div`
-  /* height: 100vh; */
-`;
+import Header from "components/common/Header";
+import ProfileCard from "components/mypage/ProfileCard";
+import ProfileSettingsList from "components/mypage/settings/ProfileSettingsList";
+
+const Container = styled.div``;
 const PageContainer = styled.main`
   font-family: "Noto Sans KR", sans-serif;
   background-color: #ffffff;
@@ -24,7 +23,6 @@ const ProfileCardContainer = styled.div`
   border-radius: 0px 0px 40px 40px;
   height: 30vh;
   color: #ffffff;
-  /* padding: 0 2rem; */
 `;
 const PageTitle = styled.span`
   display: flex;
@@ -41,8 +39,6 @@ const ProfileContentListContainer = styled.div`
   width: 100%;
   height: 100%;
   background-color: #ffffff;
-  /* filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25)); */
-
   font-size: 1.6rem;
   padding: 2rem 2rem;
   gap: 2rem;
@@ -71,7 +67,6 @@ const Settings = () => {
             <ProfileCard />
           </ProfileCardContainer>
           <ProfileContentListContainer>
-            {/* <PageTitle>설정</PageTitle> */}
             <ProfileSettingsList />
           </ProfileContentListContainer>
         </PageContainer>

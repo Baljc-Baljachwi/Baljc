@@ -187,19 +187,16 @@ export default function FinanceForm({
   initForm,
   date,
 }: FinanceFormProps) {
-  // console.log("render");
   const router = useRouter();
   const today = new Date();
   const year = today.getFullYear();
   const month = ("0" + (today.getMonth() + 1)).slice(-2);
   const day = ("0" + today.getDate()).slice(-2);
-  // const date = year + "-" + month + "-" + day;
+
   const time =
     ("0" + today.getHours()).slice(-2) +
     ":" +
     ("0" + today.getMinutes()).slice(-2);
-
-  console.log(2, date);
 
   const {
     register,
@@ -240,14 +237,10 @@ export default function FinanceForm({
   ];
 
   useEffect(() => {
-    // console.log(type);
     getCategories(type).then((res) => {
-      // console.log(res.data);
       if (res.data.code === 1300) {
-        // console.log(res.data.data);
         setCategoryList(res.data.data);
       } else {
-        // console.log(res.data.message);
         confirm("카테고리 조회 실패!");
       }
     });
@@ -263,8 +256,6 @@ export default function FinanceForm({
   }, [type, initForm, setValue]);
 
   function onSubmit(data: any) {
-    // console.log("Confirm!!");
-
     const isFixed =
       (type === "E" && data.fixedExpenditureYn) ||
       (type === "I" && data.fixedIncomeYn);
@@ -293,30 +284,25 @@ export default function FinanceForm({
           confirm("가계부 삭제 실패");
         }
       });
-      // console.log(params);
 
       // 추가 페이지에서
     } else {
       postAccountbooks(params).then((res) => {
-        // console.log(res.data);
         if (res.data.code === 1301) {
           router.push("/finance");
         } else {
           confirm("가계부 생성 실패");
         }
       });
-      // console.log(params);
     }
   }
 
   function onClickDeleteButton() {
-    // console.log("Delete!");
     if (!initForm || !initForm.accountbookId) {
       return;
     }
 
     deleteAccountbooks(initForm.accountbookId).then((res) => {
-      // console.log(res.data);
       if (res.data.code === 1305) {
         router.push("/finance");
       } else {

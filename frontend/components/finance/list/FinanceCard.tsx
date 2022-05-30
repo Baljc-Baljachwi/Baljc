@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 import Image from "next/image";
 
-import { colors } from "../../../styles/colors";
 import { useEffect, useState } from "react";
 import { getCategories } from "api/accountbook";
 import { ICategory } from "types";

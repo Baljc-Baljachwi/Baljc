@@ -7,7 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.UUID;
 
 public interface MemberService {
-//    Member signinByKakao(String code);
     Member signinByKakao(String code, String fcmToken);
     MemberDto.SigninInfo authenticateMember(Member member);
     Member getMemberByAuthentication();

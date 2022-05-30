@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 
 import {
-  getFixedExpenditure,
   getLineGraphValue,
   getBudget,
   getPieChartValue,
@@ -53,36 +52,22 @@ const LineChartPage = () => {
   useEffect(() => {
     getPieChartValue(year, month)
       .then((res) => {
-        // console.log(res.data.data);
         setCategories(res.data.data);
       })
       .catch((err) => {
-        // console.log(err.response);
-        console.log("😥🙀 도넛 차트 조회 실패");
+        console.log(err);
       });
-    // console.log(year);
-    // console.log(month);
+
     getLineGraphValue(year, month)
       .then((res) => {
-        // console.log(res.data.data);
         setXdays(res.data.data);
-        // console.log(xdays);
       })
       .catch((err) => {
-        // console.log(err.response);
-        console.log("😥🙀 도넛 차트 조회 실패");
+        console.log(err);
       });
-    // console.log("xdaysName");
-    // console.log(xdaysName);
-    // console.log("xdaysValue");
-    // console.log(xdaysValue);
+
     getBudget(dateForm)
       .then((res) => {
-        // console.log(res.data);
-        // console.log("예산 조회 성공! 🤸‍♀️🔥");
-        // console.log(expenditurePercent);
-        // console.log("퍼센트 toString");
-        // console.log(expenditurePercent.toString());
         setRemainingBudget(res.data.data.remainingBudget);
         setDailyExpenditure(res.data.data.dailyExpenditure);
         setEstimatedExpenditure(res.data.data.estimatedExpenditure);
@@ -91,8 +76,7 @@ const LineChartPage = () => {
         setRemainingBudgetPercent(res.data.data.remainingBudgetPercent);
       })
       .catch((err) => {
-        // console.log(err.response);
-        console.log("😥🙀 예산 조회 실패");
+        console.log(err);
       });
   }, [month, year]);
 
@@ -113,10 +97,9 @@ const LineChartPage = () => {
     datasets: [
       {
         label: "일 별 지출 추이",
+        data: xdaysValue,
         // data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
         // data: [65, 59, 80, 81, 56, 55, 40],
-        data: xdaysValue,
-        // data: xdays,
         // data: xdaysValue.map(() => xdaysValue),
         fill: true,
         lineTension: 0.3,
@@ -148,7 +131,6 @@ const LineChartPage = () => {
   return (
     <div>
       <h2>Line Example</h2>
-      {/* <Line data={data} width={400} height={400} /> */}
       <Line options={options} data={data2} width={400} height={400} />
     </div>
   );

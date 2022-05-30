@@ -320,7 +320,6 @@ export default function Survey() {
     );
 
     putMembers(formData).then((res) => {
-      // console.log(res.data);
       if (res.data.code === 1002) {
         setUserInfo((prev) => ({
           ...prev,
@@ -335,7 +334,6 @@ export default function Survey() {
   }
 
   function onClickGeoButton() {
-    // console.log(navigator);
     if ("geolocation" in navigator) {
       // 현재 위도, 경도
       navigator.geolocation.getCurrentPosition(
@@ -349,7 +347,6 @@ export default function Survey() {
           // 카카오 로컬 API coord => region
           kakaoCoord2Region(pos.coords.longitude, pos.coords.latitude)
             .then((res) => {
-              // console.log(res.data.documents);
               setLocation((prev) => ({
                 ...prev,
                 addressName: res.data.documents[0].address_name,
@@ -359,10 +356,9 @@ export default function Survey() {
                 isUpdated: true,
               }));
             })
-            .catch((err) => console.error(err));
+            .catch((err) => console.log(err));
         },
         (err: GeolocationPositionError) => {
-          // console.log(err.message);
           if (err.code === 1) {
             confirm("위치 액세스를 허용해주세요");
           }
@@ -610,5 +606,3 @@ export default function Survey() {
     </Container>
   );
 }
-
-// Survey.requireAuth = true;

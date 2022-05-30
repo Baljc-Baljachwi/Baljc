@@ -40,7 +40,6 @@ const StyledUl = styled.ul`
 `;
 const StyledLi = styled.li`
   margin-left: 0.4rem;
-  /* list-style: none; */
 `;
 
 export default function PriacyPolicy() {

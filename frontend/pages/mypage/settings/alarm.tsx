@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
-// import { useRecoilState } from "recoil";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -12,9 +11,7 @@ import ButtonBottom from "components/common/ButtonBottom";
 import { getAlarms, putAlarms } from "../../../api/alarm";
 import { YNType } from "../../../types";
 
-const Container = styled.div`
-  /* height: 100vh; */
-`;
+const Container = styled.div``;
 
 const PageContainer = styled.main`
   background-color: #ffffff;
@@ -22,7 +19,6 @@ const PageContainer = styled.main`
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  /* width: 100%; */
   padding: 1.6rem 2rem;
 `;
 
@@ -39,7 +35,6 @@ const ProfileContentListContainer = styled.div`
   border-radius: 1rem;
   width: 100%;
   height: 100%;
-  /* margin-top: 2rem; */
   font-size: 1.6rem;
   padding: 1.6rem 2rem;
   gap: 2rem;
@@ -109,7 +104,6 @@ const StyledToastContainer = styled(ToastContainer).attrs({
     filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.25));
   }
   .Toastify__toast-container {
-    /* width: 320px; */
     width: 20rem;
   }
   .Toastify__toast--default {
@@ -120,11 +114,9 @@ const StyledToastContainer = styled(ToastContainer).attrs({
     background: #3498db;
   }
   .Toastify__toast--success {
-    /* background: #07bc0c; */
     background: rgba(75, 192, 192, 0.4);
   }
   .Toastify__toast--warning {
-    /* background: #f1c40f; */
     background: #ffd469;
     color: #aaa;
   }
@@ -135,12 +127,10 @@ const StyledToastContainer = styled(ToastContainer).attrs({
 
 const Alarm = () => {
   const router = useRouter();
-  // const [alarms, setAlarms] = useState<IAlarm>();
   const [accountAlarmYN, setaccountAlarmYN] = useState<YNType>("Y");
   const [accountAlarmTime, setAccountAlarmTime] = useState("21:00:00");
   const [todoAlarmYN, settodoAlarmYN] = useState<YNType>("Y");
   const [todoAlarmTime, setTodoAlarmTime] = useState("09:00:00");
-  //   const UserInfo = useRecoilValue(userInfoState);
   const notify = () =>
     toast.success("🤸‍♀️ㅤ알림 설정 저장 성공!", {
       theme: "colored",
@@ -160,16 +150,13 @@ const Alarm = () => {
   useEffect(() => {
     getAlarms()
       .then((res) => {
-        // console.log(res.data);
-        // console.log("알림 조회 성공! 🤸‍♀️🔥");
         setaccountAlarmYN(res.data.data.accountAlarmYn);
         setAccountAlarmTime(res.data.data.accountAlarmTime);
         settodoAlarmYN(res.data.data.todoAlarmYn);
         setTodoAlarmTime(res.data.data.todoAlarmTime);
       })
       .catch((err) => {
-        // console.log(err.response);
-        console.log("😥🙀 알림 조회 실패");
+        console.log(err);
       });
   }, []);
 
@@ -199,13 +186,9 @@ const Alarm = () => {
     putAlarms(alarmInfo)
       .then((res) => {
         notify();
-        // console.log(res.data);
-        // console.log("알림 변경사항 저장 성공! 🤸‍♀️🔥");
       })
       .catch((err) => {
         notifyFail();
-        // console.log(err.response);
-        console.log("😥🙀 알림 변경사항 저장 실패!");
       });
   };
   const [ready, setReady] = useState(false);
@@ -224,10 +207,6 @@ const Alarm = () => {
           onClickBackButton={() => router.push("/mypage/settings")}
         />
         <PageContainer>
-          {/* <ToastContainer
-            pauseOnFocusLoss={false}
-            style={{ bottom: "10rem" }}
-          /> */}
           <StyledToastContainer
             pauseOnFocusLoss={false}
             style={{ bottom: "10rem" }}
@@ -244,7 +223,6 @@ const Alarm = () => {
               <SettingAlarmItem>
                 <span>가계부</span>
                 <div className="right-content">
-                  {/* <span>{accountAlarmTime}</span> */}
                   <TimePicker
                     className="TimePicker"
                     type="time"
@@ -260,7 +238,6 @@ const Alarm = () => {
               <SettingAlarmItem>
                 <span>할 일</span>
                 <div className="right-content">
-                  {/* <span>{todoAlarmTime}</span> */}
                   <TimePicker
                     className="TimePicker"
                     type="time"

@@ -53,11 +53,6 @@ public class AccountBookRepositorySupport {
         LocalDateTime start = LocalDateTime.parse(startDate, formatter);
         LocalDateTime end = LocalDateTime.parse(endDate, formatter);
 
-//        StringTemplate formattedDate = Expressions.stringTemplate(
-//                "DATE_FORMAT({0}, {1})"
-//                , qAccountBook.date
-//                , ConstantImpl.create("%y-%m"));
-
         List<AccountBookDto.AccountBookMonthTotal> response = jpaQueryFactory.select(new QAccountBookDto_AccountBookMonthTotal(qAccountBook.type, qAccountBook.price.sum()))
                 .from(qAccountBook)
                 .groupBy(qAccountBook.type)
