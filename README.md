@@ -199,7 +199,7 @@
 
 ### 0. 서버 아키텍처
 
-![Untitled](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/79198653-783a-4cce-828a-24dad9a476dc/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220520%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220520T021436Z&X-Amz-Expires=86400&X-Amz-Signature=07b945acde74aa0efc3470868252080e5da1ef1d5c79091bfafbf57574e3a14d&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22&x-id=GetObject)
+![image](https://user-images.githubusercontent.com/71246187/171082100-7d770612-2a30-43e7-8b00-df994f0d162c.png)
 
 ### 1. Docker 설치
 
