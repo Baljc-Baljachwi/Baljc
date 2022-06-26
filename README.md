@@ -8,19 +8,19 @@
 ## 📖 목차
 
 #### 0️⃣ **프로젝트 소개**
-- [주요 기능](#-주요-기능) 
-- [버전 기록](#-버전-기록) 
-- [디자인 및 로고](https://lab.ssafy.com/s06-final/S06P31A407/-/wikis/%EB%94%94%EC%9E%90%EC%9D%B8-%EB%B0%8F-%EB%A1%9C%EA%B3%A0)
+- [주요 기능](#-주요-기능)
+- [버전 기록](#-버전-기록)
+- [디자인 및 로고](https://github.com/Baljc-Baljachwi/Baljc/wiki/%EB%94%94%EC%9E%90%EC%9D%B8-%EB%B0%8F-%EB%A1%9C%EA%B3%A0)
 
 #### 1️⃣ 프로젝트 개발
-- [일정 계획](https://lab.ssafy.com/s06-final/S06P31A407/-/wikis/%EC%9D%BC%EC%A0%95-%EA%B3%84%ED%9A%8D)
-- [컨벤션](https://lab.ssafy.com/s06-final/S06P31A407/-/wikis/%EC%BB%A8%EB%B2%A4%EC%85%98)
-- [파일 구조](https://lab.ssafy.com/s06-final/S06P31A407/-/wikis/%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0)
+- [일정 계획](https://github.com/Baljc-Baljachwi/Baljc/wiki/%EC%9D%BC%EC%A0%95-%EA%B3%84%ED%9A%8D)
+- [컨벤션](https://github.com/Baljc-Baljachwi/Baljc/wiki/%EC%BB%A8%EB%B2%A4%EC%85%98)
+- [파일 구조](https://github.com/Baljc-Baljachwi/Baljc/wiki/%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0)
 
 #### 2️⃣ 프로젝트 산출물
 
-- [와이어 프레임](https://lab.ssafy.com/s06-final/S06P31A407/-/wikis/%EC%99%80%EC%9D%B4%EC%96%B4-%ED%94%84%EB%A0%88%EC%9E%84)
-- [ERD](https://lab.ssafy.com/s06-final/S06P31A407/-/wikis/ERD)
+- [와이어 프레임](https://github.com/Baljc-Baljachwi/Baljc/wiki/%EC%99%80%EC%9D%B4%EC%96%B4-%ED%94%84%EB%A0%88%EC%9E%84)
+- [ERD](https://github.com/Baljc-Baljachwi/Baljc/wiki/ERD)
 
 #### [3️⃣ **프로젝트 기술 스택**](#-프로젝트-기술-스택)
 
